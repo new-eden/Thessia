@@ -38,7 +38,7 @@ class Render
         $contentType = $response->getHeader("Content-Type");
         if ($contentType)
             $contentType = $contentType;
-
+        
         // Run the scrapeCheck
         $this->scrapeChecker();
 

@@ -1,71 +1,56 @@
 <?php
-namespace Thessia\Middleware;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Slim\App;
+namespace Thessia\Lib\Middleware;
 
-/**
- * Class RenaController
- * @package Thessia\Middleware
- */
-abstract class RenaController
+use Psr\Http\Message\UriInterface;
+
+abstract class Controller
 {
     // Optional properties
-    /**
-     * @var App
-     */
     protected $app;
-    /**
-     * @var RequestInterface
-     */
     protected $request;
-    /**
-     * @var ResponseInterface
-     */
     protected $response;
-    /**
-     * @var \Interop\Container\ContainerInterface
-     */
-    private $container;
 
     /**
-     * RenaController constructor.
-     * @param App $app
+     * @param \Slim\App $app
      */
-    public function __construct(App $app)
+    public function __construct(\Slim\App $app)
     {
         $this->app = $app;
-        $this->container = $app->getContainer();
     }
 
     /**
+     * This method allows use to return a callable that calls the action for
+     * the route.
      * @param $actionName
      * @return \Closure
+     * @internal param string $actionName Name of the action method to call
      */
     public function __invoke($actionName)
     {
         $app = $this->app;
         $controller = $this;
+
         $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
+
+            $container = $app->getContainer();
+
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
-
             if (method_exists($controller, 'setResponse')) {
                 $controller->setResponse($response);
             }
-
             if (method_exists($controller, 'init')) {
                 $controller->init();
             }
 
             // store the name of the controller and action so we can assert during tests
-            $controllerName = get_class($controller);
-            $controllerName = strtolower($controllerName);
+            $controllerName = get_class($controller); // eg. CrSrc\Controller\Admin\ArticlesController
+            $controllerName = strtolower($controllerName); // eg. crsrc\controller\admin\articlescontroller
             $controllerNameParts = explode('\\', $controllerName);
-            $controllerName = array_pop($controllerNameParts);
-            preg_match('/(.*)controller$/', $controllerName, $result);
+            $controllerName = array_pop($controllerNameParts); // eg. articlescontroller
+            preg_match('/(.*)controller$/', $controllerName, $result); // eg. articles?
             $controllerName = $result[1];
 
             // these values will be useful when testing, but not included with the
@@ -73,7 +58,6 @@ abstract class RenaController
             if (method_exists($response, 'setControllerName')) {
                 $response->setControllerName($controllerName);
             }
-
             if (method_exists($response, 'setActionName')) {
                 $response->setActionName($actionName);
             }
@@ -84,58 +68,41 @@ abstract class RenaController
         return $callable;
     }
 
+    // Optional setters
 
-    /**
-     * @param $request
-     */
+    // public function setApp($app)
+    // {
+    //     $this->app = $app;
+    // }
+
     public function setRequest($request)
     {
         $this->request = $request;
     }
 
-    /**
-     * @param $response
-     */
     public function setResponse($response)
     {
         $this->response = $response;
     }
 
     /**
-     * @param String $file
-     * @param array $args
-     * @param int $status
-     * @param String $contentType
-     * @return mixed
+     * Render the view from within the controller
+     * @param string $file Name of the template/ view to render
+     * @param array $args Additional variables to pass to the view
+     * @param Response?
+     * TODO should this be here?
      */
-    protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8") {
-        // Render the view using the render method
-        return $this->container->render->render($file, $args, $status, $contentType, $this->response);
-    }
+    protected function render($file, $args=array())
+    {
+        //$container = $this->app->getContainer();
+        //var_dump($container->get("view")); die();
 
-    // @TODO add a fourth that is just called api, which figures out what the user has told you they want (xml / json) and use that as the header)
-    // Remember to create a new response, with the new header that the user has requested in $this->requested
-    // Something like: $response = $this->response->withHeader($this->requested->getHeader("Content-Type")); and then pass on $response
-    /**
-     * @param array $args
-     * @param int $status
-     * @return mixed
-     */
-    protected function json($args = array(), int $status = 200) {
-        return $this->container->render->toJson($args, $status, $this->response);
+        // return $container->renderer->render($this->response, $file, $args);
+        //return $container->get("render")->render($this->response, $file, $args);
     }
 
     /**
-     * @param array $args
-     * @param int $status
-     * @return mixed
-     */
-    protected function xml($args = array(), int $status = 200) {
-        return $this->container->render->toXML($args, $status, $this->response);
-    }
-
-    /**
-     * @return mixed
+     * Return true if XHR request
      */
     protected function isXhr()
     {
@@ -143,18 +110,19 @@ abstract class RenaController
     }
 
     /**
-     * @return array
+     * Get the POST params
      */
     protected function getPost()
     {
         $post = array_diff_key($this->request->getParams(), array_flip(array(
             '_METHOD',
         )));
+
         return $post;
     }
 
     /**
-     * @return mixed
+     * Get the POST params
      */
     protected function getQueryParams()
     {
@@ -162,6 +130,7 @@ abstract class RenaController
     }
 
     /**
+     * Shorthand method to get dependency from container
      * @param $name
      * @return mixed
      */
@@ -171,9 +140,16 @@ abstract class RenaController
     }
 
     /**
-     * @param $url
-     * @param int $status
-     * @return mixed
+     * Redirect.
+     *
+     * Note: This method is not part of the PSR-7 standard.
+     *
+     * This method prepares the response object to return an HTTP Redirect
+     * response to the client.
+     *
+     * @param  string|UriInterface $url    The redirect destination.
+     * @param  int                 $status The redirect HTTP status code.
+     * @return self
      */
     protected function redirect($url, $status = 302)
     {
@@ -181,9 +157,12 @@ abstract class RenaController
     }
 
     /**
-     * @param $actionName
+     * Pass on the control to another action. Of the same class (for now)
+     *
+     * @param  string $actionName The redirect destination.
      * @param array $data
-     * @return mixed
+     * @return Controller
+     * @internal param string $status The redirect HTTP status code.
      */
     public function forward($actionName, $data=array())
     {
@@ -191,6 +170,7 @@ abstract class RenaController
         if (method_exists($this->response, 'setActionName')) {
             $this->response->setActionName($actionName);
         }
+
         return call_user_func_array(array($this, $actionName), $data);
     }
 }

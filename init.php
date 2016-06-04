@@ -1,6 +1,9 @@
 <?php
 
 // change to the main directory
+use League\Container\Container;
+use League\Container\ReflectionContainer;
+
 chdir(__DIR__);
 
 // Load the autoloader
@@ -12,9 +15,18 @@ if (file_exists(__DIR__ . "/vendor/autoload.php")) {
 }
 
 // Initialize the container
-$container = \Thessia\Helper\getContainer();
+$container = new Container;
 
-// Load the system provider
+//. Attempt to autowire class constructor dependencies
+$container->delegate(new ReflectionContainer);
+
+// Register the config file
+$container->add("configFile", __DIR__ . "/config/config.php");
+
+// Load the dependencies
+$container->addServiceProvider(\Thessia\Service\SystemServiceProvider::class);
+
+// Load the slim dependency
 $container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);
 
 // Global function(s)

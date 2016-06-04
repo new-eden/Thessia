@@ -1,4 +1,5 @@
 <?php
+error_reporting(1);
 error_reporting(E_ALL);
 
 if(PHP_SAPI == "cli-server") {
@@ -12,6 +13,8 @@ include(__DIR__ . "/../init.php");
 
 // Load slim
 $app = new \Slim\App($container);
+
+// Add container
 
 // Setup the session handler
 

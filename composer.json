@@ -12,10 +12,7 @@
   "autoload": {
     "psr-4": {
       "Thessia\\": "src/"
-    },
-    "files": [
-      "src/Helper/Container.php"
-    ]
+    }
   },
   "require": {
     "php": "^7.0.0",
