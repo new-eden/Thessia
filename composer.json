@@ -9,6 +9,14 @@
       "email": "karbowiak@gmail.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "Thessia\\": "src/"
+    },
+    "files": [
+      "src/Helper/Container.php"
+    ]
+  },
   "require": {
     "php": "^7.0.0",
     "slim/slim": "3.4.*",
@@ -19,6 +27,6 @@
     "symfony/translation": "3.1.*",
     "symfony/twig-bridge": "3.1.*",
     "symfony/console": "3.1.*",
-    "league/container": "2.2.*"
+    "jenssegers/lean": "0.1.*"
   }
 }
