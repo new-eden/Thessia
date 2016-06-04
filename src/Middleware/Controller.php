@@ -3,28 +3,37 @@
 namespace Thessia\Lib\Middleware;
 
 use Psr\Http\Message\UriInterface;
+use Slim\App;
 
 abstract class Controller
 {
     // Optional properties
+    /**
+     * @var App
+     */
     protected $app;
+    /**
+     * @var \Psr\Http\Message\RequestInterface
+     */
     protected $request;
+    /**
+     * @var \Psr\Http\Message\ResponseInterface
+     */
     protected $response;
 
     /**
-     * @param \Slim\App $app
+     * @var \Slim\Container
      */
-    public function __construct(\Slim\App $app)
+    private $container;
+
+    /**
+     * @param App $app
+     */
+    public function __construct(App $app)
     {
         $this->app = $app;
+        $this->container = $app->getContainer();
     }
-
-    // Optional setters
-
-    // public function setApp($app)
-    // {
-    //     $this->app = $app;
-    // }
 
     /**
      * This method allows use to return a callable that calls the action for
@@ -37,8 +46,8 @@ abstract class Controller
     {
         $app = $this->app;
         $controller = $this;
+
         $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
-            $container = $app->getContainer();
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
@@ -48,13 +57,15 @@ abstract class Controller
             if (method_exists($controller, 'init')) {
                 $controller->init();
             }
+
             // store the name of the controller and action so we can assert during tests
-            $controllerName = get_class($controller); // eg. CrSrc\Controller\Admin\ArticlesController
-            $controllerName = strtolower($controllerName); // eg. crsrc\controller\admin\articlescontroller
+            $controllerName = get_class($controller);
+            $controllerName = strtolower($controllerName);
             $controllerNameParts = explode('\\', $controllerName);
-            $controllerName = array_pop($controllerNameParts); // eg. articlescontroller
-            preg_match('/(.*)controller$/', $controllerName, $result); // eg. articles?
+            $controllerName = array_pop($controllerNameParts);
+            preg_match('/(.*)controller$/', $controllerName, $result);
             $controllerName = $result[1];
+
             // these values will be useful when testing, but not included with the
             // Slim\Http\Response. Instead use SlimMvc\Http\Response
             if (method_exists($response, 'setControllerName')) {
@@ -63,35 +74,61 @@ abstract class Controller
             if (method_exists($response, 'setActionName')) {
                 $response->setActionName($actionName);
             }
+
             return call_user_func_array(array($controller, $actionName), $args);
         };
+
         return $callable;
     }
 
+    /**
+     * @param $request
+     */
     public function setRequest($request)
     {
         $this->request = $request;
     }
 
+    /**
+     * @param $response
+     */
     public function setResponse($response)
     {
         $this->response = $response;
     }
 
-    /**
-     * Render the view from within the controller
-     * @param string $file Name of the template/ view to render
-     * @param array $args Additional variables to pass to the view
-     * @param Response?
-     * TODO should this be here?
-     */
-    protected function render($file, $args=array())
-    {
-        $container = $this->app->getContainer();
-        var_dump($container->get("view")); die();
 
-        // return $container->renderer->render($this->response, $file, $args);
-        //return $container->get("render")->render($this->response, $file, $args);
+    /**
+     * @param $file
+     * @param array $args
+     * @param int $status
+     * @param string $contentType
+     * @return mixed
+     */
+    protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8") {
+        // Render the view using the render method
+        return $this->container->get("render")->render($file, $args, $status, $contentType, $this->response);
+    }
+
+    // @TODO add a fourth that is just called api, which figures out what the user has told you they want (xml / json) and use that as the header)
+    // Remember to create a new response, with the new header that the user has requested in $this->requested
+    // Something like: $response = $this->response->withHeader($this->requested->getHeader("Content-Type")); and then pass on $response
+    /**
+     * @param array $args
+     * @param int $status
+     * @return mixed
+     */
+    protected function json($args = array(), int $status = 200) {
+        return $this->container->get("render")->toJson($args, $status, $this->response);
+    }
+
+    /**
+     * @param array $args
+     * @param int $status
+     * @return mixed
+     */
+    protected function xml($args = array(), int $status = 200) {
+        return $this->container->get("render")->toXML($args, $status, $this->response);
     }
 
     /**
@@ -154,7 +191,7 @@ abstract class Controller
      *
      * @param  string $actionName The redirect destination.
      * @param array $data
-     * @return Controller
+     * @return RenaController
      * @internal param string $status The redirect HTTP status code.
      */
     public function forward($actionName, $data=array())
