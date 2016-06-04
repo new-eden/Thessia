@@ -1,9 +1,9 @@
 <?php
 
-// change to the main directory
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 
+// change to the main directory
 chdir(__DIR__);
 
 // Load the autoloader
@@ -17,7 +17,7 @@ if (file_exists(__DIR__ . "/vendor/autoload.php")) {
 // Initialize the container
 $container = new Container;
 
-//. Attempt to autowire class constructor dependencies
+// Attempt to autowire class constructor dependencies
 $container->delegate(new ReflectionContainer);
 
 // Register the config file

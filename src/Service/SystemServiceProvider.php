@@ -40,18 +40,24 @@ class SystemServiceProvider extends AbstractServiceProvider {
         $container = $this->getContainer();
 
         // Add the logger
-        $container->share("log", "Monolog\\Logger")->withArgument($container->get("config")->get("name", "settings", "Thessia"));
-        $container->get("log")->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
+        $container->share("log", function() use ($container){
+            $logger = new Logger($container->get("config")->get("name", "settings", "Thessia"));
+            $logger->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
+
+            return $logger;
+        });
 
         // Add the config
         $container->share("config", "Thessia\\Lib\\Config")->withArgument("configFile")->withArgument("log");
 
         // Add the twig view
-        $twig = new Twig(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]);
-        $twig->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
-        $twig->addExtension(new \Twig_Extension_Debug());
-        $container->share("view", $twig);
+        $container->share("view", function() {
+            $twig = new Twig(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]);
+            $twig->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
+            $twig->addExtension(new \Twig_Extension_Debug());
 
+            return $twig;
+        });
 
         // Add the Cache
         $container->share("cache", "\\Thessia\\Lib\\Cache")->withArgument("config");
