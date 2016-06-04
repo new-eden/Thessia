@@ -1,0 +1,9 @@
+<?php
+
+namespace Rena\Lib;
+
+class ?name
+{
+    function __construct() {
+    }
+}

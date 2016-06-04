@@ -1,0 +1,17 @@
+<?php
+
+ namespace Rena\Tasks\Resque;
+
+ class ?nameResque {
+     public function perform() {
+
+     }
+
+     public function setUp() {
+
+     }
+
+     public function tearDown() {
+
+     }
+ }

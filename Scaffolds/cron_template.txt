@@ -1,0 +1,21 @@
+<?php
+namespace Rena\Tasks\Cron;
+use Slim\Container;
+
+class ?name
+{
+    /**
+     * @param Container $container
+     */
+    public static function execute(Container $container)
+    {
+    }
+
+    /**
+     * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
+     */
+    public static function getRunTimes()
+    {
+        return 0;
+    }
+}
