@@ -43,39 +43,41 @@ class SystemServiceProvider extends AbstractServiceProvider {
      */
     public function register()
     {
+        $container = $this->getContainer();
+
         // Add the config
-        $this->getContainer()->share("config", Config::class)->withArgument("configFile")->withArgument("log");
+        $container->share("config", Config::class)->withArgument("configFile")->withArgument("log");
 
         // Add the logger
-        $this->getContainer()->share("log", function() {
-            $logger = new Logger($this->getContainer()->get("config")->get("name", "settings", "Thessia"));
-            $logger->pushHandler(new StreamHandler($this->getContainer()->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
+        $container->share("log", function() use ($container) {
+            $logger = new Logger($container->get("config")->get("name", "settings", "Thessia"));
+            $logger->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
 
             return $logger;
         });
 
         // Add the twig view
-        $this->getContainer()->share("view", function() {
-            $twig = new Twig(__DIR__ . "/../../templates", $this->getContainer()->get("config")->getAll("settings")["view"]);
-            $twig->addExtension(new TwigExtension($this->getContainer()->get("router"), $this->getContainer()->get("request")->getUri()));
+        $container->share("view", function() use ($container) {
+            $twig = new Twig(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]);
+            $twig->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
             $twig->addExtension(new \Twig_Extension_Debug());
 
             return $twig;
         });
 
         // Add the Cache
-        $this->getContainer()->share("cache", Cache::class)->withArgument("config");
+        $container->share("cache", Cache::class)->withArgument("config");
 
         // Add the Database
-        $this->getContainer()->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
+        $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
 
         // Add the Renderer
-        $this->getContainer()->share("render", Render::class)->withArgument("view");
+        $container->share("render", Render::class)->withArgument("view");
 
         // Add the Session handler
-        $this->getContainer()->share("session", SessionHandler::class)->withArgument("cache");
+        $container->share("session", SessionHandler::class)->withArgument("cache");
 
         // Add the Timer
-        $this->getContainer()->share("timer", Timer::class);
+        $container->share("timer", Timer::class);
     }
 }
