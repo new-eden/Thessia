@@ -51,3 +51,4 @@ vendor/
 ## Application specific files:
 config/config.php
 cache/*
+logs/*
