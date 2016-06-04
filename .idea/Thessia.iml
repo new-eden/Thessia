@@ -43,6 +43,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/react/socket-client" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/react/stream" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/react/zmq" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/robmorgan/phinx" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/slim/flash" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/slim/slim" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/slim/twig-view" />
@@ -117,6 +118,7 @@
           <root url="file://$MODULE_DIR$/vendor/react/socket-client" />
           <root url="file://$MODULE_DIR$/vendor/react/stream" />
           <root url="file://$MODULE_DIR$/vendor/react/zmq" />
+          <root url="file://$MODULE_DIR$/vendor/robmorgan/phinx" />
           <root url="file://$MODULE_DIR$/vendor/slim/flash" />
           <root url="file://$MODULE_DIR$/vendor/slim/slim" />
           <root url="file://$MODULE_DIR$/vendor/slim/twig-view" />
@@ -177,6 +179,7 @@
           <root url="file://$MODULE_DIR$/vendor/react/socket-client" />
           <root url="file://$MODULE_DIR$/vendor/react/stream" />
           <root url="file://$MODULE_DIR$/vendor/react/zmq" />
+          <root url="file://$MODULE_DIR$/vendor/robmorgan/phinx" />
           <root url="file://$MODULE_DIR$/vendor/slim/flash" />
           <root url="file://$MODULE_DIR$/vendor/slim/slim" />
           <root url="file://$MODULE_DIR$/vendor/slim/twig-view" />

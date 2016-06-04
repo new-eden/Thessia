@@ -1,13 +1,13 @@
 <?php
 
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Init extends \Phinx\Console\Command\Init
+class PhinxInit extends \Phinx\Console\Command\Init
 {
     protected function configure()
     {

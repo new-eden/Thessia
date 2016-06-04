@@ -1,11 +1,11 @@
 <?php
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Test extends \Phinx\Console\Command\Test
+class PhinxTest extends \Phinx\Console\Command\Test
 {
     protected function configure()
     {

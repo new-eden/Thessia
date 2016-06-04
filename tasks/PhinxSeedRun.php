@@ -1,12 +1,12 @@
 <?php
 
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SeedRun extends \Phinx\Console\Command\SeedRun
+class PhinxSeedRun extends \Phinx\Console\Command\SeedRun
 {
     protected function configure()
     {

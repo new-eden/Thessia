@@ -1,12 +1,12 @@
 <?php
 
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Migrate extends \Phinx\Console\Command\Migrate
+class PhinxMigrate extends \Phinx\Console\Command\Migrate
 {
     protected function configure()
     {

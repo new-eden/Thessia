@@ -1,6 +1,6 @@
 <?php
 
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class SeedCreate extends \Phinx\Console\Command\SeedCreate
+class PhinxSeedCreate extends \Phinx\Console\Command\SeedCreate
 {
     protected function configure()
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Rollback extends \Phinx\Console\Command\Rollback
+class PhinxRollback extends \Phinx\Console\Command\Rollback
 {
     protected function configure()
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Thessia\Tasks\Phinx;
+namespace Thessia\Tasks;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Status extends \Phinx\Console\Command\Status
+class PhinxStatus extends \Phinx\Console\Command\Status
 {
     protected function configure()
     {

@@ -33,6 +33,7 @@
     "chrisboulton/php-resque": "1.*",
     "react/zmq": "0.3.*",
     "ratchet/pawl": "0.2.*",
-    "cboden/ratchet": "0.3.*"
+    "cboden/ratchet": "0.3.*",
+    "robmorgan/phinx": "0.5.*"
   }
 }

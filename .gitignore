@@ -52,3 +52,4 @@ vendor/
 config/config.php
 cache/*
 logs/*
+phinx.yml
