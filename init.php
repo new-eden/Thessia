@@ -12,7 +12,7 @@ if (file_exists(__DIR__ . "/vendor/autoload.php")) {
 }
 
 // Initialize the container
-$container = new League\Container\Container;
+$container = \Thessia\Helper\getContainer();
 
 // Load the system provider
 $container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);

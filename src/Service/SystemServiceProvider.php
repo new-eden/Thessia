@@ -3,6 +3,8 @@
 namespace Thessia\Service;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class SystemServiceProvider extends AbstractServiceProvider {
     /**
@@ -15,6 +17,8 @@ class SystemServiceProvider extends AbstractServiceProvider {
      * @var array
      */
     protected $provides = [
+        "log",
+        "config"
     ];
 
     /**
@@ -27,5 +31,22 @@ class SystemServiceProvider extends AbstractServiceProvider {
     {
         $container = $this->getContainer();
 
+        // Add the logger
+        $container->share("log", "Monolog\\Logger")->withArgument("Thessia");
+        $container->get("log")->pushHandler(new StreamHandler(__DIR__ . "/../../logs/thessia.log", Logger::WARNING));
+
+        // Add the config
+        $container->share("config", "Thessia\\Lib\\Config")->withArgument("configFile")->withArgument("log");
+
+        // Add the twig view
+        $container->share("view", new \Slim\Views\Twig(__DIR__ . "/../../templates", $container->get("config")->getAll("twig")));
+        $container->get("view")->addExtension(new \Slim\Views\TwigExtension($container->get("router"), $container->get("request")->getUri()));
+        $container->get("view")->addExtension(new \Twig_Extension_Debug());
+
+        // Add the Cache
+        // Add the Database
+        // Add the Renderer
+        // Add the Session handler
+        // Add the Timer
     }
 }
