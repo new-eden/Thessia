@@ -4,7 +4,6 @@ namespace Thessia\Middleware;
 use Whoops\Util\Misc;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Handler\JsonResponseHandler;
-use Zeuxisoo\Whoops\Provider\Slim\WhoopsErrorHandler;
 
 class Whoops {
 
