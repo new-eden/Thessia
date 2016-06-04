@@ -27,6 +27,12 @@
     "jenssegers/lean": "0.1.*",
     "jtrumbull/xml-parser": "1.0.*",
     "zendframework/zend-diactoros": "1.3.*",
-    "php-pm/php-pm": "dev-master"
+    "php-pm/php-pm": "dev-master",
+    "gossi/php-code-generator": "dev-master",
+    "gossi/php-code-formatter": "dev-master",
+    "chrisboulton/php-resque": "1.*",
+    "react/zmq": "0.3.*",
+    "ratchet/pawl": "0.2.*",
+    "cboden/ratchet": "0.3.*"
   }
 }

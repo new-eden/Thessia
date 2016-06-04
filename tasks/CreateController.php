@@ -21,7 +21,7 @@ class CreateController extends Command
     {
         $name = prompt("Name of Controller");
 
-        $directory = __DIR__ . "/../App/Controllers/";
+        $directory = __DIR__ . "/../src/Controllers/";
 
         $file = file_get_contents(__DIR__ . "/../Scaffolds/controller_template.txt");
 

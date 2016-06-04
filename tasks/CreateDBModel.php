@@ -33,7 +33,7 @@ class CreateDBModel extends Command
             exit();
         }
 
-        $path = __DIR__ . "/../Src/Models/Database/{$table}.php";
+        $path = __DIR__ . "/../src/Model/Database/{$table}.php";
         if(file_exists($path))
             return $output->writeln("Error, model already exists");
 

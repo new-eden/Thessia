@@ -21,13 +21,8 @@ class CreateTask extends Command
     {
         $name = prompt("Name of task");
         $description = prompt("Task description");
-        $global = prompt("Is this a global task? If it isn't it will end up in App/Tasks instead of Tasks/ (Default: global)");
 
-        if($global != "")
-            $directory = __DIR__ . "/../App/Tasks/";
-        else
-            $directory = __DIR__ . "/../Tasks/";
-
+        $directory = __DIR__ . "/../tasks/";
         $file = file_get_contents(__DIR__ . "/../Scaffolds/tasks_template.txt");
         
         $file = str_replace("?name", ucfirst($name), $file);

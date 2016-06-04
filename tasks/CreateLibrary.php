@@ -21,7 +21,7 @@ class CreateLibrary extends Command
     {
         $name = prompt("Name of Library");
 
-        $directory = __DIR__ . "/../Src/Lib/";
+        $directory = __DIR__ . "/../src/Lib/";
 
         $file = file_get_contents(__DIR__ . "/../Scaffolds/library_template.txt");
 

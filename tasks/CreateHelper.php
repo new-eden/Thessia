@@ -21,7 +21,7 @@ class CreateHelper extends Command
     {
         $name = prompt("Name of Helper");
 
-        $directory = __DIR__ . "/../App/Helpers/";
+        $directory = __DIR__ . "/../src/Helpers/";
 
         $file = file_get_contents(__DIR__ . "/../Scaffolds/helper_template.txt");
 

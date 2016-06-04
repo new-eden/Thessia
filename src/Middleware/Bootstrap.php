@@ -19,9 +19,9 @@ class Bootstrap
      * RenaBootstrap constructor.
      */
     public function __construct() {
-        require_once(__DIR__ . "/../../Init.php");
+        require_once(__DIR__ . "/../../init.php");
         $app = new App($container);
-        require_once(__DIR__ . "/../../Config/Routes.php");
+        require_once(__DIR__ . "/../../config/routes.php");
 
         $this->app = $app;
     }

@@ -21,7 +21,7 @@ class CreateMiddleware extends Command
     {
         $name = prompt("Name of Middleware");
 
-        $directory = __DIR__ . "/../App/Middleware/";
+        $directory = __DIR__ . "/../src/Middleware/";
 
         $file = file_get_contents(__DIR__ . "/../Scaffolds/middleware_template.txt");
 
