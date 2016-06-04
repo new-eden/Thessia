@@ -13,6 +13,7 @@ use Thessia\Lib\Db;
 use Thessia\Lib\Render;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
+use Thessia\Middleware\AccessLogging;
 
 class SystemServiceProvider extends AbstractServiceProvider {
     /**

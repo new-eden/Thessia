@@ -14,8 +14,6 @@ include(__DIR__ . "/../init.php");
 // Load slim
 $app = new \Slim\App($container);
 
-// Add container
-
 // Setup the session handler
 
 // Load the routes

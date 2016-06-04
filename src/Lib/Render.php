@@ -35,9 +35,7 @@ class Render
      */
     public function render(String $templateFile, $dataArray = array(), int $status = null, String $contentType = null, ResponseInterface $response)
     {
-        $contentType = $response->getHeader("Content-Type");
-        if ($contentType)
-            $contentType = $contentType;
+        $contentType = $contentType ?? $response->getHeader("Content-Type");
         
         // Run the scrapeCheck
         $this->scrapeChecker();
