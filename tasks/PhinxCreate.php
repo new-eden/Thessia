@@ -12,9 +12,10 @@ class PhinxCreate extends \Phinx\Console\Command\Create
 {
     protected function configure()
     {
+        parent::configure();
+
         $this->setName('phinx:create')
             ->setDescription('Create a new migration')
-            ->addArgument('name', InputArgument::REQUIRED, 'What is the name of the migration?')
             ->setHelp(sprintf(
                 '%sCreates a new database migration%s',
                 PHP_EOL,

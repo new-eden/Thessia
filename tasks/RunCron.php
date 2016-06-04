@@ -73,7 +73,7 @@ class RunCron extends Command
                     try {
                         $pid = pcntl_fork();
                         if ($pid === 0) {
-                            $cont = include(__DIR__ . "/../Config/Dependencies.php");
+                            $cont = include(__DIR__ . "/../config/Dependencies.php");
                             $cache = $cont->get("cache");
                             $pid = getmypid();
                             $cache->set($md5 . "_pid", $pid);
