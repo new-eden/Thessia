@@ -5,9 +5,12 @@ namespace Thessia\Lib\Middleware;
 use Psr\Http\Message\UriInterface;
 use Slim\App;
 
+/**
+ * Class Controller
+ * @package Thessia\Lib\Middleware
+ */
 abstract class Controller
 {
-    // Optional properties
     /**
      * @var App
      */
@@ -82,6 +85,19 @@ abstract class Controller
     }
 
     /**
+     * Fascilitate easily getting the stuff loaded into the container
+     *
+     * @param $name
+     * @return mixed|null
+     */
+    public function __get($name) {
+        if(!empty($this->container->get($name)))
+            return $this->container->get($name);
+
+        return null;
+    }
+
+    /**
      * @param $request
      */
     public function setRequest($request)
@@ -97,8 +113,17 @@ abstract class Controller
         $this->response = $response;
     }
 
+    /**
+     * Return the entire container for use in the controller
+     * @return \Interop\Container\ContainerInterface|\Slim\Container
+     */
+    public function getContainer() {
+        return $this->container;
+    }
 
     /**
+     * Render the template file itself
+     *
      * @param $file
      * @param array $args
      * @param int $status
@@ -106,7 +131,6 @@ abstract class Controller
      * @return mixed
      */
     protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8") {
-        // Render the view using the render method
         return $this->container->get("render")->render($file, $args, $status, $contentType, $this->response);
     }
 
@@ -114,6 +138,8 @@ abstract class Controller
     // Remember to create a new response, with the new header that the user has requested in $this->requested
     // Something like: $response = $this->response->withHeader($this->requested->getHeader("Content-Type")); and then pass on $response
     /**
+     * Render the data as json output
+     *
      * @param array $args
      * @param int $status
      * @return mixed
@@ -123,6 +149,8 @@ abstract class Controller
     }
 
     /**
+     * Render the data as xml output
+     * 
      * @param array $args
      * @param int $status
      * @return mixed

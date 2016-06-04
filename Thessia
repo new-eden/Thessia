@@ -1,0 +1,39 @@
+#!/usr/bin/env php7.0
+<?php
+
+// Error logging
+ini_set("display_errors", 1);
+error_reporting(E_ALL);
+
+// Change to this directory
+chdir(__DIR__);
+
+// Load init
+require_once("init.php");
+
+// Launch the CLI
+$cli = new Symfony\Component\Console\Application("Embrace Eternity");
+
+// Load all the commands
+$files = glob(__DIR__ . "/tasks/*.php");
+foreach ($files as $file) {
+    require_once($file);
+    $file = str_replace(__DIR__."/", "", $file);
+    $name = str_replace(".php", "", basename($file));
+    $namespace = ucfirst(str_replace("/", "\\", str_replace(".php", "", $file)));
+    $import = "\\Thessia\\{$namespace}";
+
+    $cli->add(new $import());
+}
+
+$cli->run();
+
+// Prompter
+function prompt($prompt, $default = "")
+{
+    echo "$prompt [$default] ";
+    $answer = trim(fgets(STDIN));
+    if (strlen($answer) == 0)
+        return $default == "yes" ? true : $default;
+    return $answer;
+}
