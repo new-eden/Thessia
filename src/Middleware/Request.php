@@ -1,6 +1,6 @@
 <?php
 
-namespace Thessia\Lib\Middleware;
+namespace Thessia\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
 

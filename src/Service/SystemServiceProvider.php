@@ -49,6 +49,10 @@ class SystemServiceProvider extends AbstractServiceProvider {
         // Add the config
         $container->share("config", Config::class)->withArgument("configFile");
 
+        // Add slim/twig/logger settings
+        $settings = $container->get("config")->getAll("settings");
+        $container->share("settings", $settings);
+
         // Add the logger
         $container->share("log", Logger::class)->withArgument($container->get("config")->get("name", "settings", "Thessia"));
         $container->get("log")->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));

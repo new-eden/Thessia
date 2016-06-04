@@ -15,6 +15,13 @@ include(__DIR__ . "/../init.php");
 $app = new \Slim\App($container);
 
 // Setup the session handler
+$session = $container->get("session");
+session_set_save_handler($session, true);
+session_cache_limiter(false);
+session_start();
+
+// Setup whoops
+$app->add(new \Thessia\Middleware\Whoops());
 
 // Load the routes
 require_once(__DIR__ . "/../config/routes.php");
