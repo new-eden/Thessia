@@ -46,7 +46,7 @@ class Bridge implements BridgeInterface
      */
     public function onRequest(ReactRequest $request, ReactResponse $response)
     {
-        if($this->middleware === null)
+        if ($this->middleware === null)
             return;
 
         $renaReq = $this->mapRequest($request);
@@ -130,7 +130,7 @@ class Bridge implements BridgeInterface
 
         $cookieHeader = explode(';', isset($headers['Cookie']) ? $headers['Cookie'] : $headers['cookie']);
 
-        return array_reduce($cookieHeader, function ($cookies, $cookie) {
+        return array_reduce($cookieHeader, function($cookies, $cookie) {
             list($name, $value) = explode('=', trim($cookie));
             $cookies[$name] = $value;
             return $cookies;

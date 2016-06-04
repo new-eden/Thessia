@@ -81,8 +81,9 @@ class Db
         $this->config = $config;
         $this->request = $requestInterface;
 
-        if ($this->persistence === false)
-            $this->cache->persistence = false;
+        if ($this->persistence === false) {
+                    $this->cache->persistence = false;
+        }
 
         $host = $config->get("unixSocket", "database") ? ";unix_socket=" . $config->get("unixSocket", "database", "/var/run/mysqld/mysqld.sock") : ";host=" . $config->get("host", "database", "127.0.0.1");
         $dsn = "mysql:dbname=" . $config->get("dbName", "database") . "{$host};charset=utf8";
@@ -113,8 +114,9 @@ class Db
         $result = $this->query($query, $parameters, $cacheTime);
 
         // Figure out if it has more than one result and return it
-        if (sizeof($result) >= 1)
-            return $result[0];
+        if (sizeof($result) >= 1) {
+                    return $result[0];
+        }
 
         // No results at all
         return array();
@@ -160,8 +162,9 @@ class Db
             $stmt->execute($parameters);
 
             // Check for errors
-            if ($stmt->errorCode() != 0)
-                return false;
+            if ($stmt->errorCode() != 0) {
+                            return false;
+            }
 
             // Fetch an associative array
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -174,8 +177,9 @@ class Db
             $this->queryTime += $timer->stop();
 
             // If cache time is above 0 seconds, lets store it in the cache.
-            if ($cacheTime > 0)
-                $this->cache->set($key, serialize($result), min(3600, $cacheTime));
+            if ($cacheTime > 0) {
+                            $this->cache->set($key, serialize($result), min(3600, $cacheTime));
+            }
 
             // Log the query
             $this->logQuery($query, $parameters, $duration);
@@ -238,8 +242,9 @@ class Db
         $result = $this->query($query, $parameters, $cacheTime);
 
         // Figure out if it has no results
-        if (sizeof($result) == 0)
-            return null;
+        if (sizeof($result) == 0) {
+                    return null;
+        }
 
         // Bind the first result to $resultRow
         $resultRow = $result[0];
@@ -274,7 +279,9 @@ class Db
         $queryValues = array();
 
         foreach ($parameters as $rowID => $valueRow) {
-            if (!is_array($valueRow)) continue;
+            if (!is_array($valueRow)) {
+                continue;
+            }
             $tmpQuery = array();
 
             foreach ($valueRow as $fieldID => $fieldValue) {
@@ -315,12 +322,14 @@ class Db
         // Multilevel array handling.. not pretty but does speedup shit!
         if (isset($parameters[0]) && is_array($parameters[0]) === true) {
             foreach ($parameters as $array) {
-                foreach ($array as $key => &$value)
-                    $stmt->bindParam($key, $value);
+                foreach ($array as $key => &$value) {
+                                    $stmt->bindParam($key, $value);
+                }
                 $stmt->execute();
             }
-        } else
-            $stmt->execute($parameters);
+        } else {
+                    $stmt->execute($parameters);
+        }
 
         // If an error happened, rollback and return false
         if ($stmt->errorCode() != 0) {
@@ -347,8 +356,9 @@ class Db
         $stmt->closeCursor();
 
         // If return ID is needed, return that
-        if ($returnID)
-            return $returnID;
+        if ($returnID) {
+                    return $returnID;
+        }
 
         // Return the amount of rows that got altered
         return $rowCount;
@@ -381,8 +391,9 @@ class Db
         // @todo remove this..
         $key = sha1($name . $this->request->getUri()->getPath());
 
-        if (!empty($this->cache->get($key)))
-            return null;
+        if (!empty($this->cache->get($key))) {
+                    return null;
+        }
 
         $host = $this->config->get("host", "database", "127.0.0.1");
         $username = $this->config->get('username', 'database');
@@ -403,8 +414,9 @@ class Db
         $this->queryCount++;
 
         // This is ugly, and dangerous
-        foreach ($parameters as $key => $value)
-            $query = str_replace($key, mysqli_real_escape_string($connection, $value), $query);
+        foreach ($parameters as $key => $value) {
+                    $query = str_replace($key, mysqli_real_escape_string($connection, $value), $query);
+        }
 
         return $connection->query($query, MYSQLI_ASYNC);
     }
@@ -421,12 +433,14 @@ class Db
 
         if ($cacheTime > 0) {
             $result = !empty($this->cache->get($key)) ? unserialize($this->cache->get($key)) : null;
-            if (!empty($result))
-                return $result;
+            if (!empty($result)) {
+                            return $result;
+            }
         }
 
-        if (!isset($this->connections[$name]))
-            return false;
+        if (!isset($this->connections[$name])) {
+                    return false;
+        }
 
         /** @var \mysqli $connection */
         $connection = $this->connections[$name];
@@ -441,10 +455,12 @@ class Db
 
         $data = array();
         $con = $connection->reap_async_query();
-        while ($row = $con->fetch_assoc())
-            $data[] = $row;
-        if ($cacheTime > 0)
-            $this->cache->set($key, serialize($data), min(3600, $cacheTime));
+        while ($row = $con->fetch_assoc()) {
+                    $data[] = $row;
+        }
+        if ($cacheTime > 0) {
+                    $this->cache->set($key, serialize($data), min(3600, $cacheTime));
+        }
 
         return $data;
     }
