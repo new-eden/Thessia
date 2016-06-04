@@ -27,6 +27,7 @@
     "symfony/translation": "3.1.*",
     "symfony/twig-bridge": "3.1.*",
     "symfony/console": "3.1.*",
-    "jenssegers/lean": "0.1.*"
+    "jenssegers/lean": "0.1.*",
+    "jtrumbull/xml-parser": "1.0.*"
   }
 }

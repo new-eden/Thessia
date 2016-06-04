@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "60d8871187249312ec5242933eaa09fa",
-    "content-hash": "186aa67de715190fbb7dfafdb1ca1f3b",
+    "hash": "5077f8023fe62b96b55e051d973a015f",
+    "content-hash": "5c35a9567a16fe6b0cd55dde6384a9d5",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -142,6 +142,36 @@
                 "slim"
             ],
             "time": "2015-11-22 10:52:03"
+        },
+        {
+            "name": "jtrumbull/xml-parser",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jtrumbull/xml-parser.git",
+                "reference": "94212d1bfc304ba9ac0a50b14e0a0cf67c877e86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jtrumbull/xml-parser/zipball/94212d1bfc304ba9ac0a50b14e0a0cf67c877e86",
+                "reference": "94212d1bfc304ba9ac0a50b14e0a0cf67c877e86",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "XMLParser\\": "lib/XMLParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP Class that parses XML objects",
+            "time": "2016-02-04 12:49:48"
         },
         {
             "name": "league/container",

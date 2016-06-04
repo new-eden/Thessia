@@ -15,9 +15,6 @@ $app = new \Slim\App($container);
 
 // Setup the session handler
 
-// Add whoops
-$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
-
 // Load the routes
 require_once(__DIR__ . "/../config/routes.php");
 

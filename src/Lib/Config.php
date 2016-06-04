@@ -3,17 +3,20 @@ namespace Thessia\Lib;
 
 use Monolog\Logger;
 
-class Config {
+class Config
+{
     private $config;
     private $logger;
 
-    public function __construct($configFile, Logger $logger) {
+    public function __construct($configFile, Logger $logger)
+    {
         $this->logger = $logger;
         $this->loadConfig($configFile);
     }
 
-    public function loadConfig($configFile) {
-        if(!file_exists(realpath($configFile))) {
+    public function loadConfig($configFile)
+    {
+        if (!file_exists(realpath($configFile))) {
             $this->logger->addError("Config file " . realpath($configFile) . " not found..");
             return;
         }
@@ -26,7 +29,8 @@ class Config {
         }
     }
 
-    public function get($key, $type = null, $default = null) {
+    public function get($key, $type = null, $default = null)
+    {
         $type = strtolower($type);
 
         if (!empty($this->config[$type][$key])) {
@@ -38,13 +42,14 @@ class Config {
         return $default;
     }
 
-    public function getAll($type = null) {
+    public function getAll($type = null)
+    {
         $type = strtolower($type);
 
         if (!empty($this->config[$type])) {
             return $this->config[$type];
         }
-        
+
         $this->logger->addWarning("Config group not found: {$type}");
 
         return array();
