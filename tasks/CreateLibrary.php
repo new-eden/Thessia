@@ -36,7 +36,7 @@ class CreateLibrary extends Command
             $helper = $this->getHelper("question");
             $question = new ConfirmationQuestion("Directory doesn't exist. Would you like to try and create it?", false);
 
-            if(!$helper->ask($input, $output, $question))
+            if (!$helper->ask($input, $output, $question))
                 return;
 
             @mkdir($directory);

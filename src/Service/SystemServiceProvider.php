@@ -15,7 +15,8 @@ use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
 use Thessia\Middleware\AccessLogging;
 
-class SystemServiceProvider extends AbstractServiceProvider {
+class SystemServiceProvider extends AbstractServiceProvider
+{
     /**
      * The provides array is a way to let the container
      * know that a service is provided by this service

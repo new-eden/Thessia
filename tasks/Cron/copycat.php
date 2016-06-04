@@ -1,5 +1,6 @@
 <?php
 namespace Thessia\Tasks\Cron;
+
 use Slim\Container;
 
 class copycat

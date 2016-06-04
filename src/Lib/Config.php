@@ -1,8 +1,6 @@
 <?php
 namespace Thessia\Lib;
 
-use Monolog\Logger;
-
 class Config
 {
     private $config;

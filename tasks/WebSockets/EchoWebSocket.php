@@ -5,7 +5,8 @@ use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 use Slim\Container;
 
-class EchoWebSocket implements MessageComponentInterface {
+class EchoWebSocket implements MessageComponentInterface
+{
     /**
      * @var \SplObjectStorage
      */

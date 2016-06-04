@@ -1,16 +1,18 @@
 <?php
 namespace Thessia\Middleware;
 
-use Whoops\Util\Misc;
-use Whoops\Handler\PrettyPageHandler;
 use Whoops\Handler\JsonResponseHandler;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Util\Misc;
 
-class Whoops {
+class Whoops
+{
 
-    public function __invoke($request, $response, $next) {
-        $app         = $next;
-        $container   = $app->getContainer();
-        $settings    = $container->get('settings');
+    public function __invoke($request, $response, $next)
+    {
+        $app = $next;
+        $container = $app->getContainer();
+        $settings = $container->get('settings');
         $environment = $container->get('environment');
 
         if (isset($settings['debug']) === true && $settings['debug'] === true) {
@@ -24,20 +26,20 @@ class Whoops {
             // Add more information to the PrettyPageHandler
             $prettyPageHandler->addDataTable('Slim Application', [
                 'Application Class' => get_class($app),
-                'Script Name'       => $environment->get('SCRIPT_NAME'),
-                'Request URI'       => $environment->get('PATH_INFO') ?: '<none>',
+                'Script Name' => $environment->get('SCRIPT_NAME'),
+                'Request URI' => $environment->get('PATH_INFO') ?: '<none>',
             ]);
 
             $prettyPageHandler->addDataTable('Slim Application (Request)', array(
-                'Accept Charset'  => $request->getHeader('ACCEPT_CHARSET') ?: '<none>',
+                'Accept Charset' => $request->getHeader('ACCEPT_CHARSET') ?: '<none>',
                 'Content Charset' => $request->getContentCharset() ?: '<none>',
-                'Path'            => $request->getUri()->getPath(),
-                'Query String'    => $request->getUri()->getQuery() ?: '<none>',
-                'HTTP Method'     => $request->getMethod(),
-                'Base URL'        => (string)$request->getUri(),
-                'Scheme'          => $request->getUri()->getScheme(),
-                'Port'            => $request->getUri()->getPort(),
-                'Host'            => $request->getUri()->getHost(),
+                'Path' => $request->getUri()->getPath(),
+                'Query String' => $request->getUri()->getQuery() ?: '<none>',
+                'HTTP Method' => $request->getMethod(),
+                'Base URL' => (string)$request->getUri(),
+                'Scheme' => $request->getUri()->getScheme(),
+                'Port' => $request->getUri()->getPort(),
+                'Host' => $request->getUri()->getHost(),
             ));
 
             // Set Whoops to default exception handler
@@ -51,11 +53,11 @@ class Whoops {
 
             $whoops->register();
 
-            $container->share("errorHandler", function() use ($whoops) {
+            $container->share("errorHandler", function () use ($whoops) {
                 return new WhoopsErrorHandler($whoops);
             });
 
-            $container->share("whoops", function() use ($whoops) {
+            $container->share("whoops", function () use ($whoops) {
                 return $whoops;
             });
         }
