@@ -24,7 +24,7 @@ $container->delegate(new ReflectionContainer);
 $container->add("configFile", __DIR__ . "/config/config.php");
 
 // Load the dependencies
-$container->addServiceProvider(\Thessia\Service\SystemServiceProvider::class);
+$container->addServiceProvider(new \Thessia\Service\SystemServiceProvider);
 
 // Load the slim dependency
 $container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);

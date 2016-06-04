@@ -7,6 +7,12 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+use Thessia\Lib\Cache;
+use Thessia\Lib\Config;
+use Thessia\Lib\Db;
+use Thessia\Lib\Render;
+use Thessia\Lib\SessionHandler;
+use Thessia\Lib\Timer;
 
 class SystemServiceProvider extends AbstractServiceProvider {
     /**
@@ -37,21 +43,19 @@ class SystemServiceProvider extends AbstractServiceProvider {
      */
     public function register()
     {
-        $container = $this->getContainer();
+        // Add the config
+        $this->getContainer()->share("config", Config::class)->withArgument("configFile")->withArgument("log");
 
         // Add the logger
-        $container->share("log", function() use ($container){
+        $this->getContainer()->share("log", function() use ($container){
             $logger = new Logger($container->get("config")->get("name", "settings", "Thessia"));
             $logger->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
 
             return $logger;
         });
 
-        // Add the config
-        $container->share("config", "Thessia\\Lib\\Config")->withArgument("configFile")->withArgument("log");
-
         // Add the twig view
-        $container->share("view", function() {
+        $this->getContainer()->share("view", function() use ($container) {
             $twig = new Twig(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]);
             $twig->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
             $twig->addExtension(new \Twig_Extension_Debug());
@@ -60,18 +64,18 @@ class SystemServiceProvider extends AbstractServiceProvider {
         });
 
         // Add the Cache
-        $container->share("cache", "\\Thessia\\Lib\\Cache")->withArgument("config");
+        $this->getContainer()->share("cache", Cache::class)->withArgument("config");
 
         // Add the Database
-        $container->share("db", "\\Thessia\\Lib\\Db")->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
+        $this->getContainer()->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
 
         // Add the Renderer
-        $container->share("render", "\\Thessia\\Lib\\Render")->withArgument("view");
+        $this->getContainer()->share("render", Render::class)->withArgument("view");
 
         // Add the Session handler
-        $container->share("session", "\\Thessia\\Lib\\Session")->withArgument("cache");
+        $this->getContainer()->share("session", SessionHandler::class)->withArgument("cache");
 
         // Add the Timer
-        $container->share("timer", "\\Thessia\\Lib\\Timer");
+        $this->getContainer()->share("timer", Timer::class);
     }
 }
