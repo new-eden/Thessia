@@ -33,8 +33,8 @@ class RunServer extends StartCommand
     protected function configurePPMOptions(Command $command)
     {
         $command
-            ->addOption("bridge", null, InputOption::VALUE_OPTIONAL, "The bridge we use to convert a ReactPHP-Request to your target framework.", "Rena\Middleware\RenaBridge")
-            ->addOption("bootstrap", null, InputOption::VALUE_OPTIONAL, "The class that will be used to bootstrap your application", "Rena\Middleware\RenaBootstrap")
+            ->addOption("bridge", null, InputOption::VALUE_OPTIONAL, "The bridge we use to convert a ReactPHP-Request to your target framework.", "Thessia\Middleware\Bridge")
+            ->addOption("bootstrap", null, InputOption::VALUE_OPTIONAL, "The class that will be used to bootstrap your application", "Thessia\Middleware\Bootstrap")
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "Load-Balancer host. Default is 127.0.0.1", "127.0.0.1")
             ->addOption("port", null, InputOption::VALUE_OPTIONAL, "Load-Balancer port. Default is 31337", 3337)
             ->addOption("workers", null, InputOption::VALUE_OPTIONAL, "Worker count. Default is 8. Should be minimum equal to the number of CPU cores.", 8)
