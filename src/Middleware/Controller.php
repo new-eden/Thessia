@@ -45,8 +45,8 @@ abstract class Controller
      */
     protected function render($file, $args=array())
     {
-        //$container = $this->app->getContainer();
-        //var_dump($container->get("view")); die();
+        $container = $this->app->getContainer();
+        var_dump($container->get("view")); die();
 
         // return $container->renderer->render($this->response, $file, $args);
         //return $container->get("render")->render($this->response, $file, $args);
