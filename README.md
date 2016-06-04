@@ -1,4 +1,5 @@
-<img src="http://i.imgur.com/EespvaE.png" alt="Embrace Eternity" style="width: 200px;"/>
+<p align="center"><img src="http://i.imgur.com/EespvaE.png" data-canonical-src="http://i.imgur.com/EespvaE.png" width="200"/></p>
+
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/gp/Thessia/badges/quality-score.png?b=master&s=61412094cbd1ecf596f6b122b049fab86ad50074)](https://scrutinizer-ci.com/gp/Thessia/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/gp/Thessia/badges/coverage.png?b=master&s=2efb42e9fde2b3c214c32d3157109f03d157e29e)](https://scrutinizer-ci.com/gp/Thessia/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/gp/Thessia/badges/build.png?b=master&s=120fbbcaa40104c3fe84a18d6216f2e36a6808a3)](https://scrutinizer-ci.com/gp/Thessia/build-status/master)
