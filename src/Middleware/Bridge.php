@@ -37,7 +37,7 @@ class Bridge implements BridgeInterface
      */
     public function getStaticDirectory()
     {
-        return "./Public/";
+        return "./public/";
     }
 
     /**

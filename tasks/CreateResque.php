@@ -23,7 +23,7 @@ class CreateResque extends Command
 
         $directory = __DIR__ . "/Resque/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/resque_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/resque_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 

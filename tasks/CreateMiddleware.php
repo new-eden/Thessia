@@ -23,7 +23,7 @@ class CreateMiddleware extends Command
 
         $directory = __DIR__ . "/../src/Middleware/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/middleware_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/middleware_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 

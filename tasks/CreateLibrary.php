@@ -23,7 +23,7 @@ class CreateLibrary extends Command
 
         $directory = __DIR__ . "/../src/Lib/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/library_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/library_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 

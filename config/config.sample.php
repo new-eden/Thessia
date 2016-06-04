@@ -18,7 +18,7 @@ $config["settings"] = array(
     "whoops.editor" => "sublime",
     "displayErrorDetails" => true,
     "view" => array(
-        "cache" => __DIR__ . "../cache/",
+        "cache" => __DIR__ . "/../cache/templates/",
         "debug" => true,
         "auto_reload" => true
     ),

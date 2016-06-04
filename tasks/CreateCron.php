@@ -22,7 +22,7 @@ class CreateCron extends Command
 
         $directory = __DIR__ . "/Cron/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/cron_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/cron_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 

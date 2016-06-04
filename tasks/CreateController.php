@@ -23,7 +23,7 @@ class CreateController extends Command
 
         $directory = __DIR__ . "/../src/Controllers/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/controller_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/controller_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 

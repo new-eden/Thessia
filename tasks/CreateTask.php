@@ -23,7 +23,7 @@ class CreateTask extends Command
         $description = prompt("Task description");
 
         $directory = __DIR__ . "/../tasks/";
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/tasks_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/tasks_template.txt");
         
         $file = str_replace("?name", ucfirst($name), $file);
         $file = str_replace("?description", ucfirst($description), $file);

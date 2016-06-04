@@ -23,7 +23,7 @@ class CreateWebsocket extends Command
 
         $directory = __DIR__ . "/Websockets/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/websocket_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/websocket_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 

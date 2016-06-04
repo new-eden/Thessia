@@ -23,7 +23,7 @@ class CreateHelper extends Command
 
         $directory = __DIR__ . "/../src/Helpers/";
 
-        $file = file_get_contents(__DIR__ . "/../Scaffolds/helper_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/helper_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
