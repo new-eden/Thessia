@@ -45,9 +45,6 @@ class SystemServiceProvider extends AbstractServiceProvider {
     {
         $container = $this->getContainer();
 
-        // Add the config
-        $container->share("config", Config::class)->withArgument("configFile")->withArgument("log");
-
         // Add the logger
         $container->share("log", function() use ($container) {
             $logger = new Logger($container->get("config")->get("name", "settings", "Thessia"));
@@ -56,6 +53,9 @@ class SystemServiceProvider extends AbstractServiceProvider {
             return $logger;
         });
 
+        // Add the config
+        $container->share("config", Config::class)->withArgument("configFile")->withArgument("log");
+        
         // Add the twig view
         $container->share("view", function() use ($container) {
             $twig = new Twig(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]);
@@ -68,9 +68,6 @@ class SystemServiceProvider extends AbstractServiceProvider {
         // Add the Cache
         $container->share("cache", Cache::class)->withArgument("config");
 
-        // Add the Database
-        $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
-
         // Add the Renderer
         $container->share("render", Render::class)->withArgument("view");
 
@@ -79,5 +76,8 @@ class SystemServiceProvider extends AbstractServiceProvider {
 
         // Add the Timer
         $container->share("timer", Timer::class);
+
+        // Add the Database
+        $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
     }
 }
