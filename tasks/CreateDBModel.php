@@ -62,16 +62,19 @@ class CreateDBModel extends Command
         $idFields = array();
         foreach ($columns as $get) {
             // This is for the getByName selector(s)
-            if (stristr($get["Field"], "name"))
-                $nameFields[] = $get["Field"];
+            if (stristr($get["Field"], "name")) {
+                            $nameFields[] = $get["Field"];
+            }
 
             // This is for the getByID selector(s)
-            if (strstr($get["Field"], "ID"))
-                $idFields[] = $get["Field"];
+            if (strstr($get["Field"], "ID")) {
+                            $idFields[] = $get["Field"];
+            }
 
             // This is for the getByHash selector(s)
-            if (stristr($get["Field"], "Hash"))
-                $idFields[] = $get["Field"];
+            if (stristr($get["Field"], "Hash")) {
+                            $idFields[] = $get["Field"];
+            }
         }
 
         // Get generator
@@ -97,12 +100,14 @@ class CreateDBModel extends Command
         foreach ($nameFields as $name) {
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
-                if ($get["Field"] == $name)
-                    continue;
+                if ($get["Field"] == $name) {
+                                    continue;
+                }
 
                 // Skip the id field
-                if ($get["Field"] == "id")
-                    continue;
+                if ($get["Field"] == "id") {
+                                    continue;
+                }
 
                 $class->setMethod(PhpMethod::create("get" . ucfirst($get["Field"]) . "By" . ucfirst($name))
                     ->addParameter(PhpParameter::create($name))
@@ -115,12 +120,14 @@ class CreateDBModel extends Command
         foreach ($idFields as $id) {
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
-                if ($get["Field"] == $id)
-                    continue;
+                if ($get["Field"] == $id) {
+                                    continue;
+                }
 
                 // Skip the id field
-                if ($get["Field"] == "id")
-                    continue;
+                if ($get["Field"] == "id") {
+                                    continue;
+                }
 
                 $class->setMethod(PhpMethod::create("get" . ucfirst($get["Field"]) . "By" . ucfirst($id))
                     ->addParameter(PhpParameter::create($id))
@@ -134,12 +141,14 @@ class CreateDBModel extends Command
         foreach ($nameFields as $name) {
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
-                if ($get["Field"] == $name)
-                    continue;
+                if ($get["Field"] == $name) {
+                                    continue;
+                }
 
                 // Skip the id field
-                if ($get["Field"] == "id")
-                    continue;
+                if ($get["Field"] == "id") {
+                                    continue;
+                }
 
                 $class->setMethod(PhpMethod::create("update" . ucfirst($get["Field"]) . "By" . ucfirst($name))
                     ->addParameter(PhpParameter::create($get["Field"]))
@@ -156,12 +165,14 @@ class CreateDBModel extends Command
         foreach ($idFields as $id) {
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
-                if ($get["Field"] == $id)
-                    continue;
+                if ($get["Field"] == $id) {
+                                    continue;
+                }
 
                 // Skip the id field
-                if ($get["Field"] == "id")
-                    continue;
+                if ($get["Field"] == "id") {
+                                    continue;
+                }
 
                 $class->setMethod(PhpMethod::create("update" . ucfirst($get["Field"]) . "By" . ucfirst($id))
                     ->addParameter(PhpParameter::create($get["Field"]))
@@ -180,8 +191,9 @@ class CreateDBModel extends Command
         $inserter = "public function insertInto" . ucfirst($table) . "(";
         foreach ($columns as $field) {
             // Skip the ID field
-            if ($field["Field"] == "id")
-                continue;
+            if ($field["Field"] == "id") {
+                            continue;
+            }
 
             $inserter .= "\${$field["Field"]}, ";
         }
@@ -189,8 +201,9 @@ class CreateDBModel extends Command
         $inserter .= "{";
         $inserter .= "\$this->db->execute(\"INSERT INTO {$table} (";
         foreach ($columns as $field) {
-            if ($field["Field"] == "id")
-                continue;
+            if ($field["Field"] == "id") {
+                            continue;
+            }
 
             $inserter .= $field["Field"] . ", ";
         }
@@ -198,8 +211,9 @@ class CreateDBModel extends Command
         $inserter = rtrim(trim($inserter), ",") . ") ";
         $inserter .= "VALUES (";
         foreach ($columns as $field) {
-            if ($field["Field"] == "id")
-                continue;
+            if ($field["Field"] == "id") {
+                            continue;
+            }
 
             $inserter .= ":" . $field["Field"] . ", ";
         }
@@ -208,8 +222,9 @@ class CreateDBModel extends Command
 
         $inserter .= "array(";
         foreach ($columns as $field) {
-            if ($field["Field"] == "id")
-                continue;
+            if ($field["Field"] == "id") {
+                            continue;
+            }
 
             $inserter .= "\":" . $field["Field"] . "\" => \${$field["Field"]}, ";
         }

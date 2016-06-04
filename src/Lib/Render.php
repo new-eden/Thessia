@@ -3,7 +3,6 @@ namespace Thessia\Lib;
 
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
-use XMLParser\XMLParser;
 
 /**
  * Class Render
@@ -40,10 +39,12 @@ class Render
         // Run the scrapeCheck
         $this->scrapeChecker();
 
-        if ($contentType == "application/json")
-            return $this->toJson($dataArray, $status, $response);
-        if ($contentType == "application/xml")
-            return $this->toXML($dataArray, $status, $response);
+        if ($contentType == "application/json") {
+                    return $this->toJson($dataArray, $status, $response);
+        }
+        if ($contentType == "application/xml") {
+                    return $this->toXML($dataArray, $status, $response);
+        }
 
         return $this->toTwig($templateFile, $dataArray, $status, $response);
     }
@@ -60,7 +61,7 @@ class Render
      * @param array $dataArray
      * @param int $status
      * @param ResponseInterface $response
-     * @return mixed
+     * @return ResponseInterface
      */
     public function toJson($dataArray = array(), int $status = 200, ResponseInterface $response)
     {
@@ -79,7 +80,7 @@ class Render
      * @param array $dataArray
      * @param int $status
      * @param ResponseInterface $response
-     * @return mixed
+     * @return ResponseInterface
      */
     public function toXML($dataArray = array(), int $status = 200, ResponseInterface $response)
     {

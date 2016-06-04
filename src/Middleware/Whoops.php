@@ -34,7 +34,7 @@ class Whoops {
                 'Path'            => $request->getUri()->getPath(),
                 'Query String'    => $request->getUri()->getQuery() ?: '<none>',
                 'HTTP Method'     => $request->getMethod(),
-                'Base URL'        => (string) $request->getUri(),
+                'Base URL'        => (string)$request->getUri(),
                 'Scheme'          => $request->getUri()->getScheme(),
                 'Port'            => $request->getUri()->getPort(),
                 'Host'            => $request->getUri()->getHost(),
@@ -45,7 +45,7 @@ class Whoops {
             $whoops->pushHandler($prettyPageHandler);
 
             // Enable JsonResponseHandler when request is AJAX
-            if (Misc::isAjaxRequest()){
+            if (Misc::isAjaxRequest()) {
                 $whoops->pushHandler(new JsonResponseHandler());
             }
 

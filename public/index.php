@@ -2,9 +2,9 @@
 error_reporting(1);
 error_reporting(E_ALL);
 
-if(PHP_SAPI == "cli-server") {
+if (PHP_SAPI == "cli-server") {
     $file = __DIR__ . $_SERVER["REQUEST_URI"];
-    if(is_file($file))
+    if (is_file($file))
         return false;
 }
 

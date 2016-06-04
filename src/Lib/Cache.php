@@ -12,10 +12,11 @@ class Cache
     function __construct(Config $config)
     {
         $this->redis = new Redis();
-        if (!$this->persistence)
-            $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        else
-            $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        if (!$this->persistence) {
+                    $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        } else {
+                    $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        }
     }
 
     /**
@@ -44,7 +45,7 @@ class Cache
      * Write value to the Cache.
      *
      * @param string $key The key to uniquely identify the cached item
-     * @param mixed $value The value to be cached
+     * @param string $value The value to be cached
      * @param integer $timeout .
      *
      * @return bool

@@ -34,14 +34,14 @@ class RunWebSocket extends Command
         $endpoints = array(__DIR__ . "/WebSockets/*.php", __DIR__ . "/../App/WebSockets/*.php");
 
         // Load all endpoints
-        foreach($endpoints as $dir) {
+        foreach ($endpoints as $dir) {
             $files = glob($dir);
-            foreach($files as $file) {
+            foreach ($files as $file) {
                 require_once($file);
                 $baseName = basename($file);
                 $className = str_replace(".php", "", $baseName);
                 $urlPath = strtolower(str_replace("WebSocket", "", str_replace(".php", "", $baseName)));
-                if(stristr($file, "App/")) {
+                if (stristr($file, "App/")) {
                     $className = "\\App\\WebSockets\\{$className}";
                 } else {
                     $className = "\\Rena\\Tasks\\WebSockets\\{$className}";

@@ -50,7 +50,7 @@ abstract class Controller
         $app = $this->app;
         $controller = $this;
 
-        $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
+        $callable = function($request, $response, $args) use ($app, $controller, $actionName) {
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
@@ -91,7 +91,7 @@ abstract class Controller
      * @return mixed|null
      */
     public function __get($name) {
-        if(!empty($this->container->get($name)))
+        if (!empty($this->container->get($name)))
             return $this->container->get($name);
 
         return null;
@@ -222,7 +222,7 @@ abstract class Controller
      * @return RenaController
      * @internal param string $status The redirect HTTP status code.
      */
-    public function forward($actionName, $data=array())
+    public function forward($actionName, $data = array())
     {
         // update the action name that was last used
         if (method_exists($this->response, 'setActionName')) {

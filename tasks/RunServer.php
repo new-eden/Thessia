@@ -6,7 +6,6 @@ use PHPPM\Commands\StartCommand;
 use PHPPM\ProcessManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,7 +24,7 @@ class RunServer extends StartCommand
 
         $this
             ->setName("run:server")
-            ->setDescription("Starts the server") ;
+            ->setDescription("Starts the server");
 
         $this->configurePPMOptions($this);
     }
