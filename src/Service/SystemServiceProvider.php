@@ -3,6 +3,7 @@
 namespace Thessia\Service;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
+use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Slim\Views\Twig;
@@ -13,7 +14,7 @@ use Thessia\Lib\Db;
 use Thessia\Lib\Render;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
-use Thessia\Middleware\AccessLogging;
+use Thessia\Model\Database\Killmails;
 
 class SystemServiceProvider extends AbstractServiceProvider
 {
@@ -63,19 +64,26 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->get("view")->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
         $container->get("view")->addExtension(new \Twig_Extension_Debug());
 
-        // Add the Cache
-        $container->share("cache", Cache::class)->withArgument("config");
-
         // Add the Renderer
         $container->share("render", Render::class)->withArgument("view");
-
-        // Add the Session handler
-        $container->share("session", SessionHandler::class)->withArgument("cache");
 
         // Add the Timer
         $container->share("timer", Timer::class);
 
+        // Add the Cache
+        $container->share("cache", Cache::class)->withArgument("config");
+
         // Add the Database
         $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
+
+        // Add the Session handler
+        $container->share("session", SessionHandler::class)->withArgument("cache");
+
+        // Add MongoDB
+        $container->share("mongo", Client::class);
+        $container->get("mongo")->selectDatabase($container->get("config")->get("dbName", "mongodb"));
+
+        // Models
+        $container->share("killmails", Killmails::class)->withArgument("config")->withArgument("mongo");
     }
 }
