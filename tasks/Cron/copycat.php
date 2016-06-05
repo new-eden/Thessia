@@ -1,7 +1,7 @@
 <?php
 namespace Thessia\Tasks\Cron;
 
-use Slim\Container;
+use League\Container\Container;
 
 class copycat
 {
@@ -12,8 +12,8 @@ class copycat
     {
         echo "I'm a copycat, mijau..\n";
 
-        var_dump($container["db"]->query("SELECT 1"));
-        var_dump($container["db"]->query("SELECT 2"));
+        var_dump($container->get("db")->query("SELECT 1"));
+        var_dump($container->get("db")->query("SELECT 2"));
     }
 
     /**

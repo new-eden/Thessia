@@ -14,18 +14,21 @@ require_once("init.php");
 // Launch the CLI
 $cli = new Symfony\Component\Console\Application("Embrace Eternity");
 
+$tasks = array(__DIR__ . "/tasks/*.php", __DIR__ . "/tasks/CLi/*.php");
 // Load all the commands
-$files = glob(__DIR__ . "/tasks/*.php");
-foreach ($files as $file) {
-    require_once($file);
-    $file = str_replace(__DIR__."/", "", $file);
-    $name = str_replace(".php", "", basename($file));
-    $namespace = ucfirst(str_replace("/", "\\", str_replace(".php", "", $file)));
-    $import = "\\Thessia\\{$namespace}";
 
-    $cli->add(new $import());
+foreach($tasks as $task) {
+    $files = glob($task);
+    foreach ($files as $file) {
+        require_once($file);
+        $file = str_replace(__DIR__ . "/", "", $file);
+        $name = str_replace(".php", "", basename($file));
+        $namespace = ucfirst(str_replace("/", "\\", str_replace(".php", "", $file)));
+        $import = "\\Thessia\\{$namespace}";
+
+        $cli->add(new $import());
+    }
 }
-
 $cli->run();
 
 // Prompter

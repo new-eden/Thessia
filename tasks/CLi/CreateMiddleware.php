@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -8,22 +8,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateHelper extends Command
+class CreateMiddleware extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:helper")
-            ->setDescription("Create a helper");
+            ->setName("create:Middleware")
+            ->setDescription("Create Middleware");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Helper");
+        $name = prompt("Name of Middleware");
 
-        $directory = __DIR__ . "/../src/Helpers/";
+        $directory = __DIR__ . "/../src/Middleware/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/helper_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/middleware_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -45,14 +45,14 @@ class CreateHelper extends Command
                 return;
             }
         }
-        if (!file_exists($directory . ucfirst($name) . ".php")) {
-            $fh = fopen($directory . ucfirst($name) . ".php", "w");
+        if (!file_exists($directory . ucfirst($name) . "MiddleWare.php")) {
+            $fh = fopen($directory . ucfirst($name) . "MiddleWare.php", "w");
             fwrite($fh, $file);
             fclose($fh);
-            $className = ucfirst($name) . ".php";
-            $output->writeln("Success, {$name} has been created");
+            $className = ucfirst($name) . "MiddleWare.php";
+            $output->writeln("Success, MiddleWare {$name} has been created");
         } else {
-            $output->writeln("Error, {$name} already exists.");
+            $output->writeln("Error, MiddleWare {$name} already exists.");
         }
     }
 }

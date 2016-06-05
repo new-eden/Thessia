@@ -34,6 +34,7 @@
     "react/zmq": "0.3.*",
     "ratchet/pawl": "0.2.*",
     "cboden/ratchet": "0.3.*",
-    "robmorgan/phinx": "0.5.*"
+    "robmorgan/phinx": "0.5.*",
+    "mongodb/mongodb": "1.0.*"
   }
 }

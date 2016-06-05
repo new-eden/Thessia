@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use gossi\codegen\generator\CodeFileGenerator;
 use gossi\codegen\model\PhpClass;

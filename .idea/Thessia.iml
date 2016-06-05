@@ -21,6 +21,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/jtrumbull/xml-parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mkraemer/react-pcntl" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/mongodb/mongodb" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/fast-route" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
@@ -96,6 +97,7 @@
           <root url="file://$MODULE_DIR$/vendor/jtrumbull/xml-parser" />
           <root url="file://$MODULE_DIR$/vendor/league/container" />
           <root url="file://$MODULE_DIR$/vendor/mkraemer/react-pcntl" />
+          <root url="file://$MODULE_DIR$/vendor/mongodb/mongodb" />
           <root url="file://$MODULE_DIR$/vendor/monolog/monolog" />
           <root url="file://$MODULE_DIR$/vendor/nikic/fast-route" />
           <root url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
@@ -157,6 +159,7 @@
           <root url="file://$MODULE_DIR$/vendor/jtrumbull/xml-parser" />
           <root url="file://$MODULE_DIR$/vendor/league/container" />
           <root url="file://$MODULE_DIR$/vendor/mkraemer/react-pcntl" />
+          <root url="file://$MODULE_DIR$/vendor/mongodb/mongodb" />
           <root url="file://$MODULE_DIR$/vendor/monolog/monolog" />
           <root url="file://$MODULE_DIR$/vendor/nikic/fast-route" />
           <root url="file://$MODULE_DIR$/vendor/nikic/php-parser" />

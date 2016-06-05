@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a3bddaf60523ab525e45eb89e4e9717c",
-    "content-hash": "9a2addc02e0d06a6c6a616ecab1bb736",
+    "hash": "00e7243295125693a5a895697dd45038",
+    "content-hash": "a8f9e9bb38ed530d40bc5a8688ed0bed",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -810,6 +810,61 @@
                 "react"
             ],
             "time": "2014-08-26 12:57:41"
+        },
+        {
+            "name": "mongodb/mongodb",
+            "version": "v1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mongodb/mongo-php-library.git",
+                "reference": "04c9bc046fcf02f62e2376845653ca3a94bef915"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/04c9bc046fcf02f62e2376845653ca3a94bef915",
+                "reference": "04c9bc046fcf02f62e2376845653ca3a94bef915",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mongodb": "^1.1.0",
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MongoDB\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Mikola",
+                    "email": "jmikola@gmail.com"
+                },
+                {
+                    "name": "Hannes Magnusson",
+                    "email": "bjori@mongodb.com"
+                },
+                {
+                    "name": "Derick Rethans",
+                    "email": "github@derickrethans.nl"
+                }
+            ],
+            "description": "MongoDB driver library",
+            "homepage": "https://jira.mongodb.org/browse/PHPLIB",
+            "keywords": [
+                "database",
+                "driver",
+                "mongodb",
+                "persistence"
+            ],
+            "time": "2016-06-03 18:47:51"
         },
         {
             "name": "monolog/monolog",

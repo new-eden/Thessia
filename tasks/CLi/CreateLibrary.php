@@ -1,27 +1,29 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateWebsocket extends Command
+class CreateLibrary extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:websocket")
-            ->setDescription("Create a websocket endpoint");
+            ->setName("create:library")
+            ->setDescription("Create a library file");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Websocket");
+        $name = prompt("Name of Library");
 
-        $directory = __DIR__ . "/Websockets/";
+        $directory = __DIR__ . "/../src/Lib/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/websocket_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/library_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -43,14 +45,14 @@ class CreateWebsocket extends Command
                 return;
             }
         }
-        if (!file_exists($directory . ucfirst($name) . "WebSocket.php")) {
-            $fh = fopen($directory . ucfirst($name) . "WebSocket.php", "w");
+        if (!file_exists($directory . ucfirst($name) . ".php")) {
+            $fh = fopen($directory . ucfirst($name) . ".php", "w");
             fwrite($fh, $file);
             fclose($fh);
-            $className = ucfirst($name) . "WebSocket.php";
-            $output->writeln("Success, WebSocket {$name} has been created");
+            $className = ucfirst($name) . ".php";
+            $output->writeln("Success, Library {$name} has been created");
         } else {
-            $output->writeln("Error, WebSocket {$name} already exists.");
+            $output->writeln("Error, Library {$name} already exists.");
         }
     }
 }

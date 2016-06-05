@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -8,22 +8,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateLibrary extends Command
+class CreateHelper extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:library")
-            ->setDescription("Create a library file");
+            ->setName("create:helper")
+            ->setDescription("Create a helper");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Library");
+        $name = prompt("Name of Helper");
 
-        $directory = __DIR__ . "/../src/Lib/";
+        $directory = __DIR__ . "/../src/Helpers/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/library_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/helper_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -50,9 +50,9 @@ class CreateLibrary extends Command
             fwrite($fh, $file);
             fclose($fh);
             $className = ucfirst($name) . ".php";
-            $output->writeln("Success, Library {$name} has been created");
+            $output->writeln("Success, {$name} has been created");
         } else {
-            $output->writeln("Error, Library {$name} already exists.");
+            $output->writeln("Error, {$name} already exists.");
         }
     }
 }

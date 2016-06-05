@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -8,22 +8,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateResque extends Command
+class CreateController extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:resque")
-            ->setDescription("Create a resque job");
+            ->setName("create:controller")
+            ->setDescription("Creates a controller");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Resque");
+        $name = prompt("Name of Controller");
 
-        $directory = __DIR__ . "/Resque/";
+        $directory = __DIR__ . "/../src/Controllers/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/resque_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/controller_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -45,14 +45,14 @@ class CreateResque extends Command
                 return;
             }
         }
-        if (!file_exists($directory . ucfirst($name) . ".php")) {
-            $fh = fopen($directory . ucfirst($name) . ".php", "w");
+        if (!file_exists($directory . ucfirst($name) . "Controller.php")) {
+            $fh = fopen($directory . ucfirst($name) . "Controller.php", "w");
             fwrite($fh, $file);
             fclose($fh);
-            $className = ucfirst($name) . ".php";
-            $output->writeln("Success, {$name} has been created");
+            $className = ucfirst($name) . "Controller.php";
+            $output->writeln("Success, Controller {$name} has been created");
         } else {
-            $output->writeln("Error, {$name} already exists.");
+            $output->writeln("Error, Controller {$name} already exists.");
         }
     }
 }

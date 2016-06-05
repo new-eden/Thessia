@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use JBZoo\PimpleDumper\PimpleDumper;
 use Symfony\Component\Console\Command\Command;

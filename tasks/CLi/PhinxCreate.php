@@ -1,6 +1,6 @@
 <?php
 
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

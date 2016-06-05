@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,7 +20,6 @@ class RunResque extends Command
     {
         require_once(__DIR__ . "/../vendor/chrisboulton/php-resque/lib/Resque.php");
         require_once(__DIR__ . "/../vendor/chrisboulton/php-resque/lib/Resque/Worker.php");
-        require_once(__DIR__ . "/../Config/Dependencies.php");
 
         $queues = "rt,high,med,low";
         $logLevel = \Resque_Worker::LOG_NORMAL;

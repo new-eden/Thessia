@@ -1,5 +1,5 @@
 <?php
-namespace Thessia\Tasks;
+namespace Thessia\Tasks\CLi;
 
 use Rena\Lib\Cache;
 use Symfony\Component\Console\Command\Command;
