@@ -63,6 +63,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/zendframework/zend-diactoros" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/zkillboard/redisq" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -139,6 +140,7 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/yaml" />
           <root url="file://$MODULE_DIR$/vendor/twig/twig" />
           <root url="file://$MODULE_DIR$/vendor/zendframework/zend-diactoros" />
+          <root url="file://$MODULE_DIR$/vendor/zkillboard/redisq" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/vendor/cboden/ratchet" />
@@ -201,6 +203,7 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/yaml" />
           <root url="file://$MODULE_DIR$/vendor/twig/twig" />
           <root url="file://$MODULE_DIR$/vendor/zendframework/zend-diactoros" />
+          <root url="file://$MODULE_DIR$/vendor/zkillboard/redisq" />
         </SOURCES>
       </library>
     </orderEntry>
