@@ -39,10 +39,46 @@ class typeIDs extends Mongo
     public function getAllByName($fieldName)
     {
         return $this->collection->find(
-            array("name" => $fieldName)
+            array("name.en" => $fieldName)
         );
     }
 
+    public function getAllByGermanName($fieldName) {
+        return $this->collection->find(
+            array("name.de" => $fieldName)
+        );
+    }
+
+    public function getAllByEnglishName($fieldName) {
+        return $this->collection->find(
+            array("name.en" => $fieldName)
+        );
+    }
+
+    public function getAllByFrenchName($fieldName) {
+        return $this->collection->find(
+            array("name.fr" => $fieldName)
+        );
+    }
+
+    public function getAllByJapaneseName($fieldName) {
+        return $this->collection->find(
+            array("name.ja" => $fieldName)
+        );
+    }
+
+    public function getAllByRussianName($fieldName) {
+        return $this->collection->find(
+            array("name.ru" => $fieldName)
+        );
+    }
+
+    public function getAllByChineseName($fieldName) {
+        return $this->collection->find(
+            array("name.zh" => $fieldName)
+        );
+    }
+    
     /**
      * @param mixed $typeID
      */
