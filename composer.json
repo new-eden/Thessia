@@ -35,6 +35,7 @@
     "ratchet/pawl": "0.2.*",
     "cboden/ratchet": "0.3.*",
     "robmorgan/phinx": "0.5.*",
-    "mongodb/mongodb": "1.0.*"
+    "mongodb/mongodb": "1.0.*",
+    "zkillboard/redisq": "1.*"
   }
 }
