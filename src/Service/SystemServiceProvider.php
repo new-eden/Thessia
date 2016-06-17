@@ -6,15 +6,12 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Slim\Views\Twig;
-use Slim\Views\TwigExtension;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
 use Thessia\Lib\Db;
-use Thessia\Lib\Render;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
-use Thessia\Model\Database\Killmails;
+use Thessia\Model\Database\killmails;
 
 class SystemServiceProvider extends AbstractServiceProvider
 {
@@ -79,6 +76,6 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("mongo", Client::class);
 
         // Models
-        $container->share("killmails", killmails::class)->withArgument("config")->withArgument("mongo");
+        //$container->share("killmails", killmails::class)->withArgument("config")->withArgument("mongo");
     }
 }

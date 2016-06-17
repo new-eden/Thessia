@@ -8,6 +8,7 @@ use gossi\codegen\model\PhpClass;
 use gossi\codegen\model\PhpMethod;
 use gossi\codegen\model\PhpParameter;
 use gossi\codegen\model\PhpProperty;
+use gossi\formatter\Formatter;
 use MongoDB\Client;
 use MongoDB\Model\BSONDocument;
 use Symfony\Component\Console\Command\Command;
@@ -26,8 +27,13 @@ class CreateMongoModel extends Command {
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
+        // Get the container
+        $container = getContainer();
+
         $collectionName = prompt("Collection to create a model for");
         $this->description = prompt("Description");
+        $database = prompt("Database to find collection in", "thessia");
+        $database = isset($database) ? $database : $container->get("config")->get("dbName", "mongodb");
 
         if(!$collectionName)
             return $output->writeln("Error, collection name is not defined");
@@ -36,16 +42,13 @@ class CreateMongoModel extends Command {
         if(file_exists($path))
             return $output->writeln("Error, model already exists");
 
-        // Get the container
-        $container = getContainer();
-
         // Get Mongo
         /** @var Client $mongo */
         $mongo = $container->get("mongo");
 
         // Select the collection
         try {
-            $collection = $mongo->selectCollection($container->get("config")->get("dbName", "mongodb"), $collectionName);
+            $collection = $mongo->selectCollection($database, $collectionName);
         } catch(\Exception $e) {
             return $output->writeln("Error, collection doesn't exist");
         }
@@ -57,9 +60,10 @@ class CreateMongoModel extends Command {
             array("projection" =>
                 array(
                     "_id" => 0
-                )
+                ),
+                "typeMap" => array('root' => 'array', 'document' => 'array', 'array' => 'array')
             )
-        )->getArrayCopy();
+        );
 
         // Generate the start of the code
         $class = new PhpClass();
@@ -70,7 +74,7 @@ class CreateMongoModel extends Command {
                 ->setDescription("The name of the models collection"))
             ->setProperty(PhpProperty::create("databaseName")
                 ->setVisibility("public")
-                ->setValue($container->get("config")->get("dbName", "mongodb"))
+                ->setValue($database)
                 ->setDescription("The name of the database the collection is stored in"))
             ->setProperty(PhpProperty::create("indexes")
                 ->setVisibility("public")
@@ -81,9 +85,12 @@ class CreateMongoModel extends Command {
 
         // Populate all the fields to be created
         $this->populateFields($data);
-        $this->populateFields($data["victim"], "victim");
-        $this->populateFields($data["attackers"][0], "attacker");
-        $this->populateFields($data["items"][0], "item");
+        // Populate the fields from arrays inside the array aswell..
+        foreach($data as $key => $array) {
+            if(is_array($array) || is_object($array)) {
+                $this->populateFields($array, $key);
+            }
+        }
 
         // Get Generators
         foreach($this->nameFields as $functionName => $fieldName) {
@@ -99,7 +106,6 @@ class CreateMongoModel extends Command {
         foreach($this->idFields as $functionName => $fieldName) {
             $class->setMethod(PhpMethod::create("getAllBy" . ucfirst($functionName))
                 ->addParameter(PhpParameter::create($functionName))
-                ->setReferenceReturned(true)
                 ->setVisibility("public")
                 ->setBody("return \$this->collection->find(
                     array(\"{$fieldName}\" => \${$functionName})
@@ -180,7 +186,7 @@ class CreateMongoModel extends Command {
         file_put_contents($path, $code);
         chmod($path, 0777);
 
-        $output->write("Model created: {$path}");
+        $output->write("Model created (Remember to fix the formatting): {$path}");
     }
 
     private function getIndividualFields(PhpClass $phpClass, $array, $type = null) {

@@ -5,18 +5,18 @@ use Thessia\Helper\Mongo;
 
 /**
  */
-class killmails extends Mongo
+class solarSystems extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'killmails';
+    public $collectionName = 'solarSystems';
 
     /**
      * The name of the database the collection is stored in
      */
-    public $databaseName = 'thessia';
+    public $databaseName = 'ccp';
 
     /**
      * An array of indexes for this collection
@@ -24,32 +24,32 @@ class killmails extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $crestHash
+     * @param mixed $constellationID
      */
-    public function getAllByCrestHash($crestHash)
+    public function getAllByConstellationID($constellationID)
     {
         return $this->collection->find(
-            array("crestHash" => $crestHash)
+            array("constellationID" => $constellationID)
         );
     }
 
     /**
-     * @param mixed $killID
+     * @param mixed $fieldName
      */
-    public function getAllByKillID($killID)
+    public function getAllByConstellationName($fieldName)
     {
         return $this->collection->find(
-            array("killID" => $killID)
+            array("constellationName" => $fieldName)
         );
     }
 
     /**
-     * @param mixed $moonID
+     * @param mixed $corridor
      */
-    public function getAllByMoonID($moonID)
+    public function getAllByCorridor($corridor)
     {
         return $this->collection->find(
-            array("moonID" => $moonID)
+            array("corridor" => $corridor)
         );
     }
 
@@ -94,102 +94,42 @@ class killmails extends Mongo
     }
 
     /**
-     * @param mixed $victimAllianceID
+     * @param mixed $solarSystemNameID
      */
-    public function getAllByVictimAllianceID($victimAllianceID)
+    public function getAllBySolarSystemNameID($solarSystemNameID)
     {
         return $this->collection->find(
-            array("victim.allianceID" => $victimAllianceID)
+            array("solarSystemNameID" => $solarSystemNameID)
         );
     }
 
     /**
-     * @param mixed $fieldName
+     * @param mixed $starId
      */
-    public function getAllByVictimAllianceName($fieldName)
+    public function getAllByStarId($starId)
     {
         return $this->collection->find(
-            array("victim.allianceName" => $fieldName)
+            array("star.id" => $starId)
         );
     }
 
     /**
-     * @param mixed $victimCharacterID
+     * @param mixed $starTypeID
      */
-    public function getAllByVictimCharacterID($victimCharacterID)
+    public function getAllByStarTypeID($starTypeID)
     {
         return $this->collection->find(
-            array("victim.characterID" => $victimCharacterID)
+            array("star.typeID" => $starTypeID)
         );
     }
 
     /**
-     * @param mixed $fieldName
+     * @param mixed $sunTypeID
      */
-    public function getAllByVictimCharacterName($fieldName)
+    public function getAllBySunTypeID($sunTypeID)
     {
         return $this->collection->find(
-            array("victim.characterName" => $fieldName)
-        );
-    }
-
-    /**
-     * @param mixed $victimCorporationID
-     */
-    public function getAllByVictimCorporationID($victimCorporationID)
-    {
-        return $this->collection->find(
-            array("victim.corporationID" => $victimCorporationID)
-        );
-    }
-
-    /**
-     * @param mixed $fieldName
-     */
-    public function getAllByVictimCorporationName($fieldName)
-    {
-        return $this->collection->find(
-            array("victim.corporationName" => $fieldName)
-        );
-    }
-
-    /**
-     * @param mixed $victimFactionID
-     */
-    public function getAllByVictimFactionID($victimFactionID)
-    {
-        return $this->collection->find(
-            array("victim.factionID" => $victimFactionID)
-        );
-    }
-
-    /**
-     * @param mixed $fieldName
-     */
-    public function getAllByVictimFactionName($fieldName)
-    {
-        return $this->collection->find(
-            array("victim.factionName" => $fieldName)
-        );
-    }
-
-    /**
-     * @param mixed $victimShipTypeID
-     */
-    public function getAllByVictimShipTypeID($victimShipTypeID)
-    {
-        return $this->collection->find(
-            array("victim.shipTypeID" => $victimShipTypeID)
-        );
-    }
-
-    /**
-     * @param mixed $fieldName
-     */
-    public function getAllByVictimShipTypeName($fieldName)
-    {
-        return $this->collection->find(
-            array("victim.shipTypeName" => $fieldName)
+            array("sunTypeID" => $sunTypeID)
         );
     }
 
