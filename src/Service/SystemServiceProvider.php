@@ -28,14 +28,17 @@ class SystemServiceProvider extends AbstractServiceProvider
      * @var array
      */
     protected $provides = [
-        "log",
         "config",
+        "settings",
+        "log",
+        "view",
+        "render",
+        "timer",
         "cache",
         "db",
-        "render",
         "session",
-        "timer",
-        "view"
+        "mongo",
+        "killmails"
     ];
 
     /**
@@ -59,13 +62,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("log", Logger::class)->withArgument($container->get("config")->get("name", "settings", "Thessia"));
         $container->get("log")->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
 
-        // Add the twig view
-        $container->share("view", Twig::class)->withArguments(array(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]));
-        $container->get("view")->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
-        $container->get("view")->addExtension(new \Twig_Extension_Debug());
-
-        // Add the Renderer
-        $container->share("render", Render::class)->withArgument("view");
+        // Add the Session handler
+        $container->share("session", SessionHandler::class)->withArgument("cache");
 
         // Add the Timer
         $container->share("timer", Timer::class);
@@ -76,14 +74,11 @@ class SystemServiceProvider extends AbstractServiceProvider
         // Add the Database
         $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
 
-        // Add the Session handler
-        $container->share("session", SessionHandler::class)->withArgument("cache");
 
         // Add MongoDB
         $container->share("mongo", Client::class);
-        $container->get("mongo")->selectDatabase($container->get("config")->get("dbName", "mongodb"));
 
         // Models
-        $container->share("killmails", Killmails::class)->withArgument("config")->withArgument("mongo");
+        $container->share("killmails", killmails::class)->withArgument("config")->withArgument("mongo");
     }
 }

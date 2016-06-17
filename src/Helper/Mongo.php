@@ -22,9 +22,15 @@ class Mongo {
      */
     protected $collection;
     /**
+     * The name of the collection being used
      * @var string
      */
     public $collectionName = "";
+    /**
+     * The name of the database being used (Defaults to what is defined in the config)
+     * @var string
+     */
+    public $databaseName = "";
     /**
      * @var array
      */
@@ -37,7 +43,8 @@ class Mongo {
      */
     public function __construct(Config $config, Client $mongodb) {
         $this->mongodb = $mongodb;
-        $this->collection = $mongodb->selectCollection($config->get("dbName", "mongodb"), $this->collectionName);
+        $db = !empty($this->databaseName) ? $this->databaseName : $config->get("dbName", "mongodb");
+        $this->collection = $mongodb->selectCollection($db, $this->collectionName);
     }
 
     /**
@@ -49,6 +56,10 @@ class Mongo {
             if(isset($index["unique"])) {
                 unset($index["unique"]);
                 $this->collection->createIndex($index, array("unique" => 1));
+            }
+            elseif(isset($index["sparse"])) {
+                unset($index["sparse"]);
+                $this->collection->createIndex($index, array("sparse" => 1));
             } else {
                 $this->collection->createIndex($index);
             }

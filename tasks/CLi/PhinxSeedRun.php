@@ -16,7 +16,6 @@ class PhinxSeedRun extends \Phinx\Console\Command\SeedRun
 
         $this->setName('phinx:seedrun')
             ->setDescription('Run database seeders')
-            ->addOption('--seed', '-s', InputOption::VALUE_REQUIRED, 'What is the name of the seeder?')
             ->setHelp(
                 <<<EOT
                 The <info>seed:run</info> command runs all available or individual seeders

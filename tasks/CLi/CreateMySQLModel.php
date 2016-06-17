@@ -19,7 +19,7 @@ class CreateMySQLModel extends Command
     protected function configure()
     {
         $this
-            ->setName("create:dbmodel")
+            ->setName("create:mysql")
             ->setDescription("Create a model from a database table");
     }
 

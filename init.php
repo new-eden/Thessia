@@ -15,22 +15,32 @@ if (file_exists(__DIR__ . "/vendor/autoload.php")) {
 }
 
 // Initialize the container
-$container = new Container;
-
-// Attempt to autowire class constructor dependencies
-$container->delegate(new ReflectionContainer);
-
-// Register the config file
-$container->add("configFile", __DIR__ . "/config/config.php");
-
-// Load the dependencies
-$container->addServiceProvider(new \Thessia\Service\SystemServiceProvider);
-
-// Load the slim dependency
-$container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);
+$container = getContainer();
 
 // Global function(s)
 // Dump and die!
 function dd($input) {
     var_dump($input); die();
+}
+
+function getContainer() {
+    static $container;
+
+    if(!isset($container)) {
+        $container = new Container();
+
+        // Autowire class constructor dependencies
+        $container->delegate(new ReflectionContainer());
+
+        // Register default config file
+        if(file_exists(__DIR__ . "/config/config.php"))
+            $container->add("configFile", __DIR__ . "/config/config.php");
+        else
+            throw new \Exception("Error, config.php missing in the config directory");
+
+        // Load the dependencies
+        $container->addServiceProvider(new \Thessia\Service\SystemServiceProvider);
+    }
+
+    return $container;
 }
