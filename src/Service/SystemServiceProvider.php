@@ -1,4 +1,27 @@
 <?php
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016. Michael Karbowiak
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 namespace Thessia\Service;
 
@@ -88,24 +111,25 @@ class SystemServiceProvider extends AbstractServiceProvider
 
 
         // Add MongoDB
-        $container->share("mongo", Client::class);
+        $mongo = new Client("mongodb://localhost:27017", array(), array("typeMap" => array("root" => "object", "document" => "object", "array" => "object")));
+        $container->share("mongo", $mongo);
 
         // Models
-        $container->share("blueprints", blueprints::class)->withArgument("config")->withArgument("mongo");
-        $container->share("categoryIDs", categoryIDs::class)->withArgument("config")->withArgument("mongo");
-        $container->share("certificates", certificates::class)->withArgument("config")->withArgument("mongo");
-        $container->share("constellations", constellations::class)->withArgument("config")->withArgument("mongo");
-        $container->share("graphicIDs", graphicIDs::class)->withArgument("config")->withArgument("mongo");
-        $container->share("groupIDs", groupIDs::class)->withArgument("config")->withArgument("mongo");
-        $container->share("iconIDs", iconIDs::class)->withArgument("config")->withArgument("mongo");
-        $container->share("killmails", killmails::class)->withArgument("config")->withArgument("mongo");
-        $container->share("landmarks", landmarks::class)->withArgument("config")->withArgument("mongo");
-        $container->share("regions", regions::class)->withArgument("config")->withArgument("mongo");
-        $container->share("skinLicenses", skinLicenses::class)->withArgument("config")->withArgument("mongo");
-        $container->share("skinMaterials", skinMaterials::class)->withArgument("config")->withArgument("mongo");
-        $container->share("skins", skins::class)->withArgument("config")->withArgument("mongo");
-        $container->share("solarSystems", solarSystems::class)->withArgument("config")->withArgument("mongo");
-        $container->share("tournamentRuleSets", tournamentRuleSets::class)->withArgument("config")->withArgument("mongo");
-        $container->share("typeIDs", typeIDs::class)->withArgument("config")->withArgument("mongo");
+        $container->share("blueprints", blueprints::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("categoryIDs", categoryIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("certificates", certificates::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("constellations", constellations::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("graphicIDs", graphicIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("groupIDs", groupIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("iconIDs", iconIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("killmails", killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("landmarks", landmarks::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("regions", regions::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("skinLicenses", skinLicenses::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("skinMaterials", skinMaterials::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("skins", skins::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("solarSystems", solarSystems::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("tournamentRuleSets", tournamentRuleSets::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("typeIDs", typeIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
     }
 }
