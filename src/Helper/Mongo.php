@@ -69,6 +69,7 @@ class Mongo {
      * Mongo constructor.
      * @param Config $config
      * @param Client $mongodb
+     * @param Cache $cache
      */
     public function __construct(Config $config, Client $mongodb, Cache $cache) {
         $this->cache = $cache;

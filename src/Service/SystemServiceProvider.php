@@ -50,6 +50,7 @@ use Thessia\Model\Database\skins;
 use Thessia\Model\Database\solarSystems;
 use Thessia\Model\Database\tournamentRuleSets;
 use Thessia\Model\Database\typeIDs;
+use Thessia\Model\EVE\Crest;
 
 class SystemServiceProvider extends AbstractServiceProvider
 {
@@ -111,7 +112,7 @@ class SystemServiceProvider extends AbstractServiceProvider
 
 
         // Add MongoDB
-        $mongo = new Client("mongodb://localhost:27017", array(), array("typeMap" => array("root" => "object", "document" => "object", "array" => "object")));
+        $mongo = new Client("mongodb://localhost:27017", array(), array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $container->share("mongo", $mongo);
 
         // Models
@@ -131,5 +132,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("solarSystems", solarSystems::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("tournamentRuleSets", tournamentRuleSets::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("typeIDs", typeIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+
+        $container->share("crest", Crest::class);
     }
 }

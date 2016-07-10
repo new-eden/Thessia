@@ -97,23 +97,22 @@ class Db
      * @param RequestInterface $requestInterface
      * @throws \Exception
      */
-    function __construct(Cache $cache, Logger $logger, Timer $timer, Config $config, RequestInterface $requestInterface)
+    function __construct(Cache $cache, Logger $logger, Timer $timer, Config $config)
     {
         $this->cache = $cache;
         $this->logger = $logger;
         $this->timer = $timer;
         $this->config = $config;
-        $this->request = $requestInterface;
 
         if ($this->persistence === false) {
                     $this->cache->persistence = false;
         }
 
-        $host = $config->get("unixSocket", "database") ? ";unix_socket=" . $config->get("unixSocket", "database", "/var/run/mysqld/mysqld.sock") : ";host=" . $config->get("host", "database", "127.0.0.1");
-        $dsn = "mysql:dbname=" . $config->get("dbName", "database") . "{$host};charset=utf8";
-
+        $host = $config->get("unixSocket", "db") ? ";unix_socket=" . $config->get("unixSocket", "db", "/var/run/mysqld/mysqld.sock") : ";host=" . $config->get("host", "db", "127.0.0.1");
+        $dsn = "mysql:dbname=" . $config->get("dbname", "db") . "{$host};charset=utf8";
+        
         try {
-            $this->pdo = new PDO($dsn, $config->get("username", "database"), $config->get("password", "database"), array(
+            $this->pdo = new PDO($dsn, $config->get("username", "db"), $config->get("password", "db"), array(
                 PDO::ATTR_PERSISTENT => $this->persistence,
                 PDO::ATTR_EMULATE_PREPARES => $config->get('emulatePrepares', 'database'),
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -413,7 +412,7 @@ class Db
     public function asyncExec(String $name, String $query, $parameters = array())
     {
         // @todo remove this..
-        $key = sha1($name . $this->request->getUri()->getPath());
+        $key = sha1($name);
 
         if (!empty($this->cache->get($key))) {
                     return null;
@@ -453,7 +452,7 @@ class Db
     public function asyncData(String $name, int $cacheTime = 360)
     {
         // @todo remove this..
-        $key = sha1($name . $this->request->getUri()->getPath());
+        $key = sha1($name);
 
         if ($cacheTime > 0) {
             $result = !empty($this->cache->get($key)) ? unserialize($this->cache->get($key)) : null;
