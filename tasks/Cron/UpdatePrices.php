@@ -26,18 +26,44 @@
 namespace Thessia\Tasks\Cron;
 
 use League\Container\Container;
+use MongoDB\Collection;
 
-class copycat
+class UpdatePrices
 {
     /**
      * @param Container $container
      */
     public static function execute(Container $container)
     {
-        echo "I'm a copycat, mijau..\n";
+        /** @var \MongoClient $mongo */
+        $mongo = $container->get("mongo");
+        /** @var Collection $collection */
+        $collection = $mongo->selectCollection("ccp", "typeIDs");
+        /** @var Collection $priceCollection */
+        $priceCollection = $mongo->selectCollection("thessia", "marketPrices");
 
-        var_dump($container->get("db")->query("SELECT 1"));
-        var_dump($container->get("db")->query("SELECT 2"));
+        // Get the Market Prices from CREST
+        $marketData = json_decode(file_get_contents("https://crest-tq.eveonline.com/market/prices/"), true);
+        foreach($marketData["items"] as $data) {
+            $typeID = $data["type"]["id"];
+            $typeData = $collection->find(array("typeID" => $typeID))->toArray();
+
+            if(empty($typeData[0]))
+                continue;
+
+            // If it's not empty, we bind typeData to typeData[0] to get the first element in the array..
+            $typeData = $typeData[0];
+
+            $priceArray = array(
+                "typeID" => (int) $typeID,
+                "typeNames" => $typeData["name"],
+                "marketGroupID" => (int) isset($typeData["marketGroupID"]) ? $typeData["marketGroupID"] : 0,
+                "groupID" => (int) $typeData["groupID"],
+                "adjustedPrice" => (int) isset($data["adjustedPrice"]) ? $data["adjustedPrice"] : 0,
+                "averagePrice" => (int) isset($data["averagePrice"]) ? $data["averagePrice"] : 0
+            );
+            $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
+        }
     }
 
     /**
@@ -45,6 +71,6 @@ class copycat
      */
     public static function getRunTimes()
     {
-        return 1;
+        return 86400;
     }
 }

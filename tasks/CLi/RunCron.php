@@ -25,10 +25,10 @@
 
 namespace Thessia\Tasks\CLi;
 
-use Rena\Lib\Cache;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Thessia\Lib\Cache;
 
 class RunCron extends Command
 {
@@ -44,8 +44,8 @@ class RunCron extends Command
         // Enable the garbage collector
         gc_enable();
 
-        // Import the container, yes this is ugly
-        global $container;
+        // Import the container
+        $container = getContainer();
 
         $run = true;
         $cnt = 0;
@@ -58,12 +58,12 @@ class RunCron extends Command
             }
             $cnt++;
 
-            $files = glob(__DIR__ . "/Cron/*.php");
+            $files = glob(__DIR__ . "/../Cron/*.php");
             foreach ($files as $file) {
                 require_once($file);
                 $baseName = basename($file);
                 $className = str_replace(".php", "", $baseName);
-                $import = "\\Rena\\Tasks\\Cron\\{$className}";
+                $import = "\\Thessia\\Tasks\\Cron\\{$className}";
                 $md5 = md5($baseName);
                 $currentTime = time();
 
@@ -86,9 +86,8 @@ class RunCron extends Command
                 $class = new $import();
                 $interval = $class->getRunTimes();
 
-                if ($interval == 0) {
-                                    continue;
-                }
+                if ($interval == 0)
+                    continue;
 
                 if ($currentTime > ($lastRan + $interval)) {
                     $date = date("Y-m-d H:i:s");
@@ -97,20 +96,20 @@ class RunCron extends Command
                     try {
                         $pid = pcntl_fork();
                         if ($pid === 0) {
-                            $cont = include(__DIR__ . "/../config/Dependencies.php");
-                            $cache = $cont->get("cache");
+                            $container = getContainer();
+                            $cache = $container->get("cache");
                             $pid = getmypid();
                             $cache->set($md5 . "_pid", $pid);
-                            $class->execute($cont);
+                            $class->execute($container);
                             exit();
                         }
 
                         $cache->set($md5, time());
                     } catch (\Exception $e) {
                         $output->writeln("Error: (pid: " . getmypid() . ")" . $e->getMessage());
-                        //$run = false;
-                        //posix_kill(getmypid(), 9);
-                        //exit();
+                        $run = false;
+                        posix_kill(getmypid(), 9);
+                        exit();
                     }
                 }
             }
