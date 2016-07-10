@@ -26,17 +26,19 @@
 namespace Thessia\Controller;
 
 use Thessia\Middleware\Controller;
+use Thessia\Model\Database\typeIDs;
 
 class IndexController extends Controller
 {
     public function index()
     {
-        $data = $this->typeIDs->getAllByTypeID(638);
-        $data = $this->typeIDs->getAllByName("Raven");
-        var_dump($data);
-        foreach ($data as $item) {
-            var_dump($item);
-        }
+        $container = $this->getContainer();
+        /** @var typeIDs $typeIDs */
+        $typeIDs = $container->get("typeIDs");
+        $data1 = $typeIDs->getAllByTypeID(638)->toArray();
+        $data2 = $typeIDs->getAllByName("Raven")->toArray();
+        var_dump($data1);
+        var_dump($data2);
         $this->render("index.html", array());
     }
 }

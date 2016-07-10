@@ -35,7 +35,7 @@ class Cache
 
     function __construct(Config $config)
     {
-        $this->redis = new Redis();
+        $this->redis = new \Redis();
         if (!$this->persistence) {
                     $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
         } else {
