@@ -45,7 +45,7 @@ class importKillmails extends Command
         $this
             ->setName("importKillmails")
             ->addOption("order", "o", InputOption::VALUE_REQUIRED, "The order to fetch data in", "asc")
-            ->setDescription("Import killmails from zKB to Thessia");
+            ->setDescription("Import killmails from zKB to Thessia...");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
