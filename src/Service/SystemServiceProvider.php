@@ -74,7 +74,23 @@ class SystemServiceProvider extends AbstractServiceProvider
         "db",
         "session",
         "mongo",
-        "killmails"
+        "killmails",
+        "blueprints",
+        "categoryIDs",
+        "certificates",
+        "constellations",
+        "graphicIDs",
+        "groupIDs",
+        "iconIDs",
+        "landmarks",
+        "regions",
+        "skinLicenses",
+        "skinMaterials",
+        "skins",
+        "solarSystems",
+        "tournamentRuleSets",
+        "typeIDs",
+        "crest"
     ];
 
     /**
@@ -109,7 +125,6 @@ class SystemServiceProvider extends AbstractServiceProvider
 
         // Add the Database
         $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
-
 
         // Add MongoDB
         $mongo = new Client("mongodb://localhost:27017", array(), array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
