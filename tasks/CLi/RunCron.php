@@ -25,6 +25,7 @@
 
 namespace Thessia\Tasks\CLi;
 
+use Monolog\Logger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,6 +47,8 @@ class RunCron extends Command
 
         // Import the container
         $container = getContainer();
+        /** @var Logger $log */
+        $log = $container->get("log");
 
         $run = true;
         $cnt = 0;
@@ -91,6 +94,7 @@ class RunCron extends Command
 
                 if ($currentTime > ($lastRan + $interval)) {
                     $date = date("Y-m-d H:i:s");
+                    $log->addInfo("Running cronjob: {$className} (Interval: {$interval}");
                     $output->writeln("{$date}: Running cronjob: {$className} (Interval: {$interval})");
 
                     try {
