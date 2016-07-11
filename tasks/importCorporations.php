@@ -27,16 +27,9 @@ namespace Thessia\Tasks;
 
 use MongoDB\Collection;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Thessia\Lib\Db;
-use Thessia\Model\Database\regions;
-use Thessia\Model\Database\solarSystems;
-use Thessia\Model\Database\typeIDs;
-use Thessia\Model\EVE\Crest;
 
 class importCorporations extends Command
 {
@@ -64,10 +57,10 @@ class importCorporations extends Command
         $limit = 100000;
         do {
             $corporations = $db->query("SELECT corporationID, allianceID, name, ceoID, ticker, memberCount, lastUpdated, information FROM zkillboard.zz_corporations");
-            if(empty($corporations))
+            if (empty($corporations))
                 $run = false;
 
-            foreach($corporations as $corporation) {
+            foreach ($corporations as $corporation) {
                 //$exists = $collection->findOne(array("characterID" => $character["characterID"]));
                 //if(!empty($exists) || !is_null($exists)) {
                 //    echo "Character already exists in database, skipping...\n";
@@ -87,13 +80,13 @@ class importCorporations extends Command
                     "information" => array(),
                 );
 
-                if(isset($corporation["information"]))
+                if (isset($corporation["information"]))
                     $data["information"] = json_decode($corporation["information"], true);
 
                 // Now insert it into the killmail collection
                 try {
                     $count = $collection->insertOne($data)->getInsertedCount();
-                    if($count >= 1)
+                    if ($count >= 1)
                         echo "Inserting {$corporation["corporationID"]}... Offset: {$offset}...\n";
 
                 } catch (\Exception $e) {
@@ -103,6 +96,6 @@ class importCorporations extends Command
             $run = false;
 
             //$run = false;
-        } while($run == true);
+        } while ($run == true);
     }
 }

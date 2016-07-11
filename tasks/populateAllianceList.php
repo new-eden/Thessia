@@ -64,7 +64,7 @@ class populateAllianceList extends Command
 
         $log->info("Inserting/Updating alliances...");
         $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))), true);
-        foreach($data["result"]["rowset"]["row"] as $alliance) {
+        foreach ($data["result"]["rowset"]["row"] as $alliance) {
             $alliData = $alliance["@attributes"];
             $allianceID = $alliData["allianceID"];
             $moreData = json_decode(file_get_contents("https://crest-tq.eveonline.com/alliances/{$allianceID}/"), true);
@@ -90,7 +90,7 @@ class populateAllianceList extends Command
 
             // @todo make it insert it's corporations into the corporations table.. need to add a resque scheduler for updating corporations and whatnots tho..
             $corpIDs = array();
-            foreach($moreData["corporations"] as $corp) {
+            foreach ($moreData["corporations"] as $corp) {
                 $corpIDs[] = $corp["id"];
             }
 

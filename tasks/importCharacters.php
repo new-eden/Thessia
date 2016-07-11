@@ -27,16 +27,9 @@ namespace Thessia\Tasks;
 
 use MongoDB\Collection;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Thessia\Lib\Db;
-use Thessia\Model\Database\regions;
-use Thessia\Model\Database\solarSystems;
-use Thessia\Model\Database\typeIDs;
-use Thessia\Model\EVE\Crest;
 
 class importCharacters extends Command
 {
@@ -64,10 +57,10 @@ class importCharacters extends Command
         $limit = 100000;
         do {
             $characters = $db->query("SELECT characterID, corporationID, allianceID, name, lastUpdated, history FROM zkillboard.zz_characters WHERE characterID > 0 AND name != '' LIMIT :offset,:limit", array(":offset" => $offset, ":limit" => $limit));
-            if(empty($characters))
+            if (empty($characters))
                 $run = false;
 
-            foreach($characters as $character) {
+            foreach ($characters as $character) {
                 //$exists = $collection->findOne(array("characterID" => $character["characterID"]));
                 //if(!empty($exists) || !is_null($exists)) {
                 //    echo "Character already exists in database, skipping...\n";
@@ -86,7 +79,7 @@ class importCharacters extends Command
                     "history" => array(),
                 );
 
-                if(isset($character["history"]))
+                if (isset($character["history"]))
                     $data["history"] = json_decode($character["history"], true)["employmentHistory"];
 
                 // Now insert it into the killmail collection
@@ -100,6 +93,6 @@ class importCharacters extends Command
             $offset = $offset + $limit;
 
             //$run = false;
-        } while($run == true);
+        } while ($run == true);
     }
 }
