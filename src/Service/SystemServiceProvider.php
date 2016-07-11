@@ -111,8 +111,10 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("settings", $settings);
 
         // Add the logger
-        $container->share("log", Logger::class)->withArgument($container->get("config")->get("name", "settings", "Thessia"));
-        $container->get("log")->pushHandler(new StreamHandler($container->get("config")->get("path", "settings", __DIR__ . "/../../logs/thessia.log"), Logger::WARNING));
+        $streamHandler = new StreamHandler(realpath(__DIR__ . "/../../logs/thessia.log"), Logger::INFO, true, 777, false);
+        $log = new Logger("Thessia");
+        $log->pushHandler($streamHandler);
+        $container->share("log", $log);
 
         // Add the Session handler
         $container->share("session", SessionHandler::class)->withArgument("cache");

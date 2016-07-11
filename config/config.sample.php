@@ -44,9 +44,7 @@ $config["settings"] = array(
         "cache" => __DIR__ . "/../cache/templates/",
         "debug" => true,
         "auto_reload" => true
-    ),
-    "name" => "Thessia",
-    "path" => __DIR__ . "/../logs/thessia.log"
+    )
 );
 
 // Cache settings
