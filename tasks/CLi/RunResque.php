@@ -42,8 +42,9 @@ class RunResque extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        require_once(__DIR__ . "/../vendor/chrisboulton/php-resque/lib/Resque.php");
-        require_once(__DIR__ . "/../vendor/chrisboulton/php-resque/lib/Resque/Worker.php");
+        // Require the resque files.. because it doesn't work any other way apparently..
+        require_once(__DIR__ . "/../../vendor/chrisboulton/php-resque/lib/Resque.php");
+        require_once(__DIR__ . "/../../vendor/chrisboulton/php-resque/lib/Resque/Worker.php");
 
         $queues = "rt,high,med,low";
         $logLevel = \Resque_Worker::LOG_NORMAL;
