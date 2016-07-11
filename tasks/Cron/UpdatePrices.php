@@ -64,7 +64,8 @@ class UpdatePrices
                 "marketGroupID" => (int) isset($typeData["marketGroupID"]) ? $typeData["marketGroupID"] : 0,
                 "groupID" => (int) $typeData["groupID"],
                 "adjustedPrice" => (int) isset($data["adjustedPrice"]) ? $data["adjustedPrice"] : 0,
-                "averagePrice" => (int) isset($data["averagePrice"]) ? $data["averagePrice"] : 0
+                "averagePrice" => (int) isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
+                "lastUpdated" => date("Y-m-d H:i:s")
             );
             $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]}");
             $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
