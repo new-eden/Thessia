@@ -2367,12 +2367,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "b0da5d1686cc0dec1de68d49caabdb28a0ba553a"
+                "reference": "1c9b7deebc55aed2d36c05399b22129522ec4ca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/b0da5d1686cc0dec1de68d49caabdb28a0ba553a",
-                "reference": "b0da5d1686cc0dec1de68d49caabdb28a0ba553a",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/1c9b7deebc55aed2d36c05399b22129522ec4ca2",
+                "reference": "1c9b7deebc55aed2d36c05399b22129522ec4ca2",
                 "shasum": ""
             },
             "require": {
@@ -2412,7 +2412,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-01 16:08:10"
+            "time": "2016-07-10 09:37:41"
         },
         {
             "name": "symfony/options-resolver",
@@ -2857,12 +2857,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "cdccdbbdf35f38a70eb6931667a76fc68012a999"
+                "reference": "c535bc0b56aa93ead7a75b6841f28645153b0539"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/cdccdbbdf35f38a70eb6931667a76fc68012a999",
-                "reference": "cdccdbbdf35f38a70eb6931667a76fc68012a999",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/c535bc0b56aa93ead7a75b6841f28645153b0539",
+                "reference": "c535bc0b56aa93ead7a75b6841f28645153b0539",
                 "shasum": ""
             },
             "require": {
@@ -2910,7 +2910,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-06-24 05:05:43"
+            "time": "2016-07-10 07:48:21"
         },
         {
             "name": "zendframework/zend-diactoros",

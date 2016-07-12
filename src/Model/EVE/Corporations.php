@@ -47,7 +47,30 @@ class Corporations extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("corporationID" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("corporationName" => -1)
+        ),
+        array(
+            "key" => array("allianceID" => -1)
+        ),
+        array(
+            "key" => array("allianceName" => -1)
+        ),
+        array(
+            "key" => array("ceoID" => -1)
+        ),
+        array(
+            "key" => array("ticker" => -1)
+        ),
+        array(
+            "key" => array("lastUpdated" => -1)
+        )
+    );
 
     /**
      * @param int $corporationID

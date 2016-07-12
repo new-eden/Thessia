@@ -45,7 +45,12 @@ class iconIDs extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("iconID" => -1),
+            "unique" => true
+        )
+    );
 
     /**
      * @param mixed $iconID

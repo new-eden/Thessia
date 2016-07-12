@@ -45,10 +45,118 @@ class Killmails extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("killID" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("solarSystemID" => -1)
+        ),
+        array(
+            "key" => array("solarSystemName" => -1)
+        ),
+        array(
+            "key" => array("regionID" => -1)
+        ),
+        array(
+            "key" => array("regionName" => -1)
+        ),
+        array(
+            "key" => array("victim.characterID" => -1)
+        ),
+        array(
+            "key" => array("victim.characterName" => -1)
+        ),
+        array(
+            "key" => array("victim.corporationID" => -1)
+        ),
+        array(
+            "key" => array("victim.corporationName" => -1)
+        ),
+        array(
+            "key" => array("victim.allianceID" => -1)
+        ),
+        array(
+            "key" => array("victim.allianceName" => -1)
+        ),
+        array(
+            "key" => array("victim.factionID" => -1)
+        ),
+        array(
+            "key" => array("victim.factionName" => -1)
+        ),
+        array(
+            "key" => array("victim.shipTypeID" => -1)
+        ),
+        array(
+            "key" => array("victim.shipTypeName" => -1)
+        ),
+        array(
+            "key" => array("victim.damageTaken" => -1)
+        ),
+        array(
+            "key" => array("attackers.characterID" => -1)
+        ),
+        array(
+            "key" => array("attackers.characterName" => -1)
+        ),
+        array(
+            "key" => array("attackers.corporationID" => -1)
+        ),
+        array(
+            "key" => array("attackers.corporationName" => -1)
+        ),
+        array(
+            "key" => array("attackers.allianceID" => -1)
+        ),
+        array(
+            "key" => array("attackers.allianceName" => -1)
+        ),
+        array(
+            "key" => array("attackers.factionID" => -1)
+        ),
+        array(
+            "key" => array("attackers.factionName" => -1)
+        ),
+        array(
+            "key" => array("attackers.shipTypeID" => -1)
+        ),
+        array(
+            "key" => array("attackers.shipTypeName" => -1)
+        ),
+        array(
+            "key" => array("attackers.finalBlow" => -1)
+        ),
+        array(
+            "key" => array("attackers.weaponTypeID" => -1)
+        ),
+        array(
+            "key" => array("attackers.weaponTypeName" => -1)
+        ),
+        array(
+            "key" => array("attackers.damageDone" => -1)
+        ),
+        array(
+            "key" => array("items.typeID" => -1)
+        ),
+        array(
+            "key" => array("items.typeName" => -1)
+        ),
+        array(
+            "key" => array("items.groupID" => -1)
+        ),
+        array(
+            "key" => array("" => -1)
+        ),
+        array(
+            "key" => array("" => -1)
+        )
+    );
 
     /**
-     * @param mixed $crestHash
+     * @param $crestHash
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByCrestHash($crestHash)
     {
@@ -58,7 +166,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $killID
+     * @param $killID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByKillID($killID)
     {
@@ -68,7 +177,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $moonID
+     * @param $moonID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByMoonID($moonID)
     {
@@ -78,7 +188,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $regionID
+     * @param $regionID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByRegionID($regionID)
     {
@@ -88,7 +199,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByRegionName($fieldName)
     {
@@ -98,7 +210,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $solarSystemID
+     * @param $solarSystemID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllBySolarSystemID($solarSystemID)
     {
@@ -108,7 +221,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllBySolarSystemName($fieldName)
     {
@@ -118,7 +232,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $victimAllianceID
+     * @param $victimAllianceID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimAllianceID($victimAllianceID)
     {
@@ -128,7 +243,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimAllianceName($fieldName)
     {
@@ -138,7 +254,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $victimCharacterID
+     * @param $victimCharacterID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimCharacterID($victimCharacterID)
     {
@@ -148,7 +265,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimCharacterName($fieldName)
     {
@@ -158,7 +276,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $victimCorporationID
+     * @param $victimCorporationID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimCorporationID($victimCorporationID)
     {
@@ -168,7 +287,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimCorporationName($fieldName)
     {
@@ -178,7 +298,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $victimFactionID
+     * @param $victimFactionID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimFactionID($victimFactionID)
     {
@@ -188,7 +309,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimFactionName($fieldName)
     {
@@ -198,7 +320,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $victimShipTypeID
+     * @param $victimShipTypeID
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimShipTypeID($victimShipTypeID)
     {
@@ -208,7 +331,8 @@ class Killmails extends Mongo
     }
 
     /**
-     * @param mixed $fieldName
+     * @param $fieldName
+     * @return \MongoDB\Driver\Cursor
      */
     public function getAllByVictimShipTypeName($fieldName)
     {
@@ -220,6 +344,7 @@ class Killmails extends Mongo
     /**
      * @param array $documents An array of arrays. eg: array(array(data), array(data2), array(data3))
      * @param array $options Options array, used for projection, sort, etc.
+     * @return \MongoDB\InsertManyResult|string
      */
     public function insertMany(array $documents, array $options = [])
     {
@@ -233,6 +358,7 @@ class Killmails extends Mongo
     /**
      * @param array $document The data array to insert.
      * @param array $options Options array, used for projection, sort, etc.
+     * @return \MongoDB\InsertOneResult|string
      */
     public function insertOne(array $document, array $options = [])
     {
@@ -247,6 +373,7 @@ class Killmails extends Mongo
      * @param array $filter A Filter query, eg: array("killID" => 1).
      * @param array $replacement The new data array to replace the old one with.
      * @param array $options Options array, used for projection, sort, etc.
+     * @return \MongoDB\UpdateResult|string
      */
     public function updateOne(array $filter, array $replacement, array $options = [])
     {

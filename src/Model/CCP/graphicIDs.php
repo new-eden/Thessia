@@ -45,7 +45,12 @@ class graphicIDs extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("graphicsID" => -1),
+            "unique" => true
+        )
+    );
 
     /**
      * @param mixed $graphicsID

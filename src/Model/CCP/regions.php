@@ -45,7 +45,14 @@ class regions extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("regionID" => -1),
+            "unique" => true
+        ), array(
+            "key" => array("regionName" => -1)
+        )
+    );
 
     /**
      * @param mixed $descriptionID

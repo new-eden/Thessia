@@ -47,7 +47,18 @@ class Prices extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("typeID" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("marketGroupID" => -1)
+        ),
+        array(
+            "key" => array("groupID" => -1)
+        )
+    );
 
     /**
      * @param int $typeID

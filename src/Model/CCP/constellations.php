@@ -45,7 +45,21 @@ class constellations extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("constellationID" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("regionName" => -1)
+        ),
+        array(
+            "key" => array("regionID" => -1)
+        ),
+        array(
+            "key" => array("constellationName" => -1)
+        )
+    );
 
     /**
      * @param mixed $constellationID

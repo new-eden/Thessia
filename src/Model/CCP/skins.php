@@ -45,7 +45,12 @@ class skins extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("skinID" => -1),
+            "unique" => true
+        )
+    );
 
     /**
      * @param mixed $fieldName

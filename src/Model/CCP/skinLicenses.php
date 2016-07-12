@@ -45,7 +45,12 @@ class skinLicenses extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("licenseTypeID" => -1),
+            "unique" => true
+        )
+    );
 
     /**
      * @param mixed $licenseTypeID

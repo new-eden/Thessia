@@ -45,7 +45,12 @@ class groupIDs extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("groupID" => -1),
+            "unique" => true
+        )
+    );
 
     /**
      * @param mixed $categoryID

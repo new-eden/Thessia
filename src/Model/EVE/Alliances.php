@@ -47,7 +47,15 @@ class Alliances extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("allianceID" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("ticker" => -1)
+        )
+    );
 
     /**
      * @param int $allianceID

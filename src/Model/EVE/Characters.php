@@ -47,7 +47,30 @@ class Characters extends Mongo
     /**
      * An array of indexes for this collection
      */
-    public $indexes = array();
+    public $indexes = array(
+        array(
+            "key" => array("characterID" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("characterName" => -1)
+        ),
+        array(
+            "key" => array("corporationID" => -1)
+        ),
+        array(
+            "key" => array("corporationName" => -1)
+        ),
+        array(
+            "key" => array("allianceID" => -1)
+        ),
+        array(
+            "key" => array("allianceName" => -1)
+        ),
+        array(
+            "key" => array("lastUpdated" => -1)
+        )
+    );
 
     /**
      * @param int $characterID
