@@ -26,9 +26,7 @@
 namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
@@ -60,8 +58,9 @@ class CreateHelper extends Command
             $helper = $this->getHelper("question");
             $question = new ConfirmationQuestion("Directory doesn't exist. Would you like to try and create it?", false);
 
-            if (!$helper->ask($input, $output, $question))
-                return;
+            if (!$helper->ask($input, $output, $question)) {
+                            return;
+            }
 
             @mkdir($directory);
             if (!is_dir($directory)) {

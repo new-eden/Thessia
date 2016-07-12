@@ -57,8 +57,9 @@ class importCorporations extends Command
         $limit = 100000;
         do {
             $corporations = $db->query("SELECT corporationID, allianceID, name, ceoID, ticker, memberCount, lastUpdated, information FROM zkillboard.zz_corporations");
-            if (empty($corporations))
-                $run = false;
+            if (empty($corporations)) {
+                            $run = false;
+            }
 
             foreach ($corporations as $corporation) {
                 //$exists = $collection->findOne(array("characterID" => $character["characterID"]));
@@ -80,14 +81,16 @@ class importCorporations extends Command
                     "information" => array(),
                 );
 
-                if (isset($corporation["information"]))
-                    $data["information"] = json_decode($corporation["information"], true);
+                if (isset($corporation["information"])) {
+                                    $data["information"] = json_decode($corporation["information"], true);
+                }
 
                 // Now insert it into the killmail collection
                 try {
                     $count = $collection->insertOne($data)->getInsertedCount();
-                    if ($count >= 1)
-                        echo "Inserting {$corporation["corporationID"]}... Offset: {$offset}...\n";
+                    if ($count >= 1) {
+                                            echo "Inserting {$corporation["corporationID"]}... Offset: {$offset}...\n";
+                    }
 
                 } catch (\Exception $e) {
 

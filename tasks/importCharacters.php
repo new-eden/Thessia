@@ -57,8 +57,9 @@ class importCharacters extends Command
         $limit = 100000;
         do {
             $characters = $db->query("SELECT characterID, corporationID, allianceID, name, lastUpdated, history FROM zkillboard.zz_characters WHERE characterID > 0 AND name != '' LIMIT :offset,:limit", array(":offset" => $offset, ":limit" => $limit));
-            if (empty($characters))
-                $run = false;
+            if (empty($characters)) {
+                            $run = false;
+            }
 
             foreach ($characters as $character) {
                 //$exists = $collection->findOne(array("characterID" => $character["characterID"]));
@@ -79,8 +80,9 @@ class importCharacters extends Command
                     "history" => array(),
                 );
 
-                if (isset($character["history"]))
-                    $data["history"] = json_decode($character["history"], true)["employmentHistory"];
+                if (isset($character["history"])) {
+                                    $data["history"] = json_decode($character["history"], true)["employmentHistory"];
+                }
 
                 // Now insert it into the killmail collection
                 try {

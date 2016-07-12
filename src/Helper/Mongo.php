@@ -84,11 +84,11 @@ class Mongo {
      */
     public function createIndex() {
         foreach ($this->indexes as $index) {
-            if(isset($index["unique"])) {
+            if (isset($index["unique"])) {
                 unset($index["unique"]);
                 $this->collection->createIndex($index, array("unique" => 1));
             }
-            elseif(isset($index["sparse"])) {
+            elseif (isset($index["sparse"])) {
                 unset($index["sparse"]);
                 $this->collection->createIndex($index, array("sparse" => 1));
             } else {

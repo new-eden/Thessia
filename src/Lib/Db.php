@@ -94,7 +94,6 @@ class Db
      * @param Logger $logger
      * @param Timer $timer
      * @param Config $config
-     * @param RequestInterface $requestInterface
      * @throws \Exception
      */
     function __construct(Cache $cache, Logger $logger, Timer $timer, Config $config)

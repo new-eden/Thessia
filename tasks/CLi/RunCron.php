@@ -89,8 +89,9 @@ class RunCron extends Command
                 $class = new $import();
                 $interval = $class->getRunTimes();
 
-                if ($interval == 0)
-                    continue;
+                if ($interval == 0) {
+                                    continue;
+                }
 
                 if ($currentTime > ($lastRan + $interval)) {
                     $date = date("Y-m-d H:i:s");

@@ -57,8 +57,9 @@ class CreateCron extends Command
             $helper = $this->getHelper("question");
             $question = new ConfirmationQuestion("Directory doesn't exist. Would you like to try and create it?", false);
 
-            if (!$helper->ask($input, $output, $question))
-                return;
+            if (!$helper->ask($input, $output, $question)) {
+                            return;
+            }
 
             @mkdir($directory);
             if (!is_dir($directory)) {
