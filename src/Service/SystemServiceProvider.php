@@ -31,6 +31,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
+use Thessia\Lib\cURL;
 use Thessia\Lib\Db;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
@@ -51,6 +52,7 @@ use Thessia\Model\Database\solarSystems;
 use Thessia\Model\Database\tournamentRuleSets;
 use Thessia\Model\Database\typeIDs;
 use Thessia\Model\EVE\Crest;
+use Thessia\Model\EVE\Prices;
 
 class SystemServiceProvider extends AbstractServiceProvider
 {
@@ -90,7 +92,9 @@ class SystemServiceProvider extends AbstractServiceProvider
         "solarSystems",
         "tournamentRuleSets",
         "typeIDs",
-        "crest"
+        "crest",
+        "curl",
+        "prices"
     ];
 
     /**
@@ -132,6 +136,9 @@ class SystemServiceProvider extends AbstractServiceProvider
         $mongo = new Client("mongodb://localhost:27017", array(), array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $container->share("mongo", $mongo);
 
+        // Add cURL
+        $container->share("curl", cURL::class)->withArgument("cache");
+
         // Models
         $container->share("blueprints", blueprints::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("categoryIDs", categoryIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
@@ -151,5 +158,6 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("typeIDs", typeIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
 
         $container->share("crest", Crest::class);
+        $container->share("prices", Prices::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
     }
 }
