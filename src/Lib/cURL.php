@@ -23,13 +23,6 @@
  * SOFTWARE.
  */
 
-/**
- * Created by PhpStorm.
- * User: micha
- * Date: 12-07-2016
- * Time: 16:18
- */
-
 namespace Thessia\Lib;
 
 
