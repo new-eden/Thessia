@@ -62,7 +62,7 @@ class Cache
      */
     public function get($key)
     {
-        return $this->redis->get($key);
+        return json_decode($this->redis->get($key), true);
     }
 
     /**
@@ -76,7 +76,7 @@ class Cache
      */
     public function set($key, $value, $timeout = 0)
     {
-        $result = $this->redis->set($key, $value);
+        $result = $this->redis->set($key, json_encode($value));
         if ($timeout > 0) {
             return $result ? $this->expire($key, $timeout) : $result;
         }
@@ -107,7 +107,7 @@ class Cache
      */
     public function replace($key, $value, $timeout)
     {
-        return $this->redis->set($key, $value, $timeout);
+        return $this->redis->set($key, json_encode($value), $timeout);
     }
 
     /**
