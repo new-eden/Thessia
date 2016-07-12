@@ -23,13 +23,13 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\EVE;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class killmails extends Mongo
+class Killmails extends Mongo
 {
 
     /**

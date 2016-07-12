@@ -42,7 +42,6 @@ use Thessia\Model\Database\constellations;
 use Thessia\Model\Database\graphicIDs;
 use Thessia\Model\Database\groupIDs;
 use Thessia\Model\Database\iconIDs;
-use Thessia\Model\Database\killmails;
 use Thessia\Model\Database\landmarks;
 use Thessia\Model\Database\regions;
 use Thessia\Model\Database\skinLicenses;
@@ -51,7 +50,12 @@ use Thessia\Model\Database\skins;
 use Thessia\Model\Database\solarSystems;
 use Thessia\Model\Database\tournamentRuleSets;
 use Thessia\Model\Database\typeIDs;
+use Thessia\Model\EVE\Alliances;
+use Thessia\Model\EVE\Characters;
+use Thessia\Model\EVE\Corporations;
 use Thessia\Model\EVE\Crest;
+use Thessia\Model\EVE\Killmails;
+use Thessia\Model\EVE\Participants;
 use Thessia\Model\EVE\Prices;
 
 class SystemServiceProvider extends AbstractServiceProvider
@@ -94,7 +98,11 @@ class SystemServiceProvider extends AbstractServiceProvider
         "typeIDs",
         "crest",
         "curl",
-        "prices"
+        "prices",
+        "alliances",
+        "corporations",
+        "characters",
+        "participants",
     ];
 
     /**
@@ -147,7 +155,6 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("graphicIDs", graphicIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("groupIDs", groupIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("iconIDs", iconIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("killmails", killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("landmarks", landmarks::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("regions", regions::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("skinLicenses", skinLicenses::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
@@ -159,5 +166,10 @@ class SystemServiceProvider extends AbstractServiceProvider
 
         $container->share("crest", Crest::class);
         $container->share("prices", Prices::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("alliances", Alliances::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("corporations", Corporations::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("characters", Characters::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("participants", Participants::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("killmails", Killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
     }
 }
