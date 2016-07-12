@@ -36,7 +36,8 @@ use Thessia\Lib\Config;
  * Class Mongo
  * @package Thessia\Helper
  */
-class Mongo {
+class Mongo
+{
     /**
      * @var Client
      */
@@ -71,7 +72,8 @@ class Mongo {
      * @param Client $mongodb
      * @param Cache $cache
      */
-    public function __construct(Config $config, Client $mongodb, Cache $cache) {
+    public function __construct(Config $config, Client $mongodb, Cache $cache)
+    {
         $this->cache = $cache;
         $this->mongodb = $mongodb;
         $db = !empty($this->databaseName) ? $this->databaseName : $config->get("dbName", "mongodb");
@@ -82,13 +84,13 @@ class Mongo {
      * Set $this->indexes with a list of indexes - Should only be called from CLI
      * @todo add output logging and whatnots
      */
-    public function createIndex() {
+    public function createIndex()
+    {
         foreach ($this->indexes as $index) {
             if (isset($index["unique"])) {
                 unset($index["unique"]);
                 $this->collection->createIndex($index, array("unique" => 1));
-            }
-            elseif (isset($index["sparse"])) {
+            } elseif (isset($index["sparse"])) {
                 unset($index["sparse"]);
                 $this->collection->createIndex($index, array("sparse" => 1));
             } else {

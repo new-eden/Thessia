@@ -104,12 +104,12 @@ class Db
         $this->config = $config;
 
         if ($this->persistence === false) {
-                    $this->cache->persistence = false;
+            $this->cache->persistence = false;
         }
 
         $host = $config->get("unixSocket", "db") ? ";unix_socket=" . $config->get("unixSocket", "db", "/var/run/mysqld/mysqld.sock") : ";host=" . $config->get("host", "db", "127.0.0.1");
         $dsn = "mysql:dbname=" . $config->get("dbname", "db") . "{$host};charset=utf8";
-        
+
         try {
             $this->pdo = new PDO($dsn, $config->get("username", "db"), $config->get("password", "db"), array(
                 PDO::ATTR_PERSISTENT => $this->persistence,
@@ -137,7 +137,7 @@ class Db
 
         // Figure out if it has more than one result and return it
         if (sizeof($result) >= 1) {
-                    return $result[0];
+            return $result[0];
         }
 
         // No results at all
@@ -185,7 +185,7 @@ class Db
 
             // Check for errors
             if ($stmt->errorCode() != 0) {
-                            return false;
+                return false;
             }
 
             // Fetch an associative array
@@ -200,7 +200,7 @@ class Db
 
             // If cache time is above 0 seconds, lets store it in the cache.
             if ($cacheTime > 0) {
-                            $this->cache->set($key, serialize($result), min(3600, $cacheTime));
+                $this->cache->set($key, serialize($result), min(3600, $cacheTime));
             }
 
             // Log the query
@@ -265,7 +265,7 @@ class Db
 
         // Figure out if it has no results
         if (sizeof($result) == 0) {
-                    return null;
+            return null;
         }
 
         // Bind the first result to $resultRow
@@ -345,12 +345,12 @@ class Db
         if (isset($parameters[0]) && is_array($parameters[0]) === true) {
             foreach ($parameters as $array) {
                 foreach ($array as $key => &$value) {
-                                    $stmt->bindParam($key, $value);
+                    $stmt->bindParam($key, $value);
                 }
                 $stmt->execute();
             }
         } else {
-                    $stmt->execute($parameters);
+            $stmt->execute($parameters);
         }
 
         // If an error happened, rollback and return false
@@ -379,7 +379,7 @@ class Db
 
         // If return ID is needed, return that
         if ($returnID) {
-                    return $returnID;
+            return $returnID;
         }
 
         // Return the amount of rows that got altered
@@ -414,7 +414,7 @@ class Db
         $key = sha1($name);
 
         if (!empty($this->cache->get($key))) {
-                    return null;
+            return null;
         }
 
         $host = $this->config->get("host", "database", "127.0.0.1");
@@ -437,7 +437,7 @@ class Db
 
         // This is ugly, and dangerous
         foreach ($parameters as $key => $value) {
-                    $query = str_replace($key, mysqli_real_escape_string($connection, $value), $query);
+            $query = str_replace($key, mysqli_real_escape_string($connection, $value), $query);
         }
 
         return $connection->query($query, MYSQLI_ASYNC);
@@ -456,12 +456,12 @@ class Db
         if ($cacheTime > 0) {
             $result = !empty($this->cache->get($key)) ? unserialize($this->cache->get($key)) : null;
             if (!empty($result)) {
-                            return $result;
+                return $result;
             }
         }
 
         if (!isset($this->connections[$name])) {
-                    return false;
+            return false;
         }
 
         /** @var \mysqli $connection */
@@ -478,10 +478,10 @@ class Db
         $data = array();
         $con = $connection->reap_async_query();
         while ($row = $con->fetch_assoc()) {
-                    $data[] = $row;
+            $data[] = $row;
         }
         if ($cacheTime > 0) {
-                    $this->cache->set($key, serialize($data), min(3600, $cacheTime));
+            $this->cache->set($key, serialize($data), min(3600, $cacheTime));
         }
 
         return $data;

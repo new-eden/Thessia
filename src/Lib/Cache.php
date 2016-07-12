@@ -37,9 +37,9 @@ class Cache
     {
         $this->redis = new \Redis();
         if (!$this->persistence) {
-                    $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+            $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
         } else {
-                    $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+            $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
         }
     }
 

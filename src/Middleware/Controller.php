@@ -73,7 +73,7 @@ abstract class Controller
         $app = $this->app;
         $controller = $this;
 
-        $callable = function($request, $response, $args) use ($app, $controller, $actionName) {
+        $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
@@ -113,9 +113,10 @@ abstract class Controller
      * @param $name
      * @return mixed|null
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         if (!empty($this->container->get($name))) {
-                    return $this->container->get($name);
+            return $this->container->get($name);
         }
 
         return null;
@@ -141,7 +142,8 @@ abstract class Controller
      * Return the entire container for use in the controller
      * @return \Interop\Container\ContainerInterface|\Slim\Container
      */
-    public function getContainer() {
+    public function getContainer()
+    {
         return $this->container;
     }
 
@@ -154,7 +156,8 @@ abstract class Controller
      * @param string $contentType
      * @return mixed
      */
-    protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8") {
+    protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8")
+    {
         return $this->container->get("render")->render($file, $args, $status, $contentType, $this->response);
     }
 
@@ -168,18 +171,20 @@ abstract class Controller
      * @param int $status
      * @return mixed
      */
-    protected function json($args = array(), int $status = 200) {
+    protected function json($args = array(), int $status = 200)
+    {
         return $this->container->get("render")->toJson($args, $status, $this->response);
     }
 
     /**
      * Render the data as xml output
-     * 
+     *
      * @param array $args
      * @param int $status
      * @return mixed
      */
-    protected function xml($args = array(), int $status = 200) {
+    protected function xml($args = array(), int $status = 200)
+    {
         return $this->container->get("render")->toXML($args, $status, $this->response);
     }
 
@@ -229,8 +234,8 @@ abstract class Controller
      * This method prepares the response object to return an HTTP Redirect
      * response to the client.
      *
-     * @param  string|UriInterface $url    The redirect destination.
-     * @param  int                 $status The redirect HTTP status code.
+     * @param  string|UriInterface $url The redirect destination.
+     * @param  int $status The redirect HTTP status code.
      * @return self
      */
     protected function redirect($url, $status = 302)

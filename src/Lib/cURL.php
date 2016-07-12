@@ -30,7 +30,8 @@ namespace Thessia\Lib;
  * Class cURL
  * @package Thessia\Lib
  */
-class cURL {
+class cURL
+{
     /** @var Cache $cache */
     private $cache;
 
@@ -38,7 +39,8 @@ class cURL {
      * cURL constructor.
      * @param Cache $cache
      */
-    public function __construct(Cache $cache) {
+    public function __construct(Cache $cache)
+    {
         $this->cache = $cache;
     }
 
@@ -47,12 +49,13 @@ class cURL {
      * @param int $cacheTime
      * @return mixed|null
      */
-    public function getData(string $url, int $cacheTime = 3600) {
+    public function getData(string $url, int $cacheTime = 3600)
+    {
         $md5 = md5($url);
 
         $result = $cacheTime > 0 ? $this->cache->get($md5) : null;
 
-        if(!$result) {
+        if (!$result) {
             // Init curl
             $curl = curl_init();
 
@@ -87,7 +90,8 @@ class cURL {
      * @param array $headers
      * @return mixed
      */
-    public function sendData(string $url, $postData = array(), $headers = array()) {
+    public function sendData(string $url, $postData = array(), $headers = array())
+    {
         // Define default headers
         if (empty($headers)) {
             $headers = array('Connection: keep-alive', 'Keep-Alive: timeout=10, max=1000');

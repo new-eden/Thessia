@@ -59,15 +59,15 @@ class Render
     public function render(String $templateFile, $dataArray = array(), int $status = null, String $contentType = null, ResponseInterface $response)
     {
         $contentType = $contentType ?? $response->getHeader("Content-Type");
-        
+
         // Run the scrapeCheck
         $this->scrapeChecker();
 
         if ($contentType == "application/json") {
-                    return $this->toJson($dataArray, $status, $response);
+            return $this->toJson($dataArray, $status, $response);
         }
         if ($contentType == "application/xml") {
-                    return $this->toXML($dataArray, $status, $response);
+            return $this->toXML($dataArray, $status, $response);
         }
 
         return $this->toTwig($templateFile, $dataArray, $status, $response);

@@ -34,7 +34,8 @@ use Psr\Http\Message\ResponseInterface;
  * @link https://github.com/php-fig/http-message/blob/master/src/MessageInterface.php
  * @link https://github.com/php-fig/http-message/blob/master/src/ResponseInterface.php
  */
-class Response extends \Slim\Http\Response implements ResponseInterface {
+class Response extends \Slim\Http\Response implements ResponseInterface
+{
     const HTTP_CONTINUE = 100;
     const HTTP_SWITCHING_PROTOCOLS = 101;
     const HTTP_PROCESSING = 102; // RFC2518
