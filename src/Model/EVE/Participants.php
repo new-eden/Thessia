@@ -51,7 +51,7 @@ class Participants extends Mongo
     public function getByKillID(int $killID, int $cacheTime = 3600): array
     {
         // Check if the killmail is in the cache, if it is, return it
-        $killData = $this->cache->get(md5($killID));
+        $killData = $this->cache->get(md5(serialize($killID)));
         if (!empty($killData)) {
             return $killData;
         }
@@ -62,7 +62,7 @@ class Participants extends Mongo
         );
 
         // Store the killData in the cache
-        $this->cache->set(md5($killID), $killData, $cacheTime);
+        $this->cache->set(md5(serialize($killID)), $killData, $cacheTime);
 
         // Return the killmail
         return $killData;
@@ -71,7 +71,7 @@ class Participants extends Mongo
     public function getByCrestHash(string $crestHash, int $cacheTime = 3600): array
     {
         // Check if the killmail is in the cache, if it is, return it
-        $killData = $this->cache->get(md5($crestHash));
+        $killData = $this->cache->get(md5(serialize($crestHash)));
         if (!empty($killData)) {
             return $killData;
         }
@@ -82,7 +82,7 @@ class Participants extends Mongo
         );
 
         // Store the killData in the cache
-        $this->cache->set(md5($crestHash), $killData, $cacheTime);
+        $this->cache->set(md5(serialize($crestHash)), $killData, $cacheTime);
 
         // Return the killmail
         return $killData;
@@ -90,14 +90,15 @@ class Participants extends Mongo
 
     public function getByKillTime($killTime, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($killTime));
+        $killData = $this->cache->get(md5(serialize($killTime)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("killTime" => $killTime), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
+        $extraArguments["killTime"] = $killTime;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
         $killData = $this->collection->findOne($array);
-        $this->cache->set(md5($killTime), $killData, $cacheTime);
+        $this->cache->set(md5(serialize($killTime)), $killData, $cacheTime);
         return $killData;
     }
 
@@ -105,6 +106,7 @@ class Participants extends Mongo
     {
         // Mongo Array
         $queryArray = array();
+        $dataArray = array();
 
         // Valid arguments
         $validArguments = array(
@@ -133,9 +135,6 @@ class Participants extends Mongo
 
         // If there are extraArguments, we'll run through them, and validate each one (it's all numeric values tho, except killtime, pretty easy to validate)
         if (!empty($extraArguments)) {
-            // Empty dataArray
-            $dataArray = array();
-
             // Now validate everything from extraArguments
             foreach ($validArguments as $arg) {
                 if (isset($extraArguments[$arg])) {
@@ -153,21 +152,20 @@ class Participants extends Mongo
                     $dataArray[$arg] = $extraArguments[$arg];
                 }
             }
-
-            $queryArray[0] = $dataArray;
         }
 
         // Limit
-        $queryArray[1]["limit"] = $limit;
+        $queryArray["limit"] = $limit;
 
         // Order
-        $queryArray[1]["sort"] = array("killTime" => $order == "DESC" ? -1 : 1);
+        $queryArray["sort"] = array("killTime" => $order == "DESC" ? -1 : 1);
 
         // Offset
-        $queryArray[1]["skip"] = $offset;
+        if($offset > 0)
+        $queryArray["skip"] = $offset;
 
         // Return the query array
-        return $queryArray;
+        return array("filter" => $dataArray, "options" => $queryArray);
     }
 
     public function verifyDate($date): bool
@@ -177,223 +175,239 @@ class Participants extends Mongo
 
     public function getBySolarSystemID($solarSystemID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($solarSystemID));
+        $killData = $this->cache->get(md5(serialize($solarSystemID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("solarSystemID" => $solarSystemID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($solarSystemID), $killData, $cacheTime);
+        $extraArguments["solarSystemID"] = $solarSystemID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($solarSystemID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByRegionID($regionID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($regionID));
+        $killData = $this->cache->get(md5(serialize($regionID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("regionID" => $regionID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($regionID), $killData, $cacheTime);
+        $extraArguments["regionID"] = $regionID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($regionID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByVictimCharacterID($characterID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($characterID));
+        $killData = $this->cache->get(md5(serialize($characterID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("victim.characterID" => $characterID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($characterID), $killData, $cacheTime);
+        $extraArguments["victim.characterID"] = $characterID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($characterID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByAttackerCharacterID($characterID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($characterID));
+        $killData = $this->cache->get(md5(serialize($characterID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("attackers.characterID" => $characterID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($characterID), $killData, $cacheTime);
+        $extraArguments["attackers.characterID"] = $characterID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($characterID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByVictimCorporationID($corporationID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($corporationID));
+        $killData = $this->cache->get(md5(serialize($corporationID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("victim.corporationID" => $corporationID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($corporationID), $killData, $cacheTime);
+        $extraArguments["victim.corporationID"] = $corporationID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($corporationID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByAttackerCorporationID($corporationID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($corporationID));
+        $killData = $this->cache->get(md5(serialize($corporationID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("attackers.corporationID" => $corporationID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($corporationID), $killData, $cacheTime);
+        $extraArguments["attackers.corporationID"] = $corporationID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($corporationID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByVictimAllianceID($allianceID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($allianceID));
+        $killData = $this->cache->get(md5(serialize($allianceID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("victim.allianceID" => $allianceID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($allianceID), $killData, $cacheTime);
+        $extraArguments["victim.allianceID"] = $allianceID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($allianceID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByAttackerAllianceID($allianceID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($allianceID));
+        $killData = $this->cache->get(md5(serialize($allianceID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("attackers.allianceID" => $allianceID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($allianceID), $killData, $cacheTime);
+        $extraArguments["attackers.allianceID"] = $allianceID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($allianceID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByVictimFactionID($factionID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($factionID));
+        $killData = $this->cache->get(md5(serialize($factionID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("victim.factionID" => $factionID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($factionID), $killData, $cacheTime);
+        $extraArguments["victim.factionID"] = $factionID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($factionID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByAttackerFactionID($factionID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($factionID));
+        $killData = $this->cache->get(md5(serialize($factionID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("attackers.factionID" => $factionID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($factionID), $killData, $cacheTime);
+        $extraArguments["attackers.factionID"] = $factionID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($factionID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByVictimShipTypeID($shipTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($shipTypeID));
+        $killData = $this->cache->get(md5(serialize($shipTypeID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("victim.shipTypeID" => $shipTypeID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($shipTypeID), $killData, $cacheTime);
+        $extraArguments["victim.shipTypeID"] = $shipTypeID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($shipTypeID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getByAttackerShipTypeID($shipTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($shipTypeID));
+        $killData = $this->cache->get(md5(serialize($shipTypeID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("attackers.shipTypeID" => $shipTypeID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($shipTypeID), $killData, $cacheTime);
+        $extraArguments["attackers.shipTypeID"] = $shipTypeID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($shipTypeID)), $killData, $cacheTime);
         return $killData;
     }
 
 
     public function getByAttackerWeaponTypeID($weaponTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($weaponTypeID));
+        $killData = $this->cache->get(md5(serialize($weaponTypeID)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("attackers.weaponTypeID" => $weaponTypeID), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($weaponTypeID), $killData, $cacheTime);
+        $extraArguments["attackers.weaponTypeID"] = $weaponTypeID;
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($weaponTypeID)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getAllKillsAfterDate($afterDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($afterDate));
+        $killData = $this->cache->get(md5(serialize($afterDate)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("killTime" => array("\$gte" => $afterDate)), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($afterDate), $killData, $cacheTime);
+        $extraArguments["killTime"] = array("\$gte" => $afterDate);
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($afterDate)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getAllKillsBeforeDate($beforeDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($beforeDate));
+        $killData = $this->cache->get(md5(serialize($beforeDate)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("killTime" => array("\$lt" => $beforeDate)), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($beforeDate), $killData, $cacheTime);
+        $extraArguments["killTime"] = array("\$lt" => $beforeDate);
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($beforeDate)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getAllKillsBetweenDates($afterDate = null, $beforeDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($afterDate . $beforeDate));
+        $killData = $this->cache->get(md5(serialize($afterDate . $beforeDate)));
         if (!empty($killData)) {
             return $killData;
         }
 
-        $array = array_merge(array("killTime" => array("\$gte" => $afterDate, "\$lte" => $beforeDate)), $this->generateQueryArray($extraArguments, $limit, $order, $offset));
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($afterDate . $beforeDate), $killData, $cacheTime);
+        $extraArguments["killTime"] = array("\$gte" => $afterDate, "\$lte" => $beforeDate);
+        $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($afterDate . $beforeDate)), $killData, $cacheTime);
         return $killData;
     }
 
     public function getAllKills($extraArguments = array(), $limit = 100, $cacheTime = 3600, $order = "DESC", $offset = null)
     {
-        $killData = $this->cache->get(md5($extraArguments));
+        $killData = $this->cache->get(md5(serialize($extraArguments)));
         if (!empty($killData)) {
             return $killData;
         }
 
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
-        $killData = $this->collection->find($array);
-        $this->cache->set(md5($extraArguments), $killData, $cacheTime);
+        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $this->cache->set(md5(serialize($extraArguments)), $killData, $cacheTime);
         return $killData;
     }
 }
