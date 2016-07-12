@@ -26,7 +26,8 @@
 namespace Thessia\Controller;
 
 use Thessia\Middleware\Controller;
-use Thessia\Model\Database\typeIDs;
+use Thessia\Model\CCP\typeIDs;
+use Thessia\Model\EVE\Participants;
 
 class IndexController extends Controller
 {
@@ -35,10 +36,18 @@ class IndexController extends Controller
         $container = $this->getContainer();
         /** @var typeIDs $typeIDs */
         $typeIDs = $container->get("typeIDs");
-        $data1 = $typeIDs->getAllByTypeID(638)->toArray();
-        $data2 = $typeIDs->getAllByName("Raven")->toArray();
-        var_dump($data1);
-        var_dump($data2);
+        /** @var Participants $participants */
+        $participants = $container->get("participants");
+
+        $kills = $participants->getAllKills();
+        foreach($kills as $kill) {
+            var_dump($kill);
+        }
+
+        //$data1 = $typeIDs->getAllByTypeID(638)->toArray();
+        //$data2 = $typeIDs->getAllByName("Raven")->toArray();
+        //var_dump($data1);
+        //var_dump($data2);
         $this->render("index.html", array());
     }
 }
