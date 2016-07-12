@@ -41,7 +41,7 @@ class Prices extends Mongo {
     /**
      * The name of the database the collection is stored in
      */
-    public $databaseName = 'ccp';
+    public $databaseName = 'thessia';
 
     /**
      * An array of indexes for this collection
