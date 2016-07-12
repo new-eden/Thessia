@@ -26,14 +26,27 @@
 namespace Thessia\Lib;
 
 
+/**
+ * Class cURL
+ * @package Thessia\Lib
+ */
 class cURL {
     /** @var Cache $cache */
     private $cache;
 
+    /**
+     * cURL constructor.
+     * @param Cache $cache
+     */
     public function __construct(Cache $cache) {
         $this->cache = $cache;
     }
 
+    /**
+     * @param string $url
+     * @param int $cacheTime
+     * @return mixed|null
+     */
     public function getData(string $url, int $cacheTime = 3600) {
         $md5 = md5($url);
 
@@ -68,6 +81,12 @@ class cURL {
         return $result;
     }
 
+    /**
+     * @param string $url
+     * @param array $postData
+     * @param array $headers
+     * @return mixed
+     */
     public function sendData(string $url, $postData = array(), $headers = array()) {
         // Define default headers
         if (empty($headers)) {

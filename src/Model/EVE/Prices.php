@@ -28,6 +28,10 @@ namespace Thessia\Model\EVE;
 
 use Thessia\Helper\Mongo;
 
+/**
+ * Class Prices
+ * @package Thessia\Model\EVE
+ */
 class Prices extends Mongo {
     /**
      * The name of the models collection
@@ -44,6 +48,10 @@ class Prices extends Mongo {
      */
     public $indexes = array();
 
+    /**
+     * @param int $typeID
+     * @return array|null|object
+     */
     public function getPriceForTypeID(int $typeID) {
         return $this->collection->findOne(array("typeID" => $typeID));
     }
