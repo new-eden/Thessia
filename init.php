@@ -49,14 +49,14 @@ function dd($input) {
 function getContainer() {
     static $container;
 
-    if(!isset($container)) {
+    if (!isset($container)) {
         $container = new Container();
 
         // Autowire class constructor dependencies
         $container->delegate(new ReflectionContainer());
 
         // Register default config file
-        if(file_exists(__DIR__ . "/config/config.php"))
+        if (file_exists(__DIR__ . "/config/config.php"))
             $container->add("configFile", __DIR__ . "/config/config.php");
         else
             throw new \Exception("Error, config.php missing in the config directory");

@@ -27,11 +27,9 @@ namespace Thessia\Tasks;
 
 use MongoDB\Collection;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Thessia\Lib\Db;
 use Thessia\Model\Database\regions;
 use Thessia\Model\Database\solarSystems;
@@ -71,7 +69,7 @@ class importKillmails extends Command
         // Get the order to fetch data in
         $validOrder = array("asc", "desc");
         $order = $input->getOption("order");
-        if(!in_array(strtolower($order), $validOrder)) {
+        if (!in_array(strtolower($order), $validOrder)) {
             echo "Error, not a valid fetch order...\n";
             exit();
         }
@@ -80,18 +78,18 @@ class importKillmails extends Command
 
 
         // Get the latest offset from the DB
-        $offset = (int) $db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "importOffset{$order}"), 0);
+        $offset = (int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "importOffset{$order}"), 0);
         $limit = 1000;
         $run = true;
 
         do {
             $killmails = $db->query("SELECT killID, kill_json, hash FROM zkillboard.zz_killmails WHERE killID > 0 ORDER BY killID {$order} LIMIT :offset,:limit", array(":offset" => $offset, ":limit" => $limit));
-            foreach($killmails as $killmail) {
+            foreach ($killmails as $killmail) {
                 $killID = $killmail["killID"];
 
                 // @todo Check if the kill has been inserted into Mongo
                 $exists = $collection->findOne(array("killID" => $killID));
-                if(!empty($exists) || !is_null($exists)) {
+                if (!empty($exists) || !is_null($exists)) {
                     echo "Kill already exists in database, skipping...\n";
                     continue;
                 }
@@ -117,11 +115,11 @@ class importKillmails extends Command
                 // New killData array that is being built..
                 $nk = array();
 
-                $nk["killID"] = (int) $kmData["killID"];
+                $nk["killID"] = (int)$kmData["killID"];
                 $nk["killTime"] = $kmData["killTime"];
 
                 // Lets make sure that the data in question actually works, if it doesn't we'll just continue and leave it be for later.. (Could be CREST fucking up, who knows..
-                if($nk["killTime"] == "") {
+                if ($nk["killTime"] == "") {
                     echo "Skipping {$killID} because of a malformed / missing killTime...\n";
                     continue;
                 }
@@ -129,8 +127,8 @@ class importKillmails extends Command
                 echo "Generating top portion...\n";
                 $nk["solarSystemID"] = (int)$kmData["solarSystemID"];
                 $solarData = $solarSystems->getAllBySolarSystemID($kmData["solarSystemID"])->toArray()[0];
-                $nk["solarSystemName"] = (int) $solarData["solarSystemID"];
-                $nk["regionID"] = (int) $solarData["regionID"];
+                $nk["solarSystemName"] = (int)$solarData["solarSystemID"];
+                $nk["regionID"] = (int)$solarData["regionID"];
                 $nk["regionName"] = $solarData["regionName"];
                 $nk["near"] = $this->getNear($kmData["victim"]["x"], $kmData["victim"]["y"], $kmData["victim"]["z"], $kmData["solarSystemID"]);
                 $nk["x"] = (float)$kmData["victim"]["x"];
@@ -222,8 +220,10 @@ class importKillmails extends Command
                 // Need to get max DPS with stock ammo, just gotta load some ammo into it - must be a way to determine what to load
                 echo "Getting data from Osmium...\n";
                 $osmiumData = array();
-                if (!empty($nk["items"])) // @todo fix so that osmium can actually go down without this going apeshit.. try/catch or something..
+                if (!empty($nk["items"])) {
+                    // @todo fix so that osmium can actually go down without this going apeshit.. try/catch or something..
                     $osmiumData = json_decode(file_get_contents("https://o.smium.org/api/json/loadout/dna/attributes/loc:ship,a:tank,a:ehpAndResonances,a:capacitors,a:damage?input=" . $nk["dna"]), true);
+                }
 
                 $nk["osmium"] = $osmiumData;
 
@@ -238,7 +238,7 @@ class importKillmails extends Command
             $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "importOffset{$order}", ":value" => $offset));
             //$db->execute("INSERT INTO storage (`key`, value) VALUES (:offset, :newOffset) ON DUPLICATE KEY UPDATE value = :newOffset", array(":offset" => "importOffset{$order}", ":newOffset" => $offset));
             echo "Done with the first {$limit}, now going on to the next {$limit}...\n";
-        } while($run == true);
+        } while ($run == true);
     }
 
     private function getNear($x, $y, $z, $solarSystemID)
@@ -294,7 +294,7 @@ class importKillmails extends Command
 
     private function calculateKillValue($killData)
     {
-        if(empty($killData["items"]) || !isset($killData["items"]))
+        if (empty($killData["items"]) || !isset($killData["items"]))
             return array("itemValue" => 0, "shipValue" => 0, "totalValue" => 0);
 
         $items = $killData["items"];
@@ -321,13 +321,15 @@ class importKillmails extends Command
         $db = $container->get("db");
 
         $validTypes = array("avgSell", "avgBuy", "lowSell", "lowBuy", "highSell", "highBuy");
-        if (!in_array($type, $validTypes))
-            throw new \Exception("Type not valid, please select a valid type: " . implode(", ", $validTypes));
+        if (!in_array($type, $validTypes)) {
+                    throw new \Exception("Type not valid, please select a valid type: " . implode(", ", $validTypes));
+        }
 
         $data = $db->queryField("SELECT {$type} FROM rena.invPrices WHERE typeID = :typeID ORDER BY created DESC LIMIT 1", $type, array(":typeID" => $typeID));
 
-        if (!$data)
-            return 0;
+        if (!$data) {
+                    return 0;
+        }
 
         return $data;
     }
@@ -345,19 +347,25 @@ class importKillmails extends Command
         $id = $typeIDs->getAllByTypeID($typeID)->toArray()[0];
         $itemName = $id["name"]["en"];
 
-        if (!$itemName)
-            $itemName = "TypeID {$typeID}";
+        if (!$itemName) {
+                    $itemName = "TypeID {$typeID}";
+        }
 
-        if ($typeID == 33329 && $flag == 89)
-            $price = 0.01; // Golden pod
-        else
-            $price = $this->getPriceForTypeID($typeID, "avgSell", $killTime);
+        if ($typeID == 33329 && $flag == 89) {
+                    $price = 0.01;
+        }
+        // Golden pod
+        else {
+                    $price = $this->getPriceForTypeID($typeID, "avgSell", $killTime);
+        }
 
-        if ($isCargo && strpos($itemName, "Blueprint") !== false)
-            $itemData["singleton"] = 2;
+        if ($isCargo && strpos($itemName, "Blueprint") !== false) {
+                    $itemData["singleton"] = 2;
+        }
 
-        if ($itemData["singleton"] == 2)
-            $price = $price / 100;
+        if ($itemData["singleton"] == 2) {
+                    $price = $price / 100;
+        }
 
         return ($price * ($itemData["qtyDropped"] + $itemData["qtyDestroyed"]));
     }

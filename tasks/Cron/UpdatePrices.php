@@ -52,8 +52,9 @@ class UpdatePrices
             $typeID = $data["type"]["id"];
             $typeData = $collection->find(array("typeID" => $typeID))->toArray();
 
-            if(empty($typeData[0]))
-                continue;
+            if(empty($typeData[0])) {
+                            continue;
+            }
 
             // If it's not empty, we bind typeData to typeData[0] to get the first element in the array..
             $typeData = $typeData[0];

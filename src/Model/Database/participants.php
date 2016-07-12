@@ -51,7 +51,7 @@ class participants extends Mongo
     public function getByKillID($killID, $cacheTime = 3600) {
         // Check if the killmail is in the cache, if it is, return it
         $killData = $this->cache->get($killID);
-        if(!empty($killData))
+        if (!empty($killData))
             return $killData;
 
         // The killmail was not in the cache, time to get it from the db

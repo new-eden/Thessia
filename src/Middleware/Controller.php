@@ -114,8 +114,9 @@ abstract class Controller
      * @return mixed|null
      */
     public function __get($name) {
-        if (!empty($this->container->get($name)))
-            return $this->container->get($name);
+        if (!empty($this->container->get($name))) {
+                    return $this->container->get($name);
+        }
 
         return null;
     }

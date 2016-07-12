@@ -69,8 +69,9 @@ class Bridge implements BridgeInterface
      */
     public function onRequest(ReactRequest $request, ReactResponse $response)
     {
-        if ($this->middleware === null)
-            return;
+        if ($this->middleware === null) {
+                    return;
+        }
 
         $renaReq = $this->mapRequest($request);
 
