@@ -55,13 +55,13 @@ class CreateMongoModel extends Command {
 
         $collectionName = prompt("Collection to create a model for");
         $this->description = prompt("Description");
-        $database = prompt("Database to find collection in", "thessia");
+        $database = prompt("CCP to find collection in", "thessia");
         $database = isset($database) ? $database : $container->get("config")->get("dbName", "mongodb");
 
         if(!$collectionName)
             return $output->writeln("Error, collection name is not defined");
 
-        $path = __DIR__ . "/../../src/Model/Database/{$collectionName}.php";
+        $path = __DIR__ . "/../../src/Model/CCP/{$collectionName}.php";
         if(file_exists($path))
             return $output->writeln("Error, model already exists");
 
@@ -90,7 +90,7 @@ class CreateMongoModel extends Command {
 
         // Generate the start of the code
         $class = new PhpClass();
-        $class->setQualifiedName("Thessia\\Model\\Database\\{$collectionName} extends Mongo")
+        $class->setQualifiedName("Thessia\\Model\\CCP\\{$collectionName} extends Mongo")
             ->setProperty(PhpProperty::create("collectionName")
                 ->setVisibility("public")
                 ->setValue($collectionName)

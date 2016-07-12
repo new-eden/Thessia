@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class regions extends Mongo
+class iconIDs extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'regions';
+    public $collectionName = 'iconIDs';
 
     /**
      * The name of the database the collection is stored in
@@ -48,52 +48,12 @@ class regions extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $descriptionID
+     * @param mixed $iconID
      */
-    public function getAllByDescriptionID($descriptionID)
+    public function getAllByIconID($iconID)
     {
         return $this->collection->find(
-            array("descriptionID" => $descriptionID)
-        );
-    }
-
-    /**
-     * @param mixed $factionID
-     */
-    public function getAllByFactionID($factionID)
-    {
-        return $this->collection->find(
-            array("factionID" => $factionID)
-        );
-    }
-
-    /**
-     * @param mixed $nameID
-     */
-    public function getAllByNameID($nameID)
-    {
-        return $this->collection->find(
-            array("nameID" => $nameID)
-        );
-    }
-
-    /**
-     * @param mixed $regionID
-     */
-    public function getAllByRegionID($regionID)
-    {
-        return $this->collection->find(
-            array("regionID" => $regionID)
-        );
-    }
-
-    /**
-     * @param mixed $fieldName
-     */
-    public function getAllByRegionName($fieldName)
-    {
-        return $this->collection->find(
-            array("regionName" => $fieldName)
+            array("iconID" => $iconID)
         );
     }
 

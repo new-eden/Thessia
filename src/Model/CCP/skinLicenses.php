@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class blueprints extends Mongo
+class skinLicenses extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'blueprints';
+    public $collectionName = 'skinLicenses';
 
     /**
      * The name of the database the collection is stored in
@@ -48,12 +48,22 @@ class blueprints extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $blueprintTypeID
+     * @param mixed $licenseTypeID
      */
-    public function getAllByBlueprintTypeID($blueprintTypeID)
+    public function getAllByLicenseTypeID($licenseTypeID)
     {
         return $this->collection->find(
-            array("blueprintTypeID" => $blueprintTypeID)
+            array("licenseTypeID" => $licenseTypeID)
+        );
+    }
+
+    /**
+     * @param mixed $skinID
+     */
+    public function getAllBySkinID($skinID)
+    {
+        return $this->collection->find(
+            array("skinID" => $skinID)
         );
     }
 

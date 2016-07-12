@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class skinLicenses extends Mongo
+class typeIDs extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'skinLicenses';
+    public $collectionName = 'typeIDs';
 
     /**
      * The name of the database the collection is stored in
@@ -48,22 +48,74 @@ class skinLicenses extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $licenseTypeID
+     * @param mixed $groupID
      */
-    public function getAllByLicenseTypeID($licenseTypeID)
+    public function getAllByGroupID($groupID)
     {
         return $this->collection->find(
-            array("licenseTypeID" => $licenseTypeID)
+            array("groupID" => $groupID)
         );
     }
 
     /**
-     * @param mixed $skinID
+     * @param mixed $fieldName
      */
-    public function getAllBySkinID($skinID)
+    public function getAllByName($fieldName)
     {
         return $this->collection->find(
-            array("skinID" => $skinID)
+            array("name.en" => $fieldName)
+        );
+    }
+
+    public function getAllByGermanName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.de" => $fieldName)
+        );
+    }
+
+    public function getAllByEnglishName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.en" => $fieldName)
+        );
+    }
+
+    public function getAllByFrenchName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.fr" => $fieldName)
+        );
+    }
+
+    public function getAllByJapaneseName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.ja" => $fieldName)
+        );
+    }
+
+    public function getAllByRussianName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.ru" => $fieldName)
+        );
+    }
+
+    public function getAllByChineseName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.zh" => $fieldName)
+        );
+    }
+
+    /**
+     * @param mixed $typeID
+     */
+    public function getAllByTypeID($typeID)
+    {
+        return $this->collection->find(
+            array("typeID" => $typeID)
         );
     }
 

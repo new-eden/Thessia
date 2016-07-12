@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class skins extends Mongo
+class constellations extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'skins';
+    public $collectionName = 'constellations';
 
     /**
      * The name of the database the collection is stored in
@@ -48,32 +48,52 @@ class skins extends Mongo
     public $indexes = array();
 
     /**
+     * @param mixed $constellationID
+     */
+    public function getAllByConstellationID($constellationID)
+    {
+        return $this->collection->find(
+            array("constellationID" => $constellationID)
+        );
+    }
+
+    /**
      * @param mixed $fieldName
      */
-    public function getAllByInternalName($fieldName)
+    public function getAllByConstellationName($fieldName)
     {
         return $this->collection->find(
-            array("internalName" => $fieldName)
+            array("constellationName" => $fieldName)
         );
     }
 
     /**
-     * @param mixed $skinID
+     * @param mixed $nameID
      */
-    public function getAllBySkinID($skinID)
+    public function getAllByNameID($nameID)
     {
         return $this->collection->find(
-            array("skinID" => $skinID)
+            array("nameID" => $nameID)
         );
     }
 
     /**
-     * @param mixed $skinMaterialID
+     * @param mixed $regionID
      */
-    public function getAllBySkinMaterialID($skinMaterialID)
+    public function getAllByRegionID($regionID)
     {
         return $this->collection->find(
-            array("skinMaterialID" => $skinMaterialID)
+            array("regionID" => $regionID)
+        );
+    }
+
+    /**
+     * @param mixed $fieldName
+     */
+    public function getAllByRegionName($fieldName)
+    {
+        return $this->collection->find(
+            array("regionName" => $fieldName)
         );
     }
 

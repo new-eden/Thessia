@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class typeIDs extends Mongo
+class tournamentRuleSets extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'typeIDs';
+    public $collectionName = 'tournamentRuleSets';
 
     /**
      * The name of the database the collection is stored in
@@ -48,74 +48,22 @@ class typeIDs extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $groupID
+     * @param mixed $ruleSetID
      */
-    public function getAllByGroupID($groupID)
+    public function getAllByRuleSetID($ruleSetID)
     {
         return $this->collection->find(
-            array("groupID" => $groupID)
+            array("ruleSetID" => $ruleSetID)
         );
     }
 
     /**
      * @param mixed $fieldName
      */
-    public function getAllByName($fieldName)
+    public function getAllByRuleSetName($fieldName)
     {
         return $this->collection->find(
-            array("name.en" => $fieldName)
-        );
-    }
-
-    public function getAllByGermanName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.de" => $fieldName)
-        );
-    }
-
-    public function getAllByEnglishName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.en" => $fieldName)
-        );
-    }
-
-    public function getAllByFrenchName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.fr" => $fieldName)
-        );
-    }
-
-    public function getAllByJapaneseName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.ja" => $fieldName)
-        );
-    }
-
-    public function getAllByRussianName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.ru" => $fieldName)
-        );
-    }
-
-    public function getAllByChineseName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.zh" => $fieldName)
-        );
-    }
-
-    /**
-     * @param mixed $typeID
-     */
-    public function getAllByTypeID($typeID)
-    {
-        return $this->collection->find(
-            array("typeID" => $typeID)
+            array("ruleSetName" => $fieldName)
         );
     }
 

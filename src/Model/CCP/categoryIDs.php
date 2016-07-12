@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class landmarks extends Mongo
+class categoryIDs extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'landmarks';
+    public $collectionName = 'categoryIDs';
 
     /**
      * The name of the database the collection is stored in
@@ -48,32 +48,64 @@ class landmarks extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $descriptionID
+     * @param mixed $categoryID
      */
-    public function getAllByDescriptionID($descriptionID)
+    public function getAllByCategoryID($categoryID)
     {
         return $this->collection->find(
-            array("descriptionID" => $descriptionID)
+            array("categoryID" => $categoryID)
         );
     }
 
     /**
-     * @param mixed $landmarkID
+     * @param mixed $fieldName
      */
-    public function getAllByLandmarkID($landmarkID)
+    public function getAllByName($fieldName)
     {
         return $this->collection->find(
-            array("landmarkID" => $landmarkID)
+            array("name.en" => $fieldName)
         );
     }
 
-    /**
-     * @param mixed $landmarkNameID
-     */
-    public function getAllByLandmarkNameID($landmarkNameID)
+    public function getAllByGermanName($fieldName)
     {
         return $this->collection->find(
-            array("landmarkNameID" => $landmarkNameID)
+            array("name.de" => $fieldName)
+        );
+    }
+
+    public function getAllByEnglishName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.en" => $fieldName)
+        );
+    }
+
+    public function getAllByFrenchName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.fr" => $fieldName)
+        );
+    }
+
+    public function getAllByJapaneseName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.ja" => $fieldName)
+        );
+    }
+
+    public function getAllByRussianName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.ru" => $fieldName)
+        );
+    }
+
+    public function getAllByChineseName($fieldName)
+    {
+        return $this->collection->find(
+            array("name.zh" => $fieldName)
         );
     }
 

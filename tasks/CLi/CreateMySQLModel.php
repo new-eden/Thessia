@@ -57,7 +57,7 @@ class CreateMySQLModel extends Command
             exit();
         }
 
-        $path = __DIR__ . "/../src/Model/Database/{$table}.php";
+        $path = __DIR__ . "/../src/Model/CCP/{$table}.php";
         if (file_exists($path)) {
                     return $output->writeln("Error, model already exists");
         }
@@ -70,11 +70,11 @@ class CreateMySQLModel extends Command
         $columns = $db->query("SHOW COLUMNS FROM {$table}");
 
         $class = new PhpClass();
-        $class->setQualifiedName("Rena\\Models\\Database\\{$table}")
+        $class->setQualifiedName("Rena\\Models\\CCP\\{$table}")
             ->setProperty(PhpProperty::create("db")
                 ->setVisibility("private")
                 ->setDocblock("/** @var \\Rena\\Lib\\Db \$db */")
-                ->setDescription("Database Connection")
+                ->setDescription("CCP Connection")
             )
             ->setMethod(PhpMethod::create("__construct")
                 ->addParameter(PhpParameter::create("db")

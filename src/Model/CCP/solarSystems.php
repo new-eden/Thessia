@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class tournamentRuleSets extends Mongo
+class solarSystems extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'tournamentRuleSets';
+    public $collectionName = 'solarSystems';
 
     /**
      * The name of the database the collection is stored in
@@ -48,22 +48,112 @@ class tournamentRuleSets extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $ruleSetID
+     * @param mixed $constellationID
      */
-    public function getAllByRuleSetID($ruleSetID)
+    public function getAllByConstellationID($constellationID)
     {
         return $this->collection->find(
-            array("ruleSetID" => $ruleSetID)
+            array("constellationID" => $constellationID)
         );
     }
 
     /**
      * @param mixed $fieldName
      */
-    public function getAllByRuleSetName($fieldName)
+    public function getAllByConstellationName($fieldName)
     {
         return $this->collection->find(
-            array("ruleSetName" => $fieldName)
+            array("constellationName" => $fieldName)
+        );
+    }
+
+    /**
+     * @param mixed $corridor
+     */
+    public function getAllByCorridor($corridor)
+    {
+        return $this->collection->find(
+            array("corridor" => $corridor)
+        );
+    }
+
+    /**
+     * @param mixed $regionID
+     */
+    public function getAllByRegionID($regionID)
+    {
+        return $this->collection->find(
+            array("regionID" => $regionID)
+        );
+    }
+
+    /**
+     * @param mixed $fieldName
+     */
+    public function getAllByRegionName($fieldName)
+    {
+        return $this->collection->find(
+            array("regionName" => $fieldName)
+        );
+    }
+
+    /**
+     * @param mixed $solarSystemID
+     */
+    public function getAllBySolarSystemID($solarSystemID)
+    {
+        return $this->collection->find(
+            array("solarSystemID" => $solarSystemID)
+        );
+    }
+
+    /**
+     * @param mixed $fieldName
+     */
+    public function getAllBySolarSystemName($fieldName)
+    {
+        return $this->collection->find(
+            array("solarSystemName" => $fieldName)
+        );
+    }
+
+    /**
+     * @param mixed $solarSystemNameID
+     */
+    public function getAllBySolarSystemNameID($solarSystemNameID)
+    {
+        return $this->collection->find(
+            array("solarSystemNameID" => $solarSystemNameID)
+        );
+    }
+
+    /**
+     * @param mixed $starId
+     */
+    public function getAllByStarId($starId)
+    {
+        return $this->collection->find(
+            array("star.id" => $starId)
+        );
+    }
+
+    /**
+     * @param mixed $starTypeID
+     */
+    public function getAllByStarTypeID($starTypeID)
+    {
+        return $this->collection->find(
+            array("star.typeID" => $starTypeID)
+        );
+    }
+
+    /**
+     * @param mixed $sunTypeID
+     */
+    public function getAllBySunTypeID($sunTypeID)
+    {
+        return $this->collection->find(
+            array("sunTypeID" => $sunTypeID)
         );
     }
 

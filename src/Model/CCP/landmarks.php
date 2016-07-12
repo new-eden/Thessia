@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class iconIDs extends Mongo
+class landmarks extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'iconIDs';
+    public $collectionName = 'landmarks';
 
     /**
      * The name of the database the collection is stored in
@@ -48,12 +48,32 @@ class iconIDs extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $iconID
+     * @param mixed $descriptionID
      */
-    public function getAllByIconID($iconID)
+    public function getAllByDescriptionID($descriptionID)
     {
         return $this->collection->find(
-            array("iconID" => $iconID)
+            array("descriptionID" => $descriptionID)
+        );
+    }
+
+    /**
+     * @param mixed $landmarkID
+     */
+    public function getAllByLandmarkID($landmarkID)
+    {
+        return $this->collection->find(
+            array("landmarkID" => $landmarkID)
+        );
+    }
+
+    /**
+     * @param mixed $landmarkNameID
+     */
+    public function getAllByLandmarkNameID($landmarkNameID)
+    {
+        return $this->collection->find(
+            array("landmarkNameID" => $landmarkNameID)
         );
     }
 

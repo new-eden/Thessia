@@ -35,21 +35,21 @@ use Thessia\Lib\cURL;
 use Thessia\Lib\Db;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
-use Thessia\Model\Database\blueprints;
-use Thessia\Model\Database\categoryIDs;
-use Thessia\Model\Database\certificates;
-use Thessia\Model\Database\constellations;
-use Thessia\Model\Database\graphicIDs;
-use Thessia\Model\Database\groupIDs;
-use Thessia\Model\Database\iconIDs;
-use Thessia\Model\Database\landmarks;
-use Thessia\Model\Database\regions;
-use Thessia\Model\Database\skinLicenses;
-use Thessia\Model\Database\skinMaterials;
-use Thessia\Model\Database\skins;
-use Thessia\Model\Database\solarSystems;
-use Thessia\Model\Database\tournamentRuleSets;
-use Thessia\Model\Database\typeIDs;
+use Thessia\Model\CCP\blueprints;
+use Thessia\Model\CCP\categoryIDs;
+use Thessia\Model\CCP\certificates;
+use Thessia\Model\CCP\constellations;
+use Thessia\Model\CCP\graphicIDs;
+use Thessia\Model\CCP\groupIDs;
+use Thessia\Model\CCP\iconIDs;
+use Thessia\Model\CCP\landmarks;
+use Thessia\Model\CCP\regions;
+use Thessia\Model\CCP\skinLicenses;
+use Thessia\Model\CCP\skinMaterials;
+use Thessia\Model\CCP\skins;
+use Thessia\Model\CCP\solarSystems;
+use Thessia\Model\CCP\tournamentRuleSets;
+use Thessia\Model\CCP\typeIDs;
 use Thessia\Model\EVE\Alliances;
 use Thessia\Model\EVE\Characters;
 use Thessia\Model\EVE\Corporations;
@@ -137,7 +137,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         // Add the Cache
         $container->share("cache", Cache::class)->withArgument("config");
 
-        // Add the Database
+        // Add the CCP
         $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
 
         // Add MongoDB

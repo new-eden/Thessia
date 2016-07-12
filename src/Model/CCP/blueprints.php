@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class groupIDs extends Mongo
+class blueprints extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'groupIDs';
+    public $collectionName = 'blueprints';
 
     /**
      * The name of the database the collection is stored in
@@ -48,74 +48,12 @@ class groupIDs extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $categoryID
+     * @param mixed $blueprintTypeID
      */
-    public function getAllByCategoryID($categoryID)
+    public function getAllByBlueprintTypeID($blueprintTypeID)
     {
         return $this->collection->find(
-            array("categoryID" => $categoryID)
-        );
-    }
-
-    /**
-     * @param mixed $groupID
-     */
-    public function getAllByGroupID($groupID)
-    {
-        return $this->collection->find(
-            array("groupID" => $groupID)
-        );
-    }
-
-    /**
-     * @param mixed $fieldName
-     */
-    public function getAllByName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.en" => $fieldName)
-        );
-    }
-
-    public function getAllByGermanName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.de" => $fieldName)
-        );
-    }
-
-    public function getAllByEnglishName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.en" => $fieldName)
-        );
-    }
-
-    public function getAllByFrenchName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.fr" => $fieldName)
-        );
-    }
-
-    public function getAllByJapaneseName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.ja" => $fieldName)
-        );
-    }
-
-    public function getAllByRussianName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.ru" => $fieldName)
-        );
-    }
-
-    public function getAllByChineseName($fieldName)
-    {
-        return $this->collection->find(
-            array("name.zh" => $fieldName)
+            array("blueprintTypeID" => $blueprintTypeID)
         );
     }
 

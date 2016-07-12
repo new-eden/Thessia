@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class constellations extends Mongo
+class certificates extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'constellations';
+    public $collectionName = 'certificates';
 
     /**
      * The name of the database the collection is stored in
@@ -48,52 +48,32 @@ class constellations extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $constellationID
+     * @param mixed $certificateID
      */
-    public function getAllByConstellationID($constellationID)
+    public function getAllByCertificateID($certificateID)
     {
         return $this->collection->find(
-            array("constellationID" => $constellationID)
+            array("certificateID" => $certificateID)
+        );
+    }
+
+    /**
+     * @param mixed $groupID
+     */
+    public function getAllByGroupID($groupID)
+    {
+        return $this->collection->find(
+            array("groupID" => $groupID)
         );
     }
 
     /**
      * @param mixed $fieldName
      */
-    public function getAllByConstellationName($fieldName)
+    public function getAllByName($fieldName)
     {
         return $this->collection->find(
-            array("constellationName" => $fieldName)
-        );
-    }
-
-    /**
-     * @param mixed $nameID
-     */
-    public function getAllByNameID($nameID)
-    {
-        return $this->collection->find(
-            array("nameID" => $nameID)
-        );
-    }
-
-    /**
-     * @param mixed $regionID
-     */
-    public function getAllByRegionID($regionID)
-    {
-        return $this->collection->find(
-            array("regionID" => $regionID)
-        );
-    }
-
-    /**
-     * @param mixed $fieldName
-     */
-    public function getAllByRegionName($fieldName)
-    {
-        return $this->collection->find(
-            array("regionName" => $fieldName)
+            array("name" => $fieldName)
         );
     }
 

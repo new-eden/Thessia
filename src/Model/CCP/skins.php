@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Database;
+namespace Thessia\Model\CCP;
 
 use Thessia\Helper\Mongo;
 
 /**
  */
-class certificates extends Mongo
+class skins extends Mongo
 {
 
     /**
      * The name of the models collection
      */
-    public $collectionName = 'certificates';
+    public $collectionName = 'skins';
 
     /**
      * The name of the database the collection is stored in
@@ -48,32 +48,32 @@ class certificates extends Mongo
     public $indexes = array();
 
     /**
-     * @param mixed $certificateID
-     */
-    public function getAllByCertificateID($certificateID)
-    {
-        return $this->collection->find(
-            array("certificateID" => $certificateID)
-        );
-    }
-
-    /**
-     * @param mixed $groupID
-     */
-    public function getAllByGroupID($groupID)
-    {
-        return $this->collection->find(
-            array("groupID" => $groupID)
-        );
-    }
-
-    /**
      * @param mixed $fieldName
      */
-    public function getAllByName($fieldName)
+    public function getAllByInternalName($fieldName)
     {
         return $this->collection->find(
-            array("name" => $fieldName)
+            array("internalName" => $fieldName)
+        );
+    }
+
+    /**
+     * @param mixed $skinID
+     */
+    public function getAllBySkinID($skinID)
+    {
+        return $this->collection->find(
+            array("skinID" => $skinID)
+        );
+    }
+
+    /**
+     * @param mixed $skinMaterialID
+     */
+    public function getAllBySkinMaterialID($skinMaterialID)
+    {
+        return $this->collection->find(
+            array("skinMaterialID" => $skinMaterialID)
         );
     }
 
