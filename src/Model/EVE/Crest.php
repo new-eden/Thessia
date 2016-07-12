@@ -39,7 +39,8 @@ class Crest
      * @param String $url
      * @return String
      */
-    public function validateLink(String $url): String {
+    public function validateLink(String $url): String
+    {
         if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
             preg_match("/^https:\/\/crest.eveonline.com\/killmails\/[0-9]*\/[a-zA-Z0-9]*\//", $url, $out);
             if (isset($out[0])) {
@@ -55,10 +56,10 @@ class Crest
      * @param array $killData
      * @return String
      */
-    public function generateHash($killData = array()): String {
-        if (!isset($killData["victim"])) {
-                    return "Error, not a valid mail";
-        }
+    public function generateHash($killData = array()): String
+    {
+        if (!isset($killData["victim"]))
+            return "Error, not a valid mail";
 
         $victim = $killData["victim"];
         $victimID = $victim["characterID"] == 0 ? "None" : $victim["characterID"];
@@ -74,9 +75,8 @@ class Crest
             }
         }
 
-        if ($attacker == null) {
-                    $attacker = $attackers[0];
-        }
+        if ($attacker == null)
+            $attacker = $attackers[0];
 
         $attackerID = $attacker["characterID"] == 0 ? "None" : $attacker["characterID"];
         $killDate = (strtotime($killData["killTime"]) * 10000000) + 116444736000000000;
@@ -90,7 +90,8 @@ class Crest
      * @param $crestData
      * @return array
      */
-    public function generateFromCREST($crestData): array {
+    public function generateFromCREST($crestData): array
+    {
         $killArray = array();
         $killArray["killID"] = (int)$crestData["killID"];
 
@@ -193,9 +194,8 @@ class Crest
                 $i["qtyDropped"] = (int)@$item["quantityDropped"];
                 $i["qtyDestroyed"] = (int)@$item["quantityDestroyed"];
                 $i["singleton"] = (int)@$item["singleton"];
-                if (isset($i["items"])) {
-                                    $i["items"] = $this->getItems($i["items"]);
-                }
+                if (isset($i["items"]))
+                    $i["items"] = $this->getItems($i["items"]);
 
                 $itemsArray[] = $i;
             }

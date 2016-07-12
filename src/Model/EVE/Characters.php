@@ -32,7 +32,8 @@ use Thessia\Helper\Mongo;
  * Class Characters
  * @package Thessia\Model\EVE
  */
-class Characters extends Mongo {
+class Characters extends Mongo
+{
     /**
      * The name of the models collection
      */
@@ -52,7 +53,8 @@ class Characters extends Mongo {
      * @param int $characterID
      * @return array|null|object
      */
-    public function getAllByID(int $characterID) {
+    public function getAllByID(int $characterID)
+    {
         return $this->collection->findOne(array("characterID" => $characterID));
     }
 
@@ -60,7 +62,8 @@ class Characters extends Mongo {
      * @param string $characterName
      * @return array|null|object
      */
-    public function getAllByName(string $characterName) {
+    public function getAllByName(string $characterName)
+    {
         return $this->collection->findOne(array("characterName" => $characterName));
     }
 

@@ -32,7 +32,8 @@ use Thessia\Helper\Mongo;
  * Class Alliances
  * @package Thessia\Model\EVE
  */
-class Alliances extends Mongo {
+class Alliances extends Mongo
+{
     /**
      * The name of the models collection
      */
@@ -52,7 +53,8 @@ class Alliances extends Mongo {
      * @param int $allianceID
      * @return array|null|object
      */
-    public function getAllByID(int $allianceID) {
+    public function getAllByID(int $allianceID)
+    {
         return $this->collection->findOne(array("allianceID" => $allianceID));
     }
 
@@ -60,7 +62,8 @@ class Alliances extends Mongo {
      * @param string $allianceName
      * @return array|null|object
      */
-    public function getAllByName(string $allianceName) {
+    public function getAllByName(string $allianceName)
+    {
         return $this->collection->findOne(array("allianceName" => $allianceName));
     }
 

@@ -32,7 +32,8 @@ use Thessia\Helper\Mongo;
  * Class Corporations
  * @package Thessia\Model\EVE
  */
-class Corporations extends Mongo {
+class Corporations extends Mongo
+{
     /**
      * The name of the models collection
      */
@@ -52,7 +53,8 @@ class Corporations extends Mongo {
      * @param int $corporationID
      * @return array|null|object
      */
-    public function getAllByID(int $corporationID) {
+    public function getAllByID(int $corporationID)
+    {
         return $this->collection->findOne(array("corporationID" => $corporationID));
     }
 
@@ -60,7 +62,8 @@ class Corporations extends Mongo {
      * @param string $corporationName
      * @return array|null|object
      */
-    public function getAllByName(string $corporationName) {
+    public function getAllByName(string $corporationName)
+    {
         return $this->collection->findOne(array("corporationName" => $corporationName));
     }
 
