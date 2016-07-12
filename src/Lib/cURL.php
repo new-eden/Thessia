@@ -97,7 +97,7 @@ class cURL {
         // Trim the last &
         rtrim($postLine, '&');
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_USERAGENT, "DataPoster for Thessia (karbowiak@gmail.com)"));
+        curl_setopt($curl, CURLOPT_USERAGENT, "DataPoster for Thessia (karbowiak@gmail.com)");
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         if (!empty($postData)) {
             curl_setopt($curl, CURLOPT_POST, count($postData));
