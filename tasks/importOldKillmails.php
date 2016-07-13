@@ -81,7 +81,8 @@ class importOldKillmails extends Command
                 // Throw the killmail at resque for processing
                 \Resque::enqueue("high", '\Thessia\Tasks\Resque\CrestKillmailParser', array("killID" => $killID, "killHash" => $killHash));
 
-                die();
+                // Sleep for a bit, so we don't overwhelm resque..
+                usleep(100000);
             }
 
             // New offset

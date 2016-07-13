@@ -45,15 +45,14 @@ class CrestKillmailParser {
         /** @var Parser $parser */
         $parser = $this->container->get("parser");
 
-
         $killID = $this->args["killID"];
         $killHash = $this->args["killHash"];
 
         $killmail = $parser->parseCrestKillmail($killID, $killHash);
 
-        if(is_array($killmail)) {
+        if(is_array($killmail))
             $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
-        }
+
         exit();
     }
 

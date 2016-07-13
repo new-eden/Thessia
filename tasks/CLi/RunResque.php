@@ -52,7 +52,7 @@ class RunResque extends Command
 
         $queues = array("rt", "high", "med", "low");
         $logLevel = \Resque_Worker::LOG_NORMAL;
-        $interval = 5;
+        $interval = 1;
         $worker = new \Resque_Worker($queues);
         $worker->logLevel = $logLevel;
         $output->writeln("Starting Resque Worker");
