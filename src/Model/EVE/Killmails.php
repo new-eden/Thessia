@@ -51,6 +51,9 @@ class Killmails extends Mongo
             "unique" => true
         ),
         array(
+            "key" => array("killTime" => -1)
+        ),
+        array(
             "key" => array("solarSystemID" => -1)
         ),
         array(
@@ -145,12 +148,6 @@ class Killmails extends Mongo
         ),
         array(
             "key" => array("items.groupID" => -1)
-        ),
-        array(
-            "key" => array("" => -1)
-        ),
-        array(
-            "key" => array("" => -1)
         )
     );
 

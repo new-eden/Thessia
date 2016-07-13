@@ -53,6 +53,12 @@ class Alliances extends Mongo
             "unique" => true
         ),
         array(
+            "key" => array("allianceName" => "text")
+        ),
+        array(
+            "key" => array("allianceName" => -1)
+        ),
+        array(
             "key" => array("ticker" => -1)
         )
     );

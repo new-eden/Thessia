@@ -31,9 +31,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Thessia\Lib\Db;
-use Thessia\Model\Database\regions;
-use Thessia\Model\Database\solarSystems;
-use Thessia\Model\Database\typeIDs;
+use Thessia\Model\CCP\regions;
+use Thessia\Model\CCP\solarSystems;
+use Thessia\Model\CCP\typeIDs;
 use Thessia\Model\EVE\Crest;
 
 class importKillmails extends Command
@@ -88,11 +88,11 @@ class importKillmails extends Command
                 $killID = $killmail["killID"];
 
                 // @todo Check if the kill has been inserted into Mongo
-                $exists = $collection->findOne(array("killID" => $killID));
-                if (!empty($exists) || !is_null($exists)) {
-                    echo "Kill already exists in database, skipping...\n";
-                    continue;
-                }
+                //$exists = $collection->findOne(array("killID" => $killID));
+                //if (!empty($exists) || !is_null($exists)) {
+                //    echo "Kill already exists in database, skipping...\n";
+                //    continue;
+                //}
 
                 $json = json_decode($killmail["kill_json"], true);
                 $hash = $killmail["hash"];

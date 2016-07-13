@@ -123,39 +123,60 @@ class Parser {
     }
 
     /**
-     * @param $CrestMail
+     * Parses data from CREST into a format the parser can process
+     *
+     * @param $killID
      * @param $killHash
+     * @return array
      */
-    public function parseCrestKillmail($CrestMail, $killHash) {
-        $killmail = array();
+    public function parseCrestKillmail($killID, $killHash) {
+        $url = "https://crest.eveonline.com/killmails/{$killID}/{$killHash}/";
+        $data = json_decode($this->curl->getData($url), true);
 
-        $killmail["killID"] = (int) $CrestMail["killID"];
-        $killmail["killTime"] = $CrestMail["killTime"];
+        // Generate the mail from CREST data
+        $killmail = $this->crest->generateFromCREST(array("killID" => $killID, "killmail" => $data));
 
-        // Generate the top portion of the mail
-        $killmail = array_merge($killmail, $this->generateTopPortion($CrestMail, $killHash));
-
-        // Generate the victim portion of the mail
-        $killmail["victim"] = $this->generateVictimPortion($CrestMail["victim"]);
-
-        // Generate the attackers portion of the mail
-        $killmail["attackers"] = $this->generateAttackersPortion($CrestMail["attackers"]);
-
-        // Generate the Item portion of the mail
-        $killmail["items"] = $this->generateItemPortion($CrestMail["items"]);
-
-        // Get the Osmium data, for the Osmium portion of the mail
-        $killmail["osmium"] = $this->generateOsmiumPortion($killmail["dna"]);
-
-        var_dump($killmail);
-        die();
+        // Parse the killmail data and return it..
+        return $this->parseKillmail($killmail, $killHash);
     }
 
     /**
+     * Parses data from the XML API into a format the parser can process
+     *
      * @param $xmlMail
      */
     public function parseXMLKillmail($xmlMail) {
 
+    }
+
+    /**
+     * Parses and processes the killmail data to the format stored in MongoDB
+     *
+     * @param $killmailData
+     * @return array
+     */
+    private function parseKillmail($killmailData, $killHash) {
+        $killmail = array();
+
+        $killmail["killID"] = (int) $killmailData["killID"];
+        $killmail["killTime"] = $killmailData["killTime"];
+
+        // Generate the top portion of the mail
+        $killmail = array_merge($killmail, $this->generateTopPortion($killmailData, $killHash));
+
+        // Generate the victim portion of the mail
+        $killmail["victim"] = $this->generateVictimPortion($killmailData["victim"]);
+
+        // Generate the attackers portion of the mail
+        $killmail["attackers"] = $this->generateAttackersPortion($killmailData["attackers"]);
+
+        // Generate the Item portion of the mail
+        $killmail["items"] = $this->generateItemPortion($killmailData["items"]);
+
+        // Get the Osmium data, for the Osmium portion of the mail
+        $killmail["osmium"] = $this->generateOsmiumPortion($killmail["dna"]);
+
+        return $killmail;
     }
 
     /**
@@ -185,6 +206,7 @@ class Parser {
         $top["dna"] = $this->getDNA($data["items"], $data["victim"]["shipTypeID"]);
         $top["crestHash"] = $killHash;
         $top["isNPC"] = $this->isNPC($data);
+        $top["isSolo"] = $this->isSolo($data);
 
         return $top;
     }
@@ -415,6 +437,10 @@ class Parser {
         return array("itemValue" => $killValue, "shipValue" => $victimShipValue, "totalValue" => $killValue + $victimShipValue);
     }
 
+    /**
+     * @param $typeID
+     * @return array|int|\klass
+     */
     private function getPriceForTypeID($typeID)
     {
         $data = $this->prices->getPriceForTypeID($typeID);
@@ -461,22 +487,44 @@ class Parser {
         return ($price * ($itemData["qtyDropped"] + $itemData["qtyDestroyed"]));
     }
 
+    /**
+     * @param $killData
+     * @return bool
+     */
     private function isNPC($killData) {
         $npc = 0;
         foreach ($killData["attackers"] as $attacker)
             $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
 
-        $calc = count($killData["attackers"]) / $npc;
+        $calc = 0;
+        if(count($killData["attackers"]) > 0 && $npc > 0)
+            $calc = count($killData["attackers"]) / $npc;
+
         if($calc == 1)
             return true;
         return false;
     }
 
+    /**
+     * @param $killData
+     * @return bool
+     */
     private function isSolo($killData) {
+        $npc = 0;
         if(count($killData["attackers"]) > 2)
             return false;
 
         // Now to figure out if one of them is an npc
-        foreach($killData["attackers"] as )
+        foreach($killData["attackers"] as $attacker)
+            $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+
+        $calc = 0;
+        if($npc > 0)
+            $calc = 2 / $npc;
+
+        // If the calculation is 2, it means one of them is an npc, if it's 1 means both are NPCs, and if it's non-divisible  it means they're both pilots.. and we might have made a blackhole..
+        if($calc == 2)
+            return true;
+        return false;
     }
 }

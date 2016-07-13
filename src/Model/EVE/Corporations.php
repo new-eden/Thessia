@@ -53,6 +53,9 @@ class Corporations extends Mongo
             "unique" => true
         ),
         array(
+            "key" => array("corporationName" => "text")
+        ),
+        array(
             "key" => array("corporationName" => -1)
         ),
         array(

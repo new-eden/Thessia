@@ -46,7 +46,11 @@ class RunResque extends Command
         require_once(__DIR__ . "/../../vendor/chrisboulton/php-resque/lib/Resque.php");
         require_once(__DIR__ . "/../../vendor/chrisboulton/php-resque/lib/Resque/Worker.php");
 
-        $queues = "rt,high,med,low";
+        // Load all the resque files
+        foreach(glob(__DIR__ . "/../Resque/*.php") as $file)
+            require_once($file);
+
+        $queues = array("rt", "high", "med", "low");
         $logLevel = \Resque_Worker::LOG_NORMAL;
         $interval = 5;
         $worker = new \Resque_Worker($queues);

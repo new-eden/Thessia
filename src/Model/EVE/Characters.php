@@ -53,6 +53,9 @@ class Characters extends Mongo
             "unique" => true
         ),
         array(
+            "key" => array("characterName" => "text")
+        ),
+        array(
             "key" => array("characterName" => -1)
         ),
         array(

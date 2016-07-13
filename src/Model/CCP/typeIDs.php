@@ -49,6 +49,9 @@ class typeIDs extends Mongo
         array(
             "key" => array("typeID" => -1),
             "unique" => true
+        ),
+        array(
+            "key" => array("\$**" => "text")
         )
     );
 

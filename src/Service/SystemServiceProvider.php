@@ -55,6 +55,7 @@ use Thessia\Model\EVE\Characters;
 use Thessia\Model\EVE\Corporations;
 use Thessia\Model\EVE\Crest;
 use Thessia\Model\EVE\Killmails;
+use Thessia\Model\EVE\Parser;
 use Thessia\Model\EVE\Participants;
 use Thessia\Model\EVE\Prices;
 
@@ -171,5 +172,9 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("characters", Characters::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("participants", Participants::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("killmails", Killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("parser", Parser::class)
+            ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
+            ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");
+
     }
 }
