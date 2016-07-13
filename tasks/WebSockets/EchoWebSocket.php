@@ -25,9 +25,9 @@
 
 namespace Thessia\Tasks\WebSockets;
 
+use League\Container\Container;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
-use Slim\Container;
 
 class EchoWebSocket implements MessageComponentInterface
 {
