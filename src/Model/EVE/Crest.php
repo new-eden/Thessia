@@ -75,8 +75,9 @@ class Crest
             }
         }
 
-        if ($attacker == null)
-            $attacker = $attackers[0];
+        if ($attacker == null) {
+                    $attacker = $attackers[0];
+        }
 
         $attackerID = $attacker["characterID"] == 0 ? "None" : $attacker["characterID"];
         $killDate = (strtotime($killData["killTime"]) * 10000000) + 116444736000000000;
@@ -194,8 +195,9 @@ class Crest
                 $i["qtyDropped"] = (int)@$item["quantityDropped"];
                 $i["qtyDestroyed"] = (int)@$item["quantityDestroyed"];
                 $i["singleton"] = (int)@$item["singleton"];
-                if (isset($i["items"]))
-                    $i["items"] = $this->getItems($i["items"]);
+                if (isset($i["items"])) {
+                                    $i["items"] = $this->getItems($i["items"]);
+                }
 
                 $itemsArray[] = $i;
             }
