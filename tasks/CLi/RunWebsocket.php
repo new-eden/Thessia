@@ -50,7 +50,7 @@ class RunWebSocket extends Command
         $output->writeln("Starting Websocket Instances");
 
         // Fire up Ratchet
-        $ratchet = new App($input->getOption("host"), $input->getOption("port"), $input->getOption("host"));
+        $ratchet = new App($input->getOption("httpHost"), $input->getOption("port"), $input->getOption("host"));
 
         // Find all websocket endpoints
         $endpoints = array(__DIR__ . "/WebSockets/*.php", __DIR__ . "/../App/WebSockets/*.php");

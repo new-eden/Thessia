@@ -61,7 +61,7 @@ class cURL
 
             // Setup curl
             curl_setopt_array($curl, array(
-                CURLOPT_USERAGENT => "DataGetter for Thessia (karbowiak@gmail.com)",
+                CURLOPT_USERAGENT => "DataGetter for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)",
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_POST => false,
                 CURLOPT_FORBID_REUSE => false,
@@ -113,7 +113,7 @@ class cURL
         // Trim the last &
         rtrim($postLine, '&');
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_USERAGENT, "DataPoster for Thessia (karbowiak@gmail.com)");
+        curl_setopt($curl, CURLOPT_USERAGENT, "DataPoster for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)");
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         if (!empty($postData)) {
             curl_setopt($curl, CURLOPT_POST, count($postData));

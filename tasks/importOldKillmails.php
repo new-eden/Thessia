@@ -64,16 +64,24 @@ class importOldKillmails extends Command
 
         // Get the latest offset from the DB
         $offset = (int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "mailImportOffset"), 0);
-        $limit = 1000;
+        $limit = 10000;
         $run = true;
 
         do {
+            $totalCnt = 0;
+            $innerCnt = 0;
             $killmails = $db->query("SELECT killID, kill_json, hash FROM zkillboard.zz_killmails WHERE killID > 0 ORDER BY killID ASC LIMIT :offset,:limit", array(":offset" => $offset, ":limit" => $limit));
             foreach ($killmails as $killmail) {
+                if($innerCnt == 1000) {
+                    $innerCnt = 0;
+                    $tmpOffset = $offset + $totalCnt;
+                    echo "Updating offset to {$tmpOffset}...\n";
+                    $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "mailImportOffset", ":value" => $tmpOffset));
+                }
+
                 $killID = $killmail["killID"];
 
                 $json = json_decode($killmail["kill_json"], true);
-                $hash = $killmail["hash"];
 
                 // Generate crest hash
                 $killHash = $crest->generateHash($json);
@@ -81,15 +89,19 @@ class importOldKillmails extends Command
                 // Throw the killmail at resque for processing
                 \Resque::enqueue("high", '\Thessia\Tasks\Resque\CrestKillmailParser', array("killID" => $killID, "killHash" => $killHash));
 
+                // Increment counters
+                $innerCnt++;
+                $totalCnt++;
+
                 // Sleep for a bit, so we don't overwhelm resque..
-                usleep(100000);
+                usleep(30000);
             }
 
             // New offset
             $offset = $offset + $limit;
             echo "Storing new offset in database...\n";
             $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "mailImportOffset", ":value" => $offset));
-            echo "Done with the first {$limit}, now going on to the next {$limit}...\n";
+            echo date("Y-m-d H:i:s") . ": Done with the first {$limit}, now going on to the next {$limit}...\n";
         } while ($run == true);
     }
 }

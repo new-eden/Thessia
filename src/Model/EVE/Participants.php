@@ -112,7 +112,7 @@ class Participants extends Mongo
         if (!empty($killData))
             return $killData;
 
-        $extraArguments["killTime"] = $killTime;
+        $extraArguments["killTime"] = new \MongoDB\BSON\UTCDatetime(strtotime($killTime));
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
         $killData = $this->collection->findOne($array);
         $this->cache->set(md5(serialize($killTime)), $killData, $cacheTime);
@@ -518,7 +518,7 @@ class Participants extends Mongo
         if (!empty($killData))
             return $killData;
 
-        $extraArguments["killTime"] = array("\$gte" => $afterDate);
+        $extraArguments["killTime"] = array("\$gte" => new \MongoDB\BSON\UTCDatetime(strtotime($afterDate)));
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
         $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
         $this->cache->set(md5(serialize($afterDate)), $killData, $cacheTime);
@@ -541,7 +541,7 @@ class Participants extends Mongo
         if (!empty($killData))
             return $killData;
 
-        $extraArguments["killTime"] = array("\$lt" => $beforeDate);
+        $extraArguments["killTime"] = array("\$lte" => new \MongoDB\BSON\UTCDatetime(strtotime($beforeDate)));
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
         $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
         $this->cache->set(md5(serialize($beforeDate)), $killData, $cacheTime);
@@ -565,7 +565,7 @@ class Participants extends Mongo
         if (!empty($killData))
             return $killData;
 
-        $extraArguments["killTime"] = array("\$gte" => $afterDate, "\$lte" => $beforeDate);
+        $extraArguments["killTime"] = array("\$gte" => new \MongoDB\BSON\UTCDatetime(strtotime($afterDate)), "\$lte" => new \MongoDB\BSON\UTCDatetime(strtotime($beforeDate)));
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
         $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
         $this->cache->set(md5(serialize($afterDate . $beforeDate)), $killData, $cacheTime);
