@@ -25,19 +25,13 @@
 
 namespace Thessia\Tasks;
 
-use MongoDB\Collection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Thessia\Lib\cURL;
 use Thessia\Lib\Db;
-use Thessia\Model\CCP\regions;
-use Thessia\Model\CCP\solarSystems;
-use Thessia\Model\CCP\typeIDs;
 use Thessia\Model\EVE\Crest;
 use Thessia\Model\EVE\Parser;
-use Thessia\Tasks\Resque\CrestKillmailParser;
 
 class importOldKillmails extends Command
 {
@@ -63,20 +57,23 @@ class importOldKillmails extends Command
         $curl = $container->get("curl");
 
         // Get the latest offset from the DB
-        $offset = (int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "mailImportOffset"), 0);
+        $offset = (int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value",
+            array(":offset" => "mailImportOffset"), 0);
         $limit = 10000;
         $run = true;
 
         do {
             $totalCnt = 0;
             $innerCnt = 0;
-            $killmails = $db->query("SELECT killID, kill_json, hash FROM zkillboard.zz_killmails WHERE killID > 0 ORDER BY killID ASC LIMIT :offset,:limit", array(":offset" => $offset, ":limit" => $limit));
+            $killmails = $db->query("SELECT killID, kill_json, hash FROM zkillboard.zz_killmails WHERE killID > 0 ORDER BY killID ASC LIMIT :offset,:limit",
+                array(":offset" => $offset, ":limit" => $limit));
             foreach ($killmails as $killmail) {
-                if($innerCnt == 1000) {
+                if ($innerCnt == 1000) {
                     $innerCnt = 0;
                     $tmpOffset = $offset + $totalCnt;
                     echo "Updating offset to {$tmpOffset}...\n";
-                    $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "mailImportOffset", ":value" => $tmpOffset));
+                    $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)",
+                        array(":key" => "mailImportOffset", ":value" => $tmpOffset));
                 }
 
                 $killID = $killmail["killID"];
@@ -87,7 +84,8 @@ class importOldKillmails extends Command
                 $killHash = $crest->generateHash($json);
 
                 // Throw the killmail at resque for processing
-                \Resque::enqueue("high", '\Thessia\Tasks\Resque\CrestKillmailParser', array("killID" => $killID, "killHash" => $killHash));
+                \Resque::enqueue("high", '\Thessia\Tasks\Resque\CrestKillmailParser',
+                    array("killID" => $killID, "killHash" => $killHash));
 
                 // Increment counters
                 $innerCnt++;
@@ -100,7 +98,8 @@ class importOldKillmails extends Command
             // New offset
             $offset = $offset + $limit;
             echo "Storing new offset in database...\n";
-            $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "mailImportOffset", ":value" => $offset));
+            $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)",
+                array(":key" => "mailImportOffset", ":value" => $offset));
             echo date("Y-m-d H:i:s") . ": Done with the first {$limit}, now going on to the next {$limit}...\n";
         } while ($run == true);
     }

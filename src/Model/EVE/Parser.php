@@ -108,8 +108,20 @@ class Parser
      * @param Cache $cache
      * @param Client $mongo
      */
-    public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo)
-    {
+    public function __construct(
+        typeIDs $typeIDs,
+        solarSystems $solarSystems,
+        Prices $prices,
+        Killmails $killmails,
+        Alliances $alliances,
+        Corporations $corporations,
+        Characters $characters,
+        groupIDs $groupIDs,
+        Crest $crest,
+        cURL $cURL,
+        Cache $cache,
+        Client $mongo
+    ) {
         $this->typeIDs = $typeIDs;
         $this->solarSystems = $solarSystems;
         $this->prices = $prices;
@@ -193,7 +205,8 @@ class Parser
         $top["solarSystemName"] = $solarData["solarSystemName"];
         $top["regionID"] = (int)$solarData["regionID"];
         $top["regionName"] = $solarData["regionName"];
-        $top["near"] = $this->getNear($data["victim"]["x"], $data["victim"]["y"], $data["victim"]["z"], $data["solarSystemID"]);
+        $top["near"] = $this->getNear($data["victim"]["x"], $data["victim"]["y"], $data["victim"]["z"],
+            $data["solarSystemID"]);
         $top["x"] = (float)$data["victim"]["x"];
         $top["y"] = (float)$data["victim"]["y"];
         $top["z"] = (float)$data["victim"]["z"];
@@ -230,7 +243,8 @@ class Parser
         $celestialName = "";
 
         foreach ($celestials as $celestial) {
-            $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z, 2));
+            $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z,
+                    2));
 
             if ($minimumDistance === null) {
                 $minimumDistance = $distance;
@@ -284,14 +298,19 @@ class Parser
         foreach ($items as $item) {
             $isCargo = isset($item["items"]) ? is_array($item["items"]) ? true : false : false;
             if ($isCargo) {
-                foreach ($item["items"] as $innerItem)
+                foreach ($item["items"] as $innerItem) {
                     $killValue += $this->processItem($innerItem, $isCargo);
+                }
             }
 
             $killValue += $this->processItem($item, $isCargo);
         }
 
-        return array("itemValue" => $killValue, "shipValue" => $victimShipValue, "totalValue" => $killValue + $victimShipValue);
+        return array(
+            "itemValue" => $killValue,
+            "shipValue" => $victimShipValue,
+            "totalValue" => $killValue + $victimShipValue
+        );
     }
 
     /**
@@ -354,7 +373,50 @@ class Parser
     {
         $collection = $this->mongo->selectCollection("ccp", "invFlags");
 
-        $slots = array("LoSlot0", "LoSlot1", "LoSlot2", "LoSlot3", "LoSlot4", "LoSlot5", "LoSlot6", "LoSlot7", "MedSlot0", "MedSlot1", "MedSlot2", "MedSlot3", "MedSlot4", "MedSlot5", "MedSlot6", "MedSlot7", "HiSlot0", "HiSlot1", "HiSlot2", "HiSlot3", "HiSlot4", "HiSlot5", "HiSlot6", "HiSlot7", "DroneBay", "RigSlot0", "RigSlot1", "RigSlot2", "RigSlot3", "RigSlot4", "RigSlot5", "RigSlot6", "RigSlot7", "SubSystem0", "SubSystem1", "SubSystem2", "SubSystem3", "SubSystem4", "SubSystem5", "SubSystem6", "SubSystem7", "SpecializedFuelBay");
+        $slots = array(
+            "LoSlot0",
+            "LoSlot1",
+            "LoSlot2",
+            "LoSlot3",
+            "LoSlot4",
+            "LoSlot5",
+            "LoSlot6",
+            "LoSlot7",
+            "MedSlot0",
+            "MedSlot1",
+            "MedSlot2",
+            "MedSlot3",
+            "MedSlot4",
+            "MedSlot5",
+            "MedSlot6",
+            "MedSlot7",
+            "HiSlot0",
+            "HiSlot1",
+            "HiSlot2",
+            "HiSlot3",
+            "HiSlot4",
+            "HiSlot5",
+            "HiSlot6",
+            "HiSlot7",
+            "DroneBay",
+            "RigSlot0",
+            "RigSlot1",
+            "RigSlot2",
+            "RigSlot3",
+            "RigSlot4",
+            "RigSlot5",
+            "RigSlot6",
+            "RigSlot7",
+            "SubSystem0",
+            "SubSystem1",
+            "SubSystem2",
+            "SubSystem3",
+            "SubSystem4",
+            "SubSystem5",
+            "SubSystem6",
+            "SubSystem7",
+            "SpecializedFuelBay"
+        );
         $fittingArray = array();
         $fittingString = $shipTypeID . ":";
         foreach ($itemData as $item) {

@@ -56,9 +56,10 @@ class importCharacters extends Command
         $offset = 600000;
         $limit = 100000;
         do {
-            $characters = $db->query("SELECT characterID, corporationID, allianceID, name, lastUpdated, history FROM zkillboard.zz_characters WHERE characterID > 0 AND name != '' LIMIT :offset,:limit", array(":offset" => $offset, ":limit" => $limit));
+            $characters = $db->query("SELECT characterID, corporationID, allianceID, name, lastUpdated, history FROM zkillboard.zz_characters WHERE characterID > 0 AND name != '' LIMIT :offset,:limit",
+                array(":offset" => $offset, ":limit" => $limit));
             if (empty($characters)) {
-                            $run = false;
+                $run = false;
             }
 
             foreach ($characters as $character) {
@@ -73,15 +74,17 @@ class importCharacters extends Command
                     "characterID" => $character["characterID"],
                     "characterName" => $character["name"],
                     "corporationID" => $character["corporationID"],
-                    "corporationName" => $db->queryField("SELECT name FROM zkillboard.zz_corporations WHERE corporationID = :corporationID", "name", array(":corporationID" => $character["corporationID"])),
+                    "corporationName" => $db->queryField("SELECT name FROM zkillboard.zz_corporations WHERE corporationID = :corporationID",
+                        "name", array(":corporationID" => $character["corporationID"])),
                     "allianceID" => $character["allianceID"],
-                    "allianceName" => $db->queryField("SELECT name FROM zkillboard.zz_alliances WHERE allianceID = :allianceID", "name", array(":allianceID" => $character["allianceID"])),
+                    "allianceName" => $db->queryField("SELECT name FROM zkillboard.zz_alliances WHERE allianceID = :allianceID",
+                        "name", array(":allianceID" => $character["allianceID"])),
                     "lastUpdated" => $character["lastUpdated"],
                     "history" => array(),
                 );
 
                 if (isset($character["history"])) {
-                                    $data["history"] = json_decode($character["history"], true)["employmentHistory"];
+                    $data["history"] = json_decode($character["history"], true)["employmentHistory"];
                 }
 
                 // Now insert it into the killmail collection

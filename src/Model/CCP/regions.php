@@ -49,7 +49,8 @@ class regions extends Mongo
         array(
             "key" => array("regionID" => -1),
             "unique" => true
-        ), array(
+        ),
+        array(
             "key" => array("regionName" => -1)
         )
     );

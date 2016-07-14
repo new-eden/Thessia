@@ -25,9 +25,7 @@
 
 namespace Thessia\Tasks\CLi;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class PhinxStatus extends \Phinx\Console\Command\Status
 {
@@ -39,7 +37,8 @@ class PhinxStatus extends \Phinx\Console\Command\Status
 
         $this->setName('phinx:status')
             ->setDescription('Show migration status')
-            ->addOption('--format', '-f', InputOption::VALUE_REQUIRED, 'The output format: text or json. Defaults to text.')
+            ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
+                'The output format: text or json. Defaults to text.')
             ->setHelp(
                 <<<EOT
                 The <info>status</info> command prints a list of all Migrations, along with their current status

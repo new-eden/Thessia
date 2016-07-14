@@ -26,9 +26,7 @@
 namespace Thessia\Tasks\CLi;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RunResque extends Command
@@ -47,8 +45,9 @@ class RunResque extends Command
         require_once(__DIR__ . "/../../vendor/chrisboulton/php-resque/lib/Resque/Worker.php");
 
         // Load all the resque files
-        foreach(glob(__DIR__ . "/../Resque/*.php") as $file)
+        foreach (glob(__DIR__ . "/../Resque/*.php") as $file) {
             require_once($file);
+        }
 
         $queues = array("rt", "high", "med", "low");
         $logLevel = \Resque_Worker::LOG_NORMAL;

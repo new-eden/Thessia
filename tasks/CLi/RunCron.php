@@ -90,7 +90,7 @@ class RunCron extends Command
                 $interval = $class->getRunTimes();
 
                 if ($interval == 0) {
-                                    continue;
+                    continue;
                 }
 
                 if ($currentTime > ($lastRan + $interval)) {

@@ -52,8 +52,12 @@ class Bootstrap
         $container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);
 
         // Add the twig view
-        $container->share("view", Twig::class)->withArguments(array(__DIR__ . "/../../templates", $container->get("config")->getAll("settings")["view"]));
-        $container->get("view")->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
+        $container->share("view", Twig::class)->withArguments(array(
+            __DIR__ . "/../../templates",
+            $container->get("config")->getAll("settings")["view"]
+        ));
+        $container->get("view")->addExtension(new TwigExtension($container->get("router"),
+            $container->get("request")->getUri()));
         $container->get("view")->addExtension(new \Twig_Extension_Debug());
 
         // Add the Renderer

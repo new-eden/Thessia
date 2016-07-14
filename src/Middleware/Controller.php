@@ -73,7 +73,7 @@ abstract class Controller
         $app = $this->app;
         $controller = $this;
 
-        $callable = function($request, $response, $args) use ($app, $controller, $actionName) {
+        $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
@@ -108,21 +108,6 @@ abstract class Controller
     }
 
     /**
-     * Fascilitate easily getting the stuff loaded into the container
-     *
-     * @param $name
-     * @return mixed|null
-     */
-    public function __get($name)
-    {
-        if (!empty($this->container->get($name))) {
-            return $this->container->get($name);
-        }
-
-        return null;
-    }
-
-    /**
      * @param $request
      */
     public function setRequest($request)
@@ -139,6 +124,21 @@ abstract class Controller
     }
 
     /**
+     * Fascilitate easily getting the stuff loaded into the container
+     *
+     * @param $name
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        if (!empty($this->container->get($name))) {
+            return $this->container->get($name);
+        }
+
+        return null;
+    }
+
+    /**
      * Return the entire container for use in the controller
      * @return \Interop\Container\ContainerInterface|\Slim\Container
      */
@@ -146,6 +146,28 @@ abstract class Controller
     {
         return $this->container;
     }
+
+    /**
+     * Pass on the control to another action. Of the same class (for now)
+     *
+     * @param  string $actionName The redirect destination.
+     * @param array $data
+     * @return RenaController
+     * @internal param string $status The redirect HTTP status code.
+     */
+    public function forward($actionName, $data = array())
+    {
+        // update the action name that was last used
+        if (method_exists($this->response, 'setActionName')) {
+            $this->response->setActionName($actionName);
+        }
+
+        return call_user_func_array(array($this, $actionName), $data);
+    }
+
+    // @TODO add a fourth that is just called api, which figures out what the user has told you they want (xml / json) and use that as the header)
+    // Remember to create a new response, with the new header that the user has requested in $this->requested
+    // Something like: $response = $this->response->withHeader($this->requested->getHeader("Content-Type")); and then pass on $response
 
     /**
      * Render the template file itself
@@ -156,14 +178,15 @@ abstract class Controller
      * @param string $contentType
      * @return mixed
      */
-    protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8")
-    {
+    protected function render(
+        String $file,
+        $args = array(),
+        int $status = 200,
+        String $contentType = "text/html; charset=UTF-8"
+    ) {
         return $this->container->get("render")->render($file, $args, $status, $contentType, $this->response);
     }
 
-    // @TODO add a fourth that is just called api, which figures out what the user has told you they want (xml / json) and use that as the header)
-    // Remember to create a new response, with the new header that the user has requested in $this->requested
-    // Something like: $response = $this->response->withHeader($this->requested->getHeader("Content-Type")); and then pass on $response
     /**
      * Render the data as json output
      *
@@ -241,23 +264,5 @@ abstract class Controller
     protected function redirect($url, $status = 302)
     {
         return $this->response->withRedirect($url, $status);
-    }
-
-    /**
-     * Pass on the control to another action. Of the same class (for now)
-     *
-     * @param  string $actionName The redirect destination.
-     * @param array $data
-     * @return RenaController
-     * @internal param string $status The redirect HTTP status code.
-     */
-    public function forward($actionName, $data = array())
-    {
-        // update the action name that was last used
-        if (method_exists($this->response, 'setActionName')) {
-            $this->response->setActionName($actionName);
-        }
-
-        return call_user_func_array(array($this, $actionName), $data);
     }
 }

@@ -46,20 +46,21 @@ class CreateTask extends Command
 
         $directory = __DIR__ . "/../tasks/";
         $file = file_get_contents(__DIR__ . "/../scaffolds/tasks_template.txt");
-        
+
         $file = str_replace("?name", ucfirst($name), $file);
         $file = str_replace("?description", ucfirst($description), $file);
         if (is_dir($directory) && !is_writable($directory)) {
             $output->writeln("The {$directory} directory is not writable");
             return;
         }
-        
+
         if (!is_dir($directory)) {
             $helper = $this->getHelper("question");
-            $question = new ConfirmationQuestion("Directory doesn't exist. Would you like to try and create it?", false);
+            $question = new ConfirmationQuestion("Directory doesn't exist. Would you like to try and create it?",
+                false);
 
             if (!$helper->ask($input, $output, $question)) {
-                            return;
+                return;
             }
 
             @mkdir($directory);

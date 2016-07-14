@@ -58,8 +58,9 @@ class Crest
      */
     public function generateHash($killData = array()): String
     {
-        if (!isset($killData["victim"]))
+        if (!isset($killData["victim"])) {
             return "Error, not a valid mail";
+        }
 
         $victim = $killData["victim"];
         $victimID = $victim["characterID"] == 0 ? "None" : $victim["characterID"];

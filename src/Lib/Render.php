@@ -56,8 +56,13 @@ class Render
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function render(String $templateFile, $dataArray = array(), int $status = null, String $contentType = null, ResponseInterface $response)
-    {
+    public function render(
+        String $templateFile,
+        $dataArray = array(),
+        int $status = null,
+        String $contentType = null,
+        ResponseInterface $response
+    ) {
         $contentType = $contentType ?? $response->getHeader("Content-Type");
 
         // Run the scrapeCheck

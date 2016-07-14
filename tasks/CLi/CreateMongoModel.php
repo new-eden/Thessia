@@ -31,25 +31,27 @@ use gossi\codegen\model\PhpClass;
 use gossi\codegen\model\PhpMethod;
 use gossi\codegen\model\PhpParameter;
 use gossi\codegen\model\PhpProperty;
-use gossi\formatter\Formatter;
 use MongoDB\Client;
 use MongoDB\Model\BSONDocument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateMongoModel extends Command {
+class CreateMongoModel extends Command
+{
     private $description = "";
     private $idFields = array();
     private $nameFields = array();
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setName("create:mongo")
             ->setDescription("Creates a model from a database collection");
     }
-    
-    protected function execute(InputInterface $input, OutputInterface $output) {
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         // Get the container
         $container = getContainer();
 
@@ -58,12 +60,14 @@ class CreateMongoModel extends Command {
         $database = prompt("CCP to find collection in", "thessia");
         $database = isset($database) ? $database : $container->get("config")->get("dbName", "mongodb");
 
-        if(!$collectionName)
+        if (!$collectionName) {
             return $output->writeln("Error, collection name is not defined");
+        }
 
         $path = __DIR__ . "/../../src/Model/CCP/{$collectionName}.php";
-        if(file_exists($path))
+        if (file_exists($path)) {
             return $output->writeln("Error, model already exists");
+        }
 
         // Get Mongo
         /** @var Client $mongo */
@@ -72,7 +76,7 @@ class CreateMongoModel extends Command {
         // Select the collection
         try {
             $collection = $mongo->selectCollection($database, $collectionName);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $output->writeln("Error, collection doesn't exist");
         }
 
@@ -80,10 +84,11 @@ class CreateMongoModel extends Command {
         /** @var BSONDocument $data */
         $data = $collection->findOne(
             array(),
-            array("projection" =>
-                array(
-                    "_id" => 0
-                ),
+            array(
+                "projection" =>
+                    array(
+                        "_id" => 0
+                    ),
                 "typeMap" => array('root' => 'array', 'document' => 'array', 'array' => 'array')
             )
         );
@@ -109,14 +114,14 @@ class CreateMongoModel extends Command {
         // Populate all the fields to be created
         $this->populateFields($data);
         // Populate the fields from arrays inside the array aswell..
-        foreach($data as $key => $array) {
-            if(is_array($array) || is_object($array)) {
+        foreach ($data as $key => $array) {
+            if (is_array($array) || is_object($array)) {
                 $this->populateFields($array, $key);
             }
         }
 
         // Get Generators
-        foreach($this->nameFields as $functionName => $fieldName) {
+        foreach ($this->nameFields as $functionName => $fieldName) {
             $class->setMethod(PhpMethod::create("getAllBy" . ucfirst($functionName))
                 ->addParameter(PhpParameter::create("fieldName"))
                 ->setVisibility("public")
@@ -126,7 +131,7 @@ class CreateMongoModel extends Command {
         }
 
         // Get Generators for ID fields
-        foreach($this->idFields as $functionName => $fieldName) {
+        foreach ($this->idFields as $functionName => $fieldName) {
             $class->setMethod(PhpMethod::create("getAllBy" . ucfirst($functionName))
                 ->addParameter(PhpParameter::create($functionName))
                 ->setVisibility("public")
@@ -212,63 +217,70 @@ class CreateMongoModel extends Command {
         $output->write("Model created (Remember to fix the formatting): {$path}");
     }
 
-    private function getIndividualFields(PhpClass $phpClass, $array, $type = null) {
-        foreach($this->nameFields as $functionName => $fieldName) {
-            if(stristr($functionName, $type)) {
-                $name = lcfirst(str_replace($type, "", $functionName));
-                foreach ($array as $key => $value) {
-                    if ($key == $name || $key == "_id")
-                        continue;
-
-                    $phpClass->setMethod(PhpMethod::create("get" . ucfirst($key) . "By" . ucfirst($functionName))
-                        ->addParameter(PhpParameter::create($name))
-                        ->setVisibility("public")
-                        ->setBody("return \$this->collection->find(
-                        array(\"{$fieldName}\" => \${$name}),
-                        array(\"projection\" => array(\"{$key}\" => 1)
-                    );"));
+    private function populateFields($array, $type = null)
+    {
+        foreach ($array as $key => $value) {
+            if (stristr($key, "name")) {
+                if (isset($type) && !is_numeric($type)) {
+                    $this->nameFields[$type . ucfirst($key)] = $type . "." . $key;
+                } else {
+                    $this->nameFields[$key] = $key;
                 }
             }
-        }
-
-        foreach($this->idFields as $functionName => $fieldName) {
-            if (stristr($functionName, $type)) {
-                $name = lcfirst(str_replace($type, "", $functionName));
-                foreach ($array as $key => $value) {
-                    if ($key == $name || $key == "_id")
-                        continue;
-
-                    $phpClass->setMethod(PhpMethod::create("get" . ucfirst($key) . "By" . ucfirst($functionName))
-                        ->addParameter(PhpParameter::create($name))
-                        ->setVisibility("public")
-                        ->setBody("return \$this->collection->find(
-                        array(\"{$fieldName}\" => \${$name}),
-                        array(\"projection\" => array(\"{$key}\" => 1)
-                    );"));
+            if (stristr($key, "ID")) {
+                if (isset($type) && !is_numeric($type)) {
+                    $this->idFields[$type . ucfirst($key)] = $type . "." . $key;
+                } else {
+                    $this->idFields[$key] = $key;
+                }
+            }
+            if (stristr($key, "Hash")) {
+                if (isset($type) && !is_numeric($type)) {
+                    $this->idFields[$type . ucfirst($key)] = $type . "." . $key;
+                } else {
+                    $this->idFields[$key] = $key;
                 }
             }
         }
     }
 
-    private function populateFields($array, $type = null) {
-        foreach($array as $key => $value) {
-            if(stristr($key, "name")) {
-                if(isset($type) && !is_numeric($type))
-                    $this->nameFields[$type . ucfirst($key)] = $type . "." . $key;
-                else
-                    $this->nameFields[$key] = $key;
+    private function getIndividualFields(PhpClass $phpClass, $array, $type = null)
+    {
+        foreach ($this->nameFields as $functionName => $fieldName) {
+            if (stristr($functionName, $type)) {
+                $name = lcfirst(str_replace($type, "", $functionName));
+                foreach ($array as $key => $value) {
+                    if ($key == $name || $key == "_id") {
+                        continue;
+                    }
+
+                    $phpClass->setMethod(PhpMethod::create("get" . ucfirst($key) . "By" . ucfirst($functionName))
+                        ->addParameter(PhpParameter::create($name))
+                        ->setVisibility("public")
+                        ->setBody("return \$this->collection->find(
+                        array(\"{$fieldName}\" => \${$name}),
+                        array(\"projection\" => array(\"{$key}\" => 1)
+                    );"));
+                }
             }
-            if(stristr($key, "ID")) {
-                if(isset($type) && !is_numeric($type))
-                    $this->idFields[$type . ucfirst($key)] = $type . "." . $key;
-                else
-                    $this->idFields[$key] = $key;
-            }
-            if(stristr($key, "Hash")) {
-                if(isset($type) && !is_numeric($type))
-                    $this->idFields[$type . ucfirst($key)] = $type . "." . $key;
-                else
-                    $this->idFields[$key] = $key;
+        }
+
+        foreach ($this->idFields as $functionName => $fieldName) {
+            if (stristr($functionName, $type)) {
+                $name = lcfirst(str_replace($type, "", $functionName));
+                foreach ($array as $key => $value) {
+                    if ($key == $name || $key == "_id") {
+                        continue;
+                    }
+
+                    $phpClass->setMethod(PhpMethod::create("get" . ucfirst($key) . "By" . ucfirst($functionName))
+                        ->addParameter(PhpParameter::create($name))
+                        ->setVisibility("public")
+                        ->setBody("return \$this->collection->find(
+                        array(\"{$fieldName}\" => \${$name}),
+                        array(\"projection\" => array(\"{$key}\" => 1)
+                    );"));
+                }
             }
         }
     }

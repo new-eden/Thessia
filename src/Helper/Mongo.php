@@ -26,7 +26,6 @@
 namespace Thessia\Helper;
 
 // brain fuck: http://mongodb.github.io/mongo-php-library/tutorial/crud/
-use MongoDB;
 use MongoDB\Client;
 use MongoDB\Collection;
 use Thessia\Lib\Cache;
@@ -38,14 +37,6 @@ use Thessia\Lib\Config;
  */
 class Mongo
 {
-    /**
-     * @var Client
-     */
-    protected $mongodb;
-    /**
-     * @var Collection
-     */
-    protected $collection;
     /**
      * The name of the collection being used
      * @var string
@@ -60,11 +51,18 @@ class Mongo
      * @var array
      */
     public $indexes = array();
-
     /**
      * @var Cache
      */
     public $cache;
+    /**
+     * @var Client
+     */
+    protected $mongodb;
+    /**
+     * @var Collection
+     */
+    protected $collection;
 
     /**
      * Mongo constructor.

@@ -124,7 +124,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("settings", $settings);
 
         // Add the logger
-        $streamHandler = new StreamHandler(realpath(__DIR__ . "/../../logs/thessia.log"), Logger::INFO, true, 777, false);
+        $streamHandler = new StreamHandler(realpath(__DIR__ . "/../../logs/thessia.log"), Logger::INFO, true, 777,
+            false);
         $log = new Logger("Thessia");
         $log->pushHandler($streamHandler);
         $container->share("log", $log);
@@ -139,39 +140,61 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("cache", Cache::class)->withArgument("config");
 
         // Add the CCP
-        $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
+        $container->share("db",
+            Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config")->withArgument("request");
 
         // Add MongoDB
-        $mongo = new Client("mongodb://localhost:27017", array(), array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+        $mongo = new Client("mongodb://localhost:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $container->share("mongo", $mongo);
 
         // Add cURL
         $container->share("curl", cURL::class)->withArgument("cache");
 
         // Models
-        $container->share("blueprints", blueprints::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("categoryIDs", categoryIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("certificates", certificates::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("constellations", constellations::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("graphicIDs", graphicIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("groupIDs", groupIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("iconIDs", iconIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("landmarks", landmarks::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("regions", regions::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("skinLicenses", skinLicenses::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("skinMaterials", skinMaterials::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("blueprints",
+            blueprints::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("categoryIDs",
+            categoryIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("certificates",
+            certificates::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("constellations",
+            constellations::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("graphicIDs",
+            graphicIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("groupIDs",
+            groupIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("iconIDs",
+            iconIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("landmarks",
+            landmarks::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("regions",
+            regions::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("skinLicenses",
+            skinLicenses::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("skinMaterials",
+            skinMaterials::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("skins", skins::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("solarSystems", solarSystems::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("tournamentRuleSets", tournamentRuleSets::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("typeIDs", typeIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("solarSystems",
+            solarSystems::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("tournamentRuleSets",
+            tournamentRuleSets::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("typeIDs",
+            typeIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
 
         $container->share("crest", Crest::class);
-        $container->share("prices", Prices::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("alliances", Alliances::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("corporations", Corporations::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("characters", Characters::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("participants", Participants::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-        $container->share("killmails", Killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("prices",
+            Prices::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("alliances",
+            Alliances::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("corporations",
+            Corporations::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("characters",
+            Characters::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("participants",
+            Participants::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("killmails",
+            Killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("parser", Parser::class)
             ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
             ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");

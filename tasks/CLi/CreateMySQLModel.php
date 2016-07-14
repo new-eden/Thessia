@@ -33,9 +33,7 @@ use gossi\codegen\model\PhpProperty;
 use gossi\formatter\Formatter;
 use Rena\Lib\Db;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateMySQLModel extends Command
@@ -59,7 +57,7 @@ class CreateMySQLModel extends Command
 
         $path = __DIR__ . "/../src/Model/CCP/{$table}.php";
         if (file_exists($path)) {
-                    return $output->writeln("Error, model already exists");
+            return $output->writeln("Error, model already exists");
         }
 
         // Load the datababase
@@ -88,17 +86,17 @@ class CreateMySQLModel extends Command
         foreach ($columns as $get) {
             // This is for the getByName selector(s)
             if (stristr($get["Field"], "name")) {
-                            $nameFields[] = $get["Field"];
+                $nameFields[] = $get["Field"];
             }
 
             // This is for the getByID selector(s)
             if (strstr($get["Field"], "ID")) {
-                            $idFields[] = $get["Field"];
+                $idFields[] = $get["Field"];
             }
 
             // This is for the getByHash selector(s)
             if (stristr($get["Field"], "Hash")) {
-                            $idFields[] = $get["Field"];
+                $idFields[] = $get["Field"];
             }
         }
 
@@ -126,12 +124,12 @@ class CreateMySQLModel extends Command
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
                 if ($get["Field"] == $name) {
-                                    continue;
+                    continue;
                 }
 
                 // Skip the id field
                 if ($get["Field"] == "id") {
-                                    continue;
+                    continue;
                 }
 
                 $class->setMethod(PhpMethod::create("get" . ucfirst($get["Field"]) . "By" . ucfirst($name))
@@ -146,12 +144,12 @@ class CreateMySQLModel extends Command
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
                 if ($get["Field"] == $id) {
-                                    continue;
+                    continue;
                 }
 
                 // Skip the id field
                 if ($get["Field"] == "id") {
-                                    continue;
+                    continue;
                 }
 
                 $class->setMethod(PhpMethod::create("get" . ucfirst($get["Field"]) . "By" . ucfirst($id))
@@ -167,12 +165,12 @@ class CreateMySQLModel extends Command
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
                 if ($get["Field"] == $name) {
-                                    continue;
+                    continue;
                 }
 
                 // Skip the id field
                 if ($get["Field"] == "id") {
-                                    continue;
+                    continue;
                 }
 
                 $class->setMethod(PhpMethod::create("update" . ucfirst($get["Field"]) . "By" . ucfirst($name))
@@ -191,12 +189,12 @@ class CreateMySQLModel extends Command
             foreach ($columns as $get) {
                 // If the fields match, skip it.. no reason to get/set allianceID where allianceID = allianceID
                 if ($get["Field"] == $id) {
-                                    continue;
+                    continue;
                 }
 
                 // Skip the id field
                 if ($get["Field"] == "id") {
-                                    continue;
+                    continue;
                 }
 
                 $class->setMethod(PhpMethod::create("update" . ucfirst($get["Field"]) . "By" . ucfirst($id))
@@ -217,7 +215,7 @@ class CreateMySQLModel extends Command
         foreach ($columns as $field) {
             // Skip the ID field
             if ($field["Field"] == "id") {
-                            continue;
+                continue;
             }
 
             $inserter .= "\${$field["Field"]}, ";
@@ -227,7 +225,7 @@ class CreateMySQLModel extends Command
         $inserter .= "\$this->db->execute(\"INSERT INTO {$table} (";
         foreach ($columns as $field) {
             if ($field["Field"] == "id") {
-                            continue;
+                continue;
             }
 
             $inserter .= $field["Field"] . ", ";
@@ -237,7 +235,7 @@ class CreateMySQLModel extends Command
         $inserter .= "VALUES (";
         foreach ($columns as $field) {
             if ($field["Field"] == "id") {
-                            continue;
+                continue;
             }
 
             $inserter .= ":" . $field["Field"] . ", ";
@@ -248,7 +246,7 @@ class CreateMySQLModel extends Command
         $inserter .= "array(";
         foreach ($columns as $field) {
             if ($field["Field"] == "id") {
-                            continue;
+                continue;
             }
 
             $inserter .= "\":" . $field["Field"] . "\" => \${$field["Field"]}, ";

@@ -31,13 +31,15 @@ use MongoDB\Client;
 use MongoDB\Collection;
 use Thessia\Model\EVE\Parser;
 
-class CrestKillmailParser {
+class CrestKillmailParser
+{
     /**
      * @var Container
      */
     private $container;
 
-    public function perform() {
+    public function perform()
+    {
         /** @var Client $mongodb */
         $mongodb = $this->container->get("mongo");
         /** @var Collection $collection */
@@ -50,17 +52,20 @@ class CrestKillmailParser {
 
         $killmail = $parser->parseCrestKillmail($killID, $killHash);
 
-        if(is_array($killmail))
+        if (is_array($killmail)) {
             $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
+        }
 
         exit();
     }
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->container = getContainer();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
 
     }
 }

@@ -107,7 +107,8 @@ class Db
             $this->cache->persistence = false;
         }
 
-        $host = $config->get("unixSocket", "db") ? ";unix_socket=" . $config->get("unixSocket", "db", "/var/run/mysqld/mysqld.sock") : ";host=" . $config->get("host", "db", "127.0.0.1");
+        $host = $config->get("unixSocket", "db") ? ";unix_socket=" . $config->get("unixSocket", "db",
+                "/var/run/mysqld/mysqld.sock") : ";host=" . $config->get("host", "db", "127.0.0.1");
         $dsn = "mysql:dbname=" . $config->get("dbname", "db") . "{$host};charset=utf8";
 
         try {
@@ -247,7 +248,8 @@ class Db
         }
 
         $uri = isset($_SERVER['REQUEST_URI']) ? "Query page: https://$baseAddr" . $_SERVER['REQUEST_URI'] . "\n" : '';
-        $this->logger->info(($duration != 0 ? number_format($duration / 1000, 3) . 's ' : '') . " Query: \n$query;\n$uri");
+        $this->logger->info(($duration != 0 ? number_format($duration / 1000,
+                    3) . 's ' : '') . " Query: \n$query;\n$uri");
     }
 
     /**
@@ -315,7 +317,8 @@ class Db
         }
 
         if (count($queryValues) > 0) {
-            return $this->execute($query . ' VALUES ' . implode(",", $queryIndexes) . " " . $suffix, $queryValues, $returnID);
+            return $this->execute($query . ' VALUES ' . implode(",", $queryIndexes) . " " . $suffix, $queryValues,
+                $returnID);
         } else {
             return false;
         }
@@ -470,7 +473,8 @@ class Db
         do {
             $links = $errors = $reject = $this->connections;
             mysqli_poll($links, $errors, $reject, $this->timeout);
-        } while (!in_array($connection, $links, true) && !in_array($connection, $errors, true) && !in_array($connection, $reject, true));
+        } while (!in_array($connection, $links, true) && !in_array($connection, $errors, true) && !in_array($connection,
+                $reject, true));
 
         // Stop the timer
         $this->queryTime += $this->timers[$name]->stop();

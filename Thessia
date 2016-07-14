@@ -17,7 +17,7 @@ $cli = new Symfony\Component\Console\Application("Embrace Eternity");
 $tasks = array(__DIR__ . "/tasks/*.php", __DIR__ . "/tasks/CLi/*.php");
 // Load all the commands
 
-foreach($tasks as $task) {
+foreach ($tasks as $task) {
     $files = glob($task);
     foreach ($files as $file) {
         require_once($file);
@@ -36,7 +36,8 @@ function prompt($prompt, $default = "")
 {
     echo "$prompt [$default] ";
     $answer = trim(fgets(STDIN));
-    if (strlen($answer) == 0)
+    if (strlen($answer) == 0) {
         return $default == "yes" ? true : $default;
+    }
     return $answer;
 }

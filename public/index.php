@@ -33,9 +33,9 @@ error_reporting(E_ALL);
 if (PHP_SAPI == "cli-server") {
     $file = __DIR__ . $_SERVER["REQUEST_URI"];
     if (is_file($file)) {
-            return false;
+        return false;
     }
-    }
+}
 
 // Load the initialization file
 include(__DIR__ . "/../init.php");
@@ -44,8 +44,12 @@ include(__DIR__ . "/../init.php");
 $container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);
 
 // Add the twig view
-$container->share("view", Twig::class)->withArguments(array(__DIR__ . "/../templates", $container->get("config")->getAll("settings")["view"]));
-$container->get("view")->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
+$container->share("view", Twig::class)->withArguments(array(
+    __DIR__ . "/../templates",
+    $container->get("config")->getAll("settings")["view"]
+));
+$container->get("view")->addExtension(new TwigExtension($container->get("router"),
+    $container->get("request")->getUri()));
 $container->get("view")->addExtension(new \Twig_Extension_Debug());
 
 // Add the Renderer

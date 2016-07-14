@@ -58,7 +58,7 @@ class importCorporations extends Command
         do {
             $corporations = $db->query("SELECT corporationID, allianceID, name, ceoID, ticker, memberCount, lastUpdated, information FROM zkillboard.zz_corporations");
             if (empty($corporations)) {
-                            $run = false;
+                $run = false;
             }
 
             foreach ($corporations as $corporation) {
@@ -73,7 +73,8 @@ class importCorporations extends Command
                     "corporationID" => $corporation["corporationID"],
                     "corporationName" => $corporation["name"],
                     "allianceID" => $corporation["allianceID"],
-                    "allianceName" => $db->queryField("SELECT name FROM zkillboard.zz_alliances WHERE allianceID = :allianceID", "name", array(":allianceID" => $corporation["allianceID"])),
+                    "allianceName" => $db->queryField("SELECT name FROM zkillboard.zz_alliances WHERE allianceID = :allianceID",
+                        "name", array(":allianceID" => $corporation["allianceID"])),
                     "ceoID" => $corporation["ceoID"],
                     "ticker" => $corporation["ticker"],
                     "memberCount" => $corporation["memberCount"],
@@ -82,14 +83,14 @@ class importCorporations extends Command
                 );
 
                 if (isset($corporation["information"])) {
-                                    $data["information"] = json_decode($corporation["information"], true);
+                    $data["information"] = json_decode($corporation["information"], true);
                 }
 
                 // Now insert it into the killmail collection
                 try {
                     $count = $collection->insertOne($data)->getInsertedCount();
                     if ($count >= 1) {
-                                            echo "Inserting {$corporation["corporationID"]}... Offset: {$offset}...\n";
+                        echo "Inserting {$corporation["corporationID"]}... Offset: {$offset}...\n";
                     }
 
                 } catch (\Exception $e) {

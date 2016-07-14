@@ -113,7 +113,8 @@ class cURL
         // Trim the last &
         rtrim($postLine, '&');
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_USERAGENT, "DataPoster for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)");
+        curl_setopt($curl, CURLOPT_USERAGENT,
+            "DataPoster for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)");
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         if (!empty($postData)) {
             curl_setopt($curl, CURLOPT_POST, count($postData));

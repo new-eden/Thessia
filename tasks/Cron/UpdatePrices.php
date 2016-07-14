@@ -48,24 +48,24 @@ class UpdatePrices
         $log->addInfo("CRON: Updating item values from CREST");
         // Get the Market Prices from CREST
         $marketData = json_decode(file_get_contents("https://crest-tq.eveonline.com/market/prices/"), true);
-        foreach($marketData["items"] as $data) {
+        foreach ($marketData["items"] as $data) {
             $typeID = $data["type"]["id"];
             $typeData = $collection->find(array("typeID" => $typeID))->toArray();
 
-            if(empty($typeData[0])) {
-                            continue;
+            if (empty($typeData[0])) {
+                continue;
             }
 
             // If it's not empty, we bind typeData to typeData[0] to get the first element in the array..
             $typeData = $typeData[0];
 
             $priceArray = array(
-                "typeID" => (int) $typeID,
+                "typeID" => (int)$typeID,
                 "typeNames" => $typeData["name"],
-                "marketGroupID" => (int) isset($typeData["marketGroupID"]) ? $typeData["marketGroupID"] : 0,
-                "groupID" => (int) $typeData["groupID"],
-                "adjustedPrice" => (int) isset($data["adjustedPrice"]) ? $data["adjustedPrice"] : 0,
-                "averagePrice" => (int) isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
+                "marketGroupID" => (int)isset($typeData["marketGroupID"]) ? $typeData["marketGroupID"] : 0,
+                "groupID" => (int)$typeData["groupID"],
+                "adjustedPrice" => (int)isset($data["adjustedPrice"]) ? $data["adjustedPrice"] : 0,
+                "averagePrice" => (int)isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
                 "lastUpdated" => date("Y-m-d H:i:s")
             );
             $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]}");

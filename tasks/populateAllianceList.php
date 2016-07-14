@@ -28,16 +28,11 @@ namespace Thessia\Tasks;
 use MongoDB\Collection;
 use Monolog\Logger;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Thessia\Lib\Db;
 use Thessia\Model\Database\regions;
 use Thessia\Model\Database\solarSystems;
 use Thessia\Model\Database\typeIDs;
-use Thessia\Model\EVE\Crest;
 
 class populateAllianceList extends Command
 {
@@ -63,7 +58,8 @@ class populateAllianceList extends Command
         $corporationCollection = $mongo->selectCollection("thessia", "corporations");
 
         $log->info("Inserting/Updating alliances...");
-        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))), true);
+        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))),
+            true);
         foreach ($data["result"]["rowset"]["row"] as $alliance) {
             $alliData = $alliance["@attributes"];
             $allianceID = $alliData["allianceID"];
@@ -94,7 +90,8 @@ class populateAllianceList extends Command
                 $corpIDs[] = $corp["id"];
             }
 
-            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
+            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)),
+                array("projection" => array("_id" => 0)))->toArray();
 
             $log->info("Adding/Updating {$allianceName}");
             try {

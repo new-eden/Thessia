@@ -46,7 +46,8 @@ class UpdateAllianceList
         $corporationCollection = $mongo->selectCollection("thessia", "corporations");
 
         $log->info("CRON: Inserting/Updating alliances...");
-        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))), true);
+        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))),
+            true);
         foreach ($data["result"]["rowset"]["row"] as $alliance) {
             $alliData = $alliance["@attributes"];
             $allianceID = $alliData["allianceID"];
@@ -77,7 +78,8 @@ class UpdateAllianceList
                 $corpIDs[] = $corp["id"];
             }
 
-            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
+            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)),
+                array("projection" => array("_id" => 0)))->toArray();
             $log->addInfo("CRON UpdateAllianceList: Updating {$allianceName}");
             $collection->replaceOne(array("allianceID" => $allianceID), $array, array("upsert" => true));
         }
