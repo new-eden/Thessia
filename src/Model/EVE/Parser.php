@@ -459,10 +459,7 @@ class Parser
             $calc = count($killData["attackers"]) / $npc;
         }
 
-        if ($calc == 1) {
-            return true;
-        }
-        return false;
+        return $calc == 1;
     }
 
     /**
@@ -494,10 +491,7 @@ class Parser
         }
 
         // If there is one NPC, then calc is 1, and 2 divided by 1 is 2. So if the result is 2, then it's a solo mail with an npc on it.
-        if ($calc == 2) {
-            return true;
-        }
-        return false;
+        return $calc == 2;
     }
 
     /**

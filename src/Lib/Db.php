@@ -125,6 +125,29 @@ class Db
     }
 
     /**
+     * @param $key
+     * @return mixed|null
+     */
+    private function getCache($key) {
+        $data = unserialize($this->cache->get($key));
+
+        if(!empty($data)) {
+            return $data;
+        }
+        return null;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @param $ttl
+     * @return bool
+     */
+    private function setCache($key, $value, $ttl) {
+        return $this->cache->set($key, serialize($value), min(3600, $ttl));
+    }
+
+    /**
      * @param String $query
      * @param array $parameters
      * @param int $cacheTime
@@ -164,9 +187,8 @@ class Db
 
         // If cache time is above 0 seconds, lets try and get it from that.
         if ($cacheTime > 0) {
-            // Try the cache system
-            $result = !empty($this->cache->get($key)) ? unserialize($this->cache->get($key)) : null;
-            if (!empty($result)) {
+            $result = $this->getCache($key);
+            if(!empty($result)) {
                 return $result;
             }
         }
@@ -201,7 +223,7 @@ class Db
 
             // If cache time is above 0 seconds, lets store it in the cache.
             if ($cacheTime > 0) {
-                $this->cache->set($key, serialize($result), min(3600, $cacheTime));
+                $this->setCache($key, $result, $cacheTime);
             }
 
             // Log the query
@@ -406,20 +428,9 @@ class Db
     }
 
     /**
-     * @param String $name
-     * @param String $query
-     * @param array $parameters
-     * @return bool|\mysqli_result|null
+     * @return \mysqli
      */
-    public function asyncExec(String $name, String $query, $parameters = array())
-    {
-        // @todo remove this..
-        $key = sha1($name);
-
-        if (!empty($this->cache->get($key))) {
-            return null;
-        }
-
+    private function initMysqli() {
         $host = $this->config->get("host", "database", "127.0.0.1");
         $username = $this->config->get('username', 'database');
         $password = $this->config->get('password', 'database');
@@ -427,12 +438,31 @@ class Db
         $port = $this->config->get('port', 'database', 3306);
         $socket = $this->config->get("unixSocket", "database", "/var/run/mysqld/mysqld.sock");
 
+        // Start up the mysqli connection
+        /** @var \mysqli $connection */
+        return mysqli_connect($host, $username, $password, $dbName, $port, $socket);
+    }
+
+    /**
+     * @param String $name
+     * @param String $query
+     * @param array $parameters
+     * @return bool|\mysqli_result|null
+     */
+    public function asyncExec(String $name, String $query, $parameters = array())
+    {
+        $key = sha1($name);
+
+        if (!empty($this->cache->get($key))) {
+            return null;
+        }
+        
         // Start up the timer
         $this->timers[$name] = new Timer();
 
         // Start up the mysqli connection
         /** @var \mysqli $connection */
-        $connection = mysqli_connect($host, $username, $password, $dbName, $port, $socket);
+        $connection = $this->initMysqli();
         $this->connections[$name] = $connection;
 
         // Increment the query count
@@ -453,12 +483,12 @@ class Db
      */
     public function asyncData(String $name, int $cacheTime = 360)
     {
-        // @todo remove this..
         $key = sha1($name);
 
+        // If cache time is above 0 seconds, lets try and get it from that.
         if ($cacheTime > 0) {
-            $result = !empty($this->cache->get($key)) ? unserialize($this->cache->get($key)) : null;
-            if (!empty($result)) {
+            $result = $this->getCache($key);
+            if(!empty($result)) {
                 return $result;
             }
         }
@@ -485,7 +515,7 @@ class Db
             $data[] = $row;
         }
         if ($cacheTime > 0) {
-            $this->cache->set($key, serialize($data), min(3600, $cacheTime));
+            $this->setCache($key, $data, $cacheTime);
         }
 
         return $data;
