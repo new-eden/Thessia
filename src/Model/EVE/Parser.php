@@ -160,7 +160,7 @@ class Parser {
     private function parseKillmail(array $killmailData, string $killHash): array {
         $killmail = array();
 
-        $killmail["killID"] = (int) $killmailData["killID"];
+        $killmail["killID"] = (int)$killmailData["killID"];
         $unixTime = strtotime($killmailData["killTime"]) * 1000;
         $killmail["killTime"] = new UTCDatetime($unixTime);
 
@@ -186,7 +186,7 @@ class Parser {
      * Generate the top portion of the mail array
      *
      * @param $data
-     * @param $killHash
+     * @param string $killHash
      * @return array
      */
     private function generateTopPortion($data, $killHash): array {
@@ -223,24 +223,24 @@ class Parser {
     private function generateVictimPortion($data): array {
         $victim = array();
 
-        $victim["x"] = (float) $data["x"];
-        $victim["y"] = (float) $data["y"];
-        $victim["z"] = (float) $data["z"];
-        $victim["shipTypeID"] = (int) $data["shipTypeID"];
+        $victim["x"] = (float)$data["x"];
+        $victim["y"] = (float)$data["y"];
+        $victim["z"] = (float)$data["z"];
+        $victim["shipTypeID"] = (int)$data["shipTypeID"];
         $shipData = $this->typeIDs->getAllByTypeID($data["shipTypeID"])->toArray()[0];
         $victim["shipTypeName"] = $shipData["name"]["en"];
         $victim["shipImageURL"] = $this->imageServer . "Type/" . $data["shipTypeID"] . "_32.png";
-        $victim["damageTaken"] = (int) $data["damageTaken"];
-        $victim["characterID"] = (int) $data["characterID"];
+        $victim["damageTaken"] = (int)$data["damageTaken"];
+        $victim["characterID"] = (int)$data["characterID"];
         $victim["characterName"] = $data["characterName"];
         $victim["characterImageURL"] = $this->imageServer . "Character/" . $data["characterID"] . "_128.jpg";
-        $victim["corporationID"] = (int) $data["corporationID"];
+        $victim["corporationID"] = (int)$data["corporationID"];
         $victim["corporationName"] = $data["corporationName"];
         $victim["corporationImageURL"] = $this->imageServer . "Corporation/" . $data["corporationID"] . "_128.png";
-        $victim["allianceID"] = (int) $data["allianceID"];
+        $victim["allianceID"] = (int)$data["allianceID"];
         $victim["allianceName"] = $data["allianceName"];
         $victim["allianceImageURL"] = $this->imageServer . "Alliance/" . $data["allianceID"] . "_128.png";
-        $victim["factionID"] = (int) $data["factionID"];
+        $victim["factionID"] = (int)$data["factionID"];
         $victim["factionName"] = $data["factionName"];
         $victim["factionImageURL"] = $this->imageServer . "Alliance/" . $data["factionID"] . "_128.png";
 
@@ -274,7 +274,7 @@ class Parser {
             $inner["damageDone"] = (int)$attacker["damageDone"];
             $inner["finalBlow"] = (int)$attacker["finalBlow"];
             $inner["weaponTypeID"] = (int)$attacker["weaponTypeID"];
-            if($attacker["weaponTypeID"] > 0) {
+            if ($attacker["weaponTypeID"] > 0) {
                 $weaponData = $this->typeIDs->getAllByTypeID($attacker["weaponTypeID"])->toArray()[0];
                 $inner["weaponTypeName"] = $weaponData["name"]["en"];
             } else {
@@ -340,11 +340,11 @@ class Parser {
      * @param $y
      * @param $z
      * @param $solarSystemID
-     * @return mixed|string
+     * @return string
      * @throws \Exception
      */
     private function getNear($x, $y, $z, $solarSystemID): string {
-        if($x == 0 && $y == 0 && $z == 0)
+        if ($x == 0 && $y == 0 && $z == 0)
             return "";
 
         $collection = $this->mongo->selectCollection("ccp", "celestials");
@@ -352,13 +352,13 @@ class Parser {
         $minimumDistance = null;
         $celestialName = "";
 
-        foreach($celestials as $celestial) {
+        foreach ($celestials as $celestial) {
             $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z, 2));
 
-            if($minimumDistance === null) {
+            if ($minimumDistance === null) {
                 $minimumDistance = $distance;
                 $celestialName = $this->fillInCelestialName($celestial);
-            } elseif($distance >= $minimumDistance) {
+            } elseif ($distance >= $minimumDistance) {
                 $minimumDistance = $distance;
                 $celestialName = $this->fillInCelestialName($celestial);
             }
@@ -445,13 +445,13 @@ class Parser {
 
     /**
      * @param $typeID
-     * @return array|int|\klass
+     * @return integer
      */
     private function getPriceForTypeID($typeID): int {
         $data = $this->prices->getPriceForTypeID($typeID);
         $value = $data["averagePrice"];
 
-        if(!$value)
+        if (!$value)
             return 0;
         return $value;
     }
@@ -459,7 +459,7 @@ class Parser {
     /**
      * @param $itemData
      * @param bool $isCargo
-     * @return float|int
+     * @return double
      * @throws \Exception
      */
     private function processItem($itemData, $isCargo = false): float {
@@ -499,10 +499,10 @@ class Parser {
         foreach ($killData["attackers"] as $attacker)
             $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
 
-        if($kdCount > 0 && $npc > 0)
+        if ($kdCount > 0 && $npc > 0)
             $calc = count($killData["attackers"]) / $npc;
 
-        if($calc == 1)
+        if ($calc == 1)
             return true;
         return false;
     }
@@ -519,20 +519,20 @@ class Parser {
         $calc = 0;
         $kdCount = count($killData["attackers"]);
 
-        if($kdCount > 2)
+        if ($kdCount > 2)
             return false;
-        elseif($kdCount == 1)
+        elseif ($kdCount == 1)
             return true;
 
         // Now to figure out if one of them is an npc
-        foreach($killData["attackers"] as $attacker)
+        foreach ($killData["attackers"] as $attacker)
             $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
 
-        if($npc > 0)
+        if ($npc > 0)
             $calc = 2 / $npc;
 
         // If there is one NPC, then calc is 1, and 2 divided by 1 is 2. So if the result is 2, then it's a solo mail with an npc on it.
-        if($calc == 2)
+        if ($calc == 2)
             return true;
         return false;
     }
