@@ -141,6 +141,8 @@ class Participants extends Mongo
             "shipValue",
             "fittingValue",
             "totalValue",
+            "isNPC",
+            "isSolo",
             "victim.shipTypeID",
             "victim.characterID",
             "victim.corporationID",
@@ -153,9 +155,9 @@ class Participants extends Mongo
             "attackers.allianceID",
             "attackers.factionID",
             "attackers.finalBlow",
-            //"items.typeID",
-            //"items.groupID",
-            //"items.categoryID",
+            "items.typeID",
+            "items.groupID",
+            "items.categoryID",
         );
 
         // If there are extraArguments, we'll run through them, and validate each one (it's all numeric values tho, except killtime, pretty easy to validate)

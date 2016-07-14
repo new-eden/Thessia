@@ -486,18 +486,20 @@ class Parser {
     }
 
     /**
-     * If there is only an NPC on the mail, it's an npc mail.
+     * If there is only an NPC (or multiple NPCs) on the mail, it's an NPC mail.
      *
      * @param $killData
      * @return bool
      */
     private function isNPC($killData): bool {
         $npc = 0;
+        $calc = 0;
+        $kdCount = count($killData["attackers"]);
+
         foreach ($killData["attackers"] as $attacker)
             $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
 
-        $calc = 0;
-        if(count($killData["attackers"]) > 0 && $npc > 0)
+        if($kdCount > 0 && $npc > 0)
             $calc = count($killData["attackers"]) / $npc;
 
         if($calc == 1)
@@ -506,30 +508,30 @@ class Parser {
     }
 
     /**
-     * If there is a minimum of two people on the mail, and one is an npc, it's a solo mail. it's also a solo mail if just one person is on the mail.
+     * If there is only one person on the mail (Excluding NPCs) then it's a solo mail
+     * Altho, max allowed is 2 attackers. So if there is 5 attackers, 4 npc's and 1 character, it doesn't count as solo.
      *
      * @param $killData
      * @return bool
      */
     private function isSolo($killData): bool {
         $npc = 0;
+        $calc = 0;
         $kdCount = count($killData["attackers"]);
 
         if($kdCount > 2)
             return false;
-
-        if($kdCount == 1)
+        elseif($kdCount == 1)
             return true;
 
         // Now to figure out if one of them is an npc
         foreach($killData["attackers"] as $attacker)
             $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
 
-        $calc = 0;
         if($npc > 0)
             $calc = 2 / $npc;
 
-        // If the calculation is 2, it means one of them is an npc, if it's 1 means both are NPCs, and if it's non-divisible  it means they're both pilots.. and we might have made a blackhole..
+        // If there is one NPC, then calc is 1, and 2 divided by 1 is 2. So if the result is 2, then it's a solo mail with an npc on it.
         if($calc == 2)
             return true;
         return false;
