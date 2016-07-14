@@ -58,7 +58,7 @@ class Participants extends Mongo
         // Check if the killmail is in the cache, if it is, return it
         $killData = $this->cache->get(md5(serialize($killID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         // The killmail was not in the cache, time to get it from the db
@@ -83,7 +83,7 @@ class Participants extends Mongo
         // Check if the killmail is in the cache, if it is, return it
         $killData = $this->cache->get(md5(serialize($crestHash)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         // The killmail was not in the cache, time to get it from the db
@@ -112,7 +112,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($killTime)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["killTime"] = new \MongoDB\BSON\UTCDatetime(strtotime($killTime));
@@ -192,7 +192,7 @@ class Participants extends Mongo
 
         // Offset
         if ($offset > 0) {
-                $queryArray["skip"] = $offset;
+            $queryArray["skip"] = $offset;
         }
 
         // Return the query array
@@ -222,7 +222,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($solarSystemID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["solarSystemID"] = $solarSystemID;
@@ -246,7 +246,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($regionID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["regionID"] = $regionID;
@@ -270,7 +270,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($characterID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["victim.characterID"] = $characterID;
@@ -294,7 +294,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($characterID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["attackers.characterID"] = $characterID;
@@ -318,7 +318,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($corporationID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["victim.corporationID"] = $corporationID;
@@ -342,7 +342,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($corporationID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["attackers.corporationID"] = $corporationID;
@@ -366,7 +366,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($allianceID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["victim.allianceID"] = $allianceID;
@@ -390,7 +390,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($allianceID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["attackers.allianceID"] = $allianceID;
@@ -414,7 +414,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($factionID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["victim.factionID"] = $factionID;
@@ -438,7 +438,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($factionID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["attackers.factionID"] = $factionID;
@@ -462,7 +462,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($shipTypeID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["victim.shipTypeID"] = $shipTypeID;
@@ -486,7 +486,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($shipTypeID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["attackers.shipTypeID"] = $shipTypeID;
@@ -511,7 +511,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($weaponTypeID)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["attackers.weaponTypeID"] = $weaponTypeID;
@@ -535,7 +535,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($afterDate)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["killTime"] = array("\$gte" => new \MongoDB\BSON\UTCDatetime(strtotime($afterDate)));
@@ -559,7 +559,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($beforeDate)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["killTime"] = array("\$lte" => new \MongoDB\BSON\UTCDatetime(strtotime($beforeDate)));
@@ -584,7 +584,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($afterDate . $beforeDate)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $extraArguments["killTime"] = array("\$gte" => new \MongoDB\BSON\UTCDatetime(strtotime($afterDate)), "\$lte" => new \MongoDB\BSON\UTCDatetime(strtotime($beforeDate)));
@@ -607,7 +607,7 @@ class Participants extends Mongo
     {
         $killData = $this->cache->get(md5(serialize($extraArguments)));
         if (!empty($killData)) {
-                    return $killData;
+            return $killData;
         }
 
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);

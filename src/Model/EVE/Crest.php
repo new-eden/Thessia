@@ -76,7 +76,7 @@ class Crest
         }
 
         if ($attacker == null) {
-                    $attacker = $attackers[0];
+            $attacker = $attackers[0];
         }
 
         $attackerID = $attacker["characterID"] == 0 ? "None" : $attacker["characterID"];
@@ -196,7 +196,7 @@ class Crest
                 $i["qtyDestroyed"] = (int)@$item["quantityDestroyed"];
                 $i["singleton"] = (int)@$item["singleton"];
                 if (isset($i["items"])) {
-                                    $i["items"] = $this->getItems($i["items"]);
+                    $i["items"] = $this->getItems($i["items"]);
                 }
 
                 $itemsArray[] = $i;

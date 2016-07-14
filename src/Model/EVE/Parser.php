@@ -38,7 +38,8 @@ use Thessia\Model\CCP\typeIDs;
  * Class Parser
  * @package Thessia\Model\EVE
  */
-class Parser {
+class Parser
+{
     /**
      * @var typeIDs
      */
@@ -107,7 +108,8 @@ class Parser {
      * @param Cache $cache
      * @param Client $mongo
      */
-    public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo) {
+    public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo)
+    {
         $this->typeIDs = $typeIDs;
         $this->solarSystems = $solarSystems;
         $this->prices = $prices;
@@ -130,7 +132,8 @@ class Parser {
      * @param $killHash
      * @return array
      */
-    public function parseCrestKillmail($killID, $killHash) {
+    public function parseCrestKillmail($killID, $killHash)
+    {
         $url = "https://crest.eveonline.com/killmails/{$killID}/{$killHash}/";
         $data = json_decode($this->curl->getData($url), true);
 
@@ -142,22 +145,14 @@ class Parser {
     }
 
     /**
-     * Parses data from the XML API into a format the parser can process
-     *
-     * @param $xmlMail
-     */
-    public function parseXMLKillmail($xmlMail) {
-
-    }
-
-    /**
      * Parses and processes the killmail data to the format stored in MongoDB
      *
      * @param $killmailData
      * @param $killHash
      * @return array
      */
-    private function parseKillmail(array $killmailData, string $killHash): array {
+    private function parseKillmail(array $killmailData, string $killHash): array
+    {
         $killmail = array();
 
         $killmail["killID"] = (int)$killmailData["killID"];
@@ -189,7 +184,8 @@ class Parser {
      * @param string $killHash
      * @return array
      */
-    private function generateTopPortion($data, $killHash): array {
+    private function generateTopPortion($data, $killHash): array
+    {
         $top = array();
 
         $top["solarSystemID"] = (int)$data["solarSystemID"];
@@ -215,12 +211,241 @@ class Parser {
     }
 
     /**
+     * @param $x
+     * @param $y
+     * @param $z
+     * @param $solarSystemID
+     * @return string
+     * @throws \Exception
+     */
+    private function getNear($x, $y, $z, $solarSystemID): string
+    {
+        if ($x == 0 && $y == 0 && $z == 0) {
+            return "";
+        }
+
+        $collection = $this->mongo->selectCollection("ccp", "celestials");
+        $celestials = $collection->find(array("solarSystemID" => $solarSystemID));
+        $minimumDistance = null;
+        $celestialName = "";
+
+        foreach ($celestials as $celestial) {
+            $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z, 2));
+
+            if ($minimumDistance === null) {
+                $minimumDistance = $distance;
+                $celestialName = $this->fillInCelestialName($celestial);
+            } elseif ($distance >= $minimumDistance) {
+                $minimumDistance = $distance;
+                $celestialName = $this->fillInCelestialName($celestial);
+            }
+        }
+
+        return $celestialName;
+    }
+
+    /**
+     * @param $celestial
+     * @return string
+     */
+    private function fillInCelestialName($celestial): string
+    {
+        $celestialName = "";
+        $types = array("Stargate", "Moon", "Planet", "Asteroid Belt", "Sun");
+        foreach ($types as $type) {
+            if (isset($celestial["typeName"])) {
+                if (strpos($celestial["typeName"], $type) !== false) {
+                    $string = $type;
+                    $string .= " (";
+                    $string .= isset($celestial["itemName"]) ? $celestial["itemName"] : $celestial["solarSystemName"];
+                    $string .= ")";
+                    $celestialName = $string;
+                }
+            }
+        }
+
+        return $celestialName;
+    }
+
+    /**
+     * @param $killData
+     * @return array
+     * @throws \Exception
+     */
+    private function calculateKillValue($killData): array
+    {
+        if (empty($killData["items"]) || !isset($killData["items"])) {
+            return array("itemValue" => 0, "shipValue" => 0, "totalValue" => 0);
+        }
+
+        $items = $killData["items"];
+        $victimShipValue = $this->getPriceForTypeID($killData["victim"]["shipTypeID"]);
+        $killValue = 0;
+        foreach ($items as $item) {
+            $isCargo = isset($item["items"]) ? is_array($item["items"]) ? true : false : false;
+            if ($isCargo) {
+                foreach ($item["items"] as $innerItem)
+                    $killValue += $this->processItem($innerItem, $isCargo);
+            }
+
+            $killValue += $this->processItem($item, $isCargo);
+        }
+
+        return array("itemValue" => $killValue, "shipValue" => $victimShipValue, "totalValue" => $killValue + $victimShipValue);
+    }
+
+    /**
+     * @param $typeID
+     * @return integer
+     */
+    private function getPriceForTypeID($typeID): int
+    {
+        $data = $this->prices->getPriceForTypeID($typeID);
+        $value = $data["averagePrice"];
+
+        if (!$value) {
+            return 0;
+        }
+        return $value;
+    }
+
+    /**
+     * @param $itemData
+     * @param bool $isCargo
+     * @return double
+     * @throws \Exception
+     */
+    private function processItem($itemData, $isCargo = false): float
+    {
+        $typeID = $itemData["typeID"];
+        $flag = $itemData["flag"];
+        $id = $this->typeIDs->getAllByTypeID($typeID)->toArray()[0];
+        $itemName = $id["name"]["en"];
+
+        if (!$itemName) {
+            $itemName = "TypeID {$typeID}";
+        }
+
+        if ($typeID == 33329 && $flag == 89) {
+            // Golden pod
+            $price = 0.01;
+        } else {
+            $price = $this->getPriceForTypeID($typeID);
+        }
+
+        if ($isCargo && strpos($itemName, "Blueprint") !== false) {
+            $itemData["singleton"] = 2;
+        }
+
+        if ($itemData["singleton"] == 2) {
+            $price = $price / 100;
+        }
+
+        return ($price * ($itemData["qtyDropped"] + $itemData["qtyDestroyed"]));
+    }
+
+    /**
+     * @param array $itemData
+     * @param $shipTypeID
+     * @return string
+     * @throws \Exception
+     */
+    private function getDNA($itemData = array(), $shipTypeID): string
+    {
+        $collection = $this->mongo->selectCollection("ccp", "invFlags");
+
+        $slots = array("LoSlot0", "LoSlot1", "LoSlot2", "LoSlot3", "LoSlot4", "LoSlot5", "LoSlot6", "LoSlot7", "MedSlot0", "MedSlot1", "MedSlot2", "MedSlot3", "MedSlot4", "MedSlot5", "MedSlot6", "MedSlot7", "HiSlot0", "HiSlot1", "HiSlot2", "HiSlot3", "HiSlot4", "HiSlot5", "HiSlot6", "HiSlot7", "DroneBay", "RigSlot0", "RigSlot1", "RigSlot2", "RigSlot3", "RigSlot4", "RigSlot5", "RigSlot6", "RigSlot7", "SubSystem0", "SubSystem1", "SubSystem2", "SubSystem3", "SubSystem4", "SubSystem5", "SubSystem6", "SubSystem7", "SpecializedFuelBay");
+        $fittingArray = array();
+        $fittingString = $shipTypeID . ":";
+        foreach ($itemData as $item) {
+            $flagName = $collection->findOne(array("flagID" => $item["flag"]))["flagName"];
+            if (in_array($flagName, $slots) || @$item["categoryID"] == 8) {
+                if (isset($fittingArray[$item["typeID"]])) {
+                    $fittingArray[$item["typeID"]]["count"] = $fittingArray[$item["typeID"]]["count"] + (@$item["qtyDropped"] + @$item["qtyDestroyed"]);
+                } else {
+                    $fittingArray[$item["typeID"]] = array("count" => (@$item["qtyDropped"] + @$item["qtyDestroyed"]));
+                }
+            }
+        }
+
+        foreach ($fittingArray as $key => $item) {
+            $fittingString .= "$key;" . $item["count"] . ":";
+        }
+
+        $fittingString .= ":";
+
+        return $fittingString;
+    }
+
+    /**
+     * If there is only an NPC (or multiple NPCs) on the mail, it's an NPC mail.
+     *
+     * @param $killData
+     * @return bool
+     */
+    private function isNPC($killData): bool
+    {
+        $npc = 0;
+        $calc = 0;
+        $kdCount = count($killData["attackers"]);
+
+        foreach ($killData["attackers"] as $attacker) {
+            $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+        }
+
+        if ($kdCount > 0 && $npc > 0) {
+            $calc = count($killData["attackers"]) / $npc;
+        }
+
+        if ($calc == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * If there is only one person on the mail (Excluding NPCs) then it's a solo mail
+     * Altho, max allowed is 2 attackers. So if there is 5 attackers, 4 npc's and 1 character, it doesn't count as solo.
+     *
+     * @param $killData
+     * @return bool
+     */
+    private function isSolo($killData): bool
+    {
+        $npc = 0;
+        $calc = 0;
+        $kdCount = count($killData["attackers"]);
+
+        if ($kdCount > 2) {
+            return false;
+        } elseif ($kdCount == 1) {
+            return true;
+        }
+
+        // Now to figure out if one of them is an npc
+        foreach ($killData["attackers"] as $attacker) {
+            $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+        }
+
+        if ($npc > 0) {
+            $calc = 2 / $npc;
+        }
+
+        // If there is one NPC, then calc is 1, and 2 divided by 1 is 2. So if the result is 2, then it's a solo mail with an npc on it.
+        if ($calc == 2) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Generate the victim portion of the mail array
      *
      * @param $data
      * @return array
      */
-    private function generateVictimPortion($data): array {
+    private function generateVictimPortion($data): array
+    {
         $victim = array();
 
         $victim["x"] = (float)$data["x"];
@@ -253,7 +478,8 @@ class Parser {
      * @param $data
      * @return mixed
      */
-    private function generateAttackersPortion($data): array {
+    private function generateAttackersPortion($data): array
+    {
         $attackers = array();
 
         foreach ($data as $attacker) {
@@ -299,7 +525,8 @@ class Parser {
      * @return array
      * @throws \Exception
      */
-    private function generateItemPortion($data): array {
+    private function generateItemPortion($data): array
+    {
         $items = array();
 
         foreach ($data as $item) {
@@ -328,231 +555,22 @@ class Parser {
      * @param $data
      * @return array|mixed
      */
-    private function generateOsmiumPortion($data): array {
+    private function generateOsmiumPortion($data): array
+    {
         $data = $this->curl->getData("https://o.smium.org/api/json/loadout/dna/attributes/loc:ship,a:tank,a:ehpAndResonances,a:capacitors,a:damage?input={$data}");
         if (is_array($data)) {
-                    return array();
+            return array();
         }
         return json_decode($data, true);
     }
 
     /**
-     * @param $x
-     * @param $y
-     * @param $z
-     * @param $solarSystemID
-     * @return string
-     * @throws \Exception
-     */
-    private function getNear($x, $y, $z, $solarSystemID): string {
-        if ($x == 0 && $y == 0 && $z == 0) {
-                    return "";
-        }
-
-        $collection = $this->mongo->selectCollection("ccp", "celestials");
-        $celestials = $collection->find(array("solarSystemID" => $solarSystemID));
-        $minimumDistance = null;
-        $celestialName = "";
-
-        foreach ($celestials as $celestial) {
-            $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z, 2));
-
-            if ($minimumDistance === null) {
-                $minimumDistance = $distance;
-                $celestialName = $this->fillInCelestialName($celestial);
-            } elseif ($distance >= $minimumDistance) {
-                $minimumDistance = $distance;
-                $celestialName = $this->fillInCelestialName($celestial);
-            }
-        }
-
-        return $celestialName;
-    }
-
-    /**
-     * @param $celestial
-     * @return string
-     */
-    private function fillInCelestialName($celestial): string {
-        $celestialName = "";
-        $types = array("Stargate", "Moon", "Planet", "Asteroid Belt", "Sun");
-        foreach ($types as $type) {
-            if (isset($celestial["typeName"])) {
-                if (strpos($celestial["typeName"], $type) !== false) {
-                    $string = $type;
-                    $string .= " (";
-                    $string .= isset($celestial["itemName"]) ? $celestial["itemName"] : $celestial["solarSystemName"];
-                    $string .= ")";
-                    $celestialName = $string;
-                }
-            }
-        }
-
-        return $celestialName;
-    }
-
-    /**
-     * @param array $itemData
-     * @param $shipTypeID
-     * @return string
-     * @throws \Exception
-     */
-    private function getDNA($itemData = array(), $shipTypeID): string {
-        $collection = $this->mongo->selectCollection("ccp", "invFlags");
-
-        $slots = array("LoSlot0", "LoSlot1", "LoSlot2", "LoSlot3", "LoSlot4", "LoSlot5", "LoSlot6", "LoSlot7", "MedSlot0", "MedSlot1", "MedSlot2", "MedSlot3", "MedSlot4", "MedSlot5", "MedSlot6", "MedSlot7", "HiSlot0", "HiSlot1", "HiSlot2", "HiSlot3", "HiSlot4", "HiSlot5", "HiSlot6", "HiSlot7", "DroneBay", "RigSlot0", "RigSlot1", "RigSlot2", "RigSlot3", "RigSlot4", "RigSlot5", "RigSlot6", "RigSlot7", "SubSystem0", "SubSystem1", "SubSystem2", "SubSystem3", "SubSystem4", "SubSystem5", "SubSystem6", "SubSystem7", "SpecializedFuelBay");
-        $fittingArray = array();
-        $fittingString = $shipTypeID . ":";
-        foreach ($itemData as $item) {
-            $flagName = $collection->findOne(array("flagID" => $item["flag"]))["flagName"];
-            if (in_array($flagName, $slots) || @$item["categoryID"] == 8) {
-                if (isset($fittingArray[$item["typeID"]])) {
-                                    $fittingArray[$item["typeID"]]["count"] = $fittingArray[$item["typeID"]]["count"] + (@$item["qtyDropped"] + @$item["qtyDestroyed"]);
-                } else {
-                                    $fittingArray[$item["typeID"]] = array("count" => (@$item["qtyDropped"] + @$item["qtyDestroyed"]));
-                }
-            }
-        }
-
-        foreach ($fittingArray as $key => $item) {
-                    $fittingString .= "$key;" . $item["count"] . ":";
-        }
-
-        $fittingString .= ":";
-
-        return $fittingString;
-    }
-
-    /**
-     * @param $killData
-     * @return array
-     * @throws \Exception
-     */
-    private function calculateKillValue($killData): array {
-        if (empty($killData["items"]) || !isset($killData["items"])) {
-                    return array("itemValue" => 0, "shipValue" => 0, "totalValue" => 0);
-        }
-
-        $items = $killData["items"];
-        $victimShipValue = $this->getPriceForTypeID($killData["victim"]["shipTypeID"]);
-        $killValue = 0;
-        foreach ($items as $item) {
-            $isCargo = isset($item["items"]) ? is_array($item["items"]) ? true : false : false;
-            if ($isCargo) {
-                            foreach ($item["items"] as $innerItem)
-                    $killValue += $this->processItem($innerItem, $isCargo);
-            }
-
-            $killValue += $this->processItem($item, $isCargo);
-        }
-
-        return array("itemValue" => $killValue, "shipValue" => $victimShipValue, "totalValue" => $killValue + $victimShipValue);
-    }
-
-    /**
-     * @param $typeID
-     * @return integer
-     */
-    private function getPriceForTypeID($typeID): int {
-        $data = $this->prices->getPriceForTypeID($typeID);
-        $value = $data["averagePrice"];
-
-        if (!$value) {
-                    return 0;
-        }
-        return $value;
-    }
-
-    /**
-     * @param $itemData
-     * @param bool $isCargo
-     * @return double
-     * @throws \Exception
-     */
-    private function processItem($itemData, $isCargo = false): float {
-        $typeID = $itemData["typeID"];
-        $flag = $itemData["flag"];
-        $id = $this->typeIDs->getAllByTypeID($typeID)->toArray()[0];
-        $itemName = $id["name"]["en"];
-
-        if (!$itemName) {
-                    $itemName = "TypeID {$typeID}";
-        }
-
-        if ($typeID == 33329 && $flag == 89) {
-            // Golden pod
-            $price = 0.01;
-        } else {
-                    $price = $this->getPriceForTypeID($typeID);
-        }
-
-        if ($isCargo && strpos($itemName, "Blueprint") !== false) {
-                    $itemData["singleton"] = 2;
-        }
-
-        if ($itemData["singleton"] == 2) {
-                    $price = $price / 100;
-        }
-
-        return ($price * ($itemData["qtyDropped"] + $itemData["qtyDestroyed"]));
-    }
-
-    /**
-     * If there is only an NPC (or multiple NPCs) on the mail, it's an NPC mail.
+     * Parses data from the XML API into a format the parser can process
      *
-     * @param $killData
-     * @return bool
+     * @param $xmlMail
      */
-    private function isNPC($killData): bool {
-        $npc = 0;
-        $calc = 0;
-        $kdCount = count($killData["attackers"]);
+    public function parseXMLKillmail($xmlMail)
+    {
 
-        foreach ($killData["attackers"] as $attacker) {
-                    $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
-        }
-
-        if ($kdCount > 0 && $npc > 0) {
-                    $calc = count($killData["attackers"]) / $npc;
-        }
-
-        if ($calc == 1) {
-                    return true;
-        }
-        return false;
-    }
-
-    /**
-     * If there is only one person on the mail (Excluding NPCs) then it's a solo mail
-     * Altho, max allowed is 2 attackers. So if there is 5 attackers, 4 npc's and 1 character, it doesn't count as solo.
-     *
-     * @param $killData
-     * @return bool
-     */
-    private function isSolo($killData): bool {
-        $npc = 0;
-        $calc = 0;
-        $kdCount = count($killData["attackers"]);
-
-        if ($kdCount > 2) {
-                    return false;
-        } elseif ($kdCount == 1) {
-                    return true;
-        }
-
-        // Now to figure out if one of them is an npc
-        foreach ($killData["attackers"] as $attacker) {
-                    $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
-        }
-
-        if ($npc > 0) {
-                    $calc = 2 / $npc;
-        }
-
-        // If there is one NPC, then calc is 1, and 2 divided by 1 is 2. So if the result is 2, then it's a solo mail with an npc on it.
-        if ($calc == 2) {
-                    return true;
-        }
-        return false;
     }
 }

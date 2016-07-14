@@ -42,11 +42,14 @@ $container = getContainer();
 
 // Global function(s)
 // Dump and die!
-function dd($input) {
-    var_dump($input); die();
+function dd($input)
+{
+    var_dump($input);
+    die();
 }
 
-function getContainer() {
+function getContainer()
+{
     static $container;
 
     if (!isset($container)) {
@@ -57,9 +60,9 @@ function getContainer() {
 
         // Register default config file
         if (file_exists(__DIR__ . "/config/config.php")) {
-                    $container->add("configFile", __DIR__ . "/config/config.php");
+            $container->add("configFile", __DIR__ . "/config/config.php");
         } else {
-                    throw new \Exception("Error, config.php missing in the config directory");
+            throw new \Exception("Error, config.php missing in the config directory");
         }
 
         // Load the dependencies
