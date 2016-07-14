@@ -188,7 +188,7 @@ class Participants extends Mongo
         $queryArray["sort"] = array("killTime" => $order == "DESC" ? -1 : 1);
 
         // Offset
-        if($offset > 0)
+        if ($offset > 0)
         $queryArray["skip"] = $offset;
 
         // Return the query array
