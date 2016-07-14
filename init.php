@@ -56,10 +56,11 @@ function getContainer() {
         $container->delegate(new ReflectionContainer());
 
         // Register default config file
-        if (file_exists(__DIR__ . "/config/config.php"))
-            $container->add("configFile", __DIR__ . "/config/config.php");
-        else
-            throw new \Exception("Error, config.php missing in the config directory");
+        if (file_exists(__DIR__ . "/config/config.php")) {
+                    $container->add("configFile", __DIR__ . "/config/config.php");
+        } else {
+                    throw new \Exception("Error, config.php missing in the config directory");
+        }
 
         // Load the dependencies
         $container->addServiceProvider(new \Thessia\Service\SystemServiceProvider);

@@ -330,8 +330,9 @@ class Parser {
      */
     private function generateOsmiumPortion($data): array {
         $data = $this->curl->getData("https://o.smium.org/api/json/loadout/dna/attributes/loc:ship,a:tank,a:ehpAndResonances,a:capacitors,a:damage?input={$data}");
-        if (is_array($data))
-            return array();
+        if (is_array($data)) {
+                    return array();
+        }
         return json_decode($data, true);
     }
 
@@ -344,8 +345,9 @@ class Parser {
      * @throws \Exception
      */
     private function getNear($x, $y, $z, $solarSystemID): string {
-        if ($x == 0 && $y == 0 && $z == 0)
-            return "";
+        if ($x == 0 && $y == 0 && $z == 0) {
+                    return "";
+        }
 
         $collection = $this->mongo->selectCollection("ccp", "celestials");
         $celestials = $collection->find(array("solarSystemID" => $solarSystemID));
@@ -404,15 +406,17 @@ class Parser {
         foreach ($itemData as $item) {
             $flagName = $collection->findOne(array("flagID" => $item["flag"]))["flagName"];
             if (in_array($flagName, $slots) || @$item["categoryID"] == 8) {
-                if (isset($fittingArray[$item["typeID"]]))
-                    $fittingArray[$item["typeID"]]["count"] = $fittingArray[$item["typeID"]]["count"] + (@$item["qtyDropped"] + @$item["qtyDestroyed"]);
-                else
-                    $fittingArray[$item["typeID"]] = array("count" => (@$item["qtyDropped"] + @$item["qtyDestroyed"]));
+                if (isset($fittingArray[$item["typeID"]])) {
+                                    $fittingArray[$item["typeID"]]["count"] = $fittingArray[$item["typeID"]]["count"] + (@$item["qtyDropped"] + @$item["qtyDestroyed"]);
+                } else {
+                                    $fittingArray[$item["typeID"]] = array("count" => (@$item["qtyDropped"] + @$item["qtyDestroyed"]));
+                }
             }
         }
 
-        foreach ($fittingArray as $key => $item)
-            $fittingString .= "$key;" . $item["count"] . ":";
+        foreach ($fittingArray as $key => $item) {
+                    $fittingString .= "$key;" . $item["count"] . ":";
+        }
 
         $fittingString .= ":";
 
@@ -425,17 +429,19 @@ class Parser {
      * @throws \Exception
      */
     private function calculateKillValue($killData): array {
-        if (empty($killData["items"]) || !isset($killData["items"]))
-            return array("itemValue" => 0, "shipValue" => 0, "totalValue" => 0);
+        if (empty($killData["items"]) || !isset($killData["items"])) {
+                    return array("itemValue" => 0, "shipValue" => 0, "totalValue" => 0);
+        }
 
         $items = $killData["items"];
         $victimShipValue = $this->getPriceForTypeID($killData["victim"]["shipTypeID"]);
         $killValue = 0;
         foreach ($items as $item) {
             $isCargo = isset($item["items"]) ? is_array($item["items"]) ? true : false : false;
-            if ($isCargo)
-                foreach ($item["items"] as $innerItem)
+            if ($isCargo) {
+                            foreach ($item["items"] as $innerItem)
                     $killValue += $this->processItem($innerItem, $isCargo);
+            }
 
             $killValue += $this->processItem($item, $isCargo);
         }
@@ -451,8 +457,9 @@ class Parser {
         $data = $this->prices->getPriceForTypeID($typeID);
         $value = $data["averagePrice"];
 
-        if (!$value)
-            return 0;
+        if (!$value) {
+                    return 0;
+        }
         return $value;
     }
 
@@ -468,19 +475,24 @@ class Parser {
         $id = $this->typeIDs->getAllByTypeID($typeID)->toArray()[0];
         $itemName = $id["name"]["en"];
 
-        if (!$itemName)
-            $itemName = "TypeID {$typeID}";
+        if (!$itemName) {
+                    $itemName = "TypeID {$typeID}";
+        }
 
-        if ($typeID == 33329 && $flag == 89) // Golden pod
+        if ($typeID == 33329 && $flag == 89) {
+            // Golden pod
             $price = 0.01;
-        else
-            $price = $this->getPriceForTypeID($typeID);
+        } else {
+                    $price = $this->getPriceForTypeID($typeID);
+        }
 
-        if ($isCargo && strpos($itemName, "Blueprint") !== false)
-            $itemData["singleton"] = 2;
+        if ($isCargo && strpos($itemName, "Blueprint") !== false) {
+                    $itemData["singleton"] = 2;
+        }
 
-        if ($itemData["singleton"] == 2)
-            $price = $price / 100;
+        if ($itemData["singleton"] == 2) {
+                    $price = $price / 100;
+        }
 
         return ($price * ($itemData["qtyDropped"] + $itemData["qtyDestroyed"]));
     }
@@ -496,14 +508,17 @@ class Parser {
         $calc = 0;
         $kdCount = count($killData["attackers"]);
 
-        foreach ($killData["attackers"] as $attacker)
-            $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+        foreach ($killData["attackers"] as $attacker) {
+                    $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+        }
 
-        if ($kdCount > 0 && $npc > 0)
-            $calc = count($killData["attackers"]) / $npc;
+        if ($kdCount > 0 && $npc > 0) {
+                    $calc = count($killData["attackers"]) / $npc;
+        }
 
-        if ($calc == 1)
-            return true;
+        if ($calc == 1) {
+                    return true;
+        }
         return false;
     }
 
@@ -519,21 +534,25 @@ class Parser {
         $calc = 0;
         $kdCount = count($killData["attackers"]);
 
-        if ($kdCount > 2)
-            return false;
-        elseif ($kdCount == 1)
-            return true;
+        if ($kdCount > 2) {
+                    return false;
+        } elseif ($kdCount == 1) {
+                    return true;
+        }
 
         // Now to figure out if one of them is an npc
-        foreach ($killData["attackers"] as $attacker)
-            $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+        foreach ($killData["attackers"] as $attacker) {
+                    $npc += $attacker["characterID"] == 0 && ($attacker["corporationID"] < 1999999 && $attacker["corporationID"] != 1000125) ? 1 : 0;
+        }
 
-        if ($npc > 0)
-            $calc = 2 / $npc;
+        if ($npc > 0) {
+                    $calc = 2 / $npc;
+        }
 
         // If there is one NPC, then calc is 1, and 2 divided by 1 is 2. So if the result is 2, then it's a solo mail with an npc on it.
-        if ($calc == 2)
-            return true;
+        if ($calc == 2) {
+                    return true;
+        }
         return false;
     }
 }
