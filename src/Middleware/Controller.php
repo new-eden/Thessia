@@ -73,7 +73,7 @@ abstract class Controller
         $app = $this->app;
         $controller = $this;
 
-        $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
+        $callable = function($request, $response, $args) use ($app, $controller, $actionName) {
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
