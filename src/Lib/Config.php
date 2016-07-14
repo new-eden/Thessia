@@ -42,6 +42,10 @@ class Config
         $this->config = array_change_key_case(include($configFile), \CASE_LOWER);
     }
 
+    /**
+     * @param string $key
+     * @param string $type
+     */
     public function get($key, $type = null, $default = null)
     {
         $type = strtolower($type);
