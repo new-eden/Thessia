@@ -40,7 +40,7 @@ class IndexController extends Controller
         $participants = $container->get("participants");
 
         $kills = $participants->getAllKills();
-        foreach($kills as $kill) {
+        foreach ($kills as $kill) {
             var_dump($kill);
         }
 
