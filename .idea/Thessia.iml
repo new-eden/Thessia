@@ -17,7 +17,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzle/parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzle/stream" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/jenssegers/lean" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jtrumbull/xml-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mkraemer/react-pcntl" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mongodb/mongodb" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
@@ -92,7 +94,9 @@
           <root url="file://$MODULE_DIR$/vendor/guzzle/parser" />
           <root url="file://$MODULE_DIR$/vendor/guzzle/stream" />
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+          <root url="file://$MODULE_DIR$/vendor/jenssegers/lean" />
           <root url="file://$MODULE_DIR$/vendor/jtrumbull/xml-parser" />
+          <root url="file://$MODULE_DIR$/vendor/league/container" />
           <root url="file://$MODULE_DIR$/vendor/mkraemer/react-pcntl" />
           <root url="file://$MODULE_DIR$/vendor/mongodb/mongodb" />
           <root url="file://$MODULE_DIR$/vendor/monolog/monolog" />
@@ -153,7 +157,9 @@
           <root url="file://$MODULE_DIR$/vendor/guzzle/parser" />
           <root url="file://$MODULE_DIR$/vendor/guzzle/stream" />
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+          <root url="file://$MODULE_DIR$/vendor/jenssegers/lean" />
           <root url="file://$MODULE_DIR$/vendor/jtrumbull/xml-parser" />
+          <root url="file://$MODULE_DIR$/vendor/league/container" />
           <root url="file://$MODULE_DIR$/vendor/mkraemer/react-pcntl" />
           <root url="file://$MODULE_DIR$/vendor/mongodb/mongodb" />
           <root url="file://$MODULE_DIR$/vendor/monolog/monolog" />

@@ -29,6 +29,7 @@ use MongoDB\Client;
 use Psr\Http\Message\UriInterface;
 use Slim\App;
 use Slim\Views\Twig;
+use Thessia\Lib\Render;
 
 /**
  * Class Controller
@@ -58,6 +59,12 @@ abstract class Controller
      * @var Client
      */
     private $mongo;
+
+    /**
+     * @var Render
+     */
+    private $render;
+
     /**
      * @param App $app
      */
@@ -66,6 +73,7 @@ abstract class Controller
         $this->app = $app;
         $this->container = $app->getContainer();
         $this->mongo = $this->container->get("mongo");
+        $this->render = $this->container->get("render");
     }
 
     /**
@@ -187,7 +195,7 @@ abstract class Controller
      */
     protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8")
     {
-        return $this->container->get("render")->render($file, $args, $status, $contentType, $this->response);
+        return $this->render->render($file, $args, $status, $contentType);
     }
 
     /**
@@ -195,11 +203,12 @@ abstract class Controller
      *
      * @param array $args
      * @param int $status
+     * @param String $contentType
      * @return mixed
      */
-    protected function json($args = array(), int $status = 200)
+    protected function json($args = array(), int $status = 200, String $contentType = "application/json; charset=UTF-8")
     {
-        return $this->container->get("render")->toJson($args, $status, $this->response);
+        return $this->render->render("", $args, $status, $contentType);
     }
 
     /**
@@ -207,11 +216,12 @@ abstract class Controller
      *
      * @param array $args
      * @param int $status
+     * @param String $contentType
      * @return mixed
      */
-    protected function xml($args = array(), int $status = 200)
+    protected function xml($args = array(), int $status = 200, String $contentType = "application/xml; charset=UTF-8")
     {
-        return $this->container->get("render")->toXML($args, $status, $this->response);
+        return $this->render->render("", $args, $status, $contentType);
     }
 
     /**

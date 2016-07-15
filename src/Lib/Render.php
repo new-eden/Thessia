@@ -25,8 +25,11 @@
 
 namespace Thessia\Lib;
 
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Http\Body;
 use Slim\Views\Twig;
+use XMLParser\XMLParser;
 
 /**
  * Class Render
@@ -38,14 +41,20 @@ class Render
      * @var Twig
      */
     private $view;
+    private $response;
+    private $request;
 
     /**
      * Render constructor.
      * @param Twig $twig
+     * @param ResponseInterface $response
+     * @param RequestInterface $request
      */
-    public function __construct(Twig $twig)
+    public function __construct(Twig $twig, ResponseInterface $response, RequestInterface $request)
     {
         $this->view = $twig;
+        $this->response = $response;
+        $this->request = $request;
     }
 
     /**
@@ -53,29 +62,23 @@ class Render
      * @param array $dataArray
      * @param int|null $status
      * @param String|null $contentType
-     * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function render(
-        String $templateFile,
-        $dataArray = array(),
-        int $status = null,
-        String $contentType = null,
-        ResponseInterface $response
-    ) {
-        $contentType = $contentType ?? $response->getHeader("Content-Type");
+    public function render(String $templateFile, $dataArray = array(), int $status = null, String $contentType = null)
+    {
+        $contentType = $contentType ?? $this->response->getHeader("Content-Type");
 
         // Run the scrapeCheck
         $this->scrapeChecker();
 
-        if ($contentType == "application/json") {
-            return $this->toJson($dataArray, $status, $response);
+        if (stristr($contentType, "application/json")) {
+            return $this->toJson($dataArray, $status, $this->response);
         }
-        if ($contentType == "application/xml") {
-            return $this->toXML($dataArray, $status, $response);
+        if (stristr($contentType, "application/xml")) {
+            return $this->toXML($dataArray, $status, $this->response);
         }
 
-        return $this->toTwig($templateFile, $dataArray, $status, $response);
+        return $this->toTwig($templateFile, $dataArray, $status, $this->response);
     }
 
     /**
@@ -92,18 +95,18 @@ class Render
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function toJson($dataArray = array(), int $status = 200, ResponseInterface $response)
+    private function toJson($dataArray = array(), int $status = 200, ResponseInterface $response)
     {
-
-        $resp = $response->withStatus($status)
-            ->withHeader("Content-Type", "application/json; charset=utf-8")
-            ->withAddedHeader("Access-Control-Allow-Origin", "*")
-            ->withAddedHeader("Access-Control-Allow-Methods", "*");
-
-        $body = $resp->getBody();
+        /** @var Body $body */
+        $body = $response->getBody();
         $body->write(json_encode($dataArray));
 
-        return $resp->withBody($body);
+        return $response
+            ->withStatus($status)
+            ->withHeader('Content-type', 'application/json; charset=utf-8')
+            ->withAddedHeader("Access-Control-Allow-Origin", "*")
+            ->withAddedHeader("Access-Control-Allow-Methods", "*")
+            ->withBody($body);
     }
 
     /**
@@ -112,17 +115,21 @@ class Render
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function toXML($dataArray = array(), int $status = 200, ResponseInterface $response)
+    private function toXML($dataArray = array(), int $status = 200, ResponseInterface $response)
     {
-        $resp = $response->withStatus($status)
-            ->withHeader("Content-Type", "application/xml; charset=utf-8")
-            ->withAddedHeader("Access-Control-Allow-Origin", "*")
-            ->withAddedHeader("Access-Control-Allow-Methods", "*");
+        /** @var XMLParser $xml */
+        $xml = XMLParser::encode($dataArray, "Thessia");
 
+        /** @var Body $body */
         $body = $response->getBody();
-        $body->write(json_encode($dataArray));
+        $body->write($xml->asXML());
 
-        return $resp->withBody($body);
+        return $response
+            ->withStatus($status)
+            ->withHeader('Content-type', 'application/xml; charset=utf-8')
+            ->withAddedHeader("Access-Control-Allow-Origin", "*")
+            ->withAddedHeader("Access-Control-Allow-Methods", "*")
+            ->withBody($body);
     }
 
 
@@ -133,22 +140,21 @@ class Render
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function toTwig(String $templateFile, $dataArray = array(), int $status = 200, ResponseInterface $response)
+    private function toTwig(String $templateFile, $dataArray = array(), int $status = 200, ResponseInterface $response)
     {
         // Get all the character information on the guy who is logged in
-
-        // Create an array of extra data to pass along
         $extraData = array();
 
         // Merge the arrays
         $dataArray = array_merge($extraData, $dataArray);
 
-        $resp = $response->withStatus($status)
-            ->withHeader("Content-Type", "text/html; charset=utf-8");
-
+        /** @var Body $body */
         $body = $response->getBody();
         $body->write($this->view->fetch($templateFile, $dataArray));
 
-        return $resp->withBody($body);
+        return $response
+            ->withStatus($status)
+            ->withHeader("Content-Type", "text/html; charset=utf-8")
+            ->withBody($body);
     }
 }

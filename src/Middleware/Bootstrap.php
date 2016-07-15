@@ -25,15 +25,16 @@
 
 namespace Thessia\Middleware;
 
+use League\Container\Container;
 use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Thessia\Lib\Render;
-use Thessia\Middleware\Whoops;
+use Jenssegers\Lean\SlimServiceProvider;
 
 /**
- * Class RenaBootstrap
- * @package Rena\Middleware
+ * Class Bootstrap
+ * @package Thessia\Middleware
  */
 class Bootstrap
 {
@@ -47,19 +48,23 @@ class Bootstrap
      */
     public function __construct()
     {
+        /** @var Container $container */
         require_once(__DIR__ . "/../../init.php");
+
+        $container->addServiceProvider(new SlimServiceProvider);
 
         // Add the twig view
         $container->share("view", Twig::class)->withArguments(array(
             __DIR__ . "/../../templates",
             $container->get("config")->getAll("settings")["view"]
         ));
-        $container->get("view")->addExtension(new TwigExtension($container->get("router"),
-            $container->get("request")->getUri()));
+
+        // Add extensions to twig
+        $container->get("view")->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
         $container->get("view")->addExtension(new \Twig_Extension_Debug());
 
         // Add the Renderer
-        $container->share("render", Render::class)->withArgument("view");
+        $container->share("render", Render::class)->withArgument("view")->withArgument("response")->withArgument("request");
 
         $app = new App($container);
 

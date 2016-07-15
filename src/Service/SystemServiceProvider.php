@@ -32,10 +32,13 @@ use Monolog\Logger;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Views\Twig;
+use Slim\Views\TwigExtension;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
 use Thessia\Lib\cURL;
 use Thessia\Lib\Db;
+use Thessia\Lib\Render;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
 use Thessia\Model\CCP\blueprints;
@@ -115,7 +118,6 @@ class SystemServiceProvider extends AbstractServiceProvider
         "corporations",
         "characters",
         "participants",
-        // Slim3
         'settings',
         'environment',
         'request',
@@ -145,50 +147,6 @@ class SystemServiceProvider extends AbstractServiceProvider
     public function register()
     {
         $container = $this->getContainer();
-
-        // Slim3
-        $this->getContainer()->share('settings', function () {
-            return new Collection($this->defaultSettings);
-        });
-
-        $this->getContainer()->share('environment', function () {
-            return new Environment($_SERVER);
-        });
-
-        $this->getContainer()->share('request', function () {
-            return Request::createFromEnvironment($this->getContainer()->get('environment'));
-        });
-
-        $this->getContainer()->share('response', function () {
-            $headers = new Headers(array("Content-Type" => "text/html; charset=utf-8"));
-            $response = new Response(200, $headers);
-
-            return $response->withProtocolVersion($this->getContainer()->get('settings')['httpVersion']);
-        });
-
-        $this->getContainer()->share('router', function () {
-            return new Router;
-        });
-
-        $this->getContainer()->share('foundHandler', function () {
-            return new RequestResponse;
-        });
-
-        $this->getContainer()->share('errorHandler', function () {
-            return new Error($this->getContainer()->get('settings')['displayErrorDetails']);
-        });
-
-        $this->getContainer()->share('notFoundHandler', function () {
-            return new NotFound;
-        });
-
-        $this->getContainer()->share('notAllowedHandler', function () {
-            return new NotAllowed;
-        });
-
-        $this->getContainer()->share('callableResolver', function () {
-            return new CallableResolver($this->getContainer());
-        });
 
         // Add the config
         $container->share("config", Config::class)->withArgument("configFile");

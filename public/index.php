@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+use League\Container\Container;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Thessia\Lib\Render;
@@ -39,19 +40,23 @@ if (PHP_SAPI == "cli-server") {
 }
 
 // Load the initialization file
+/** @var Container $container */
 include(__DIR__ . "/../init.php");
+
+$container->addServiceProvider(new Jenssegers\Lean\SlimServiceProvider);
 
 // Add the twig view
 $container->share("view", Twig::class)->withArguments(array(
     __DIR__ . "/../templates",
     $container->get("config")->getAll("settings")["view"]
 ));
-$container->get("view")->addExtension(new TwigExtension($container->get("router"),
-    $container->get("request")->getUri()));
+
+// Add extensions to twig
+$container->get("view")->addExtension(new TwigExtension($container->get("router"), $container->get("request")->getUri()));
 $container->get("view")->addExtension(new \Twig_Extension_Debug());
 
 // Add the Renderer
-$container->add("render", Render::class)->withArgument("view");
+$container->share("render", Render::class)->withArgument("view")->withArgument("response")->withArgument("request");
 
 // Load slim
 $app = new \Slim\App($container);

@@ -48,6 +48,6 @@ class IndexController extends Controller
         //$data2 = $typeIDs->getAllByName("Raven")->toArray();
         //var_dump($data1);
         //var_dump($data2);
-        $this->render("index.html", array());
+        return $this->render("index.html", array());
     }
 }

@@ -45,18 +45,18 @@ class CharacterAPIController extends Controller
     public function characterCount() {
         $count = $this->collection->count();
 
-        $this->json(array("characterCount" => $count));
+        return $this->json(array("characterCount" => $count));
     }
 
     public function characterInformation(int $characterID) {
         $info = $this->collection->find(array("characterID" => $characterID))->toArray();
 
-        $this->json($info);
+        return $this->json($info);
     }
 
     public function findCharacter(string $searchTerm) {
         $find = $this->collection->find(array("\$text" => array("\$search" => $searchTerm)), array("limit" => 50))->toArray();
-        $this->json($find);
+        return $this->json($find);
     }
 
     public function topCharacters(int $characterID, int $limit = 10) {
@@ -68,7 +68,7 @@ class CharacterAPIController extends Controller
             array('$limit' => $limit)
         ))->toArray();
 
-        $this->json($data);
+        return $this->json($data);
     }
 
     public function topCorporations(int $characterID, int $limit = 10) {
@@ -80,7 +80,7 @@ class CharacterAPIController extends Controller
             array('$limit' => $limit)
         ))->toArray();
 
-        $this->json($data);
+        return $this->json($data);
     }
 
     public function topAlliances(int $characterID, int $limit = 10) {
@@ -92,7 +92,7 @@ class CharacterAPIController extends Controller
             array('$limit' => $limit)
         ))->toArray();
 
-        $this->json($data);
+        return $this->json($data);
     }
 
     public function topShips(int $characterID, int $limit = 10) {
@@ -104,7 +104,7 @@ class CharacterAPIController extends Controller
             array('$limit' => $limit)
         ))->toArray();
 
-        $this->json($data);
+        return $this->json($data);
     }
 
     public function topSystems(int $characterID, int $limit = 10) {
@@ -116,7 +116,7 @@ class CharacterAPIController extends Controller
             array('$limit' => $limit)
         ))->toArray();
 
-        $this->json($data);
+        return $this->json($data);
     }
 
     public function topRegions(int $characterID, int $limit = 10) {
@@ -128,6 +128,6 @@ class CharacterAPIController extends Controller
             array('$limit' => $limit)
         ))->toArray();
 
-        $this->json($data);
+        return $this->json($data);
     }
 }
