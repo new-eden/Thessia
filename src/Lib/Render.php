@@ -28,6 +28,7 @@ namespace Thessia\Lib;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Body;
+use Slim\Http\Stream;
 use Slim\Views\Twig;
 use XMLParser\XMLParser;
 
@@ -97,16 +98,17 @@ class Render
      */
     private function toJson($dataArray = array(), int $status = 200, ResponseInterface $response)
     {
-        /** @var Body $body */
-        $body = $response->getBody();
-        $body->write(json_encode($dataArray));
-
-        return $response
-            ->withStatus($status)
+        /** @var ResponseInterface $resp */
+        $resp = $response->withStatus($status)
             ->withHeader('Content-type', 'application/json; charset=utf-8')
             ->withAddedHeader("Access-Control-Allow-Origin", "*")
-            ->withAddedHeader("Access-Control-Allow-Methods", "*")
-            ->withBody($body);
+            ->withAddedHeader("Access-Control-Allow-Methods", "*");
+
+        /** @var Body $body */
+        $body = new Body(fopen('php://temp', 'r+'));
+        $body->write(json_encode($dataArray));
+
+        return $resp->withBody($body);
     }
 
     /**
@@ -117,19 +119,20 @@ class Render
      */
     private function toXML($dataArray = array(), int $status = 200, ResponseInterface $response)
     {
+        /** @var ResponseInterface $resp */
+        $resp = $response->withStatus($status)
+            ->withHeader('Content-type', 'application/xml; charset=utf-8')
+            ->withAddedHeader("Access-Control-Allow-Origin", "*")
+            ->withAddedHeader("Access-Control-Allow-Methods", "*");
+
         /** @var XMLParser $xml */
         $xml = XMLParser::encode($dataArray, "Thessia");
 
         /** @var Body $body */
-        $body = $response->getBody();
+        $body = new Body(fopen('php://temp', 'r+'));
         $body->write($xml->asXML());
 
-        return $response
-            ->withStatus($status)
-            ->withHeader('Content-type', 'application/xml; charset=utf-8')
-            ->withAddedHeader("Access-Control-Allow-Origin", "*")
-            ->withAddedHeader("Access-Control-Allow-Methods", "*")
-            ->withBody($body);
+        return $resp->withBody($body);
     }
 
 
@@ -148,13 +151,15 @@ class Render
         // Merge the arrays
         $dataArray = array_merge($extraData, $dataArray);
 
+        /** @var ResponseInterface $resp */
+        $resp = $response->withStatus($status)
+            ->withHeader("Content-Type", "text/html; charset=utf-8");
+
         /** @var Body $body */
-        $body = $response->getBody();
+        $body = new Body(fopen('php://temp', 'r+'));
         $body->write($this->view->fetch($templateFile, $dataArray));
 
-        return $response
-            ->withStatus($status)
-            ->withHeader("Content-Type", "text/html; charset=utf-8")
-            ->withBody($body);
+        return $resp->withBody($body);
+
     }
 }
