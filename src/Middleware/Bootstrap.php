@@ -69,10 +69,10 @@ class Bootstrap
         $app = new App($container);
 
         // Setup the session handler
-        $session = $container->get("session");
-        session_set_save_handler($session, true);
-        session_cache_limiter(false);
-        session_start();
+        //$session = $container->get("session");
+        //session_set_save_handler($session, true);
+        //session_cache_limiter(false);
+        //session_start();
 
         // Setup whoops
         $app->add(new Whoops());
