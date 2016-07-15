@@ -24,43 +24,23 @@
  */
 
 $app->group("/api", function () use ($app) {
-    $controller = new \Thessia\Controller\APIController($app);
-    $app->group("/character", function() use ($app, $controller) {
-        $app->get("/count/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/information/:characterID/", function(int $characterID) use ($app, $controller) {
-
-        });
-
-        $app->get("/find/:searchTerm/", function($searchTerm) use ($app, $controller) {
-
-        });
+    $app->group("/character", function() use ($app) {
+        $controller = new \Thessia\Controller\API\CharacterAPIController($app);
+        $app->get("/count/", $controller("characterCount"));
+        $app->get("/information/{characterID:[0-9]+}/", $controller("characterInformation"));
+        $app->get("/find/{searchTerm:[A-Za-z0-9]+}/", $controller("findCharacter"));
 
         $app->group("/top", function() use ($app, $controller) {
-            $app->get("/characters/:characterID(/:limit)/", function(int $characterID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/corporation/:corporationID(/:limit)/", function(int $corporationID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/alliances/:allianceID(/:limit)/", function(int $allianceID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/ships/:shipTypeID(/:limit)/", function(int $shipTypeID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/systems/:solarSystemID(/:limit)/", function(int $solarSystemID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/regions/:regionID(/:limit)/", function(int $regionID, int $limit = 10) use ($app, $controller) {
-
-            });
+            $app->get("/characters/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCharacters"));
+            $app->get("/corporations/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCorporations"));
+            $app->get("/alliances/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topAlliances"));
+            $app->get("/ships/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topShips"));
+            $app->get("/systems/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topSystems"));
+            $app->get("/regions/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topRegions"));
         });
     });
-
-    $app->group("/corporation", function() use ($app, $controller) {
+    /*
+    $app->group("/corporation", function() use ($app) {
         $app->get("/count/", function() use ($app, $controller) {
 
         });
@@ -99,7 +79,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/alliance", function() use ($app, $controller) {
+    $app->group("/alliance", function() use ($app) {
         $app->get("/count/", function() use ($app, $controller) {
 
         });
@@ -138,7 +118,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/faction", function() use ($app, $controller) {
+    $app->group("/faction", function() use ($app) {
         $app->get("/count/", function() use ($app, $controller) {
 
         });
@@ -177,7 +157,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/item", function() use ($app, $controller) {
+    $app->group("/item", function() use ($app) {
         $app->get("/information/:itemID/", function(int $itemID) {
 
         });
@@ -208,7 +188,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/system", function() use ($app, $controller) {
+    $app->group("/system", function() use ($app) {
         $app->get("/information/:solarSystemID/", function(int $solarSystemID) {
 
         });
@@ -239,7 +219,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/region", function() use ($app, $controller) {
+    $app->group("/region", function() use ($app) {
         $app->get("/information/:regionID/", function(int $regionID) {
 
         });
@@ -270,7 +250,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/constellation", function() use ($app, $controller) {
+    $app->group("/constellation", function() use ($app) {
         $app->get("/information/:constellationID/", function(int $constellationID) {
 
         });
@@ -301,7 +281,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/celestial", function() use ($app, $controller) {
+    $app->group("/celestial", function() use ($app) {
         $app->get("/information/:celestialID/", function(int $celestialID) {
 
         });
@@ -332,7 +312,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/kill", function() use ($app, $controller) {
+    $app->group("/kill", function() use ($app) {
         $app->post("/add/", function() use ($app, $controller) {
 
         });
@@ -346,7 +326,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/killlist", function() use ($app, $controller) {
+    $app->group("/killlist", function() use ($app) {
         $app->get("/latest/", function() use ($app, $controller) {
 
         });
@@ -433,7 +413,7 @@ $app->group("/api", function () use ($app) {
 
     });
 
-    $app->group("/kills", function() use ($app, $controller) {
+    $app->group("/kills", function() use ($app) {
         $app->get("/solarSystem/:solarSystemID/(:extraParameters+)", function (int $solarSystemID, $parameters = array()) use ($app, $controller) {
 
         });
@@ -483,7 +463,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/losses", function() use ($app, $controller) {
+    $app->group("/losses", function() use ($app) {
         $app->get("/solarSystem/:solarSystemID/(:extraParameters+)", function (int $solarSystemID, $parameters = array()) use ($app, $controller) {
 
         });
@@ -533,7 +513,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/stats", function() use ($app, $controller) {
+    $app->group("/stats", function() use ($app) {
         $app->get("/top10Characters/", function () use ($app, $controller) {
 
         });
@@ -583,14 +563,14 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/search", function() use ($app, $controller) {
+    $app->group("/search", function() use ($app) {
         $app->get("(/:searchType)/:searchTerm/", function ($searchType = null, $searchTerm = null) use ($app, $controller) {
             if (!$searchType)
                 $searchType = array("faction", "alliance", "corporation", "character", "item", "system", "region");
         });
     });
 
-    $app->group("/tools", function() use ($app, $controller) {
+    $app->group("/tools", function() use ($app) {
         $app->post("/calculateCrestHash/", function () use ($app) {
 
         });
@@ -600,7 +580,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/wars", function() use ($app, $controller) {
+    $app->group("/wars", function() use ($app) {
         $app->get("/count/", function () use ($app) {
 
         });
@@ -614,7 +594,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/market", function() use ($app, $controller) {
+    $app->group("/market", function() use ($app) {
         $app->get("/price/:typeID/", function ($typeID) use ($app) {
 
         });
@@ -624,7 +604,7 @@ $app->group("/api", function () use ($app) {
         });
     });
 
-    $app->group("/authed", function() use ($app, $controller) {
+    $app->group("/authed", function() use ($app) {
 
-    });
+    });*/
 });

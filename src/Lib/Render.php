@@ -94,12 +94,13 @@ class Render
      */
     public function toJson($dataArray = array(), int $status = 200, ResponseInterface $response)
     {
+
         $resp = $response->withStatus($status)
             ->withHeader("Content-Type", "application/json; charset=utf-8")
             ->withAddedHeader("Access-Control-Allow-Origin", "*")
             ->withAddedHeader("Access-Control-Allow-Methods", "*");
 
-        $body = $response->getBody();
+        $body = $resp->getBody();
         $body->write(json_encode($dataArray));
 
         return $resp->withBody($body);

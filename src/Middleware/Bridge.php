@@ -47,10 +47,10 @@ class Bridge implements BridgeInterface
 
     /**
      * @param string $appBootstrap
-     * @param $appenv
+     * @param $appEnvironment
      * @param bool $debug
      */
-    public function bootstrap($appBootstrap, $appenv, $debug)
+    public function bootstrap($appBootstrap, $appEnvironment, $debug)
     {
         $this->middleware = new $appBootstrap;
     }
@@ -73,14 +73,14 @@ class Bridge implements BridgeInterface
             return;
         }
 
-        $renaReq = $this->mapRequest($request);
+        $req = $this->mapRequest($request);
 
         $middleware = $this->middleware;
 
         $initialResponse = new DiactorosResponse;
-        $renaResp = $middleware($renaReq, $initialResponse);
+        $resp = $middleware($req, $initialResponse);
 
-        $this->mapResponse($renaResp, $response);
+        $this->mapResponse($resp, $response);
     }
 
     /**

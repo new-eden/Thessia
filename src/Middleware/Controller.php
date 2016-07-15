@@ -25,8 +25,10 @@
 
 namespace Thessia\Middleware;
 
+use MongoDB\Client;
 use Psr\Http\Message\UriInterface;
 use Slim\App;
+use Slim\Views\Twig;
 
 /**
  * Class Controller
@@ -53,12 +55,17 @@ abstract class Controller
     private $container;
 
     /**
+     * @var Client
+     */
+    private $mongo;
+    /**
      * @param App $app
      */
     public function __construct(App $app)
     {
         $this->app = $app;
         $this->container = $app->getContainer();
+        $this->mongo = $this->container->get("mongo");
     }
 
     /**
@@ -152,8 +159,8 @@ abstract class Controller
      *
      * @param  string $actionName The redirect destination.
      * @param array $data
-     * @return RenaController
      * @internal param string $status The redirect HTTP status code.
+     * @return mixed
      */
     public function forward($actionName, $data = array())
     {
@@ -178,12 +185,8 @@ abstract class Controller
      * @param string $contentType
      * @return mixed
      */
-    protected function render(
-        String $file,
-        $args = array(),
-        int $status = 200,
-        String $contentType = "text/html; charset=UTF-8"
-    ) {
+    protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8")
+    {
         return $this->container->get("render")->render($file, $args, $status, $contentType, $this->response);
     }
 

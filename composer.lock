@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8a17f58f678076f4ad1318af5a76eb7c",
-    "content-hash": "23985d45ab747960b3976e7fa865ef4d",
+    "hash": "af6f5a4269cd29d0c8de8784728479be",
+    "content-hash": "3871736c4684aec6666f573e4d918d41",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -634,55 +634,6 @@
             "time": "2016-07-08 22:34:56"
         },
         {
-            "name": "jenssegers/lean",
-            "version": "v0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jenssegers/lean.git",
-                "reference": "caf2c698d07427b5688fc82ea8a9c6f4e80494bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/lean/zipball/caf2c698d07427b5688fc82ea8a9c6f4e80494bf",
-                "reference": "caf2c698d07427b5688fc82ea8a9c6f4e80494bf",
-                "shasum": ""
-            },
-            "require": {
-                "league/container": "^2.0.0",
-                "php": ">=5.5.0",
-                "slim/slim": "^3.0.0@RC"
-            },
-            "require-dev": {
-                "mockery/mockery": "^0.9.0",
-                "phpunit/phpunit": "^4.0|^5.0",
-                "satooshi/php-coveralls": "^0.6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Jenssegers\\Lean\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jens Segers",
-                    "homepage": "https://jenssegers.com"
-                }
-            ],
-            "description": "Use the league/container with auto-wiring support as the core container in Slim 3",
-            "homepage": "https://github.com/jenssegers/lean",
-            "keywords": [
-                "container",
-                "league",
-                "slim"
-            ],
-            "time": "2015-11-22 10:52:03"
-        },
-        {
             "name": "jtrumbull/xml-parser",
             "version": "v1.0.2",
             "source": {
@@ -714,16 +665,16 @@
         },
         {
             "name": "league/container",
-            "version": "dev-master",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/container.git",
-                "reference": "93b3f4f72c5871121e4702b7da265e1147ddc8e6"
+                "reference": "c0e7d947b690891f700dc4967ead7bdb3d6708c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/container/zipball/93b3f4f72c5871121e4702b7da265e1147ddc8e6",
-                "reference": "93b3f4f72c5871121e4702b7da265e1147ddc8e6",
+                "url": "https://api.github.com/repos/thephpleague/container/zipball/c0e7d947b690891f700dc4967ead7bdb3d6708c1",
+                "reference": "c0e7d947b690891f700dc4967ead7bdb3d6708c1",
                 "shasum": ""
             },
             "require": {
@@ -774,7 +725,7 @@
                 "provider",
                 "service"
             ],
-            "time": "2016-04-14 09:45:18"
+            "time": "2016-03-17 11:07:59"
         },
         {
             "name": "mkraemer/react-pcntl",
@@ -1517,7 +1468,7 @@
         },
         {
             "name": "react/dns",
-            "version": "dev-master",
+            "version": "v0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/dns.git",
@@ -1858,16 +1809,16 @@
         },
         {
             "name": "robmorgan/phinx",
-            "version": "v0.5.5.1",
+            "version": "v0.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robmorgan/phinx.git",
-                "reference": "809d403eaee5583efe48b0f24d3ff8f1d893e1a0"
+                "reference": "da9950a5e5b9314ebf72ddc6317ed587ce9ba8dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/809d403eaee5583efe48b0f24d3ff8f1d893e1a0",
-                "reference": "809d403eaee5583efe48b0f24d3ff8f1d893e1a0",
+                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/da9950a5e5b9314ebf72ddc6317ed587ce9ba8dc",
+                "reference": "da9950a5e5b9314ebf72ddc6317ed587ce9ba8dc",
                 "shasum": ""
             },
             "require": {
@@ -1915,7 +1866,7 @@
                 "migrations",
                 "phinx"
             ],
-            "time": "2016-06-17 15:51:03"
+            "time": "2016-06-17 15:29:02"
         },
         {
             "name": "slim/flash",

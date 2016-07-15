@@ -29,6 +29,7 @@ use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Thessia\Lib\Render;
+use Thessia\Middleware\Whoops;
 
 /**
  * Class RenaBootstrap
@@ -48,9 +49,6 @@ class Bootstrap
     {
         require_once(__DIR__ . "/../../init.php");
 
-        // Load the slim dependency
-        $container->addServiceProvider(new \Jenssegers\Lean\SlimServiceProvider);
-
         // Add the twig view
         $container->share("view", Twig::class)->withArguments(array(
             __DIR__ . "/../../templates",
@@ -64,6 +62,16 @@ class Bootstrap
         $container->share("render", Render::class)->withArgument("view");
 
         $app = new App($container);
+
+        // Setup the session handler
+        $session = $container->get("session");
+        session_set_save_handler($session, true);
+        session_cache_limiter(false);
+        session_start();
+
+        // Setup whoops
+        $app->add(new Whoops());
+
         require_once(__DIR__ . "/../../config/routes.php");
 
         $this->app = $app;

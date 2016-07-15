@@ -29,6 +29,9 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Slim\Http\Headers;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
 use Thessia\Lib\cURL;
@@ -58,6 +61,14 @@ use Thessia\Model\EVE\Killmails;
 use Thessia\Model\EVE\Parser;
 use Thessia\Model\EVE\Participants;
 use Thessia\Model\EVE\Prices;
+use Slim\CallableResolver;
+use Slim\Collection;
+use Slim\Handlers\Error;
+use Slim\Handlers\NotAllowed;
+use Slim\Handlers\NotFound;
+use Slim\Handlers\Strategies\RequestResponse;
+use Slim\Http\Environment;
+use Slim\Router;
 
 class SystemServiceProvider extends AbstractServiceProvider
 {
@@ -104,6 +115,25 @@ class SystemServiceProvider extends AbstractServiceProvider
         "corporations",
         "characters",
         "participants",
+        // Slim3
+        'settings',
+        'environment',
+        'request',
+        'response',
+        'router',
+        'foundHandler',
+        'errorHandler',
+        'notFoundHandler',
+        'notAllowedHandler',
+        'callableResolver',
+    ];
+
+    private $defaultSettings = [
+        'httpVersion'                       => '1.1',
+        'responseChunkSize'                 => 4096,
+        'outputBuffering'                   => 'append',
+        'determineRouteBeforeAppMiddleware' => false,
+        'displayErrorDetails'               => false,
     ];
 
     /**
@@ -115,6 +145,50 @@ class SystemServiceProvider extends AbstractServiceProvider
     public function register()
     {
         $container = $this->getContainer();
+
+        // Slim3
+        $this->getContainer()->share('settings', function () {
+            return new Collection($this->defaultSettings);
+        });
+
+        $this->getContainer()->share('environment', function () {
+            return new Environment($_SERVER);
+        });
+
+        $this->getContainer()->share('request', function () {
+            return Request::createFromEnvironment($this->getContainer()->get('environment'));
+        });
+
+        $this->getContainer()->share('response', function () {
+            $headers = new Headers(array("Content-Type" => "text/html; charset=utf-8"));
+            $response = new Response(200, $headers);
+
+            return $response->withProtocolVersion($this->getContainer()->get('settings')['httpVersion']);
+        });
+
+        $this->getContainer()->share('router', function () {
+            return new Router;
+        });
+
+        $this->getContainer()->share('foundHandler', function () {
+            return new RequestResponse;
+        });
+
+        $this->getContainer()->share('errorHandler', function () {
+            return new Error($this->getContainer()->get('settings')['displayErrorDetails']);
+        });
+
+        $this->getContainer()->share('notFoundHandler', function () {
+            return new NotFound;
+        });
+
+        $this->getContainer()->share('notAllowedHandler', function () {
+            return new NotAllowed;
+        });
+
+        $this->getContainer()->share('callableResolver', function () {
+            return new CallableResolver($this->getContainer());
+        });
 
         // Add the config
         $container->share("config", Config::class)->withArgument("configFile");
@@ -198,6 +272,5 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("parser", Parser::class)
             ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
             ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");
-
     }
 }
