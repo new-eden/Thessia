@@ -39,84 +39,41 @@ $app->group("/api", function () use ($app) {
             $app->get("/regions/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topRegions"));
         });
     });
-    /*
+
     $app->group("/corporation", function() use ($app) {
-        $app->get("/count/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/information/:corporationID/", function(int $corporationID) use ($app, $controller) {
-
-        });
-
-        $app->get("/find/:searchTerm/", function($searchTerm) use ($app, $controller) {
-
-        });
-
-        $app->get("/members/:corporationID/", function($corporationID) use ($app, $controller) {
-
-        });
+        $controller = new \Thessia\Controller\API\CorporationAPIController($app);
+        $app->get("/count/", $controller("corporationCount"));
+        $app->get("/information/{corporationID:[0-9]+}/", $controller("corporationInformation"));
+        $app->get("/find/{searchTerm:[^\\/]+}/", $controller("findCorporation"));
+        $app->get("/members/{corporationID:[0-9]+}/", $controller("corporationMembers"));
 
         $app->group("/top", function() use ($app, $controller) {
-            $app->get("/characters/:characterID(/:limit)/", function(int $characterID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/corporation/:corporationID(/:limit)/", function(int $corporationID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/alliances/:allianceID(/:limit)/", function(int $allianceID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/ships/:shipTypeID(/:limit)/", function(int $shipTypeID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/systems/:solarSystemID(/:limit)/", function(int $solarSystemID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/regions/:regionID(/:limit)/", function(int $regionID, int $limit = 10) use ($app, $controller) {
-
-            });
+            $app->get("/characters/{corporationID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCharacters"));
+            $app->get("/corporations/{corporationID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCorporations"));
+            $app->get("/alliances/{corporationID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topAlliances"));
+            $app->get("/ships/{corporationID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topShips"));
+            $app->get("/systems/{corporationID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topSystems"));
+            $app->get("/regions/{corporationID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topRegions"));
         });
     });
 
     $app->group("/alliance", function() use ($app) {
-        $app->get("/count/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/information/:allianceID/", function(int $allianceID) use ($app, $controller) {
-
-        });
-
-        $app->get("/find/:searchTerm/", function($searchTerm) use ($app, $controller) {
-
-        });
-
-        $app->get("/members/:allianceID/", function($allianceID) use ($app, $controller) {
-
-        });
+        $controller = new \Thessia\Controller\API\AllianceAPIController($app);
+        $app->get("/count/", $controller("allianceCount"));
+        $app->get("/information/{allianceID:[0-9]+}/", $controller("allianceInformation"));
+        $app->get("/find/{searchTerm:[^\\/]+}/", $controller("findAlliance"));
+        $app->get("/members/{allianceID:[0-9]+}/", $controller("allianceMembers"));
 
         $app->group("/top", function() use ($app, $controller) {
-            $app->get("/characters/:characterID(/:limit)/", function(int $characterID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/corporation/:corporationID(/:limit)/", function(int $corporationID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/alliances/:allianceID(/:limit)/", function(int $allianceID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/ships/:shipTypeID(/:limit)/", function(int $shipTypeID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/systems/:solarSystemID(/:limit)/", function(int $solarSystemID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/regions/:regionID(/:limit)/", function(int $regionID, int $limit = 10) use ($app, $controller) {
-
-            });
+            $app->get("/characters/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCharacters"));
+            $app->get("/corporations/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topAlliances"));
+            $app->get("/alliances/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topAlliances"));
+            $app->get("/ships/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topShips"));
+            $app->get("/systems/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topSystems"));
+            $app->get("/regions/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topRegions"));
         });
     });
+    /*
 
     $app->group("/faction", function() use ($app) {
         $app->get("/count/", function() use ($app, $controller) {
