@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
-// Load all the routes
-foreach(glob(__DIR__ . "/routes/*.php") as $route)
-    require_once($route);
+$app->group("", function () use ($app) {
+    $controller = new \Thessia\Controller\IndexController($app);
+    $app->get("/", $controller("index"));
+});

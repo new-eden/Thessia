@@ -67,6 +67,7 @@ class importOldKillmails extends Command
             $innerCnt = 0;
             $killmails = $db->query("SELECT killID, kill_json, hash FROM zkillboard.zz_killmails WHERE killID > 0 ORDER BY killID ASC LIMIT :offset,:limit",
                 array(":offset" => $offset, ":limit" => $limit));
+
             foreach ($killmails as $killmail) {
                 if ($innerCnt == 1000) {
                     $innerCnt = 0;

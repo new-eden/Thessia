@@ -23,6 +23,13 @@
  * SOFTWARE.
  */
 
-// Load all the routes
-foreach(glob(__DIR__ . "/routes/*.php") as $route)
-    require_once($route);
+namespace Thessia\Controller;
+
+use Thessia\Middleware\Controller;
+use Thessia\Model\CCP\typeIDs;
+use Thessia\Model\EVE\Participants;
+
+class APIController extends Controller
+{
+
+}

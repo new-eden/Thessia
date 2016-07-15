@@ -456,7 +456,7 @@ class Db
         if (!empty($this->cache->get($key))) {
             return null;
         }
-        
+
         // Start up the timer
         $this->timers[$name] = new Timer();
 

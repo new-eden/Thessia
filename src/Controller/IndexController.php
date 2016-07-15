@@ -39,10 +39,10 @@ class IndexController extends Controller
         /** @var Participants $participants */
         $participants = $container->get("participants");
 
-        $kills = $participants->getAllKills();
-        foreach ($kills as $kill) {
-            var_dump($kill);
-        }
+        //$kills = $participants->getAllKills();
+        //foreach ($kills as $kill) {
+        //    var_dump($kill);
+        //}
 
         //$data1 = $typeIDs->getAllByTypeID(638)->toArray();
         //$data2 = $typeIDs->getAllByName("Raven")->toArray();
