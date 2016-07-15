@@ -28,7 +28,6 @@ namespace Thessia\Lib;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Body;
-use Slim\Http\Stream;
 use Slim\Views\Twig;
 use XMLParser\XMLParser;
 
@@ -129,7 +128,7 @@ class Render
         $xml = XMLParser::encode($dataArray, "Thessia");
 
         /** @var Body $body */
-        $body = new Body(fopen('php://temp', 'r+'));
+        $body = new Body(fopen('php://memory', 'r+'));
         $body->write($xml->asXML());
 
         return $resp->withBody($body);

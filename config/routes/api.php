@@ -73,46 +73,24 @@ $app->group("/api", function () use ($app) {
             $app->get("/regions/{allianceID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topRegions"));
         });
     });
-    /*
 
-    $app->group("/faction", function() use ($app) {
-        $app->get("/count/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/information/:factionID/", function(int $factionID) use ($app, $controller) {
-
-        });
-
-        $app->get("/find/:searchTerm/", function($searchTerm) use ($app, $controller) {
-
-        });
-
-        $app->get("/members/:factionID/", function($factionID) use ($app, $controller) {
-
-        });
+    $app->group("/item", function() use ($app) {
+        $controller = new \Thessia\Controller\API\ItemAPIController($app);
+        $app->get("/count/", $controller("itemCount"));
+        $app->get("/information/{typeID:[0-9]+}/", $controller("itemInformation"));
+        $app->get("/find/{searchTerm:[^\\/]+}/", $controller("findItem"));
 
         $app->group("/top", function() use ($app, $controller) {
-            $app->get("/characters/:characterID(/:limit)/", function(int $characterID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/corporation/:corporationID(/:limit)/", function(int $corporationID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/alliances/:allianceID(/:limit)/", function(int $allianceID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/ships/:shipTypeID(/:limit)/", function(int $shipTypeID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/systems/:solarSystemID(/:limit)/", function(int $solarSystemID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/regions/:regionID(/:limit)/", function(int $regionID, int $limit = 10) use ($app, $controller) {
-
-            });
+            $app->get("/characters/{itemID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCharacters"));
+            $app->get("/corporations/{itemID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCorporations"));
+            $app->get("/alliances/{itemID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topAlliances"));
+            $app->get("/ships/{itemID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topShips"));
+            $app->get("/systems/{itemID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topSystems"));
+            $app->get("/regions/{itemID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topRegions"));
         });
     });
+
+    /*
 
     $app->group("/item", function() use ($app) {
         $app->get("/information/:itemID/", function(int $itemID) {
