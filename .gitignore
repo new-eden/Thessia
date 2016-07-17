@@ -53,3 +53,5 @@ config/config.php
 cache/*
 logs/*
 phinx.yml
+
+composer.phar
