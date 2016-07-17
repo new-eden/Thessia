@@ -62,7 +62,7 @@ class AllianceAPIController extends Controller
         return $this->json($info);
     }
 
-    public function findCorporation(string $searchTerm) {
+    public function findAlliance(string $searchTerm) {
         $find = $this->collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => 50))->toArray();
         return $this->json($find);
     }

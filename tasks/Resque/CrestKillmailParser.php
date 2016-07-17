@@ -53,7 +53,11 @@ class CrestKillmailParser
         $killmail = $parser->parseCrestKillmail($killID, $killHash);
 
         if (is_array($killmail)) {
-            $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
+            try {
+                $collection->insertOne($killmail);
+            } catch(\Exception $e) {
+                $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
+            }
         }
 
         exit();

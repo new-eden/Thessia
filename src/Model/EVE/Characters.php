@@ -93,6 +93,14 @@ class Characters extends Mongo
         return $this->collection->findOne(array("characterName" => $characterName));
     }
 
+    public function getCharacterCount() {
+        return $this->collection->count();
+    }
+
+    public function getCharacterInformation(int $characterID): array {
+        return $this->collection->find(array("characterID" => $characterID))->toArray();
+    }
+
     /**
      * @param array $documents An array of arrays. eg: array(array(data), array(data2), array(data3))
      * @param array $options Options array, used for projection, sort, etc.

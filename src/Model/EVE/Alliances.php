@@ -81,7 +81,20 @@ class Alliances extends Mongo
         return $this->collection->findOne(array("allianceName" => $allianceName));
     }
 
-    /**
+    public function getAllianceCount() {
+        return $this->collection->count();
+    }
+
+    public function getAllianceInformation(int $allianceID): array {
+        return $this->collection->find(array("allianceID" => $allianceID))->toArray();
+    }
+
+    public function getAllianceMembers(int $allianceID): array {
+        $characters = $this->mongodb->selectCollection("thessia", "characters");
+        return $characters->find(array("allianceID" => $allianceID))->toArray();
+    }
+
+        /**
      * @param array $documents An array of arrays. eg: array(array(data), array(data2), array(data3))
      * @param array $options Options array, used for projection, sort, etc.
      * @return \MongoDB\InsertManyResult|string

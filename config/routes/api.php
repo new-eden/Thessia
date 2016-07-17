@@ -92,36 +92,6 @@ $app->group("/api", function () use ($app) {
 
     /*
 
-    $app->group("/item", function() use ($app) {
-        $app->get("/information/:itemID/", function(int $itemID) {
-
-        });
-
-        $app->get("/find/:searchTerm/", function($searchTerm) use ($app, $controller) {
-
-        });
-
-        $app->group("/top", function() use ($app, $controller) {
-            $app->get("/characters/:characterID(/:limit)/", function(int $characterID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/corporation/:corporationID(/:limit)/", function(int $corporationID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/alliances/:allianceID(/:limit)/", function(int $allianceID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/ships/:shipTypeID(/:limit)/", function(int $shipTypeID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/systems/:solarSystemID(/:limit)/", function(int $solarSystemID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/regions/:regionID(/:limit)/", function(int $regionID, int $limit = 10) use ($app, $controller) {
-
-            });
-        });
-    });
 
     $app->group("/system", function() use ($app) {
         $app->get("/information/:solarSystemID/", function(int $solarSystemID) {

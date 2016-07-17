@@ -93,6 +93,18 @@ class Corporations extends Mongo
         return $this->collection->findOne(array("corporationName" => $corporationName));
     }
 
+    public function getCorporationCount() {
+        return $this->collection->count();
+    }
+
+    public function getCorporationInformation(int $corporationID): array {
+        return $this->collection->find(array("corporationID" => $corporationID))->toArray();
+    }
+
+    public function getCorporationMembers(int $corporationID): array {
+        $characters = $this->mongodb->selectCollection("thessia", "characters");
+        return $characters->find(array("corporationID" => $corporationID))->toArray();
+    }
     /**
      * @param array $documents An array of arrays. eg: array(array(data), array(data2), array(data3))
      * @param array $options Options array, used for projection, sort, etc.
