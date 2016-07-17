@@ -93,7 +93,7 @@ class importOldKillmails extends Command
                 $totalCnt++;
 
                 // Sleep for a bit, so we don't overwhelm resque..
-                usleep(30000);
+                //usleep(30000);
             }
 
             // New offset

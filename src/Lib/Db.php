@@ -83,10 +83,6 @@ class Db
      * @var Config
      */
     private $config;
-    /**
-     * @var RequestInterface
-     */
-    private $request;
 
     /**
      * Db constructor.
