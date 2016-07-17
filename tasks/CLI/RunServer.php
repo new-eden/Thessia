@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use PHPPM\Commands\StartCommand;
 use PHPPM\ProcessManager;

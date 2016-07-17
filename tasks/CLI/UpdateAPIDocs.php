@@ -23,24 +23,23 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
-use JBZoo\PimpleDumper\PimpleDumper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateThessia extends Command
+class UpdateAPIDocs extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("update:thessia")
-            ->setDescription("Updates composer and other stuff");
+            ->setName("update:apidocs")
+            ->setDescription("Update the API Documentation");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        global $container;
+        $output->writeln("Updatedocs task");
     }
 }

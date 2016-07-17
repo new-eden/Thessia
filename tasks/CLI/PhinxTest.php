@@ -23,30 +23,28 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class PhinxCreate extends \Phinx\Console\Command\Create
+class PhinxTest extends \Phinx\Console\Command\Test
 {
     protected function configure()
     {
         parent::configure();
 
-        $this->setName('phinx:create')
-            ->setDescription('Create a new migration')
-            ->setHelp(sprintf(
-                '%sCreates a new database migration%s',
-                PHP_EOL,
-                PHP_EOL
-            ));
+        $this->addOption('--environment', '-e', InputOption::VALUE_REQUIRED, 'The target environment');
 
-        // An alternative template.
-        $this->addOption('template', 't', InputOption::VALUE_REQUIRED, 'Use an alternative template');
+        $this->setName('phinx:test')
+            ->setDescription('Verify the configuration file')
+            ->setHelp(
+                <<<EOT
+                The <info>test</info> command verifies the YAML configuration file and optionally an environment
 
-        // A classname to be used to gain access to the template content as well as the ability to
-        // have a callback once the migration file has been created.
-        $this->addOption('class', 'l', InputOption::VALUE_REQUIRED,
-            'Use a class implementing "' . self::CREATION_INTERFACE . '" to generate the template');
+<info>phinx test</info>
+<info>phinx test -e development</info>
+
+EOT
+            );
     }
 }

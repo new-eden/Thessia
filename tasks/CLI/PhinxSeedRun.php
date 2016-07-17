@@ -23,11 +23,11 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class PhinxMigrate extends \Phinx\Console\Command\Migrate
+class PhinxSeedRun extends \Phinx\Console\Command\SeedRun
 {
     protected function configure()
     {
@@ -35,18 +35,15 @@ class PhinxMigrate extends \Phinx\Console\Command\Migrate
 
         $this->addOption('--environment', '-e', InputOption::VALUE_REQUIRED, 'The target environment');
 
-        $this->setName('phinx:migrate')
-            ->setDescription('Migrate the database')
-            ->addOption('--target', '-t', InputOption::VALUE_REQUIRED, 'The version number to migrate to')
-            ->addOption('--date', '-d', InputOption::VALUE_REQUIRED, 'The date to migrate to')
+        $this->setName('phinx:seedrun')
+            ->setDescription('Run database seeders')
             ->setHelp(
                 <<<EOT
-                The <info>migrate</info> command runs all available Migrations, optionally up to a specific version
+                The <info>seed:run</info> command runs all available or individual seeders
 
-<info>phinx migrate -e development</info>
-<info>phinx migrate -e development -t 20110103081132</info>
-<info>phinx migrate -e development -d 20110103</info>
-<info>phinx migrate -e development -v</info>
+<info>phinx seed:run -e development</info>
+<info>phinx seed:run -e development -s UserSeeder</info>
+<info>phinx seed:run -e development -v</info>
 
 EOT
             );

@@ -23,23 +23,24 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
+use JBZoo\PimpleDumper\PimpleDumper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateComposer extends Command
+class UpdateThessia extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("update:composer")
-            ->setDescription("Update Composer and the Autoloader");
+            ->setName("update:thessia")
+            ->setDescription("Updates composer and other stuff");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("update composer task");
+        global $container;
     }
 }

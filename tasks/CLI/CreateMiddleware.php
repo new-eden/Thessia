@@ -23,29 +23,29 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateWebsocket extends Command
+class CreateMiddleware extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:websocket")
-            ->setDescription("Create a websocket endpoint");
+            ->setName("create:Middleware")
+            ->setDescription("Create Middleware");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Websocket");
+        $name = prompt("Name of Middleware");
 
-        $directory = __DIR__ . "/WebSockets/";
+        $directory = __DIR__ . "/../src/Middleware/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/websocket_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/middleware_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -69,14 +69,14 @@ class CreateWebsocket extends Command
                 return;
             }
         }
-        if (!file_exists($directory . ucfirst($name) . "WebSocket.php")) {
-            $fh = fopen($directory . ucfirst($name) . "WebSocket.php", "w");
+        if (!file_exists($directory . ucfirst($name) . "MiddleWare.php")) {
+            $fh = fopen($directory . ucfirst($name) . "MiddleWare.php", "w");
             fwrite($fh, $file);
             fclose($fh);
-            $className = ucfirst($name) . "WebSocket.php";
-            $output->writeln("Success, WebSocket {$name} has been created");
+            $className = ucfirst($name) . "MiddleWare.php";
+            $output->writeln("Success, MiddleWare {$name} has been created");
         } else {
-            $output->writeln("Error, WebSocket {$name} already exists.");
+            $output->writeln("Error, MiddleWare {$name} already exists.");
         }
     }
 }

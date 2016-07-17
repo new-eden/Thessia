@@ -23,23 +23,32 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class PhinxSeedCreate extends \Phinx\Console\Command\SeedCreate
+class PhinxMigrate extends \Phinx\Console\Command\Migrate
 {
     protected function configure()
     {
         parent::configure();
 
-        $this->setName('phinx:seedcreate')
-            ->setDescription('Create a new database seeder')
-            ->addArgument('seedname', InputArgument::REQUIRED, 'What is the name of the seeder?')
-            ->setHelp(sprintf(
-                '%sCreates a new database seeder%s',
-                PHP_EOL,
-                PHP_EOL
-            ));
+        $this->addOption('--environment', '-e', InputOption::VALUE_REQUIRED, 'The target environment');
+
+        $this->setName('phinx:migrate')
+            ->setDescription('Migrate the database')
+            ->addOption('--target', '-t', InputOption::VALUE_REQUIRED, 'The version number to migrate to')
+            ->addOption('--date', '-d', InputOption::VALUE_REQUIRED, 'The date to migrate to')
+            ->setHelp(
+                <<<EOT
+                The <info>migrate</info> command runs all available Migrations, optionally up to a specific version
+
+<info>phinx migrate -e development</info>
+<info>phinx migrate -e development -t 20110103081132</info>
+<info>phinx migrate -e development -d 20110103</info>
+<info>phinx migrate -e development -v</info>
+
+EOT
+            );
     }
 }

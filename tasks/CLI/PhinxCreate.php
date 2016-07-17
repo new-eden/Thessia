@@ -23,21 +23,30 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class PhinxInit extends \Phinx\Console\Command\Init
+class PhinxCreate extends \Phinx\Console\Command\Create
 {
     protected function configure()
     {
-        $this->setName('phinx:init')
-            ->setDescription('Initialize the application for Phinx')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Which path should we initialize for Phinx?')
+        parent::configure();
+
+        $this->setName('phinx:create')
+            ->setDescription('Create a new migration')
             ->setHelp(sprintf(
-                '%sInitializes the application for Phinx%s',
+                '%sCreates a new database migration%s',
                 PHP_EOL,
                 PHP_EOL
             ));
+
+        // An alternative template.
+        $this->addOption('template', 't', InputOption::VALUE_REQUIRED, 'Use an alternative template');
+
+        // A classname to be used to gain access to the template content as well as the ability to
+        // have a callback once the migration file has been created.
+        $this->addOption('class', 'l', InputOption::VALUE_REQUIRED,
+            'Use a class implementing "' . self::CREATION_INTERFACE . '" to generate the template');
     }
 }

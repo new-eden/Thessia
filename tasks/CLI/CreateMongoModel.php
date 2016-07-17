@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 
 use gossi\codegen\generator\CodeFileGenerator;

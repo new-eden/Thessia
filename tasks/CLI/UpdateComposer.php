@@ -23,23 +23,23 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateAPIDocs extends Command
+class UpdateComposer extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("update:apidocs")
-            ->setDescription("Update the API Documentation");
+            ->setName("update:composer")
+            ->setDescription("Update Composer and the Autoloader");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("Updatedocs task");
+        $output->writeln("update composer task");
     }
 }

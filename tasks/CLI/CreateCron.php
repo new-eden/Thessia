@@ -23,29 +23,28 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateMiddleware extends Command
+class CreateCron extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:Middleware")
-            ->setDescription("Create Middleware");
+            ->setName("create:cron")
+            ->setDescription("Create a cron job");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Middleware");
+        $name = prompt("Name of Cronjob");
 
-        $directory = __DIR__ . "/../src/Middleware/";
+        $directory = __DIR__ . "/Cron/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/middleware_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/cron_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -69,14 +68,14 @@ class CreateMiddleware extends Command
                 return;
             }
         }
-        if (!file_exists($directory . ucfirst($name) . "MiddleWare.php")) {
-            $fh = fopen($directory . ucfirst($name) . "MiddleWare.php", "w");
+        if (!file_exists($directory . ucfirst($name) . ".php")) {
+            $fh = fopen($directory . ucfirst($name) . ".php", "w");
             fwrite($fh, $file);
             fclose($fh);
-            $className = ucfirst($name) . "MiddleWare.php";
-            $output->writeln("Success, MiddleWare {$name} has been created");
+            $className = ucfirst($name) . ".php";
+            $output->writeln("Success, {$name} has been created");
         } else {
-            $output->writeln("Error, MiddleWare {$name} already exists.");
+            $output->writeln("Error, {$name} already exists.");
         }
     }
 }

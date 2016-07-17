@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Ratchet\App;
 use Symfony\Component\Console\Command\Command;

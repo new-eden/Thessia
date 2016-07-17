@@ -23,29 +23,29 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateController extends Command
+class CreateWebsocket extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:controller")
-            ->setDescription("Creates a controller");
+            ->setName("create:websocket")
+            ->setDescription("Create a websocket endpoint");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Controller");
+        $name = prompt("Name of Websocket");
 
-        $directory = __DIR__ . "/../src/Controllers/";
+        $directory = __DIR__ . "/WebSockets/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/controller_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/websocket_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
@@ -69,14 +69,14 @@ class CreateController extends Command
                 return;
             }
         }
-        if (!file_exists($directory . ucfirst($name) . "Controller.php")) {
-            $fh = fopen($directory . ucfirst($name) . "Controller.php", "w");
+        if (!file_exists($directory . ucfirst($name) . "WebSocket.php")) {
+            $fh = fopen($directory . ucfirst($name) . "WebSocket.php", "w");
             fwrite($fh, $file);
             fclose($fh);
-            $className = ucfirst($name) . "Controller.php";
-            $output->writeln("Success, Controller {$name} has been created");
+            $className = ucfirst($name) . "WebSocket.php";
+            $output->writeln("Success, WebSocket {$name} has been created");
         } else {
-            $output->writeln("Error, Controller {$name} already exists.");
+            $output->writeln("Error, WebSocket {$name} already exists.");
         }
     }
 }

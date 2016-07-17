@@ -23,28 +23,29 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\CLi;
+namespace Thessia\Tasks\CLI;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CreateCron extends Command
+class CreateResque extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("create:cron")
-            ->setDescription("Create a cron job");
+            ->setName("create:resque")
+            ->setDescription("Create a resque job");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = prompt("Name of Cronjob");
+        $name = prompt("Name of Resque");
 
-        $directory = __DIR__ . "/Cron/";
+        $directory = __DIR__ . "/Resque/";
 
-        $file = file_get_contents(__DIR__ . "/../scaffolds/cron_template.txt");
+        $file = file_get_contents(__DIR__ . "/../scaffolds/resque_template.txt");
 
         $file = str_replace("?name", ucfirst($name), $file);
 
