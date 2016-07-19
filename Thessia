@@ -1,4 +1,4 @@
-#!/usr/bin/env php7.0
+#!/usr/bin/env php
 <?php
 
 // Error logging
@@ -14,7 +14,7 @@ require_once(__DIR__ . "/init.php");
 // Launch the CLI
 $cli = new Symfony\Component\Console\Application("Embrace Eternity");
 
-$tasks = array(__DIR__ . "/tasks/*.php", __DIR__ . "/tasks/CLi/*.php");
+$tasks = array(__DIR__ . "/tasks/*.php", __DIR__ . "/tasks/CLI/*.php");
 // Load all the commands
 
 foreach ($tasks as $task) {
