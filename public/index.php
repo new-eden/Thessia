@@ -58,7 +58,10 @@ $container->get("view")->addExtension(new \Twig_Extension_Debug());
 // Add the Renderer
 $container->share("render", Render::class)->withArgument("view")->withArgument("response")->withArgument("request");
 
-// Load slim
+// Site settings
+$settings = $container->get("settings");
+
+// Startup the app
 $app = new \Slim\App($container);
 
 // Setup the session handler
@@ -67,8 +70,10 @@ session_set_save_handler($session, true);
 session_cache_limiter(false);
 session_start();
 
-// Setup whoops
-$app->add(new Whoops());
+// Setup debugging stuff
+if($settings["debug"] == true) {
+    $app->add(new Whoops());
+}
 
 // Load the routes
 require_once(__DIR__ . "/../config/routes.php");

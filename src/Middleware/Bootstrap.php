@@ -66,16 +66,22 @@ class Bootstrap
         // Add the Renderer
         $container->share("render", Render::class)->withArgument("view")->withArgument("response")->withArgument("request");
 
+        // Site settings
+        $settings = $container->get("settings");
+
+        // Startup the app
         $app = new App($container);
 
         // Setup the session handler
-        //$session = $container->get("session");
-        //session_set_save_handler($session, true);
-        //session_cache_limiter(false);
-        //session_start();
+        $session = $container->get("session");
+        session_set_save_handler($session, true);
+        session_cache_limiter(false);
+        session_start();
 
-        // Setup whoops
-        $app->add(new Whoops());
+        // Setup debugging stuff
+        if($settings["debug"] == true) {
+            $app->add(new Whoops());
+        }
 
         require_once(__DIR__ . "/../../config/routes.php");
 
