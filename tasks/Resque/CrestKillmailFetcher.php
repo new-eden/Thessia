@@ -29,9 +29,11 @@ namespace Thessia\Tasks\Resque;
 use League\Container\Container;
 use MongoDB\Client;
 use MongoDB\Collection;
+use Thessia\Lib\cURL;
+use Thessia\Model\EVE\Crest;
 use Thessia\Model\EVE\Parser;
 
-class CrestKillmailParser
+class CrestKillmailFetcher
 {
     /**
      * @var Container
@@ -40,24 +42,23 @@ class CrestKillmailParser
 
     public function perform()
     {
-        /** @var Client $mongodb */
-        $mongodb = $this->container->get("mongo");
-        /** @var Collection $collection */
-        $collection = $mongodb->selectCollection("thessia", "killmails");
-        /** @var Parser $parser */
-        $parser = $this->container->get("parser");
+        /** @var cURL $curl */
+        $curl = $this->container->get("curl");
+        /** @var Crest $crest */
+        $crest = $this->container->get("crest");
 
-        $killID = $this->args["killID"];
-        $killHash = $this->args["killHash"];
+        $url = $this->args["url"];
+        $warID = $this->args["warID"] ? $this->args["warID"] : 0;
 
-        $killmail = $parser->parseCrestKillmail($killID, $killHash);
+        $data = json_decode($curl->getData($url, 0), true);
 
-        if (is_array($killmail)) {
-            try {
-                $collection->insertOne($killmail);
-            } catch(\Exception $e) {
-                $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
-            }
+        if(isset($data["killID"])) {
+            $source = isset($warID) ? "warID:{$warID}" : "CREST:{$data["killID"]}";
+            $killID = $data["killID"];
+            $hash = $crest->generateHash($data);
+
+            \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser',
+                array("killID" => $killID, "killHash" => $hash));
         }
 
         exit();
