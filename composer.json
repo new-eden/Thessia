@@ -38,6 +38,7 @@
     "cboden/ratchet": "0.3.*",
     "robmorgan/phinx": "0.5.*",
     "mongodb/mongodb": "1.0.*",
-    "zkillboard/redisq": "1.*"
+    "zkillboard/redisq": "1.*",
+    "3rdpartyeve/phealng": "2.3.*"
   }
 }
