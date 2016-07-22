@@ -53,9 +53,6 @@ class RunWebSocket extends Command
         // Fire up Ratchet
         $ratchet = new App($input->getOption("httpHost"), $input->getOption("port"), $input->getOption("host"));
 
-        // Find all websocket endpoints
-        $endpoints = array(__DIR__ . "/WebSockets/*.php", __DIR__ . "/../App/WebSockets/*.php");
-
         // Load all endpoints
         foreach (glob(__DIR__ . "/../WebSockets/*.php") as $file) {
             require_once($file);
