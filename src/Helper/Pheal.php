@@ -87,7 +87,7 @@ class Pheal
     /**
      * @return Logger
      */
-    public function log() {
+    private function log() {
         $psrLogger = new Logger("Pheal");
         $psrLogger->pushHandler(new StreamHandler(__DIR__ . "/../../logs/pheal.log", Logger::INFO));
 

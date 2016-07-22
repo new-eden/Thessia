@@ -29,7 +29,13 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Thessia\Helper\CCPXMLAPI;
+use Thessia\Helper\EVE\Account;
+use Thessia\Helper\EVE\API;
+use Thessia\Helper\EVE\Character;
+use Thessia\Helper\EVE\Corporation;
+use Thessia\Helper\EVE\EVE;
+use Thessia\Helper\EVE\Map;
+use Thessia\Helper\EVE\Server;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
 use Thessia\Lib\cURL;
@@ -117,7 +123,14 @@ class SystemServiceProvider extends AbstractServiceProvider
         'notFoundHandler',
         'notAllowedHandler',
         'callableResolver',
-        'pheal'
+        'pheal',
+        "ccpAccount",
+        "ccpAPI",
+        "ccpCharacter",
+        "ccpCorporation",
+        "ccpEVE",
+        "ccpMap",
+        "ccpServer",
     ];
 
     /**
@@ -195,6 +208,12 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("pheal", Pheal::class)->withArgument("storage");
 
         // Add CCP XML Interface Shim thing
-        $container->share("ccpxmlapi", CCPXMLAPI::class)->withArgument("pheal")->withArgument("storage")->withArgument("cache");
+        $container->share("ccpAccount", Account::class)->withArgument("pheal");
+        $container->share("ccpAPI", API::class)->withArgument("pheal");
+        $container->share("ccpCharacter", Character::class)->withArgument("pheal");
+        $container->share("ccpCorporation", Corporation::class)->withArgument("pheal");
+        $container->share("ccpEVE", EVE::class)->withArgument("pheal");
+        $container->share("ccpMap", Map::class)->withArgument("pheal");
+        $container->share("ccpServer", Server::class)->withArgument("pheal");
     }
 }
