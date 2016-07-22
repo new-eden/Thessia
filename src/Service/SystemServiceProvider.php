@@ -29,16 +29,11 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Slim\Http\Headers;
-use Slim\Http\Request;
-use Slim\Http\Response;
-use Slim\Views\Twig;
-use Slim\Views\TwigExtension;
+use Thessia\Helper\CCPXMLAPI;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
 use Thessia\Lib\cURL;
 use Thessia\Lib\Db;
-use Thessia\Lib\Render;
 use Thessia\Lib\SessionHandler;
 use Thessia\Lib\Timer;
 use Thessia\Model\CCP\blueprints;
@@ -64,14 +59,8 @@ use Thessia\Model\EVE\Killmails;
 use Thessia\Model\EVE\Parser;
 use Thessia\Model\EVE\Participants;
 use Thessia\Model\EVE\Prices;
-use Slim\CallableResolver;
-use Slim\Collection;
-use Slim\Handlers\Error;
-use Slim\Handlers\NotAllowed;
-use Slim\Handlers\NotFound;
-use Slim\Handlers\Strategies\RequestResponse;
-use Slim\Http\Environment;
-use Slim\Router;
+use Thessia\Model\Site\Storage;
+use Thessia\Helper\Pheal;
 
 class SystemServiceProvider extends AbstractServiceProvider
 {
@@ -128,6 +117,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         'notFoundHandler',
         'notAllowedHandler',
         'callableResolver',
+        'pheal'
     ];
 
     /**
@@ -199,5 +189,12 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("parser", Parser::class)
             ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
             ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");
+        $container->share("storage", Storage::class);
+
+        // Add Pheal
+        $container->share("pheal", Pheal::class)->withArgument("storage");
+
+        // Add CCP XML Interface Shim thing
+        $container->share("ccpxmlapi", CCPXMLAPI::class)->withArgument("pheal")->withArgument("storage")->withArgument("cache");
     }
 }
