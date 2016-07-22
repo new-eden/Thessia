@@ -40,12 +40,12 @@ class RunWebSocket extends Command
             ->setDescription("Run the websocket server")
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "WebSocket host. Default is 0.0.0.0", "0.0.0.0")
             ->addOption("port", null, InputOption::VALUE_OPTIONAL, "WebSocket port. Default is 474", 474)
-            ->addOption("httpHost", null, InputOption::VALUE_OPTIONAL, "WebSocket httpHost. Default is localhost",
-                "localhost");
+            ->addOption("httpHost", null, InputOption::VALUE_OPTIONAL, "WebSocket httpHost. Default is localhost", "localhost");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Load the container
         $container = getContainer();
 
         $output->writeln("Starting Websocket Instances");
@@ -65,7 +65,7 @@ class RunWebSocket extends Command
             $ratchet->route("/{$urlPath}", new $className($container), array("*"));
         }
 
-
+        // Run the websocket
         $ratchet->run();
     }
 }
