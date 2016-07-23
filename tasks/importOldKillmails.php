@@ -59,7 +59,7 @@ class importOldKillmails extends Command
         // Get the latest offset from the DB
         $offset = (int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value",
             array(":offset" => "mailImportOffset"), 0);
-        $limit = 10000;
+        $limit = 100000;
         $run = true;
 
         do {
@@ -85,7 +85,7 @@ class importOldKillmails extends Command
                 $killHash = $crest->generateHash($json);
 
                 // Throw the killmail at resque for processing
-                \Resque::enqueue("high", '\Thessia\Tasks\Resque\CrestKillmailParser',
+                \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser',
                     array("killID" => $killID, "killHash" => $killHash));
 
                 // Increment counters
@@ -93,7 +93,7 @@ class importOldKillmails extends Command
                 $totalCnt++;
 
                 // Sleep for a bit, so we don't overwhelm resque..
-                usleep(30000);
+                //usleep(30000);
             }
 
             // New offset
