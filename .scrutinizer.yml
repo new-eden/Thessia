@@ -50,7 +50,6 @@ tools:
 filter:
   excluded_paths:
     - "vendor/"
-    - "tasks/"
 
 build:
     environment:
