@@ -23,8 +23,6 @@
  * SOFTWARE.
  */
 
-declare(ticks = 1);
-
 namespace Thessia\Tasks\CLI;
 
 use Boris\Boris;
