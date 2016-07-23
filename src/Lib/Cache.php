@@ -74,7 +74,7 @@ class Cache
      *
      * @return mixed
      */
-    public function get(string $key): array
+    public function get(string $key)
     {
         return json_decode($this->redis->get($key), true);
     }
