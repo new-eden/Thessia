@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-$app->group("/api", function () use ($app) {
+$app->group("/api", function() use ($app) {
     $app->group("/character", function() use ($app) {
         $controller = new \Thessia\Controller\API\CharacterAPIController($app);
         $app->get("/count/", $controller("characterCount"));

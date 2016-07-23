@@ -27,7 +27,6 @@ namespace Thessia\Lib;
 
 use Monolog\Logger;
 use PDO;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * Class Db
@@ -127,7 +126,7 @@ class Db
     private function getCache(string $key) {
         $data = unserialize($this->cache->get($key));
 
-        if(!empty($data)) {
+        if (!empty($data)) {
             return $data;
         }
         return null;
@@ -185,7 +184,7 @@ class Db
         // If cache time is above 0 seconds, lets try and get it from that.
         if ($cacheTime > 0) {
             $result = $this->getCache($key);
-            if(!empty($result)) {
+            if (!empty($result)) {
                 return $result;
             }
         }
@@ -485,7 +484,7 @@ class Db
         // If cache time is above 0 seconds, lets try and get it from that.
         if ($cacheTime > 0) {
             $result = $this->getCache($key);
-            if(!empty($result)) {
+            if (!empty($result)) {
                 return $result;
             }
         }

@@ -77,11 +77,11 @@ class Whoops
 
             $whoops->register();
 
-            $container->share("errorHandler", function () use ($whoops) {
+            $container->share("errorHandler", function() use ($whoops) {
                 return new WhoopsErrorHandler($whoops);
             });
 
-            $container->share("whoops", function () use ($whoops) {
+            $container->share("whoops", function() use ($whoops) {
                 return $whoops;
             });
         }

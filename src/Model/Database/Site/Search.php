@@ -39,15 +39,15 @@ class Search {
         $valid = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial");
         $searchArray = array();
 
-        if(!is_array($searchIn))
+        if (!is_array($searchIn))
             $searchIn = array($searchIn);
 
-        foreach($searchIn as $lookIn) {
-            if(in_array($lookIn, $valid)) {
+        foreach ($searchIn as $lookIn) {
+            if (in_array($lookIn, $valid)) {
                 $singleSearch = $this->$lookIn($searchTerm, 1);
                 $multiSearch = $this->lookIn($searchTerm, $limit);
 
-                if(count($multiSearch) >= 1)
+                if (count($multiSearch) >= 1)
                     $searchArray[$lookIn] = $multiSearch;
                 else
                     $searchArray[$lookIn] = $singleSearch;

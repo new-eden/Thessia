@@ -71,7 +71,7 @@ session_cache_limiter(false);
 session_start();
 
 // Setup debugging stuff
-if($settings["debug"] == true) {
+if ($settings["debug"] == true) {
     $app->add(new Whoops());
 }
 

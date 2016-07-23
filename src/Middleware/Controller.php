@@ -28,7 +28,6 @@ namespace Thessia\Middleware;
 use MongoDB\Client;
 use Psr\Http\Message\UriInterface;
 use Slim\App;
-use Slim\Views\Twig;
 use Thessia\Lib\Render;
 
 /**
@@ -88,7 +87,7 @@ abstract class Controller
         $app = $this->app;
         $controller = $this;
 
-        $callable = function ($request, $response, $args) use ($app, $controller, $actionName) {
+        $callable = function($request, $response, $args) use ($app, $controller, $actionName) {
             if (method_exists($controller, 'setRequest')) {
                 $controller->setRequest($request);
             }
@@ -191,7 +190,7 @@ abstract class Controller
      * @param array $args
      * @param int $status
      * @param string $contentType
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function render(String $file, $args = array(), int $status = 200, String $contentType = "text/html; charset=UTF-8")
     {
@@ -204,7 +203,7 @@ abstract class Controller
      * @param array $args
      * @param int $status
      * @param String $contentType
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function json($args = array(), int $status = 200, String $contentType = "application/json; charset=UTF-8")
     {
@@ -217,7 +216,7 @@ abstract class Controller
      * @param array $args
      * @param int $status
      * @param String $contentType
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function xml($args = array(), int $status = 200, String $contentType = "application/xml; charset=UTF-8")
     {

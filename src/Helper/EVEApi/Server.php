@@ -53,7 +53,7 @@ class Server {
             $p->scope = "Server";
             $result = $p->ServerStatus()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException(null, null, $exception);
             return array();
         }

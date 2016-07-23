@@ -80,7 +80,7 @@ class ApiKeys extends Mongo {
 
         try {
             $this->collection->insertOne($data);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->collection->updateOne(array("apiKey" => $apiKey), $data);
         }
     }
@@ -98,7 +98,7 @@ class ApiKeys extends Mongo {
      * @throws \Exception
      */
     public function updateKey(array $data) {
-        if(isset($data["apiKey"])) {
+        if (isset($data["apiKey"])) {
             $apiKey = $data["apiKey"];
         }
         else {
@@ -107,7 +107,7 @@ class ApiKeys extends Mongo {
 
         try {
             $this->collection->insertOne($data);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->collection->updateOne(array("apiKey" => $apiKey), $data);
         }
     }

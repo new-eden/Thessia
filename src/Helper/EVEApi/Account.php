@@ -55,7 +55,7 @@ class Account {
             $p->scope = "Account";
             $result = $p->APIKeyInfo()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
@@ -74,7 +74,7 @@ class Account {
             $p->scope = "Account";
             $result = $p->accountStatus()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
@@ -93,7 +93,7 @@ class Account {
             $p->scope = "Account";
             $result = $p->Characters()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
