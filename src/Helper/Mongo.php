@@ -86,7 +86,7 @@ class Mongo
         return new UTCDatetime($milliseconds);
     }
 
-    public function maketimeFromUnixTime($unixTime): UTCDatetime {
+    public function makeTimeFromUnixTime($unixTime): UTCDatetime {
         $milliseconds = $unixTime * 1000;
         return new UTCDatetime($milliseconds);
     }
