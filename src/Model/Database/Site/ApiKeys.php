@@ -74,7 +74,7 @@ class ApiKeys extends Mongo {
             "vCode" => $vCode,
             "belongsTo" => $userID,
             "label" => $label,
-            "dateAdded" => $this->maketimeFromUnixTime(time()),
+            "dateAdded" => $this->makeTimeFromUnixTime(time()),
             "lastValidation" => null,
         );
 
