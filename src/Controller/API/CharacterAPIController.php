@@ -25,8 +25,8 @@
 
 namespace Thessia\Controller\API;
 
-use Thessia\Middleware\Controller;
 use Slim\App;
+use Thessia\Middleware\Controller;
 
 class CharacterAPIController extends Controller
 {

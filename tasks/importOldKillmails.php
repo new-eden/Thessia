@@ -28,8 +28,8 @@ namespace Thessia\Tasks;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Thessia\Lib\cURL;
 use Thessia\Lib\Db;
+use Thessia\Lib\cURL;
 use Thessia\Model\EVE\Crest;
 use Thessia\Model\EVE\Parser;
 

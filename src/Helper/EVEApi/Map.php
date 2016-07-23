@@ -53,7 +53,7 @@ class Map {
             $p->scope = "Map";
             $result = $p->FacWarSystems()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException(null, null, $exception);
             return array();
         }
@@ -70,7 +70,7 @@ class Map {
             $p->scope = "Map";
             $result = $p->Jumps()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException(null, null, $exception);
             return array();
         }
@@ -88,7 +88,7 @@ class Map {
             $p->scope = "Map";
             $result = $p->Kills()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException(null, null, $exception);
             return array();
         }
@@ -105,7 +105,7 @@ class Map {
             $p->scope = "Map";
             $result = $p->Sovereignty()->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException(null, null, $exception);
             return array();
         }

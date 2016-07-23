@@ -27,11 +27,8 @@ namespace Thessia\Tasks\Resque;
 
 
 use League\Container\Container;
-use MongoDB\Client;
-use MongoDB\Collection;
 use Thessia\Lib\cURL;
 use Thessia\Model\EVE\Crest;
-use Thessia\Model\EVE\Parser;
 
 class CrestKillmailFetcher
 {
@@ -52,7 +49,7 @@ class CrestKillmailFetcher
 
         $data = json_decode($curl->getData($url, 0), true);
 
-        if(isset($data["killID"])) {
+        if (isset($data["killID"])) {
             $source = isset($warID) ? "warID:{$warID}" : "CREST:{$data["killID"]}";
             $killID = $data["killID"];
             $hash = $crest->generateHash($data);

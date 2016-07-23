@@ -56,7 +56,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->AccountBalance(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -76,7 +76,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->AssetList(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -97,7 +97,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->Blueprints(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -118,7 +118,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->CalendarEventAttendees(array("characterID" => $characterID, "eventIDs" => implode(",", $eventIDs)))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -138,7 +138,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->CharacterSheet(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -160,7 +160,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->ContactList(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -181,7 +181,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->ContactNotifications(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -202,7 +202,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->ContractBids(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -223,7 +223,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->ContractItems(array("characterID" => $characterID, "contractID" => $contractID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -244,12 +244,12 @@ class Character {
             $p->scope = "Char";
 
             $requestArray = array("characterID" => $characterID);
-            if(isset($contractID))
+            if (isset($contractID))
                 $requestArray["contractID"] = $contractID;
 
             $result = $p->Contracts($requestArray)->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -269,7 +269,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->FacWarStats(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -290,7 +290,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->IndustryJobs(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -311,7 +311,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->IndustryJobsHistory(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -335,15 +335,15 @@ class Character {
 
             $requestArray = array("characterID" => $characterID);
 
-            if(isset($fromID))
+            if (isset($fromID))
                 $requestArray["fromID"] = $fromID;
 
-            if(isset($rowCount))
+            if (isset($rowCount))
                 $requestArray["rowCount"] = $rowCount;
 
             $result = $p->KillMails($requestArray)->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -365,7 +365,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->Locations(array("characterID" => $characterID, "IDs" => implode(",", $IDs)))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -387,7 +387,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->MailBodies(array("characterID" => $characterID, "IDs" => implode(",", $IDs)))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -407,7 +407,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->MailMessages(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -427,7 +427,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->MailingLists(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -449,12 +449,12 @@ class Character {
 
             $requestArray = array("characterID" => $characterID);
 
-            if(isset($orderID))
+            if (isset($orderID))
                 $requestArray["orderID"] = $orderID;
 
             $result = $p->MarketOrders($requestArray)->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -474,7 +474,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->Medals(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -495,7 +495,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->NotificationTexts(array("characterID" => $characterID, "IDs" => implode(",", $IDs)))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -515,7 +515,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->Notifications(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -536,7 +536,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->PlanetaryColonies(array("characterID" => $characterID, "planetID" => $planetID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -557,7 +557,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->PlanetaryLinks(array("characterID" => $characterID, "planetID" => $planetID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -578,7 +578,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->PlanetaryPins(array("characterID" => $characterID, "planetID" => $planetID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -599,7 +599,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->PlanetaryRoutes(array("characterID" => $characterID, "planetID" => $planetID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -619,7 +619,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->Research(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -639,7 +639,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->SkillInTraining(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -659,7 +659,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->SkillQueue(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -681,7 +681,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->Standings(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -701,7 +701,7 @@ class Character {
             $p->scope = "Char";
             $result = $p->UpcomingCalendarEvents(array("characterID" => $characterID))->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -725,16 +725,16 @@ class Character {
 
             $requestArray = array("characterID" => $characterID, "accountKey" => $accountKey);
 
-            if(isset($fromID))
+            if (isset($fromID))
                 $requestArray["fromID"] = $fromID;
 
-            if(isset($rowCount))
+            if (isset($rowCount))
                 $requestArray["rowCount"] = $rowCount;
 
 
             $result = $p->WalletJournal($requestArray)->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
@@ -758,15 +758,15 @@ class Character {
 
             $requestArray = array("characterID" => $characterID, "accountKey" => $accountKey);
 
-            if(isset($fromID))
+            if (isset($fromID))
                 $requestArray["fromID"] = $fromID;
 
-            if(isset($rowCount))
+            if (isset($rowCount))
                 $requestArray["rowCount"] = $rowCount;
 
             $result = $p->WalletTransactions($requestArray)->toArray();
             return $result;
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }

@@ -25,12 +25,12 @@
 
 namespace Thessia\Middleware;
 
+use Jenssegers\Lean\SlimServiceProvider;
 use League\Container\Container;
 use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Thessia\Lib\Render;
-use Jenssegers\Lean\SlimServiceProvider;
 
 /**
  * Class Bootstrap
@@ -79,7 +79,7 @@ class Bootstrap
         session_start();
 
         // Setup debugging stuff
-        if($settings["debug"] == true) {
+        if ($settings["debug"] == true) {
             $app->add(new Whoops());
         }
 
