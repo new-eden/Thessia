@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "848286cfa595737708bf1e1adf8ad2f1",
-    "content-hash": "b1ae076ff7e97fbe0fce8ab81960e0af",
+    "hash": "2dfc1c84c084ed7a4a4916dcb9f0211d",
+    "content-hash": "0815fe3596ce89f3f545458c6d2b1a63",
     "packages": [
         {
             "name": "3rdpartyeve/phealng",
@@ -177,6 +177,42 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "time": "2014-12-30 15:22:37"
+        },
+        {
+            "name": "d11wtq/boris",
+            "version": "v1.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/borisrepl/boris.git",
+                "reference": "31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/borisrepl/boris/zipball/31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483",
+                "reference": "31055b15e2d3fe47f31f6aa8e277f8f3fc7eb483",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcntl": "*",
+                "ext-posix": "*",
+                "ext-readline": "*",
+                "php": ">=5.3.0"
+            },
+            "bin": [
+                "bin/boris"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Boris": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A tiny, but robust REPL (Read-Evaluate-Print-Loop) for PHP.",
+            "time": "2015-03-01 08:05:19"
         },
         {
             "name": "evenement/evenement",
@@ -370,7 +406,7 @@
         },
         {
             "name": "gossi/php-code-generator",
-            "version": "dev-master",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gossi/php-code-generator.git",
@@ -740,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "9a33bfc518c40717d71ab425c31f5855abe93a48"
+                "reference": "682d637bec5dd750bba5568e980888a639d7c35b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/9a33bfc518c40717d71ab425c31f5855abe93a48",
-                "reference": "9a33bfc518c40717d71ab425c31f5855abe93a48",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/682d637bec5dd750bba5568e980888a639d7c35b",
+                "reference": "682d637bec5dd750bba5568e980888a639d7c35b",
                 "shasum": ""
             },
             "require": {
@@ -797,7 +833,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2016-07-21 15:13:24"
+            "time": "2016-07-21 23:46:37"
         },
         {
             "name": "jenssegers/lean",
@@ -3155,7 +3191,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "php-pm/php-pm": 20,
-        "gossi/php-code-generator": 20,
         "gossi/php-code-formatter": 20
     },
     "prefer-stable": false,
