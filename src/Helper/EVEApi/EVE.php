@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Helper\EVE;
+namespace Thessia\Helper\EVEApi;
 
 
 use Thessia\Helper\Pheal;

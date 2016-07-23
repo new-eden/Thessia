@@ -23,12 +23,16 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Helper\EVE;
+namespace Thessia\Helper\EVEApi;
 
 
 use Thessia\Helper\Pheal;
 
-class Server {
+/**
+ * Class API
+ * @package Thessia\Helper\EVEApi
+ */
+class API {
     /**
      * @var Pheal
      */
@@ -43,15 +47,15 @@ class Server {
     }
 
     /**
-     * Returns current Tranquility status and number of players online.
+     * Returns a list of the API Calls that contain private Character or Corporation information and which access bits are required.
      *
      * @return array
      */
-    public function serverServerStatus(): array {
+    public function apiCallList(): array {
         try {
             $p = $this->pheal->Pheal();
-            $p->scope = "Server";
-            $result = $p->ServerStatus()->toArray();
+            $p->scope = "API";
+            $result = $p->CallList()->toArray();
             return $result;
         } catch(\Exception $exception) {
             $this->pheal->handleApiException(null, null, $exception);
