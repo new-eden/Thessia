@@ -26,6 +26,7 @@
 namespace Thessia\Helper;
 
 // brain fuck: http://mongodb.github.io/mongo-php-library/tutorial/crud/
+use MongoDB\BSON\UTCDatetime;
 use MongoDB\Client;
 use MongoDB\Collection;
 use Thessia\Lib\Cache;
@@ -76,6 +77,18 @@ class Mongo
         $this->mongodb = $mongodb;
         $db = !empty($this->databaseName) ? $this->databaseName : $config->get("dbName", "mongodb");
         $this->collection = $mongodb->selectCollection($db, $this->collectionName);
+    }
+
+    public function makeTimeFromDateTime($dateTime): UTCDatetime {
+        $unixTime = strtotime($dateTime);
+        $milliseconds = $unixTime * 1000;
+
+        return new UTCDatetime($milliseconds);
+    }
+
+    public function maketimeFromUnixTime($unixTime): UTCDatetime {
+        $milliseconds = $unixTime * 1000;
+        return new UTCDatetime($milliseconds);
     }
 
     /**

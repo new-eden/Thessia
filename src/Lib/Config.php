@@ -25,15 +25,29 @@
 
 namespace Thessia\Lib;
 
+/**
+ * Class Config
+ * @package Thessia\Lib
+ */
 class Config
 {
+    /**
+     * @var
+     */
     private $config;
 
+    /**
+     * Config constructor.
+     * @param $configFile
+     */
     public function __construct($configFile)
     {
         $this->loadConfig($configFile);
     }
 
+    /**
+     * @param $configFile
+     */
     public function loadConfig($configFile)
     {
         if (!file_exists(realpath($configFile))) {
@@ -42,11 +56,14 @@ class Config
         $this->config = array_change_key_case(include($configFile), \CASE_LOWER);
     }
 
+
     /**
      * @param string $key
-     * @param string $type
+     * @param string|null $type
+     * @param string|null $default
+     * @return string
      */
-    public function get($key, $type = null, $default = null)
+    public function get(string $key, string $type = null, string $default = null)
     {
         $type = strtolower($type);
 
@@ -57,7 +74,12 @@ class Config
         return $default;
     }
 
-    public function getAll($type = null)
+
+    /**
+     * @param string|null $type
+     * @return array
+     */
+    public function getAll(string $type = null): array
     {
         $type = strtolower($type);
 

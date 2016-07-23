@@ -87,7 +87,7 @@ class Pheal
     /**
      * @return Logger
      */
-    private function log() {
+    private function log(): Logger {
         $psrLogger = new Logger("Pheal");
         $psrLogger->pushHandler(new StreamHandler(__DIR__ . "/../../logs/pheal.log", Logger::INFO));
 
@@ -100,7 +100,7 @@ class Pheal
      * @return \Pheal\Pheal
      * @throws \Exception
      */
-    public function Pheal(int $apiKey = null, string $vCode = null) {
+    public function Pheal(int $apiKey = null, string $vCode = null): \Pheal\Pheal {
         // Verify that we're not in a 904, by poking the storage
         $nineOhFour = $this->storage->get("ccp904");
 

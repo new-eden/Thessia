@@ -28,11 +28,25 @@ namespace Thessia\Lib;
 use Closure;
 use Redis;
 
+/**
+ * Class Cache
+ * @package Thessia\Lib
+ */
 class Cache
 {
+    /**
+     * @var bool
+     */
     public $persistence = true;
+    /**
+     * @var Redis
+     */
     private $redis;
 
+    /**
+     * Cache constructor.
+     * @param Config $config
+     */
     function __construct(Config $config)
     {
         $this->redis = new \Redis();
@@ -48,7 +62,7 @@ class Cache
      *
      * @return Redis
      */
-    public function returnRedis()
+    public function returnRedis(): Redis
     {
         return $this->redis;
     }
@@ -60,7 +74,7 @@ class Cache
      *
      * @return mixed
      */
-    public function get($key)
+    public function get(string $key): array
     {
         return json_decode($this->redis->get($key), true);
     }
@@ -70,11 +84,10 @@ class Cache
      *
      * @param string $key The key to uniquely identify the cached item
      * @param string $value The value to be cached
-     * @param integer $timeout .
-     *
+     * @param integer $timeout
      * @return bool
      */
-    public function set($key, $value, $timeout = 0)
+    public function set(string $key, string $value, int $timeout = 0): bool
     {
         $result = $this->redis->set($key, json_encode($value));
         if ($timeout > 0) {
@@ -91,7 +104,7 @@ class Cache
      *
      * @return bool
      */
-    protected function expire($key, $timeout)
+    protected function expire(string $key, int $timeout): bool
     {
         return $this->redis->expire($key, $timeout);
     }
@@ -101,11 +114,11 @@ class Cache
      *
      * @param string $key The key to uniquely identify the cached item
      * @param mixed $value The value to be cached
-     * @param null|string $timeout A strtotime() compatible Cache time.
+     * @param int $timeout
      *
      * @return bool
      */
-    public function replace($key, $value, $timeout)
+    public function replace(string $key, string $value, int $timeout): bool
     {
         return $this->redis->set($key, json_encode($value), $timeout);
     }
@@ -117,7 +130,7 @@ class Cache
      *
      * @return bool
      */
-    public function delete($key)
+    public function delete(string $key): bool
     {
         return (boolean)$this->redis->del($key);
     }
@@ -134,7 +147,7 @@ class Cache
      *
      * @return callable Function returning item's new value on successful increment, else `false`
      */
-    public function increment($key, $timeout = 0)
+    public function increment(string $key, int $timeout = 0)
     {
         $data = $this->redis->incr($key);
         if ($timeout) {
@@ -155,7 +168,7 @@ class Cache
      *
      * @return Closure Function returning item's new value on successful decrement, else `false`
      */
-    public function decrement($key, $timeout = 0)
+    public function decrement(string $key, int $timeout = 0)
     {
         $data = $this->redis->decr($key);
         if ($timeout) {
@@ -167,10 +180,10 @@ class Cache
     /**
      * Clears user-space Cache.
      *
-     * @return bool|null
+     * @return bool
      */
-    public function flush()
+    public function flush(): bool
     {
-        $this->redis->flushDB();
+        return $this->redis->flushDB();
     }
 }

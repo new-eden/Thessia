@@ -121,10 +121,10 @@ class Db
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return mixed|null
      */
-    private function getCache($key) {
+    private function getCache(string $key) {
         $data = unserialize($this->cache->get($key));
 
         if(!empty($data)) {
@@ -133,13 +133,14 @@ class Db
         return null;
     }
 
+
     /**
-     * @param $key
-     * @param $value
-     * @param $ttl
+     * @param string $key
+     * @param string $value
+     * @param int $ttl
      * @return bool
      */
-    private function setCache($key, $value, $ttl) {
+    private function setCache(string $key, string $value, int $ttl): bool {
         return $this->cache->set($key, serialize($value), min(3600, $ttl));
     }
 

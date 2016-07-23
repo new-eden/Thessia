@@ -27,20 +27,96 @@
 namespace Thessia\Model\Site;
 
 
-class ApiKeys {
-    public function addKey() {
+use MongoDB\BSON\UTCDatetime;
+use Thessia\Helper\Mongo;
+use Thessia\Helper\Pheal;
 
+/**
+ * Class ApiKeys
+ * @package Thessia\Model\Site
+ */
+class ApiKeys extends Mongo {
+    /**
+     * The name of the models collection
+     */
+    public $collectionName = 'apiKeys';
+
+    /**
+     * The name of the database the collection is stored in
+     */
+    public $databaseName = 'thessia';
+
+    /**
+     * An array of indexes for this collection
+     */
+    public $indexes = array(
+        array(
+            "key" => array("apiKey" => -1),
+            "unique" => true
+        ),
+        array(
+            "key" => array("belongsTo" => -1)
+        ),
+        array(
+            "key" => array("lastValidation" => -1)
+        )
+    );
+
+    /**
+     * @param int $apiKey
+     * @param string $vCode
+     * @param int|null $userID
+     * @param string|null $label
+     */
+    public function addKey(int $apiKey, string $vCode, int $userID = null, string $label = null) {
+        $data = array(
+            "apiKey" => $apiKey,
+            "vCode" => $vCode,
+            "belongsTo" => $userID,
+            "label" => $label,
+            "dateAdded" => $this->maketimeFromUnixTime(time()),
+            "lastValidation" => null,
+        );
+
+        try {
+            $this->collection->insertOne($data);
+        } catch(\Exception $e) {
+            $this->collection->updateOne(array("apiKey" => $apiKey), $data);
+        }
     }
 
-    public function getKey() {
-
+    /**
+     * @param int $apiKey
+     * @return array
+     */
+    public function getKey(int $apiKey): array {
+        return $this->collection->find(array("apiKey" => $apiKey))->toArray();
     }
 
-    public function updateKey() {
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    public function updateKey(array $data) {
+        if(isset($data["apiKey"])) {
+            $apiKey = $data["apiKey"];
+        }
+        else {
+            throw new \Exception("Error, no apiKey set. Make sure your data array contains the proper data.");
+        }
 
+        try {
+            $this->collection->insertOne($data);
+        } catch(\Exception $e) {
+            $this->collection->updateOne(array("apiKey" => $apiKey), $data);
+        }
     }
 
-    public function deleteKey() {
-
+    /**
+     * @param int $apiKey
+     * @return int
+     */
+    public function deleteKey(int $apiKey): int {
+        return $this->collection->deleteOne(array("apiKey" => $apiKey))->getDeletedCount();
     }
 }
