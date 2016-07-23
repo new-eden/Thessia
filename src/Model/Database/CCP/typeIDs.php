@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\CCP;
+namespace Thessia\Model\Database\CCP;
 
 use Thessia\Helper\Mongo;
 

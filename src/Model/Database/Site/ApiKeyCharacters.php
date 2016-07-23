@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\Site;
+namespace Thessia\Model\Database\Site;
 
 
 class ApiKeyCharacters {

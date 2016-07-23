@@ -30,14 +30,14 @@
  * Time: 19:23
  */
 
-namespace Thessia\Model\Site;
+namespace Thessia\Model\Database\Site;
 
 
 use Thessia\Helper\Mongo;
 
 /**
  * Class Settings
- * @package Thessia\Model\Site
+ * @package Thessia\Model\Database\Site
  */
 class Storage extends Mongo
 {

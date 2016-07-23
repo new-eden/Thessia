@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\EVE;
+namespace Thessia\Model\Database\EVE;
 
 use DateTime;
 use Thessia\Helper\Mongo;

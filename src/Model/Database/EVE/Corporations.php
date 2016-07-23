@@ -23,14 +23,14 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Model\EVE;
+namespace Thessia\Model\Database\EVE;
 
 
 use Thessia\Helper\Mongo;
 
 /**
  * Class Corporations
- * @package Thessia\Model\EVE
+ * @package Thessia\Model\Database\EVE
  */
 class Corporations extends Mongo
 {

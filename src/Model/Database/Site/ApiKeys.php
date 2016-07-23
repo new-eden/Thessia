@@ -24,7 +24,7 @@
  */
 
 
-namespace Thessia\Model\Site;
+namespace Thessia\Model\Database\Site;
 
 
 use MongoDB\BSON\UTCDatetime;
@@ -33,7 +33,7 @@ use Thessia\Helper\Pheal;
 
 /**
  * Class ApiKeys
- * @package Thessia\Model\Site
+ * @package Thessia\Model\Database\Site
  */
 class ApiKeys extends Mongo {
     /**

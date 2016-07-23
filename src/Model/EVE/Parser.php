@@ -108,20 +108,7 @@ class Parser
      * @param Cache $cache
      * @param Client $mongo
      */
-    public function __construct(
-        typeIDs $typeIDs,
-        solarSystems $solarSystems,
-        Prices $prices,
-        Killmails $killmails,
-        Alliances $alliances,
-        Corporations $corporations,
-        Characters $characters,
-        groupIDs $groupIDs,
-        Crest $crest,
-        cURL $cURL,
-        Cache $cache,
-        Client $mongo
-    ) {
+    public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo) {
         $this->typeIDs = $typeIDs;
         $this->solarSystems = $solarSystems;
         $this->prices = $prices;
