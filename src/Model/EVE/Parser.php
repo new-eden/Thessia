@@ -30,9 +30,14 @@ use MongoDB\BSON\UTCDatetime;
 use MongoDB\Client;
 use Thessia\Lib\Cache;
 use Thessia\Lib\cURL;
-use Thessia\Model\CCP\groupIDs;
-use Thessia\Model\CCP\solarSystems;
-use Thessia\Model\CCP\typeIDs;
+use Thessia\Model\Database\CCP\groupIDs;
+use Thessia\Model\Database\CCP\solarSystems;
+use Thessia\Model\Database\CCP\typeIDs;
+use Thessia\Model\Database\EVE\Alliances;
+use Thessia\Model\Database\EVE\Characters;
+use Thessia\Model\Database\EVE\Corporations;
+use Thessia\Model\Database\EVE\Killmails;
+use Thessia\Model\Database\EVE\Prices;
 
 /**
  * Class Parser
