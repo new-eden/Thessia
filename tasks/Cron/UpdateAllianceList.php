@@ -46,8 +46,7 @@ class UpdateAllianceList
         $corporationCollection = $mongo->selectCollection("thessia", "corporations");
 
         $log->info("CRON: Inserting/Updating alliances...");
-        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))),
-            true);
+        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))), true);
         foreach ($data["result"]["rowset"]["row"] as $alliance) {
             $alliData = $alliance["@attributes"];
             $allianceID = $alliData["allianceID"];
@@ -61,27 +60,31 @@ class UpdateAllianceList
             $description = $moreData["description"];
 
             $array = array(
-                "allianceID" => $allianceID,
+                "allianceID" => (int) $allianceID,
                 "allianceName" => $allianceName,
                 "ticker" => $ticker,
-                "memberCount" => $memberCount,
-                "executorCorporationID" => $executorCorpID,
+                "memberCount" => (int) $memberCount,
+                "executorCorporationID" => (int) $executorCorpID,
                 "executorCorporationName" => $executorCorpName,
                 "startDate" => $startDate,
                 "description" => $description,
                 "lastUpdated" => date("Y-m-d H:i:s")
             );
 
-            // @todo make it insert it's corporations into the corporations table.. need to add a resque scheduler for updating corporations and whatnots tho..
             $corpIDs = array();
             foreach ($moreData["corporations"] as $corp) {
-                $corpIDs[] = $corp["id"];
+                $corpID = $corp["id"];
+                $corpIDs[] = $corpID;
+                \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $corpID));
             }
 
-            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)),
-                array("projection" => array("_id" => 0)))->toArray();
-            $log->addInfo("CRON UpdateAllianceList: Updating {$allianceName}");
-            $collection->replaceOne(array("allianceID" => $allianceID), $array, array("upsert" => true));
+            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
+            $log->info("CRON UpdateAllianceList: Updating {$allianceName}");
+            try {
+                $collection->insertOne($array);
+            } catch (\Exception $e) {
+                $collection->replaceOne(array("allianceID" => $allianceID), $array);
+            }
         }
     }
 
