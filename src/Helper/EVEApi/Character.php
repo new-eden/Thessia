@@ -132,7 +132,7 @@ class Character {
      * @param int|null $characterID
      * @return array
      */
-    public function characterCharacterSheet(int $apiKey, string $vCode, int $characterID = null): array {
+    public function characterCharacterSheet(int $apiKey = null, string $vCode = null, int $characterID = null): array {
         try {
             $p = $this->pheal->Pheal($apiKey, $vCode);
             $p->scope = "Char";

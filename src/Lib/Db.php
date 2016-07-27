@@ -135,11 +135,11 @@ class Db
 
     /**
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      * @param int $ttl
      * @return bool
      */
-    private function setCache(string $key, string $value, int $ttl): bool {
+    private function setCache(string $key, $value, int $ttl): bool {
         return $this->cache->set($key, serialize($value), min(3600, $ttl));
     }
 

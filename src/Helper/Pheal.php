@@ -109,7 +109,7 @@ class Pheal
      * @param int $characterID
      * @param \Exception $exception
      */
-    public function handleApiException(int $apiKey, int $characterID, \Exception $exception) {
+    public function handleApiException(int $apiKey = null, int $characterID, \Exception $exception) {
         $code = $exception->getCode();
         $message = $exception->getMessage();
 
