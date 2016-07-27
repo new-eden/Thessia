@@ -132,11 +132,12 @@ class Parser
     /**
      * Parses data from CREST into a format the parser can process
      *
-     * @param $killID
-     * @param $killHash
+     * @param int $killID
+     * @param string $killHash
+     * @param int|null $warID
      * @return array
      */
-    public function parseCrestKillmail($killID, $killHash)
+    public function parseCrestKillmail(int $killID, string $killHash, int $warID = null)
     {
         $url = "https://crest.eveonline.com/killmails/{$killID}/{$killHash}/";
         $data = json_decode($this->curl->getData($url), true);
@@ -145,17 +146,18 @@ class Parser
         $killmail = $this->crest->generateFromCREST(array("killID" => $killID, "killmail" => $data));
 
         // Parse the killmail data and return it..
-        return $this->parseKillmail($killmail, $killHash);
+        return $this->parseKillmail($killmail, $killHash, $warID);
     }
 
     /**
      * Parses and processes the killmail data to the format stored in MongoDB
      *
-     * @param $killmailData
-     * @param $killHash
+     * @param array $killmailData
+     * @param string $killHash
+     * @param int $warID
      * @return array
      */
-    private function parseKillmail(array $killmailData, string $killHash): array
+    private function parseKillmail(array $killmailData, string $killHash, int $warID = null): array
     {
         $killmail = array();
 
@@ -164,7 +166,7 @@ class Parser
         $killmail["killTime"] = new UTCDatetime($unixTime);
 
         // Generate the top portion of the mail
-        $killmail = array_merge($killmail, $this->generateTopPortion($killmailData, $killHash));
+        $killmail = array_merge($killmail, $this->generateTopPortion($killmailData, $killHash, $warID));
 
         // Generate the victim portion of the mail
         $killmail["victim"] = $this->generateVictimPortion($killmailData["victim"]);
@@ -186,9 +188,10 @@ class Parser
      *
      * @param $data
      * @param string $killHash
+     * @param int $warID
      * @return array
      */
-    private function generateTopPortion($data, $killHash): array
+    private function generateTopPortion($data, $killHash, $warID): array
     {
         $top = array();
 
@@ -211,6 +214,7 @@ class Parser
         $top["crestHash"] = $killHash;
         $top["isNPC"] = $this->isNPC($data);
         $top["isSolo"] = $this->isSolo($data);
+        $top["warID"] = (int)$warID ?? 0;
 
         return $top;
     }

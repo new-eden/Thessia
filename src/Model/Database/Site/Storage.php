@@ -75,7 +75,7 @@ class Storage extends Mongo
      * Insert an object into the storage area
      *
      * @param string $key
-     * @param $value Can be a string, null, array, object - the sky's the limit
+     * @param mixed $value Can be a string, null, array, object - the sky's the limit
      */
     public function set(string $key, $value) {
         $this->collection->replaceOne(array("key" => $key), array("key" => $key, "value" => $value));

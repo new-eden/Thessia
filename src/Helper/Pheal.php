@@ -117,7 +117,6 @@ class Pheal
             case 904: // temp ban from CCPs api server
             case 28: // Timeouts
                 break;
-
             case 403:
             case 502:
             case 503: // Service Unavailable - try again later
