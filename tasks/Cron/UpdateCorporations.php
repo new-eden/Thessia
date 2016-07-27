@@ -45,7 +45,7 @@ class UpdateCorporations
         $collection = $mongo->selectCollection("thessia", "corporations");
 
         $log->addInfo("CRON: Updating Corporations from the EVE API");
-        $date = strtotime(date("Y-m-d H:i:s", strtotime("-1 week"))) * 1000;
+        $date = strtotime(date("Y-m-d H:i:s", strtotime("-3 days"))) * 1000;
         $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 50000))->toArray();
 
         foreach($corporationsToUpdate as $corp) {
