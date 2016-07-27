@@ -29,10 +29,9 @@ use League\Container\Container;
 use MongoDB\BSON\UTCDatetime;
 use MongoDB\Client;
 use MongoDB\Collection;
-use Thessia\Helper\EVEApi\Corporation;
-use Thessia\Model\Database\EVE\Alliances;
+use Thessia\Helper\EVEApi\EVE;
 
-class UpdateCorporation
+class UpdateCharacter
 {
     /**
      * @var Container
@@ -44,32 +43,33 @@ class UpdateCorporation
         /** @var Client $mongodb */
         $mongodb = $this->container->get("mongo");
         /** @var Collection $collection */
-        $collection = $mongodb->selectCollection("thessia", "corporations");
-        /** @var Corporation $corporation */
-        $corporation = $this->container->get("ccpCorporation");
-        /** @var Alliances $alliance */
-        $alliance = $this->container->get("alliances");
+        $collection = $mongodb->selectCollection("thessia", "characters");
+        /** @var EVE $character */
+        $eve = $this->container->get("ccpEVE");
 
-        $corporationID = (int) $this->args["corporationID"];
+        $characterID = (int) $this->args["characterID"];
 
-        if($corporationID == 0)
+        if($characterID == 0)
             exit;
 
-        $sheet = $corporation->corporationCorporationSheet(null, null, $corporationID);
-        if(isset($sheet["result"]["corporationName"])) {
+        $sheet = $eve->eveCharacterInfo($characterID);
+        if(isset($sheet["result"]["characterName"])) {
             $data = array(
+                "characterID" => (int) $sheet["result"]["characterID"],
+                "characterName" => $sheet["result"]["characterName"],
                 "corporationID" => (int) $sheet["result"]["corporationID"],
-                "corporationName" => $sheet["result"]["corporationName"],
-                "allianceID" => (int) $sheet["result"]["allianceID"],
-                "allianceName" => $alliance->getAllByID($sheet["result"]["allianceID"])["allianceName"],
-                "ceoID" => (int) $sheet["result"]["ceoID"],
-                "ticker" => $sheet["result"]["ticker"],
-                "memberCount" => (int) $sheet["result"]["memberCount"],
+                "corporationName" => $sheet["result"]["corporation"],
+                "corporationJoinDate" => new UTCDatetime(strtotime($sheet["result"]["corporationDate"]) * 1000),
+                "allianceID" => (int) $sheet["result"]["allianceID"] ?? 0,
+                "allianceName" => $sheet["result"]["alliance"] ?? "",
+                "allianceJoinDate" => new UTCDatetime(strtotime($sheet["result"]["allianceDate"]) * 1000),
+                "securityStatus" => (float) $sheet["result"]["securityStatus"],
+                "race" => $sheet["result"]["race"],
                 "lastUpdated" => new UTCDatetime(time() * 1000),
-                "information" => $sheet
+                "history" => $sheet["result"]["employmentHistory"]
             );
 
-            $collection->replaceOne(array("corporationID" => $corporationID), $data, array("upsert" => true));
+            $collection->replaceOne(array("characterID" => $characterID), $data, array("upsert" => true));
         }
         exit();
     }
