@@ -83,7 +83,6 @@ class populateAllianceList extends Command
                 "lastUpdated" => date("Y-m-d H:i:s")
             );
 
-            // @todo make it insert it's corporations into the corporations table.. need to add a resque scheduler for updating corporations and whatnots tho..
             $corpIDs = array();
             foreach ($moreData["corporations"] as $corp) {
                 $corpID = $corp["id"];
