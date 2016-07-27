@@ -23,15 +23,7 @@
  * SOFTWARE.
  */
 
-/**
- * Created by PhpStorm.
- * User: micha
- * Date: 22-07-2016
- * Time: 01:06
- */
-
 namespace Thessia\Helper;
-
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -40,7 +32,7 @@ use Pheal\Core\Config;
 use Pheal\Fetcher\Guzzle;
 use Pheal\Log\PsrLogger;
 use Pheal\RateLimiter\FileLockRateLimiter;
-use Thessia\Model\Site\Storage;
+use Thessia\Model\Database\Site\Storage;
 
 /**
  * Class Pheal

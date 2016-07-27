@@ -192,7 +192,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("parser", Parser::class)
             ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
             ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");
-        $container->share("storage", Storage::class);
+        $container->share("storage", Storage::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
 
         // Add Pheal
         $container->share("pheal", Pheal::class)->withArgument("storage");

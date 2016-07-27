@@ -25,7 +25,6 @@
 
 namespace Thessia\Helper\EVEApi;
 
-
 use Thessia\Helper\Pheal;
 
 class Corporation {
@@ -218,17 +217,22 @@ class Corporation {
      *
      * @param int $apiKey
      * @param string $vCode
-     * @param int|null $characterID
+     * @param int|null $corporationID
      * @return array
      */
-    public function corporationCorporationSheet(int $apiKey, string $vCode, int $characterID = null): array {
+    public function corporationCorporationSheet(int $apiKey = null, string $vCode = null, int $corporationID = null): array {
         try {
             $p = $this->pheal->Pheal($apiKey, $vCode);
             $p->scope = "Corp";
 
             $requestArray = array();
-            if (isset($characterID))
-                $requestArray["characterID"] = $characterID;
+            $requestArray["corporationID"] = $corporationID;
+
+            if(isset($apiKey))
+                $requestArray["apiKey"] = $apiKey;
+
+            if(isset($vCode))
+                $requestArray["vCode"] = $vCode;
 
             $result = $p->CorporationSheet($requestArray)->toArray();
             return $result;
