@@ -86,7 +86,9 @@ class populateAllianceList extends Command
             // @todo make it insert it's corporations into the corporations table.. need to add a resque scheduler for updating corporations and whatnots tho..
             $corpIDs = array();
             foreach ($moreData["corporations"] as $corp) {
-                $corpIDs[] = $corp["id"];
+                $corpID = $corp["id"];
+                $corpIDs[] = $corpID;
+                \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $corpID));
             }
 
             $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
