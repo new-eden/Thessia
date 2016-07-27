@@ -37,8 +37,8 @@ class UpdateThessia extends Command
     protected function configure()
     {
         $this
-            ->setName("update:thessia")
-            ->setDescription("Updates composer and other stuff");
+            ->setName("update")
+            ->setDescription("Updates composer, phpstorm meta, phpdocs and other stuff");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
