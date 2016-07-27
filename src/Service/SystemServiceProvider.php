@@ -81,10 +81,7 @@ class SystemServiceProvider extends AbstractServiceProvider
      */
     protected $provides = [
         "config",
-        "settings",
         "log",
-        "view",
-        "render",
         "timer",
         "cache",
         "db",

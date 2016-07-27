@@ -1,8 +1,5 @@
 <?php
 namespace PHPSTORM_META {
-
-    use League\Container\Container;
-
     $STATIC_METHOD_TYPES = [
         \Interop\Container\ContainerInterface::get('') => [
           'config' instanceof Thessia\Lib\Config,
@@ -43,8 +40,17 @@ namespace PHPSTORM_META {
           'ccpEVE' instanceof Thessia\Helper\EVEApi\EVE,
           'ccpMap' instanceof Thessia\Helper\EVEApi\Map,
           'ccpServer' instanceof Thessia\Helper\EVEApi\Server,
+          'environment' instanceof Slim\Http\Environment,
+          'request' instanceof Slim\Http\Request,
+          'response' instanceof Slim\Http\Response,
+          'router' instanceof Slim\Router,
+          'foundHandler' instanceof Slim\Handlers\Strategies\RequestResponse,
+          'errorHandler' instanceof Slim\Handlers\Error,
+          'notFoundHandler' instanceof Slim\Handlers\NotFound,
+          'notAllowedHandler' instanceof Slim\Handlers\NotAllowed,
+          'callableResolver' instanceof Slim\CallableResolver,
           'render' instanceof \Thessia\Lib\Render,
-          "" == "@"
+
         ]
     ];
 }

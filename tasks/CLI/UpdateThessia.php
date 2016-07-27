@@ -26,21 +26,69 @@
 namespace Thessia\Tasks\CLI;
 
 use JBZoo\PimpleDumper\PimpleDumper;
+use Jenssegers\Lean\SlimServiceProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Thessia\Service\SystemServiceProvider;
 
 class UpdateThessia extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("update:thessia")
+            ->setName("update")
             ->setDescription("Updates composer and other stuff");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        global $container;
+        // Generate the .phpstorm.meta.php file
+        $this->phpStormMeta();
+
+        // Update composer
+    }
+
+    private function phpStormMeta() {
+        $container = getContainer();
+        $container->addServiceProvider(new SlimServiceProvider());
+        $systemProvider = new SystemServiceProvider();
+        $slimProvider = new SlimServiceProvider();
+        $systemProvides = $systemProvider->provides();
+        $slimProvides = $slimProvider->provides();
+
+        $provides = array_merge($systemProvides, $slimProvides);
+
+        // Generate the instance array
+        $instanceArray = array();
+        foreach($provides as $service) {
+            if(is_object($container->get($service))) {
+                $instance = get_class($container->get($service));
+                $instanceArray[$service] = $instance;
+            }
+        }
+
+        // Manually added parts
+        $instanceArray["render"] = '\Thessia\Lib\Render';
+
+        // Generate the phpstorm meta file and output it to the root of the directory.
+        $location = __DIR__ . "/../../.phpstorm.meta.php";
+
+        $data = "<?php
+namespace PHPSTORM_META {
+    \$STATIC_METHOD_TYPES = [
+        \\Interop\\Container\\ContainerInterface::get('') => [\n";
+
+        //"mongo" instanceof Client,
+        foreach($instanceArray as $key => $inst)
+            $data .= "          '{$key}' instanceof {$inst},\n";
+
+        // "" == "@",
+        $data .= "
+        ]
+    ];
+}";
+
+        file_put_contents($location, $data);
     }
 }
