@@ -49,8 +49,9 @@ class KillmailParser
 
         $killID = $this->args["killID"];
         $killHash = $this->args["killHash"];
+        $warID = $this->args["warID"] ?? null;
 
-        $killmail = $parser->parseCrestKillmail($killID, $killHash);
+        $killmail = $parser->parseCrestKillmail($killID, $killHash, $warID);
 
         if (is_array($killmail)) {
             try {

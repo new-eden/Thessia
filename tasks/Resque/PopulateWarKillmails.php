@@ -23,41 +23,58 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\Cron;
+namespace Thessia\Tasks\Resque;
+
 
 use League\Container\Container;
-use MongoDB\BSON\UTCDatetime;
+use MongoDB\Client;
 use MongoDB\Collection;
-use Monolog\Logger;
+use Thessia\Lib\cURL;
+use Thessia\Model\EVE\Parser;
 
-class UpdateCorporations
+class PopulateWarKillmails
 {
     /**
-     * @param Container $container
+     * @var Container
      */
-    public static function execute(Container $container)
+    private $container;
+
+    public function perform()
     {
-        /** @var \MongoClient $mongo */
-        $mongo = $container->get("mongo");
-        /** @var Logger $log */
-        $log = $container->get("log");
-        /** @var Collection $collection */
-        $collection = $mongo->selectCollection("thessia", "corporations");
+        /** @var cURL $curl */
+        $curl = $this->container->get("curl");
 
-        $log->addInfo("CRON: Updating Corporations from the EVE API");
-        $date = strtotime(date("Y-m-d H:i:s", strtotime("-1 week"))) * 1000;
-        $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 50000))->toArray();
+        $href = $this->args["href"];
+        $warID = $this->args["warID"];
 
-        foreach($corporationsToUpdate as $corp) {
-            \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporations', array("corporationID" => $corp["corporationID"]));
+        $data = json_decode($curl->getData($href), true);
+        $pageCount = $data["pageCount"];
+        $currPage = 1;
+
+        while($currPage <= $pageCount) {
+            $data = json_decode($curl->getData($href . "?page={$currPage}"), true);
+            foreach($data["items"] as $km) {
+                $elem = parse_url($km["href"]);
+                $parts = explode("/", $elem["path"]);
+                $killID = $parts[2] ?? null;
+                $hash = $parts[3] ?? null;
+
+                if($killID != null && $hash != null)
+                    \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $killID, "killHash" => $hash, "warID" => $warID));
+            }
+            $currPage++;
         }
+
+        exit();
     }
 
-    /**
-     * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
-     */
-    public static function getRunTimes()
+    public function setUp()
     {
-        return 3600;
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
 }
