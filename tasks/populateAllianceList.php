@@ -57,9 +57,8 @@ class populateAllianceList extends Command
         /** @var Collection $corporationCollection */
         $corporationCollection = $mongo->selectCollection("thessia", "corporations");
 
-        $log->info("Inserting/Updating alliances...");
-        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))),
-            true);
+        $output->writeln("Inserting/Updating alliances...");
+        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))), true);
         foreach ($data["result"]["rowset"]["row"] as $alliance) {
             $alliData = $alliance["@attributes"];
             $allianceID = $alliData["allianceID"];
@@ -73,11 +72,11 @@ class populateAllianceList extends Command
             $description = $moreData["description"];
 
             $array = array(
-                "allianceID" => $allianceID,
+                "allianceID" => (int) $allianceID,
                 "allianceName" => $allianceName,
                 "ticker" => $ticker,
-                "memberCount" => $memberCount,
-                "executorCorporationID" => $executorCorpID,
+                "memberCount" => (int) $memberCount,
+                "executorCorporationID" => (int) $executorCorpID,
                 "executorCorporationName" => $executorCorpName,
                 "startDate" => $startDate,
                 "description" => $description,
@@ -90,10 +89,9 @@ class populateAllianceList extends Command
                 $corpIDs[] = $corp["id"];
             }
 
-            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)),
-                array("projection" => array("_id" => 0)))->toArray();
+            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
 
-            $log->info("Adding/Updating {$allianceName}");
+            $output->writeln("Adding/Updating {$allianceName}");
             try {
                 $collection->insertOne($array);
             } catch (\Exception $e) {
