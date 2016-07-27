@@ -45,7 +45,7 @@ class RunBoris extends Command
         $boris = new Boris("Thessia>\n");
         $boris->setInspector(new ExportInspector());
         $boris->onStart('$container = getContainer();');
-        $boris->onStart('echo "Welcome to Boris.\n The container from Thessia is available under \$container.\n";');
+        $boris->onStart('echo "Welcome to Boris.\nThe container from Thessia is available under \$container.\n";');
         $boris->onStart('echo "To use, say mongodb, simply do: \$mongo = \$container->get(\"mongo\");\n\n";');
         $boris->start();
     }
