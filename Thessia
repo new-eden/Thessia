@@ -15,8 +15,8 @@ require_once(__DIR__ . "/init.php");
 $cli = new Symfony\Component\Console\Application("Embrace Eternity");
 
 $tasks = array(__DIR__ . "/tasks/*.php", __DIR__ . "/tasks/CLI/*.php");
-// Load all the commands
 
+// Load all the commands
 foreach ($tasks as $task) {
     $files = glob($task);
     foreach ($files as $file) {
@@ -29,6 +29,7 @@ foreach ($tasks as $task) {
         $cli->add(new $import());
     }
 }
+
 $cli->run();
 
 // Prompter
