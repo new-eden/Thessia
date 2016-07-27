@@ -37,7 +37,7 @@ class UpdateThessia extends Command
     protected function configure()
     {
         $this
-            ->setName("update")
+            ->setName("update:thessia")
             ->setDescription("Updates composer and other stuff");
     }
 
