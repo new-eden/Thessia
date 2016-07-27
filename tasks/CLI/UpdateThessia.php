@@ -47,6 +47,19 @@ class UpdateThessia extends Command
         $this->phpStormMeta();
 
         // Update composer
+        if(!file_exists(__DIR__ . "/../../composer.phar")) {
+            file_put_contents(__DIR__ . "/../../composer.phar",
+                file_get_contents("https://getcomposer.org/composer.phar"));
+
+            $this->updateComposer();
+        } else {
+            $this->updateComposer();
+        }
+    }
+
+    private function updateComposer() {
+        chdir(__DIR__ . "/../../");
+        exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar update -o");
     }
 
     private function phpStormMeta() {
