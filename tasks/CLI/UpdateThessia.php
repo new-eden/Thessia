@@ -46,7 +46,7 @@ class UpdateThessia extends Command
         // Generate the .phpstorm.meta.php file
         $this->phpStormMeta();
 
-        // Update composer
+        // Update composer @todo move into the updateComposer function
         if(!file_exists(__DIR__ . "/../../composer.phar")) {
             file_put_contents(__DIR__ . "/../../composer.phar",
                 file_get_contents("https://getcomposer.org/composer.phar"));
