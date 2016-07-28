@@ -97,6 +97,16 @@ class Cache
     }
 
     /**
+     * Returns true if a key exists. False if it doesn't
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function exists(string $key): bool {
+        return $this->redis->exists($key);
+    }
+
+    /**
      * Sets expiration time for Cache key.
      *
      * @param string $key The key to uniquely identify the cached item
