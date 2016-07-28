@@ -25,47 +25,49 @@
 
 namespace Thessia\Tasks\CLI;
 
-use Ratchet\App;
+use RedisQ\Action;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RunWebSocketServer extends Command
-{
+class RunRedisQ extends Command {
     protected function configure()
     {
         $this
-            ->setName("run:wsserver")
-            ->setDescription("Run the websocket server")
-            ->addOption("host", null, InputOption::VALUE_OPTIONAL, "WebSocket host. Default is 0.0.0.0", "0.0.0.0")
-            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "WebSocket port. Default is 474", 474)
-            ->addOption("httpHost", null, InputOption::VALUE_OPTIONAL, "WebSocket httpHost. Default is localhost", "localhost");
+            ->setName("run:redisq")
+            ->setDescription("Run RedisQ fetcher process");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Load the container
         $container = getContainer();
+        $log = $container->get("log");
+        $mongo = $container->get("mongo");
+        $collection = $mongo->selectCollection("thessia", "killmails");
 
-        $output->writeln("Starting Websocket Instances");
+        $run = true;
+        do {
+            $p = Action::listen("https://redisq.zkillboard.com/");
 
-        // Fire up Ratchet
-        $ratchet = new App($input->getOption("httpHost"), $input->getOption("port"), $input->getOption("host"));
+            if(!empty($p)) {
+                $killID = $p["killID"];
+                $killHash = $p["zkb"]["hash"];
+                $warID = $p["zkb"]["killmail"]["war"]["id"] ?? 0;
 
-        // Load all endpoints
-        foreach (glob(__DIR__ . "/../WebSockets/*.php") as $file) {
-            require_once($file);
-            $baseName = basename($file);
-            $className = str_replace(".php", "", $baseName);
-            $urlPath = strtolower(str_replace("WebSocket", "", str_replace(".php", "", $baseName)));
-            $className = "\\Thessia\\Tasks\\WebSockets\\{$className}";
+                // If a killmail already exists, we'll not bother to insert it
+                $exists = $collection->findOne(array("killID" => $killID));
+                if(!empty($exists))
+                    continue;
 
-            $output->writeln("Adding path: /{$urlPath} to WebSocket Instance");
-            $ratchet->route("/{$urlPath}", new $className($container), array("*"));
-        }
+                if($killID && $killHash) {
+                    // Logging
+                    $log->info("Got killmail from RedisQ");
 
-        // Run the websocket
-        $ratchet->run();
+                    // Enqueue the mail for processing
+                    \Resque::enqueue("now", '\Thessia\Tasks\Resque\KillmailParser',
+                        array("killID" => $killID, "killHash" => $killHash, "warID" => $warID));
+                }
+            }
+        } while($run == true);
     }
 }
