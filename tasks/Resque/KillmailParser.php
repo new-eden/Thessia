@@ -29,6 +29,8 @@ namespace Thessia\Tasks\Resque;
 use League\Container\Container;
 use MongoDB\Client;
 use MongoDB\Collection;
+use Ratchet\WebSocket\Version\RFC6455\Connection;
+use Thessia\Lib\Config;
 use Thessia\Model\EVE\Parser;
 
 class KillmailParser
@@ -46,10 +48,12 @@ class KillmailParser
         $collection = $mongodb->selectCollection("thessia", "killmails");
         /** @var Parser $parser */
         $parser = $this->container->get("parser");
+        /** @var Config $config */
+        $config = $this->container->get("config");
 
         $killID = (int) $this->args["killID"];
         $killHash = (string) $this->args["killHash"];
-        $warID = isset($this->args["warID"]) ? (int) $this->args["warID"] : null;
+        $warID = isset($this->args["warID"]) ? (int) $this->args["warID"] : 0;
 
         // It happens that there are a \n in the hash, remove it so the hash functions
         if(stristr($killHash, "\n"))
@@ -73,6 +77,15 @@ class KillmailParser
             } catch(\Exception $e) {
                 $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
             }
+
+            // Send it to the websocket as well, if it fails, do nothing
+            try {
+                \Ratchet\Client\connect($config->get("serverAddress", "websocket"))->then(function (Connection $conn
+                ) use ($killmail) {
+                    $conn->send(json_encode($killmail, JSON_NUMERIC_CHECK));
+                    $conn->close();
+                });
+            } catch(\Exception $e) {}
         }
 
         exit();
