@@ -27,11 +27,11 @@ namespace Thessia\Tasks\WebSockets;
 
 use League\Container\Container;
 use Ratchet\ConnectionInterface;
-use Ratchet\MessageComponentInterface;
 use Ratchet\Wamp\Topic;
 use Ratchet\Wamp\WampServerInterface;
-use React\EventLoop\Factory;
-use React\Stomp\Factory as StompFactory;
+use React\EventLoop\LoopInterface;
+use React\Stomp\Client;
+use React\Stomp\Factory;
 
 class KillsWebSocket implements WampServerInterface
 {
@@ -41,17 +41,24 @@ class KillsWebSocket implements WampServerInterface
     protected $clients;
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * @param Container $container
+     * @param $loop
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, LoopInterface $loop)
     {
         $this->clients = new \SplObjectStorage();
-        $this->container = $container;
+        $config = $container->get("config");
+
+        // Setup stomp
+        $factory = new Factory($loop);
+        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
+        $client = $factory->createClient($clientArray);
+        $client->connect()
+            ->then(function(Client $client) {
+                $client->subscribe("/topic/kills", function($frame) {
+                    $this->onMessage($frame->body);
+                });
+            });
     }
 
     /**

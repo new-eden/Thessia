@@ -27,7 +27,6 @@ namespace Thessia\Tasks\CLI;
 
 use Ratchet\App;
 use React\EventLoop\Factory;
-use React\Stomp\Client;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -51,7 +50,6 @@ class RunWebSocketServer extends Command
     {
         // Load the container
         $container = getContainer();
-        $config = $container->get("config");
 
         $output->writeln("Starting Websocket Instances");
 
@@ -65,44 +63,15 @@ class RunWebSocketServer extends Command
         foreach(glob(__DIR__ . "/../WebSockets/*.php") as $include)
             require_once($include);
 
-        $echoWebSocket = new EchoWebSocket($container);
-        $killsWebSocket = new KillsWebSocket($container);
-
-        // Setup stomp
-        $factory = new \React\Stomp\Factory($loop);
-        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
-        $client = $factory->createClient($clientArray);
-        $client->connect()
-            ->then(function(Client $client) use ($killsWebSocket) {
-                $client->subscribe("/topic/kills", function($frame) use ($client, $killsWebSocket) {
-                    $killsWebSocket->onMessage($frame->body);
-                });
-            });
+        // Startup the endpoints.
+        $echoWebSocket = new EchoWebSocket($container, $loop);
+        $killsWebSocket = new KillsWebSocket($container, $loop);
 
         // Add routes
         $ratchet->route("/echo", $echoWebSocket, array("*"));
         $ratchet->route("/kills", $killsWebSocket, array("*"));
 
+        // Start the loop
         $loop->run();
-
-        // Run the websocket
-        //$ratchet->run();
     }
 }
-
-/*
- *         // Kick mail off to stomp!
-        $loop = Factory::create();
-        $factory = new StompFactory($loop);
-        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
-        $client = $factory->createClient($clientArray);
-        $client->connect()
-            ->then(function(\React\Stomp\Client $client) use ($clients) {
-                $client->subscribe("/topic/kills", function($message) use ($clients) {
-
-                });
-            });
-
-        // Run the Stomp loop, it'll only run once tho..
-        $loop->run();
- */

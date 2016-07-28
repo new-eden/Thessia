@@ -28,6 +28,7 @@ namespace Thessia\Tasks\WebSockets;
 use League\Container\Container;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
+use React\EventLoop\LoopInterface;
 
 class EchoWebSocket implements MessageComponentInterface
 {
@@ -37,17 +38,12 @@ class EchoWebSocket implements MessageComponentInterface
     protected $clients;
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * @param Container $container
+     * @param $loop
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, LoopInterface $loop)
     {
         $this->clients = new \SplObjectStorage();
-        $this->container = $container;
     }
 
     /**
