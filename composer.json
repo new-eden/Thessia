@@ -37,6 +37,7 @@
     "d11wtq/boris": "1.0.*",
     "mongodb/mongodb": "1.0.*",
     "zkillboard/redisq": "1.*",
-    "3rdpartyeve/phealng": "2.3.*"
+    "3rdpartyeve/phealng": "2.3.*",
+    "bandwidth-throttle/token-bucket": "1.0.*"
   }
 }

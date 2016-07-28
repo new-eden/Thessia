@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db3cfa3a2318ebfd634beccb5ac12a9f",
-    "content-hash": "91b83e006301233ae5cd31077661909f",
+    "hash": "1282ef7edfe77ed81a9991050e880ee5",
+    "content-hash": "b41d3b2fb0a964fbfce77f875916dc04",
     "packages": [
         {
             "name": "3rdpartyeve/phealng",
@@ -59,6 +59,62 @@
                 "PhealNG"
             ],
             "time": "2016-01-10 16:59:33"
+        },
+        {
+            "name": "bandwidth-throttle/token-bucket",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bandwidth-throttle/token-bucket.git",
+                "reference": "e052491e5adb5ad999efeda9700ad6ebbe263dbc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bandwidth-throttle/token-bucket/zipball/e052491e5adb5ad999efeda9700ad6ebbe263dbc",
+                "reference": "e052491e5adb5ad999efeda9700ad6ebbe263dbc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "malkusch/lock": "^0.4",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "ext-redis": "^2.2.4",
+                "mikey179/vfsstream": "^1.5.0",
+                "php-mock/php-mock-phpunit": "^1",
+                "phpunit/phpunit": "^5",
+                "predis/predis": "^1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "bandwidthThrottle\\tokenBucket\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "WTFPL"
+            ],
+            "authors": [
+                {
+                    "name": "Markus Malkusch",
+                    "email": "markus@malkusch.de",
+                    "homepage": "http://markus.malkusch.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Implementation of the Token Bucket algorithm.",
+            "homepage": "https://github.com/bandwidth-throttle/token-bucket",
+            "keywords": [
+                "bandwidth",
+                "rate limit",
+                "rate limiting",
+                "throttle",
+                "throttling",
+                "token bucket"
+            ],
+            "time": "2016-06-27 21:08:17"
         },
         {
             "name": "cboden/ratchet",
@@ -842,6 +898,65 @@
                 "service"
             ],
             "time": "2016-03-17 11:07:59"
+        },
+        {
+            "name": "malkusch/lock",
+            "version": "0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/malkusch/lock.git",
+                "reference": "d34daa7ef656cad56ce8c2f1e53c6c5fd2b8b771"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/malkusch/lock/zipball/d34daa7ef656cad56ce8c2f1e53c6c5fd2b8b771",
+                "reference": "d34daa7ef656cad56ce8c2f1e53c6c5fd2b8b771",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5",
+                "psr/log": "^1"
+            },
+            "require-dev": {
+                "ext-redis": "^2.2.4",
+                "kriswallsmith/spork": "0.3.*",
+                "mikey179/vfsstream": "^1.5.0",
+                "php-mock/php-mock-phpunit": "^0.3",
+                "phpunit/phpunit": "^4",
+                "predis/predis": "~1.0",
+                "zetacomponents/system-information": "~1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "malkusch\\lock\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "WTFPL"
+            ],
+            "authors": [
+                {
+                    "name": "Markus Malkusch",
+                    "email": "markus@malkusch.de",
+                    "homepage": "http://markus.malkusch.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Mutex library for exclusive code execution.",
+            "homepage": "https://github.com/malkusch/lock",
+            "keywords": [
+                "cas",
+                "flock",
+                "lock",
+                "memcache",
+                "mutex",
+                "redis",
+                "redlock",
+                "semaphore"
+            ],
+            "time": "2015-08-11 18:56:02"
         },
         {
             "name": "mkraemer/react-pcntl",
