@@ -26,10 +26,14 @@
 namespace Thessia\Tasks\CLI;
 
 use Ratchet\App;
+use React\EventLoop\Factory;
+use React\Stomp\Client;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Thessia\Tasks\WebSockets\EchoWebSocket;
+use Thessia\Tasks\WebSockets\KillsWebSocket;
 
 class RunWebSocketServer extends Command
 {
@@ -39,7 +43,7 @@ class RunWebSocketServer extends Command
             ->setName("run:wsserver")
             ->setDescription("Run the websocket server")
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "WebSocket host. Default is 0.0.0.0", "0.0.0.0")
-            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "WebSocket port. Default is 474", 474)
+            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "WebSocket port. Default is 474", 8800)
             ->addOption("httpHost", null, InputOption::VALUE_OPTIONAL, "WebSocket httpHost. Default is localhost", "localhost");
     }
 
@@ -47,25 +51,58 @@ class RunWebSocketServer extends Command
     {
         // Load the container
         $container = getContainer();
+        $config = $container->get("config");
 
         $output->writeln("Starting Websocket Instances");
 
+        // Create the loop
+        $loop = Factory::create();
+
         // Fire up Ratchet
-        $ratchet = new App($input->getOption("httpHost"), $input->getOption("port"), $input->getOption("host"));
+        $ratchet = new App($input->getOption("httpHost"), $input->getOption("port"), $input->getOption("host"), $loop);
 
         // Load all endpoints
-        foreach (glob(__DIR__ . "/../WebSockets/*.php") as $file) {
-            require_once($file);
-            $baseName = basename($file);
-            $className = str_replace(".php", "", $baseName);
-            $urlPath = strtolower(str_replace("WebSocket", "", str_replace(".php", "", $baseName)));
-            $className = "\\Thessia\\Tasks\\WebSockets\\{$className}";
+        foreach(glob(__DIR__ . "/../WebSockets/*.php") as $include)
+            require_once($include);
 
-            $output->writeln("Adding path: /{$urlPath} to WebSocket Instance");
-            $ratchet->route("/{$urlPath}", new $className($container), array("*"));
-        }
+        $echoWebSocket = new EchoWebSocket($container);
+        $killsWebSocket = new KillsWebSocket($container);
+
+        // Setup stomp
+        $factory = new \React\Stomp\Factory($loop);
+        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
+        $client = $factory->createClient($clientArray);
+        $client->connect()
+            ->then(function(Client $client) use ($killsWebSocket) {
+                $client->subscribe("/topic/kills", function($frame) use ($client, $killsWebSocket) {
+                    $killsWebSocket->onMessage($frame->body);
+                });
+            });
+
+        // Add routes
+        $ratchet->route("/echo", $echoWebSocket, array("*"));
+        $ratchet->route("/kills", $killsWebSocket, array("*"));
+
+        $loop->run();
 
         // Run the websocket
-        $ratchet->run();
+        //$ratchet->run();
     }
 }
+
+/*
+ *         // Kick mail off to stomp!
+        $loop = Factory::create();
+        $factory = new StompFactory($loop);
+        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
+        $client = $factory->createClient($clientArray);
+        $client->connect()
+            ->then(function(\React\Stomp\Client $client) use ($clients) {
+                $client->subscribe("/topic/kills", function($message) use ($clients) {
+
+                });
+            });
+
+        // Run the Stomp loop, it'll only run once tho..
+        $loop->run();
+ */
