@@ -73,6 +73,7 @@ class importOldKillmails extends Command
 
             echo "Current offset: {$offset}...\n";
             foreach ($killmails as $killmail) {
+                // Make sure the killmail doesn't already exist
                 $exists = $kms->getAllByKillID($killmail["killID"]);
                 if(!empty($exists)) {
                     // Set the offset

@@ -55,6 +55,8 @@ class UpdateThessia extends Command
         } else {
             $this->updateComposer();
         }
+
+        // @todo Update phpdoc
     }
 
     private function updateComposer() {

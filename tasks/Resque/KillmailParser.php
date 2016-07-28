@@ -47,12 +47,26 @@ class KillmailParser
         /** @var Parser $parser */
         $parser = $this->container->get("parser");
 
-        $killID = $this->args["killID"];
-        $killHash = $this->args["killHash"];
-        $warID = $this->args["warID"] ?? null;
+        $killID = (int) $this->args["killID"];
+        $killHash = (string) $this->args["killHash"];
+        $warID = isset($this->args["warID"]) ? (int) $this->args["warID"] : null;
 
+        // It happens that there are a \n in the hash, remove it so the hash functions
+        if(stristr($killHash, "\n"))
+            $killHash = str_replace("\n", "", $killHash);
+
+        // @todo add a way to force update a mail
+        // Make sure the mail doesn't already exist before we bother CREST
+        $exists = $collection->findOne(array("killID" => $killID));
+        if(!empty($exists)) {
+            echo "Killmail already exists...\n";
+            exit;
+        }
+
+        // Throw the killID, hash and warID (if there is one) at the parser, and let it generate a nice pretty killmail for us.
         $killmail = $parser->parseCrestKillmail($killID, $killHash, $warID);
 
+        // If the killmail is an array, we try and insert it - if it already exists, we'll just update it.
         if (is_array($killmail)) {
             try {
                 $collection->insertOne($killmail);

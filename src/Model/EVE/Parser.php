@@ -620,9 +620,9 @@ class Parser
      * Get the fitting data from O.smium for the fit on the ship that blew up.
      *
      * @param $data
-     * @return array|mixed
+     * @return mixed
      */
-    private function generateOsmiumPortion($data): array
+    private function generateOsmiumPortion($data)
     {
         $data = $this->curl->getData("https://o.smium.org/api/json/loadout/dna/attributes/loc:ship,a:tank,a:ehpAndResonances,a:capacitors,a:damage?input={$data}");
         if (is_array($data)) {
