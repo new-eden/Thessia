@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1282ef7edfe77ed81a9991050e880ee5",
-    "content-hash": "b41d3b2fb0a964fbfce77f875916dc04",
+    "hash": "d4a4ca08b2ca106f444c0ecd605329fb",
+    "content-hash": "4fa6d71d618dc16a468187b80ed67a07",
     "packages": [
         {
             "name": "3rdpartyeve/phealng",
@@ -1734,6 +1734,51 @@
             "time": "2016-03-19 13:11:48"
         },
         {
+            "name": "react/stomp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/stomp.git",
+                "reference": "5cae9c0ef6397785302c085c464c278a69427c26"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/stomp/zipball/5cae9c0ef6397785302c085c464c278a69427c26",
+                "reference": "5cae9c0ef6397785302c085c464c278a69427c26",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "~2.0",
+                "php": ">=5.4",
+                "react/promise": "~2.0",
+                "react/socket": "0.4.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.3.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "React\\Stomp": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "STOMP bindings for React.",
+            "keywords": [
+                "rabbitmq",
+                "stomp"
+            ],
+            "time": "2015-01-25 19:06:56"
+        },
+        {
             "name": "react/stream",
             "version": "v0.4.3",
             "source": {
@@ -2229,12 +2274,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "ed578281f8f0ac26c12ec3b474708221a91551de"
+                "reference": "e0ecb4772c6186bb5288076daf421bed9ef57489"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/ed578281f8f0ac26c12ec3b474708221a91551de",
-                "reference": "ed578281f8f0ac26c12ec3b474708221a91551de",
+                "url": "https://api.github.com/repos/symfony/process/zipball/e0ecb4772c6186bb5288076daf421bed9ef57489",
+                "reference": "e0ecb4772c6186bb5288076daf421bed9ef57489",
                 "shasum": ""
             },
             "require": {
@@ -2270,7 +2315,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-26 08:08:27"
+            "time": "2016-07-28 11:15:50"
         },
         {
             "name": "symfony/routing",
@@ -2417,12 +2462,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "bb74e1511adb52512846f248ae2f7b7053d8ae43"
+                "reference": "5a7f5fa756fef4f287d9adfc479cda043fa8b799"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/bb74e1511adb52512846f248ae2f7b7053d8ae43",
-                "reference": "bb74e1511adb52512846f248ae2f7b7053d8ae43",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/5a7f5fa756fef4f287d9adfc479cda043fa8b799",
+                "reference": "5a7f5fa756fef4f287d9adfc479cda043fa8b799",
                 "shasum": ""
             },
             "require": {
@@ -2490,7 +2535,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "https://symfony.com",
-            "time": "2016-07-26 08:04:17"
+            "time": "2016-07-28 11:13:48"
         },
         {
             "name": "twig/twig",

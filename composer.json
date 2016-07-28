@@ -32,6 +32,7 @@
     "php-pm/php-pm": "dev-master",
     "chrisboulton/php-resque": "1.*",
     "react/zmq": "0.3.*",
+    "react/stomp": "0.2.*",
     "ratchet/pawl": "0.2.*",
     "cboden/ratchet": "0.3.*",
     "d11wtq/boris": "1.0.*",

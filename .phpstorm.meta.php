@@ -40,6 +40,7 @@ namespace PHPSTORM_META {
           'ccpEVE' instanceof Thessia\Helper\EVEApi\EVE,
           'ccpMap' instanceof Thessia\Helper\EVEApi\Map,
           'ccpServer' instanceof Thessia\Helper\EVEApi\Server,
+          'crestHelper' instanceof Thessia\Helper\CrestHelper,
           'environment' instanceof Slim\Http\Environment,
           'request' instanceof Slim\Http\Request,
           'response' instanceof Slim\Http\Response,
