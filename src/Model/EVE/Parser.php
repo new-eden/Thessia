@@ -164,6 +164,7 @@ class Parser
         $killmail["killID"] = (int)$killmailData["killID"];
         $unixTime = strtotime($killmailData["killTime"]) * 1000;
         $killmail["killTime"] = new UTCDatetime($unixTime);
+        $killmail["killTime_str"] = $killmailData["killTime"];
 
         // Generate the top portion of the mail
         $killmail = array_merge($killmail, $this->generateTopPortion($killmailData, $killHash, $warID));
@@ -171,8 +172,12 @@ class Parser
         // Generate the victim portion of the mail
         $killmail["victim"] = $this->generateVictimPortion($killmailData["victim"]);
 
+        // Get the pointValue and totalDamage taken
+        $pointValue = $killmail["pointValue"];
+        $totalDamage = $killmail["victim"]["damageTaken"];
+
         // Generate the attackers portion of the mail
-        $killmail["attackers"] = $this->generateAttackersPortion($killmailData["attackers"]);
+        $killmail["attackers"] = $this->generateAttackersPortion($killmailData["attackers"], $pointValue, $totalDamage);
 
         // Generate the Item portion of the mail
         $killmail["items"] = $this->generateItemPortion($killmailData["items"]);
@@ -210,6 +215,13 @@ class Parser
         $top["shipValue"] = (float)$killValues["shipValue"];
         $top["fittingValue"] = (float)$killValues["itemValue"];
         $top["totalValue"] = (float)$killValues["totalValue"];
+
+        // Calculate out the pointValue of this kill..
+        if($killValues["totalValue"] == 0)
+            $top["pointValue"] = 0;
+        else
+            $top["pointValue"] = ($killValues["totalValue"] / 10000) / count($data["attackers"]);
+
         $top["dna"] = $this->getDNA($data["items"], $data["victim"]["shipTypeID"]);
         $top["crestHash"] = $killHash;
         $top["isNPC"] = $this->isNPC($data);
@@ -535,9 +547,11 @@ class Parser
      * Generate the attackers portion of the mail array
      *
      * @param $data
-     * @return mixed
+     * @param $pointValue
+     * @param $totalDamage
+     * @return array|mixed
      */
-    private function generateAttackersPortion($data): array
+    private function generateAttackersPortion($data, $pointValue, $totalDamage): array
     {
         $attackers = array();
 
@@ -578,6 +592,14 @@ class Parser
             $shipData = $this->typeIDs->getAllByTypeID($attacker["shipTypeID"])->toArray()[0];
             $inner["shipTypeName"] = $shipData["name"]["en"];
             $inner["shipImageURL"] = $this->imageServer . "Type/" . $attacker["shipTypeID"] . "_32.png";
+
+            // Calculate the amount of points this pilot gets for this kill out of the total..
+            if($attacker["damageDone"] == 0 || $totalDamage == 0) {
+                $inner["points"] = 0;
+            } else {
+                $percentDamage = (int)$attacker["damageDone"] / $totalDamage;
+                $inner["points"] = $pointValue * $percentDamage;
+            }
 
             $attackers[] = $inner;
         }

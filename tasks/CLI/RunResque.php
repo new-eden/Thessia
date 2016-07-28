@@ -49,6 +49,7 @@ class RunResque extends Command
             require_once($file);
         }
 
+
         $queues = array("rt", "high", "med", "low");
         $logLevel = \Resque_Worker::LOG_NORMAL;
         $interval = 1;

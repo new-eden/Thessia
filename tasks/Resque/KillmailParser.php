@@ -30,6 +30,8 @@ use League\Container\Container;
 use MongoDB\Client;
 use MongoDB\Collection;
 use Ratchet\WebSocket\Version\RFC6455\Connection;
+use React\EventLoop\Factory;
+use React\Stomp\Factory as StompFactory;
 use Thessia\Lib\Config;
 use Thessia\Model\EVE\Parser;
 
@@ -77,17 +79,22 @@ class KillmailParser
             } catch(\Exception $e) {
                 $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
             }
-
-            // Send it to the websocket as well, if it fails, do nothing
-            try {
-                \Ratchet\Client\connect($config->get("serverAddress", "websocket"))->then(function (Connection $conn
-                ) use ($killmail) {
-                    $conn->send(json_encode($killmail, JSON_NUMERIC_CHECK));
-                    $conn->close();
-                });
-            } catch(\Exception $e) {}
         }
 
+        // Kick mail off to stomp!
+        $loop = Factory::create();
+        $factory = new StompFactory($loop);
+        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
+        $client = $factory->createClient($clientArray);
+        $client->connect()
+            ->then(function(\React\Stomp\Client $client) use ($killmail) {
+                $killmail["killTime"] = $killmail["killTime_str"];
+                $client->send("/topic/kills", json_encode($killmail, JSON_NUMERIC_CHECK));
+                $client->disconnect();
+            });
+
+        // Run the Stomp loop, it'll only run once tho..
+        $loop->run();
         exit();
     }
 
