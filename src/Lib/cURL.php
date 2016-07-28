@@ -47,15 +47,19 @@ class cURL
     /**
      * @param string $url
      * @param int $cacheTime
+     * @param array $headers
      * @return mixed|null
      */
-    public function getData(string $url, int $cacheTime = 3600)
+    public function getData(string $url, int $cacheTime = 3600, array $headers = array())
     {
         $md5 = md5($url);
 
         $result = $cacheTime > 0 ? $this->cache->get($md5) : null;
 
         if (!$result) {
+            // Merge the headers from the request with the default headers
+            $headers = array_merge(array("Connection: keep-alive", "Keep-Alive: timeout=10, max=1000"), $headers);
+
             // Init curl
             $curl = curl_init();
 
@@ -65,9 +69,9 @@ class cURL
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_POST => false,
                 CURLOPT_FORBID_REUSE => false,
-                CURLOPT_ENCODING => '',
+                CURLOPT_ENCODING => "",
                 CURLOPT_URL => $url,
-                CURLOPT_HTTPHEADER => array('Connection: keep-alive', 'Keep-Alive: timeout=10, max=1000'),
+                CURLOPT_HTTPHEADER => $headers,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_FAILONERROR => true,
             ));
@@ -93,28 +97,26 @@ class cURL
     public function sendData(string $url, $postData = array(), $headers = array())
     {
         // Define default headers
-        if (empty($headers)) {
-            $headers = array('Connection: keep-alive', 'Keep-Alive: timeout=10, max=1000');
-        }
+        if (empty($headers))
+            $headers = array("Connection: keep-alive", "Keep-Alive: timeout=10, max=1000");
 
         // Init curl
         $curl = curl_init();
 
         // Init postLine
-        $postLine = '';
+        $postLine = "";
 
         // Populate the $postData
         if (!empty($postData)) {
             foreach ($postData as $key => $value) {
-                $postLine .= $key . '=' . $value . '&';
+                $postLine .= $key . "=" . $value . "&";
             }
         }
 
         // Trim the last &
-        rtrim($postLine, '&');
+        rtrim($postLine, "&");
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_USERAGENT,
-            "DataPoster for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)");
+        curl_setopt($curl, CURLOPT_USERAGENT, "DataPoster for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)");
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         if (!empty($postData)) {
             curl_setopt($curl, CURLOPT_POST, count($postData));
