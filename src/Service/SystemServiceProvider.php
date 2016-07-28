@@ -29,6 +29,7 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Thessia\Helper\CrestHelper;
 use Thessia\Helper\EVEApi\Account;
 use Thessia\Helper\EVEApi\API;
 use Thessia\Helper\EVEApi\Character;
@@ -118,6 +119,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         "ccpEVE",
         "ccpMap",
         "ccpServer",
+        "crestHelper",
     ];
 
     /**
@@ -202,5 +204,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("ccpEVE", EVE::class)->withArgument("pheal");
         $container->share("ccpMap", Map::class)->withArgument("pheal");
         $container->share("ccpServer", Server::class)->withArgument("pheal");
+
+        // Crest Helper
+        $container->share("crestHelper", CrestHelper::class)->withArgument("cache")->withArgument("curl");
     }
 }

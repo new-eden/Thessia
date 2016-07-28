@@ -37,7 +37,7 @@ use Thessia\Lib\cURL;
  * Class Crest
  * @package Thessia\Helper
  */
-class Crest {
+class CrestHelper {
     /**
      * @var BlockingConsumer
      */
@@ -69,9 +69,10 @@ class Crest {
 
     /**
      * @param String $path
+     * @param int $cacheTTL
      * @return array
      */
-    public function getData(String $path): array {
+    private function getData(String $path, int $cacheTTL = 3600): array {
         $url = "https://crest.eveonline.com{$path}";
         $md5 = md5($url);
 
@@ -83,7 +84,7 @@ class Crest {
         $this->consumer->consume(1);
 
         // Now get the data from CREST, and return it. Also cache it in the db for 5 minutes.
-        $data = $this->curl->getData($url, 300);
+        $data = $this->curl->getData($url, $cacheTTL);
 
         // Make sure it's actually json
         if($this->isJson($data)) {
@@ -91,7 +92,7 @@ class Crest {
             $data = json_decode($data, true);
 
             // Store it in the cache for 5 minutes
-            $this->cache->set($md5, $data, 300);
+            $this->cache->set($md5, $data, $cacheTTL);
 
             // Return the data
             return $data;
@@ -99,6 +100,113 @@ class Crest {
 
         // If it's not json, return an empty array
         return array();
+    }
+
+    /**
+     * Return all the wars available.
+     *
+     * @cacheTime 1 day
+     * @param int $page
+     * @return array
+     */
+    public function getWars(int $page = 1): array {
+        $url = "/wars/?page={$page}";
+        return $this->getData($url, 86400);
+    }
+
+    /**
+     * Return a single wars information
+     *
+     * @cacheTime 1 hour
+     * @param int $warID
+     * @return array
+     */
+    public function getWar(int $warID): array {
+        $url = "/wars/{$warID}/";
+        return $this->getData($url, 3600);
+    }
+
+    /**
+     * Return all the killmails for a war
+     *
+     * @cacheTime 1 hour
+     * @param int $warID
+     * @param int $page
+     * @return array
+     */
+    public function getWarKillmails(int $warID, int $page = 1): array {
+        $url = "/wars/{$warID}/killmails/all/?page={$page}";
+        return $this->getData($url, 3600);
+    }
+
+    /**
+     * Return all the Types available in EVE
+     *
+     * @cacheTime 1 hour
+     * @param int $page
+     * @return array
+     */
+    public function getTypes(int $page = 1) {
+        $url = "/inventory/types/?page={$page}";
+        return $this->getData($url, 3600);
+    }
+
+    /**
+     * Return data for a single Type
+     *
+     * @cacheTime 1 hour
+     * @param int $typeID
+     * @return array
+     */
+    public function getType(int $typeID) {
+        $url = "/inventory/types/{$typeID}/";
+        return $this->getData($url, 3600);
+    }
+
+    /**
+     * Get the current EVE time
+     *
+     * @cacheTime 10 seconds
+     * @return array
+     */
+    public function getEveTime() {
+        $url = "/time/";
+        return $this->getData($url, 10);
+    }
+
+    /**
+     * Get the insurance values for ships in EVE
+     *
+     * @cacheTime 1 hour
+     * @return array
+     */
+    public function getInsurancePrices() {
+        $url = "/insuranceprices/";
+        return $this->getData($url, 3600);
+    }
+
+    /**
+     * Get a list of all alliances in EVE
+     *
+     * @cacheTime 30 minutes
+     * @param int $page
+     * @return array
+     */
+    public function getAlliances(int $page = 1) {
+        $url = "/alliances/?page={$page}";
+        return $this->getData($url, 1800);
+    }
+
+    /**
+     * Get information for a single alliance in EVE
+     *
+     * @cacheTime 30 minutes
+     * @param int $allianceID
+     * @return array
+     */
+    public function getAlliance(int $allianceID) {
+        $url = "/alliances/{$allianceID}/";
+        return $this->getData($url, 1800);
     }
 
     public function updateToken() {

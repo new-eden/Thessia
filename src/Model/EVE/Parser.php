@@ -137,7 +137,7 @@ class Parser
      * @param int|null $warID
      * @return array
      */
-    public function parseCrestKillmail(int $killID, string $killHash, int $warID = null)
+    public function parseCrestKillmail(int $killID, string $killHash, int $warID = 0)
     {
         $url = "https://crest.eveonline.com/killmails/{$killID}/{$killHash}/";
         $data = json_decode($this->curl->getData($url), true);
@@ -157,7 +157,7 @@ class Parser
      * @param int $warID
      * @return array
      */
-    private function parseKillmail(array $killmailData, string $killHash, int $warID = null): array
+    private function parseKillmail(array $killmailData, string $killHash, int $warID = 0): array
     {
         $killmail = array();
 
