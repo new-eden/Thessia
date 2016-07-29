@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d4a4ca08b2ca106f444c0ecd605329fb",
-    "content-hash": "4fa6d71d618dc16a468187b80ed67a07",
+    "hash": "035350758acd1be2d99c5e9bc7b3b145",
+    "content-hash": "04a531c42afbc35b0c08055cabcff4f8",
     "packages": [
         {
             "name": "3rdpartyeve/phealng",
@@ -1182,12 +1182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-pm/php-pm.git",
-                "reference": "2cfd21a4dbd451108dd5fd1985f822ad577fd899"
+                "reference": "561a16820a3b1099d0755cdf5f9eef43bd752617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-pm/php-pm/zipball/2cfd21a4dbd451108dd5fd1985f822ad577fd899",
-                "reference": "2cfd21a4dbd451108dd5fd1985f822ad577fd899",
+                "url": "https://api.github.com/repos/php-pm/php-pm/zipball/561a16820a3b1099d0755cdf5f9eef43bd752617",
+                "reference": "561a16820a3b1099d0755cdf5f9eef43bd752617",
                 "shasum": ""
             },
             "require": {
@@ -1223,7 +1223,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2016-07-27 13:33:19"
+            "time": "2016-07-28 16:40:25"
         },
         {
             "name": "pimple/pimple",
@@ -2097,6 +2097,63 @@
             "time": "2016-07-26 08:04:17"
         },
         {
+            "name": "symfony/debug",
+            "version": "3.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/debug.git",
+                "reference": "4c1b48c6a433e194a42ce3d064cd43ceb7c3682f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/4c1b48c6a433e194a42ce3d064cd43ceb7c3682f",
+                "reference": "4c1b48c6a433e194a42ce3d064cd43ceb7c3682f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "psr/log": "~1.0"
+            },
+            "conflict": {
+                "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
+            },
+            "require-dev": {
+                "symfony/class-loader": "~2.8|~3.0",
+                "symfony/http-kernel": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Debug\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Debug Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-07-26 08:04:17"
+        },
+        {
             "name": "symfony/event-dispatcher",
             "version": "dev-master",
             "source": {
@@ -2543,12 +2600,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "c535bc0b56aa93ead7a75b6841f28645153b0539"
+                "reference": "b7cd3a88dcab5189a7f6d7f8756b17cd25faf759"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/c535bc0b56aa93ead7a75b6841f28645153b0539",
-                "reference": "c535bc0b56aa93ead7a75b6841f28645153b0539",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b7cd3a88dcab5189a7f6d7f8756b17cd25faf759",
+                "reference": "b7cd3a88dcab5189a7f6d7f8756b17cd25faf759",
                 "shasum": ""
             },
             "require": {
@@ -2596,7 +2653,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-07-10 07:48:21"
+            "time": "2016-07-28 20:58:48"
         },
         {
             "name": "zendframework/zend-diactoros",
