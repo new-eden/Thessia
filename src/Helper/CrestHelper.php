@@ -217,7 +217,7 @@ class CrestHelper {
      * @return array
      */
     public function getMarketPrices(int $page = 1) {
-        $url = "/market/prices/?page{$page}";
+        $url = "/market/prices/?page={$page}";
         return $this->getData($url, 82800);
     }
 
