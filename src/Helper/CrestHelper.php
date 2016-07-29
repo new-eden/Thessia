@@ -212,6 +212,7 @@ class CrestHelper {
     /**
      * Get Market Pricing information.
      *
+     * @cacheTime: 23 hours
      * @param int $page
      * @return array
      */
