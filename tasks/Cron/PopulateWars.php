@@ -37,6 +37,7 @@ use League\Container\Container;
 use MongoDB\BSON\UTCDatetime;
 use MongoDB\Collection;
 use Monolog\Logger;
+use Thessia\Helper\CrestHelper;
 use Thessia\Lib\cURL;
 
 class PopulateWars {
@@ -49,20 +50,20 @@ class PopulateWars {
         $mongo = $container->get("mongo");
         /** @var Logger $log */
         $log = $container->get("log");
-        /** @var cURL $curl */
-        $curl = $container->get("curl");
+        /** @var CrestHelper $crestHelper */
+        $crestHelper = $container->get("crestHelper");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("thessia", "wars");
 
         $log->addInfo("CRON: Updating Wars from CREST");
-        $data = json_decode($curl->getData("https://crest.eveonline.com/wars/", 3600), true);
+        $data = $crestHelper->getWars();
         $pageCount = $data["pageCount"];
         $currPage = 1;
 
         while($currPage <= $pageCount) {
-            $data = json_decode($curl->getData("https://crest.eveonline.com/wars/?page={$currPage}", 3600), true);
+            $data = $crestHelper->getWars($currPage);
             foreach($data["items"] as $war) {
-                $innerData = json_decode($curl->getData($war["href"]));
+                $innerData = $crestHelper->getWar($war["id"]);
 
                 // If it already exists in the database, and timeFinished is set - just skip
                 $exists = $collection->findOne(array("warID" => $innerData["id"]));
@@ -87,6 +88,7 @@ class PopulateWars {
                     "aggressorName" => $innerData["aggressor"]["name"],
                     "aggressorID" => $innerData["aggressor"]["id"]
                 );
+
                 // Populate the defender part of the war data array
                 $array["defender"] = array(
                     "shipsKilled" => $innerData["defender"]["shipsKilled"],

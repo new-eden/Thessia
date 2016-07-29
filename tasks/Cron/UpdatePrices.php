@@ -28,6 +28,7 @@ namespace Thessia\Tasks\Cron;
 use League\Container\Container;
 use MongoDB\Collection;
 use Monolog\Logger;
+use Thessia\Helper\CrestHelper;
 
 class UpdatePrices
 {
@@ -40,14 +41,17 @@ class UpdatePrices
         $mongo = $container->get("mongo");
         /** @var Logger $log */
         $log = $container->get("log");
+        /** @var CrestHelper $crestHelper */
+        $crestHelper = $container->get("crestHelper");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("ccp", "typeIDs");
         /** @var Collection $priceCollection */
         $priceCollection = $mongo->selectCollection("thessia", "marketPrices");
 
         $log->addInfo("CRON: Updating item values from CREST");
+
         // Get the Market Prices from CREST
-        $marketData = json_decode(file_get_contents("https://crest-tq.eveonline.com/market/prices/"), true);
+        $marketData = $crestHelper->getMarketPrices();
         foreach ($marketData["items"] as $data) {
             $typeID = $data["type"]["id"];
             $typeData = $collection->find(array("typeID" => $typeID))->toArray();

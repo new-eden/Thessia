@@ -25,9 +25,12 @@
 
 namespace Thessia\Tasks\CLI;
 
+use React\EventLoop\Factory;
+use React\Stomp\Factory as StompFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Thessia\Lib\Config;
 
 class RunResque extends Command
 {
@@ -48,7 +51,6 @@ class RunResque extends Command
         foreach (glob(__DIR__ . "/../Resque/*.php") as $file) {
             require_once($file);
         }
-
 
         $queues = array("rt", "high", "med", "low");
         $logLevel = \Resque_Worker::LOG_NORMAL;

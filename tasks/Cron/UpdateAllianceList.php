@@ -28,6 +28,8 @@ namespace Thessia\Tasks\Cron;
 use League\Container\Container;
 use MongoDB\Collection;
 use Monolog\Logger;
+use Thessia\Helper\CrestHelper;
+use Thessia\Helper\EVEApi\EVE;
 
 class UpdateAllianceList
 {
@@ -40,23 +42,26 @@ class UpdateAllianceList
         $mongo = $container->get("mongo");
         /** @var Logger $log */
         $log = $container->get("log");
+        /** @var EVE $eve */
+        $eve = $container->get("ccpEVE");
+        /** @var CrestHelper $crestHelper */
+        $crestHelper = $container->get("crestHelper");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("thessia", "alliances");
         /** @var Collection $corporationCollection */
         $corporationCollection = $mongo->selectCollection("thessia", "corporations");
 
         $log->info("CRON: Inserting/Updating alliances...");
-        $data = json_decode(json_encode(simplexml_load_string(file_get_contents("https://api.eveonline.com/eve/AllianceList.xml.aspx"))), true);
-        foreach ($data["result"]["rowset"]["row"] as $alliance) {
-            $alliData = $alliance["@attributes"];
-            $allianceID = $alliData["allianceID"];
-            $moreData = json_decode(file_get_contents("https://crest-tq.eveonline.com/alliances/{$allianceID}/"), true);
+        $data = $eve->eveAllianceList();
+        foreach ($data["result"] as $alliance) {
+            $allianceID = $alliance["allianceID"];
+            $moreData = $crestHelper->getAlliance($allianceID);
             $allianceName = $moreData["name"];
             $ticker = $moreData["shortName"];
-            $memberCount = $alliData["memberCount"];
-            $executorCorpID = $alliData["executorCorpID"];
+            $memberCount = $alliance["memberCount"];
+            $executorCorpID = $alliance["executorCorpID"];
             $executorCorpName = $moreData["executorCorporation"]["name"];
-            $startDate = $alliData["startDate"];
+            $startDate = $alliance["startDate"];
             $description = $moreData["description"];
 
             $array = array(

@@ -47,26 +47,31 @@ class RunRedisQ extends Command {
 
         $run = true;
         do {
-            $p = Action::listen("https://redisq.zkillboard.com/");
+            try {
+                $p = Action::listen("https://redisq.zkillboard.com/");
 
-            if(!empty($p)) {
-                $killID = $p["killID"];
-                $killHash = $p["zkb"]["hash"];
-                $warID = $p["zkb"]["killmail"]["war"]["id"] ?? 0;
+                if (!empty($p)) {
+                    $killID = $p["killID"];
+                    $killHash = $p["zkb"]["hash"];
+                    $warID = $p["zkb"]["killmail"]["war"]["id"] ?? 0;
 
-                // If a killmail already exists, we'll not bother to insert it
-                $exists = $collection->findOne(array("killID" => $killID));
-                if(!empty($exists))
-                    continue;
+                    // If a killmail already exists, we'll not bother to insert it
+                    $exists = $collection->findOne(array("killID" => $killID));
+                    if (!empty($exists)) {
+                        continue;
+                    }
 
-                if($killID && $killHash) {
-                    // Logging
-                    $log->info("Got killmail from RedisQ");
+                    if ($killID && $killHash) {
+                        // Logging
+                        $log->info("Got killmail from RedisQ");
 
-                    // Enqueue the mail for processing
-                    \Resque::enqueue("now", '\Thessia\Tasks\Resque\KillmailParser',
-                        array("killID" => $killID, "killHash" => $killHash, "warID" => $warID));
+                        // Enqueue the mail for processing
+                        \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser',
+                            array("killID" => $killID, "killHash" => $killHash, "warID" => $warID));
+                    }
                 }
+            } catch (\Exception $e) {
+                echo "Error: " . $e->getMessage();
             }
         } while($run == true);
     }
