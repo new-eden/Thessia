@@ -194,7 +194,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("storage", Storage::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
 
         // Add Pheal
-        $container->share("pheal", Pheal::class)->withArgument("storage");
+        $container->share("pheal", Pheal::class)->withArgument("storage")->withArgument("mongo");
 
         // Add CCP XML Interface Shim thing
         $container->share("ccpAccount", Account::class)->withArgument("pheal");

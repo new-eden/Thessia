@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "035350758acd1be2d99c5e9bc7b3b145",
-    "content-hash": "04a531c42afbc35b0c08055cabcff4f8",
+    "hash": "fa8b9b47e1a85ab778c013a7a2aed92a",
+    "content-hash": "de2beee4f013f509dd70a1a7441ff1aa",
     "packages": [
         {
             "name": "3rdpartyeve/phealng",
@@ -1182,12 +1182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-pm/php-pm.git",
-                "reference": "561a16820a3b1099d0755cdf5f9eef43bd752617"
+                "reference": "65e4f80dced89ef4a82a95b74de873bdecef3bfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-pm/php-pm/zipball/561a16820a3b1099d0755cdf5f9eef43bd752617",
-                "reference": "561a16820a3b1099d0755cdf5f9eef43bd752617",
+                "url": "https://api.github.com/repos/php-pm/php-pm/zipball/65e4f80dced89ef4a82a95b74de873bdecef3bfd",
+                "reference": "65e4f80dced89ef4a82a95b74de873bdecef3bfd",
                 "shasum": ""
             },
             "require": {
@@ -1199,6 +1199,7 @@
                 "react/socket-client": "^0.5.0",
                 "react/stream": "^0.4",
                 "symfony/console": "^2.6|^3.0",
+                "symfony/debug": "^2.6|^3.0",
                 "symfony/process": "^2.6|^3.0"
             },
             "require-dev": {
@@ -1223,7 +1224,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2016-07-28 16:40:25"
+            "time": "2016-07-29 14:30:28"
         },
         {
             "name": "pimple/pimple",
@@ -1270,6 +1271,56 @@
                 "dependency injection"
             ],
             "time": "2015-09-11 15:11:22"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v1.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "6ab10b2b705ea5121f2c1ea87a290f6871c32ebd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/6ab10b2b705ea5121f2c1ea87a290f6871c32ebd",
+                "reference": "6ab10b2b705ea5121f2c1ea87a290f6871c32ebd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2016-06-18 19:51:10"
         },
         {
             "name": "psr/http-message",

@@ -26,7 +26,7 @@
 namespace Thessia\Lib;
 
 use Closure;
-use Redis;
+use Predis\Client;
 
 /**
  * Class Cache
@@ -38,8 +38,9 @@ class Cache
      * @var bool
      */
     public $persistence = true;
+
     /**
-     * @var Redis
+     * @var Client
      */
     private $redis;
 
@@ -49,20 +50,19 @@ class Cache
      */
     function __construct(Config $config)
     {
-        $this->redis = new \Redis();
-        if (!$this->persistence) {
-            $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        } else {
-            $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        }
+        $this->redis = new Client(array(
+            "scheme" => "tcp",
+            "host" => $config->get("host", "redis", "127.0.0.1"),
+            "port" => $config->get("port", "redis", 6379),
+        ));
     }
 
     /**
      * Returns the redis handle for usage in places where the Cache functions aren't enough
      *
-     * @return Redis
+     * @return Client
      */
-    public function returnRedis(): Redis
+    public function returnRedis(): Client
     {
         return $this->redis;
     }
@@ -93,7 +93,10 @@ class Cache
         if ($timeout > 0) {
             return $result ? $this->expire($key, $timeout) : $result;
         }
-        return $result;
+
+        if($result == "OK")
+            return true;
+        return false;
     }
 
     /**
@@ -166,6 +169,7 @@ class Cache
         return $data;
     }
 
+
     /**
      * Performs an atomic decrement operation on specified numeric Cache item.
      *
@@ -177,8 +181,7 @@ class Cache
      * @param int $timeout A strtotime() compatible Cache time.
      *
      * @return Closure Function returning item's new value on successful decrement, else `false`
-     */
-    public function decrement(string $key, int $timeout = 0)
+     */    public function decrement(string $key, int $timeout = 0)
     {
         $data = $this->redis->decr($key);
         if ($timeout) {
@@ -194,6 +197,6 @@ class Cache
      */
     public function flush(): bool
     {
-        return $this->redis->flushDB();
+        return $this->redis->flushdb();
     }
 }
