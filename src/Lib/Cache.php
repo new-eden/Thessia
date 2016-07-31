@@ -26,8 +26,7 @@
 namespace Thessia\Lib;
 
 use Closure;
-use Predis\Client;
-use Predis\Response\Status;
+use Redis;
 
 /**
  * Class Cache
@@ -39,9 +38,8 @@ class Cache
      * @var bool
      */
     public $persistence = true;
-
     /**
-     * @var Client
+     * @var Redis
      */
     private $redis;
 
@@ -51,19 +49,20 @@ class Cache
      */
     function __construct(Config $config)
     {
-        $this->redis = new Client(array(
-            "scheme" => "tcp",
-            "host" => $config->get("host", "redis", "127.0.0.1"),
-            "port" => $config->get("port", "redis", 6379),
-        ));
+        $this->redis = new \Redis();
+        if ($this->persistence == false) {
+            $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        } else {
+            $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        }
     }
 
     /**
      * Returns the redis handle for usage in places where the Cache functions aren't enough
      *
-     * @return Client
+     * @return Redis
      */
-    public function returnRedis(): Client
+    public function returnRedis(): Redis
     {
         return $this->redis;
     }
@@ -88,15 +87,13 @@ class Cache
      * @param integer $timeout
      * @return bool
      */
-    public function set(string $key, string $value, int $timeout = 0): bool
+    public function set(string $key, $value, int $timeout = 0): bool
     {
         $result = $this->redis->set($key, json_encode($value));
-        if ($timeout > 0)
-            $this->expire($key, $timeout);
-
-        if($result == "OK")
-            return true;
-        return false;
+        if ($timeout > 0) {
+            return $result ? $this->expire($key, $timeout) : $result;
+        }
+        return $result;
     }
 
     /**
@@ -106,15 +103,7 @@ class Cache
      * @return bool
      */
     public function exists(string $key): bool {
-        /** @var Status $data */
-        $data = $this->redis->exists($key);
-        // This is an odd one, can be an integer, or an object..
-        if($data instanceof Status)
-            $data = $data->getPayload();
-
-        if($data == 1 || $data == "OK")
-            return true;
-        return false;
+        return $this->redis->exists($key);
     }
 
     /**
@@ -123,9 +112,9 @@ class Cache
      * @param string $key The key to uniquely identify the cached item
      * @param integer $timeout
      *
-     * @return mixed
+     * @return bool
      */
-    protected function expire(string $key, int $timeout)
+    protected function expire(string $key, int $timeout): bool
     {
         return $this->redis->expire($key, $timeout);
     }
@@ -177,7 +166,6 @@ class Cache
         return $data;
     }
 
-
     /**
      * Performs an atomic decrement operation on specified numeric Cache item.
      *
@@ -189,7 +177,8 @@ class Cache
      * @param int $timeout A strtotime() compatible Cache time.
      *
      * @return Closure Function returning item's new value on successful decrement, else `false`
-     */    public function decrement(string $key, int $timeout = 0)
+     */
+    public function decrement(string $key, int $timeout = 0)
     {
         $data = $this->redis->decr($key);
         if ($timeout) {
@@ -205,6 +194,6 @@ class Cache
      */
     public function flush(): bool
     {
-        return $this->redis->flushdb();
+        return $this->redis->flushDB();
     }
 }

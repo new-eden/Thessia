@@ -86,12 +86,13 @@ class Alliances extends Mongo
     }
 
     public function getAllianceInformation(int $allianceID): array {
-        return $this->collection->find(array("allianceID" => $allianceID))->toArray();
+        $info = $this->collection->findOne(array("allianceID" => $allianceID), array("projection" => array("_id" => 0)));
+        return $info;
     }
 
     public function getAllianceMembers(int $allianceID): array {
         $characters = $this->mongodb->selectCollection("thessia", "characters");
-        return $characters->find(array("allianceID" => $allianceID))->toArray();
+        return $characters->find(array("allianceID" => $allianceID), array("projection" => array("_id" => 0)))->toArray();
     }
 
         /**

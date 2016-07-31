@@ -27,120 +27,122 @@ namespace Thessia\Controller\API;
 
 use Slim\App;
 use Thessia\Middleware\Controller;
+use Thessia\Model\Database\EVE\Corporations;
+use Thessia\Model\Database\EVE\Top;
+use Thessia\Model\Database\Site\Search;
 
+/**
+ * Class CorporationAPIController
+ * @package Thessia\Controller\API
+ */
 class CorporationAPIController extends Controller
 {
     /**
-     * @var \MongoDB\Collection
+     * @var Search
      */
-    private $collection;
+    private $search;
     /**
-     * @var \MongoDB\Collection
+     * @var Corporations
      */
-    private $killmails;
+    private $corporation;
     /**
-     * @var \MongoDB\Collection
+     * @var Top
      */
-    private $characters;
+    private $top;
+
+    /**
+     * CorporationAPIController constructor.
+     * @param App $app
+     */
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->collection = $this->mongo->selectCollection("thessia", "corporations");
-        $this->characters = $this->mongo->selectCollection("thessia", "characters");
-        $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
+        $this->corporation = $this->container->get("corporations");
+        $this->search = $this->container->get("search");
+        $this->top = $this->container->get("top");
     }
 
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function corporationCount() {
-        $count = $this->collection->count();
-
+        $count = $this->corporation->getCorporationCount();
         return $this->json(array("corporationCount" => $count));
     }
 
+    /**
+     * @param int $corporationID
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function corporationInformation(int $corporationID) {
-        $info = $this->collection->find(array("corporationID" => $corporationID))->toArray();
-
-        return $this->json($info);
+        $information = $this->corporation->getCorporationInformation($corporationID);
+        return $this->json($information);
     }
 
+    /**
+     * @param string $searchTerm
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function findCorporation(string $searchTerm) {
-        $find = $this->collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => 50))->toArray();
-        return $this->json($find);
+        return $this->json($this->search->search($searchTerm, array("corporation"), 50)["corporation"]);
     }
 
+    /**
+     * @param int $corporationID
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function corporationMembers(int $corporationID) {
-        $find = $this->characters->find(array("corporationID" => $corporationID))->toArray();
-        return $this->json($find);
+        $characters = $this->corporation->getCorporationMembers($corporationID);
+        return $this->json($characters);
     }
 
+    /**
+     * @param int $corporationID
+     * @param int $limit
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function topCharacters(int $corporationID, int $limit = 10) {
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.corporationID" => $corporationID)),
-            array('$group' => array("_id" => '$victim.characterID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "characterID" => '$_id')),
-            array('$sort' => array("count" => -1)),
-            array('$limit' => $limit)
-        ))->toArray();
-
+        $data = $this->top->topCharacters("corporationID", $corporationID, $limit);
         return $this->json($data);
     }
 
-    public function topCorporations(int $corporationID, int $limit = 10) {
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.corporationID" => $corporationID)),
-            array('$group' => array("_id" => '$victim.corporationID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "corporationID" => '$_id')),
-            array('$sort' => array("count" => -1)),
-            array('$limit' => $limit)
-        ))->toArray();
-
-        return $this->json($data);
-    }
-
+    /**
+     * @param int $corporationID
+     * @param int $limit
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function topAlliances(int $corporationID, int $limit = 10) {
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.corporationID" => $corporationID)),
-            array('$group' => array("_id" => '$victim.allianceID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "allianceID" => '$_id')),
-            array('$sort' => array("count" => -1)),
-            array('$limit' => $limit)
-        ))->toArray();
-
+        $data = $data = $this->top->topAlliances("corporationID", $corporationID, $limit);
         return $this->json($data);
     }
 
+    /**
+     * @param int $corporationID
+     * @param int $limit
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function topShips(int $corporationID, int $limit = 10) {
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.corporationID" => $corporationID)),
-            array('$group' => array("_id" => '$victim.shipTypeID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "shipTypeID" => '$_id')),
-            array('$sort' => array("count" => -1)),
-            array('$limit' => $limit)
-        ))->toArray();
-
+        $data = $data = $this->top->topShips("corporationID", $corporationID, $limit);
         return $this->json($data);
     }
 
+    /**
+     * @param int $corporationID
+     * @param int $limit
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function topSystems(int $corporationID, int $limit = 10) {
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.corporationID" => $corporationID)),
-            array('$group' => array("_id" => '$solarSystemID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "solarSystemID" => '$_id')),
-            array('$sort' => array("count" => -1)),
-            array('$limit' => $limit)
-        ))->toArray();
-
+        $data = $data = $this->top->topSystems("corporationID", $corporationID, $limit);
         return $this->json($data);
     }
 
+    /**
+     * @param int $corporationID
+     * @param int $limit
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function topRegions(int $corporationID, int $limit = 10) {
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.corporationID" => $corporationID)),
-            array('$group' => array("_id" => '$regionID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "regionID" => '$_id')),
-            array('$sort' => array("count" => -1)),
-            array('$limit' => $limit)
-        ))->toArray();
-
+        $data = $data = $this->top->topRegions("corporationID", $corporationID, $limit);
         return $this->json($data);
     }
 }

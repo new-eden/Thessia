@@ -78,9 +78,9 @@ class CrestHelper {
 
         // If it exists in the cache, we'll just get it from there for now
         if($this->cache->exists($md5)) {
-            $data = (string) $this->cache->get($md5);
-            if($this->isJson($data))
-                return (array) json_decode($data, true);
+            $data = $this->isJson($this->cache->get($md5)) ? json_decode($this->cache->get($md5), true) : false;
+            if($data != false)
+                return $data;
         }
 
         // Consume a token. It will block till one becomes available if none are available.
@@ -94,11 +94,15 @@ class CrestHelper {
             // Unpack the json to an array
             $data = json_decode($data, true);
 
-            // Store it in the cache for 5 minutes
-            $this->cache->set($md5, json_encode($data), $cacheTTL);
+            // If the data is an array - we'll cache it and return the data
+            if(is_array($data)) {
 
-            // Return the data
-            return $data;
+                // Store it in the cache for 5 minutes
+                $this->cache->set($md5, json_encode($data, JSON_NUMERIC_CHECK), $cacheTTL);
+
+                // Return the data
+                return $data;
+            }
         }
 
         // If it's not json, return an empty array
@@ -233,7 +237,10 @@ class CrestHelper {
      * @param string $json
      * @return bool
      */
-    private function isJson(string $json): bool {
+    private function isJson($json): bool {
+        if(is_array($json) || is_object($json) || is_null($json) || is_numeric($json))
+            return false;
+
         json_decode($json);
         return (json_last_error() == JSON_ERROR_NONE);
     }

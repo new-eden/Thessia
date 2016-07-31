@@ -98,7 +98,7 @@ class Characters extends Mongo
     }
 
     public function getCharacterInformation(int $characterID): array {
-        return $this->collection->find(array("characterID" => $characterID))->toArray();
+        return $this->collection->findOne(array("characterID" => $characterID), array("projection" => array("_id" => 0)));
     }
 
     /**

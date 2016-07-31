@@ -61,6 +61,11 @@ use Thessia\Model\Database\CCP\typeIDs;
 use Thessia\Model\Database\EVE\Alliances;
 use Thessia\Model\Database\EVE\Characters;
 use Thessia\Model\Database\EVE\Corporations;
+use Thessia\Model\Database\EVE\Top;
+use Thessia\Model\Database\Site\ApiKeyCharacters;
+use Thessia\Model\Database\Site\ApiKeyCheck;
+use Thessia\Model\Database\Site\ApiKeys;
+use Thessia\Model\Database\Site\Search;
 use Thessia\Model\EVE\Crest;
 use Thessia\Model\Database\EVE\Killmails;
 use Thessia\Model\EVE\Parser;
@@ -120,6 +125,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         "ccpMap",
         "ccpServer",
         "crestHelper",
+        "top",
     ];
 
     /**
@@ -192,6 +198,11 @@ class SystemServiceProvider extends AbstractServiceProvider
             ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
             ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");
         $container->share("storage", Storage::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
+        $container->share("apiKeyCharacters", ApiKeyCharacters::class);
+        $container->share("apiKeyCheck", ApiKeyCheck::class);
+        $container->share("apiKeys", ApiKeys::class);
+        $container->share("search", Search::class)->withArgument("mongo");
+        $container->share("top", Top::class)->withArgument("mongo");
 
         // Add Pheal
         $container->share("pheal", Pheal::class)->withArgument("storage")->withArgument("mongo");

@@ -27,55 +27,50 @@ namespace Thessia\Controller\API;
 
 use Slim\App;
 use Thessia\Middleware\Controller;
+use Thessia\Model\Database\EVE\Characters;
+use Thessia\Model\Database\EVE\Top;
 use Thessia\Model\Database\Site\Search;
 
 /**
- * Class ItemAPIController
+ * Class SolarSystemAPIController
  * @package Thessia\Controller\API
  */
-class ItemAPIController extends Controller
+class SolarSystemAPIController extends Controller
 {
-    /**
-     * @var \MongoDB\Collection
-     */
-    private $collection;
-    /**
-     * @var \MongoDB\Collection
-     */
-    private $killmails;
     /**
      * @var Search
      */
     private $search;
+    /**
+     * @var \MongoDB\Collection
+     */
+    private $collection;
 
     /**
-     * ItemAPIController constructor.
+     * SolarSystemAPIController constructor.
      * @param App $app
      */
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->collection = $this->mongo->selectCollection("ccp", "typeIDs");
-        $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
+        $this->collection = $this->mongo->selectCollection("ccp", "solarSystems");
         $this->search = $this->container->get("search");
     }
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function itemCount() {
+    public function solarSystemCount() {
         $count = $this->collection->count();
-
-        return $this->json(array("itemCount" => $count));
+        return $this->json(array("solarSystemCount" => $count));
     }
 
     /**
-     * @param int $itemID
+     * @param int $solarSystemID
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function itemInformation(int $itemID) {
-        $info = $this->collection->find(array("typeID" => $itemID))->toArray();
-
+    public function solarSystemInformation(int $solarSystemID) {
+        $info = $this->collection->findOne(array("solarSystemID" => $solarSystemID));
         return $this->json($info);
     }
 
@@ -83,7 +78,7 @@ class ItemAPIController extends Controller
      * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function findItem(string $searchTerm) {
-        return $this->json($this->search->search($searchTerm, array("item"), 50));
+    public function findSolarSystem(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("system"), 50)["system"]);
     }
 }

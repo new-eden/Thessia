@@ -25,6 +25,7 @@
 
 namespace Thessia\Middleware;
 
+use League\Container\Container;
 use MongoDB\Client;
 use Psr\Http\Message\UriInterface;
 use Slim\App;
@@ -50,14 +51,14 @@ abstract class Controller
     protected $response;
 
     /**
-     * @var \Slim\Container
+     * @var Container
      */
-    private $container;
+    protected $container;
 
     /**
      * @var Client
      */
-    private $mongo;
+    protected $mongo;
 
     /**
      * @var Render
@@ -138,23 +139,9 @@ abstract class Controller
     }
 
     /**
-     * Fascilitate easily getting the stuff loaded into the container
-     *
-     * @param $name
-     * @return mixed|null
-     */
-    public function __get($name)
-    {
-        if (!empty($this->container->get($name))) {
-            return $this->container->get($name);
-        }
-
-        return null;
-    }
-
-    /**
      * Return the entire container for use in the controller
-     * @return \Interop\Container\ContainerInterface|\Slim\Container
+     *
+     * @return \Interop\Container\ContainerInterface|Container
      */
     public function getContainer()
     {

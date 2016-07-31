@@ -35,8 +35,8 @@ class Search {
         $this->mongodb = $client;
     }
 
-    public function search(string $searchTerm, array $searchIn = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial"), int $limit = 5): array {
-        $valid = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial");
+    public function search(string $searchTerm, array $searchIn = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial", "constellation"), int $limit = 5): array {
+        $valid = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial", "constellation");
         $searchArray = array();
 
         if (!is_array($searchIn))
@@ -45,7 +45,7 @@ class Search {
         foreach ($searchIn as $lookIn) {
             if (in_array($lookIn, $valid)) {
                 $singleSearch = $this->$lookIn($searchTerm, 1);
-                $multiSearch = $this->lookIn($searchTerm, $limit);
+                $multiSearch = $this->$lookIn($searchTerm, $limit);
 
                 if (count($multiSearch) >= 1)
                     $searchArray[$lookIn] = $multiSearch;
@@ -60,56 +60,55 @@ class Search {
     private function faction(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("thessia", "factions");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
-
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0), "limit" => $limit))->toArray();
     }
 
     private function alliance(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("thessia", "alliances");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
     private function corporation(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("thessia", "corporations");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
-
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
     private function character(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("thessia", "characters");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
-
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
     private function item(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("ccp", "typeIDs");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
-
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
     private function system(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("ccp", "solarSystems");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
-
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
     private function region(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("ccp", "regions");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
+    }
 
+    private function constellation(string $searchTerm, int $limit = 5): array {
+        /** @var Collection $collection */
+        $collection = $this->mongodb->selectCollection("ccp", "constellations");
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
     private function celestial(string $searchTerm, int $limit = 5): array {
         /** @var Collection $collection */
         $collection = $this->mongodb->selectCollection("ccp", "celestials");
-        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "limit" => $limit))->toArray();
-
+        return $collection->find(array("\$text" => array("\$search" => "\"$searchTerm\"")), array("score" => array("\$meta" => "textScore"), "sort" => array("\$score" => -1), "projection" => array("_id" => 0),  "limit" => $limit))->toArray();
     }
 
 }

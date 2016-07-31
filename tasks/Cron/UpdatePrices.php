@@ -52,28 +52,30 @@ class UpdatePrices
 
         // Get the Market Prices from CREST
         $marketData = $crestHelper->getMarketPrices();
-        foreach ($marketData["items"] as $data) {
-            $typeID = $data["type"]["id"];
-            $typeData = $collection->find(array("typeID" => $typeID))->toArray();
+        if(isset($marketData["items"])) {
+            foreach ($marketData["items"] as $data) {
+                $typeID = $data["type"]["id"];
+                $typeData = $collection->find(array("typeID" => $typeID))->toArray();
 
-            if (empty($typeData[0])) {
-                continue;
+                if (empty($typeData[0])) {
+                    continue;
+                }
+
+                // If it's not empty, we bind typeData to typeData[0] to get the first element in the array..
+                $typeData = $typeData[0];
+
+                $priceArray = array(
+                    "typeID" => (int)$typeID,
+                    "typeNames" => $typeData["name"],
+                    "marketGroupID" => (int)isset($typeData["marketGroupID"]) ? $typeData["marketGroupID"] : 0,
+                    "groupID" => (int)$typeData["groupID"],
+                    "adjustedPrice" => (int)isset($data["adjustedPrice"]) ? $data["adjustedPrice"] : 0,
+                    "averagePrice" => (int)isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
+                    "lastUpdated" => date("Y-m-d H:i:s")
+                );
+                $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]["en"]}");
+                $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
             }
-
-            // If it's not empty, we bind typeData to typeData[0] to get the first element in the array..
-            $typeData = $typeData[0];
-
-            $priceArray = array(
-                "typeID" => (int)$typeID,
-                "typeNames" => $typeData["name"],
-                "marketGroupID" => (int)isset($typeData["marketGroupID"]) ? $typeData["marketGroupID"] : 0,
-                "groupID" => (int)$typeData["groupID"],
-                "adjustedPrice" => (int)isset($data["adjustedPrice"]) ? $data["adjustedPrice"] : 0,
-                "averagePrice" => (int)isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
-                "lastUpdated" => date("Y-m-d H:i:s")
-            );
-            $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]["en"]}");
-            $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
         }
     }
 

@@ -105,7 +105,7 @@ class Render
 
         /** @var Body $body */
         $body = new Body(fopen('php://temp', 'r+'));
-        $body->write(json_encode($dataArray));
+        $body->write(json_encode($dataArray, JSON_NUMERIC_CHECK));
 
         return $resp->withBody($body);
     }

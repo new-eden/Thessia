@@ -27,55 +27,50 @@ namespace Thessia\Controller\API;
 
 use Slim\App;
 use Thessia\Middleware\Controller;
+use Thessia\Model\Database\EVE\Characters;
+use Thessia\Model\Database\EVE\Top;
 use Thessia\Model\Database\Site\Search;
 
 /**
- * Class ItemAPIController
+ * Class RegionAPIController
  * @package Thessia\Controller\API
  */
-class ItemAPIController extends Controller
+class RegionAPIController extends Controller
 {
-    /**
-     * @var \MongoDB\Collection
-     */
-    private $collection;
-    /**
-     * @var \MongoDB\Collection
-     */
-    private $killmails;
     /**
      * @var Search
      */
     private $search;
+    /**
+     * @var \MongoDB\Collection
+     */
+    private $collection;
 
     /**
-     * ItemAPIController constructor.
+     * RegionAPIController constructor.
      * @param App $app
      */
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->collection = $this->mongo->selectCollection("ccp", "typeIDs");
-        $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
+        $this->collection = $this->mongo->selectCollection("ccp", "regions");
         $this->search = $this->container->get("search");
     }
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function itemCount() {
+    public function regionCount() {
         $count = $this->collection->count();
-
-        return $this->json(array("itemCount" => $count));
+        return $this->json(array("regionCount" => $count));
     }
 
     /**
-     * @param int $itemID
+     * @param int $regionID
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function itemInformation(int $itemID) {
-        $info = $this->collection->find(array("typeID" => $itemID))->toArray();
-
+    public function regionInformation(int $regionID) {
+        $info = $this->collection->findOne(array("regionID" => $regionID));
         return $this->json($info);
     }
 
@@ -83,7 +78,7 @@ class ItemAPIController extends Controller
      * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function findItem(string $searchTerm) {
-        return $this->json($this->search->search($searchTerm, array("item"), 50));
+    public function findRegion(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("region"), 50)["region"]);
     }
 }

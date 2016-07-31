@@ -23,60 +23,32 @@
  * SOFTWARE.
  */
 
+
 namespace Thessia\Controller\API;
+
 
 use Slim\App;
 use Thessia\Middleware\Controller;
-use Thessia\Model\Database\EVE\Characters;
-use Thessia\Model\Database\EVE\Top;
 use Thessia\Model\Database\Site\Search;
 
 /**
- * Class CharacterAPIController
+ * Class SearchAPIController
  * @package Thessia\Controller\API
  */
-class CharacterAPIController extends Controller
-{
+class SearchAPIController extends Controller {
     /**
      * @var Search
      */
     private $search;
-    /**
-     * @var Characters
-     */
-    private $character;
-    /**
-     * @var Top
-     */
-    private $top;
 
     /**
-     * CharacterAPIController constructor.
+     * SearchAPIController constructor.
      * @param App $app
      */
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->character = $this->container->get("characters");
         $this->search = $this->container->get("search");
-        $this->top = $this->container->get("top");
-    }
-
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function characterCount() {
-        $count = $this->character->getCharacterCount();
-        return $this->json(array("characterCount" => $count));
-    }
-
-    /**
-     * @param int $characterID
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function characterInformation(int $characterID) {
-        $info = $this->character->getCharacterInformation($characterID);
-        return $this->json($info);
     }
 
     /**
@@ -84,56 +56,62 @@ class CharacterAPIController extends Controller
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function findCharacter(string $searchTerm) {
-        return $this->json($this->search->search($searchTerm, array("character"), 50)["character"]);
+        return $this->json($this->search->search($searchTerm, array("character"))["character"]);
     }
 
     /**
-     * @param int $characterID
-     * @param int $limit
+     * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function topCorporations(int $characterID, int $limit = 10) {
-        $data = $this->top->topCorporations("characterID", $characterID, $limit);
-        return $this->json($data);
+    public function findCorporation(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("corporation"))["corporation"]);
     }
 
     /**
-     * @param int $characterID
-     * @param int $limit
+     * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function topAlliances(int $characterID, int $limit = 10) {
-        $data = $data = $this->top->topAlliances("characterID", $characterID, $limit);
-        return $this->json($data);
+    public function findAlliance(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("alliance"))["alliance"]);
     }
 
     /**
-     * @param int $characterID
-     * @param int $limit
+     * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function topShips(int $characterID, int $limit = 10) {
-        $data = $data = $this->top->topShips("characterID", $characterID, $limit);
-        return $this->json($data);
+    public function findFaction(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("faction"))["faction"]);
     }
 
     /**
-     * @param int $characterID
-     * @param int $limit
+     * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function topSystems(int $characterID, int $limit = 10) {
-        $data = $data = $this->top->topSystems("characterID", $characterID, $limit);
-        return $this->json($data);
+    public function findSolarSystem(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("system"))["system"]);
     }
 
     /**
-     * @param int $characterID
-     * @param int $limit
+     * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function topRegions(int $characterID, int $limit = 10) {
-        $data = $data = $this->top->topRegions("characterID", $characterID, $limit);
-        return $this->json($data);
+    public function findRegion(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("region"))["region"]);
+    }
+
+    /**
+     * @param string $searchTerm
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function findCelestial(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("celestial"))["celestial"]);
+    }
+
+    /**
+     * @param string $searchTerm
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function findItem(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("item"))["item"]);
     }
 }

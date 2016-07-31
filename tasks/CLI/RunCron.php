@@ -121,15 +121,26 @@ class RunCron extends Command
                         if(($pid = pcntl_fork()) == 0) {
                             // Load the container in the child
                             $container = getContainer();
-                            // Load the cache in the child
+
+                            // Load the cache in the child (It has to be new, and non-persistent for shit to not die)
+                            $config = $container->get("config");
+                            $newCache = new Cache($config);
+                            $newCache->persistence = false;
+                            $container->share("cache", $newCache);
                             $cache = $container->get("cache");
+
+                            // Get the PID of the child
                             $pid = getmypid();
+
                             // Insert the childs pid to the cache
                             $cache->set($md5 . "_pid", $pid);
+
                             // Execute the execute function in the child
                             $class->execute($container);
+
                             // Set when the child was run
                             $cache->set($md5, time());
+
                             // Exit the child
                             exit();
                         }

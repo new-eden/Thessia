@@ -27,55 +27,50 @@ namespace Thessia\Controller\API;
 
 use Slim\App;
 use Thessia\Middleware\Controller;
+use Thessia\Model\Database\EVE\Characters;
+use Thessia\Model\Database\EVE\Top;
 use Thessia\Model\Database\Site\Search;
 
 /**
- * Class ItemAPIController
+ * Class ConstellationAPIController
  * @package Thessia\Controller\API
  */
-class ItemAPIController extends Controller
+class ConstellationAPIController extends Controller
 {
-    /**
-     * @var \MongoDB\Collection
-     */
-    private $collection;
-    /**
-     * @var \MongoDB\Collection
-     */
-    private $killmails;
     /**
      * @var Search
      */
     private $search;
+    /**
+     * @var \MongoDB\Collection
+     */
+    private $collection;
 
     /**
-     * ItemAPIController constructor.
+     * ConstellationAPIController constructor.
      * @param App $app
      */
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->collection = $this->mongo->selectCollection("ccp", "typeIDs");
-        $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
+        $this->collection = $this->mongo->selectCollection("ccp", "constellations");
         $this->search = $this->container->get("search");
     }
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function itemCount() {
+    public function constellationCount() {
         $count = $this->collection->count();
-
-        return $this->json(array("itemCount" => $count));
+        return $this->json(array("constellationCount" => $count));
     }
 
     /**
-     * @param int $itemID
+     * @param int $constellationID
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function itemInformation(int $itemID) {
-        $info = $this->collection->find(array("typeID" => $itemID))->toArray();
-
+    public function constellationInformation(int $constellationID) {
+        $info = $this->collection->findOne(array("constellationID" => $constellationID));
         return $this->json($info);
     }
 
@@ -83,7 +78,7 @@ class ItemAPIController extends Controller
      * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function findItem(string $searchTerm) {
-        return $this->json($this->search->search($searchTerm, array("item"), 50));
+    public function findConstellation(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("constellation"), 50)["constellation"]);
     }
 }

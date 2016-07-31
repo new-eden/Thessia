@@ -65,44 +65,48 @@ class PopulateWars {
             foreach($data["items"] as $war) {
                 $innerData = $crestHelper->getWar($war["id"]);
 
-                // If it already exists in the database, and timeFinished is set - just skip
-                $exists = $collection->findOne(array("warID" => $innerData["id"]));
-                if(!empty($exists) && isset($innerData["timeFinished"]))
-                    continue;
+                $warID = (int) $innerData["id"];
 
-                // Create the war data array
-                $array = array(
-                    "warID" => (int) $innerData["id"],
-                    "timeDeclared" => isset($innerData["timeDeclared"]) ? new UTCDatetime(strtotime($innerData["timeDeclared"]) * 1000): null,
-                    "timeStarted" => isset($innerData["timeStarted"]) ? new UTCDatetime(strtotime($innerData["timeStarted"]) * 1000) : null,
-                    "timeFinished" => isset($innerData["timeFinished"]) ? new UTCDatetime(strtotime($innerData["timeFinished"]) * 1000) : null,
-                    "openForAllies" => (boolean) $innerData["openForAllies"],
-                    "allyCount" => (int) $innerData["allyCount"],
-                    "mutual" => (boolean) $innerData["mutual"]
-                );
+                if(isset($warID)) {
+                    // If it already exists in the database, and timeFinished is set - just skip
+                    $exists = $collection->findOne(array("warID" => $warID));
+                    if (!empty($exists) && isset($innerData["timeFinished"]))
+                        continue;
 
-                // Populate the aggressor part of the war data array
-                $array["aggressor"] = array(
-                    "shipsKilled" => $innerData["aggressor"]["shipsKilled"],
-                    "iskKilled" => $innerData["aggressor"]["iskKilled"],
-                    "aggressorName" => $innerData["aggressor"]["name"],
-                    "aggressorID" => $innerData["aggressor"]["id"]
-                );
+                    // Create the war data array
+                    $array = array(
+                        "warID" => $warID,
+                        "timeDeclared" => isset($innerData["timeDeclared"]) ? new UTCDatetime(strtotime($innerData["timeDeclared"]) * 1000) : null,
+                        "timeStarted" => isset($innerData["timeStarted"]) ? new UTCDatetime(strtotime($innerData["timeStarted"]) * 1000) : null,
+                        "timeFinished" => isset($innerData["timeFinished"]) ? new UTCDatetime(strtotime($innerData["timeFinished"]) * 1000) : null,
+                        "openForAllies" => (boolean)$innerData["openForAllies"],
+                        "allyCount" => (int)$innerData["allyCount"],
+                        "mutual" => (boolean)$innerData["mutual"]
+                    );
 
-                // Populate the defender part of the war data array
-                $array["defender"] = array(
-                    "shipsKilled" => $innerData["defender"]["shipsKilled"],
-                    "iskKilled" => $innerData["defender"]["iskKilled"],
-                    "defenderName" => $innerData["defender"]["name"],
-                    "defenderID" => $innerData["defender"]["id"]
-                );
+                    // Populate the aggressor part of the war data array
+                    $array["aggressor"] = array(
+                        "shipsKilled" => $innerData["aggressor"]["shipsKilled"],
+                        "iskKilled" => $innerData["aggressor"]["iskKilled"],
+                        "aggressorName" => $innerData["aggressor"]["name"],
+                        "aggressorID" => $innerData["aggressor"]["id"]
+                    );
 
-                // Insert the war data array into the database
-                $collection->replaceOne(array("warID" => $innerData["id"]), $array, array("upsert" => true));
+                    // Populate the defender part of the war data array
+                    $array["defender"] = array(
+                        "shipsKilled" => $innerData["defender"]["shipsKilled"],
+                        "iskKilled" => $innerData["defender"]["iskKilled"],
+                        "defenderName" => $innerData["defender"]["name"],
+                        "defenderID" => $innerData["defender"]["id"]
+                    );
 
-                // Now pass off the killmail link to the Resque fetcher, so it can fetch all the killmails.. If there are any.
-                if($innerData["aggressor"]["shipsKilled"] > 0 || $innerData["defender"]["shipsKilled"] > 0)
-                    \Resque::enqueue("med", '\Thessia\Tasks\Resque\PopulateWarKillmails', array("href" => $innerData["killmails"], "warID" => $innerData["id"]));
+                    // Insert the war data array into the database
+                    $collection->replaceOne(array("warID" => $innerData["id"]), $array, array("upsert" => true));
+
+                    // Now pass off the killmail link to the Resque fetcher, so it can fetch all the killmails.. If there are any.
+                    if ($innerData["aggressor"]["shipsKilled"] > 0 || $innerData["defender"]["shipsKilled"] > 0)
+                        \Resque::enqueue("med", '\Thessia\Tasks\Resque\PopulateWarKillmails', array("href" => $innerData["killmails"], "warID" => $innerData["id"]));
+                }
             }
 
             // Increment the current page
