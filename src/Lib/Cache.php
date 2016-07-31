@@ -27,6 +27,7 @@ namespace Thessia\Lib;
 
 use Closure;
 use Predis\Client;
+use Predis\Response\Status;
 
 /**
  * Class Cache
@@ -90,9 +91,8 @@ class Cache
     public function set(string $key, string $value, int $timeout = 0): bool
     {
         $result = $this->redis->set($key, json_encode($value));
-        if ($timeout > 0) {
-            return $result ? $this->expire($key, $timeout) : $result;
-        }
+        if ($timeout > 0)
+            $this->expire($key, $timeout);
 
         if($result == "OK")
             return true;
@@ -106,7 +106,15 @@ class Cache
      * @return bool
      */
     public function exists(string $key): bool {
-        return $this->redis->exists($key);
+        /** @var Status $data */
+        $data = $this->redis->exists($key);
+        // This is an odd one, can be an integer, or an object..
+        if($data instanceof Status)
+            $data = $data->getPayload();
+
+        if($data == 1 || $data == "OK")
+            return true;
+        return false;
     }
 
     /**
@@ -115,9 +123,9 @@ class Cache
      * @param string $key The key to uniquely identify the cached item
      * @param integer $timeout
      *
-     * @return bool
+     * @return mixed
      */
-    protected function expire(string $key, int $timeout): bool
+    protected function expire(string $key, int $timeout)
     {
         return $this->redis->expire($key, $timeout);
     }

@@ -53,13 +53,13 @@ class UpdateAllianceList
 
         $log->info("CRON: Inserting/Updating alliances...");
         $data = $eve->eveAllianceList();
-        foreach ($data["result"] as $alliance) {
-            $allianceID = $alliance["allianceID"];
+        foreach ($data["result"]["alliances"] as $alliance) {
+            $allianceID = (int) $alliance["allianceID"];
             $moreData = $crestHelper->getAlliance($allianceID);
             $allianceName = $moreData["name"];
             $ticker = $moreData["shortName"];
-            $memberCount = $alliance["memberCount"];
-            $executorCorpID = $alliance["executorCorpID"];
+            $memberCount = (int) $alliance["memberCount"];
+            $executorCorpID = (int) $alliance["executorCorpID"];
             $executorCorpName = $moreData["executorCorporation"]["name"];
             $startDate = $alliance["startDate"];
             $description = $moreData["description"];

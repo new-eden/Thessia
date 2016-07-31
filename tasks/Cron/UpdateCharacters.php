@@ -46,10 +46,11 @@ class UpdateCharacters
 
         $log->addInfo("CRON: Updating Characters from the EVE API");
         $date = strtotime(date("Y-m-d H:i:s", strtotime("-1 week"))) * 1000;
-        $charactersToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 50000))->toArray();
+        $charactersToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 850))->toArray();
 
         foreach($charactersToUpdate as $char) {
-            \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCharacter', array("characterID" => $char["characterID"]));
+            if($char["characterID"] > 0)
+                \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCharacter', array("characterID" => $char["characterID"]));
         }
     }
 
@@ -58,6 +59,6 @@ class UpdateCharacters
      */
     public static function getRunTimes()
     {
-        return 3600;
+        return 60;
     }
 }

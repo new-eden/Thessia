@@ -46,10 +46,11 @@ class UpdateCorporations
 
         $log->addInfo("CRON: Updating Corporations from the EVE API");
         $date = strtotime(date("Y-m-d H:i:s", strtotime("-3 days"))) * 1000;
-        $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 50000))->toArray();
+        $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 850))->toArray();
 
         foreach($corporationsToUpdate as $corp) {
-            \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporations', array("corporationID" => $corp["corporationID"]));
+            if($corp["corporationID"] > 0)
+                \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $corp["corporationID"]));
         }
     }
 
@@ -58,6 +59,6 @@ class UpdateCorporations
      */
     public static function getRunTimes()
     {
-        return 3600;
+        return 60;
     }
 }

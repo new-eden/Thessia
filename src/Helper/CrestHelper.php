@@ -77,8 +77,11 @@ class CrestHelper {
         $md5 = md5($url);
 
         // If it exists in the cache, we'll just get it from there for now
-        if($this->cache->exists($md5))
-            return json_decode($this->cache->get($md5), true);
+        if($this->cache->exists($md5)) {
+            $data = (string) $this->cache->get($md5);
+            if($this->isJson($data))
+                return (array) json_decode($data, true);
+        }
 
         // Consume a token. It will block till one becomes available if none are available.
         $this->consumer->consume(1);
@@ -213,11 +216,10 @@ class CrestHelper {
      * Get Market Pricing information.
      *
      * @cacheTime: 23 hours
-     * @param int $page
      * @return array
      */
-    public function getMarketPrices(int $page = 1) {
-        $url = "/market/prices/?page={$page}";
+    public function getMarketPrices() {
+        $url = "/market/prices/";
         return $this->getData($url, 82800);
     }
 

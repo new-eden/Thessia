@@ -72,7 +72,7 @@ class UpdatePrices
                 "averagePrice" => (int)isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
                 "lastUpdated" => date("Y-m-d H:i:s")
             );
-            $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]}");
+            $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]["en"]}");
             $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
         }
     }

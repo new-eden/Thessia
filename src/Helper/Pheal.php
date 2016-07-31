@@ -82,7 +82,7 @@ class Pheal
         $this->pheal->log = new PsrLogger($this->log());
         $this->pheal->api_customkeys = true;
         $this->pheal->api_base = "https://api.eveonline.com/";
-        $this->pheal->rateLimiter = new FileLockRateLimiter(__DIR__ . "/../../cache/", 30, 30, 10);
+        $this->pheal->rateLimiter = new FileLockRateLimiter(__DIR__ . "/../../cache/", 60, 30, 10);
     }
 
     /**

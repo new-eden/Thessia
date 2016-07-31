@@ -60,8 +60,8 @@ class UpdateCorporation
             $data = array(
                 "corporationID" => (int) $sheet["result"]["corporationID"],
                 "corporationName" => $sheet["result"]["corporationName"],
-                "allianceID" => (int) $sheet["result"]["allianceID"],
-                "allianceName" => $alliance->getAllByID($sheet["result"]["allianceID"])["allianceName"],
+                "allianceID" => (int) isset($sheet["result"]["allianceID"]) ? $sheet["result"]["allianceID"] : 0,
+                "allianceName" => isset($sheet["result"]["allianceID"]) ? $alliance->getAllByID($sheet["result"]["allianceID"])["allianceName"] : "",
                 "ceoID" => (int) $sheet["result"]["ceoID"],
                 "ticker" => $sheet["result"]["ticker"],
                 "memberCount" => (int) $sheet["result"]["memberCount"],

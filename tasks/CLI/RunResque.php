@@ -29,6 +29,7 @@ use React\EventLoop\Factory;
 use React\Stomp\Factory as StompFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Thessia\Lib\Config;
 
@@ -38,7 +39,8 @@ class RunResque extends Command
     {
         $this
             ->setName("run:resque")
-            ->setDescription("Run the Resque jobs");
+            ->setDescription("Run the Resque jobs")
+            ->addOption("queue", null, InputOption::VALUE_REQUIRED, "The queue name for which it should be listening to..", array("rt", "high", "med", "low"));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -52,7 +54,11 @@ class RunResque extends Command
             require_once($file);
         }
 
-        $queues = array("rt", "high", "med", "low");
+        if(is_array($input->getOption("queue")))
+            $queues = $input->getOption("queue");
+        else
+            $queues = array($input->getOption("queue"));
+
         $logLevel = \Resque_Worker::LOG_NORMAL;
         $interval = 1;
         $worker = new \Resque_Worker($queues);

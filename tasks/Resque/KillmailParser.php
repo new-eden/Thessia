@@ -73,13 +73,8 @@ class KillmailParser
         $killmail = $parser->parseCrestKillmail($killID, $killHash, $warID);
 
         // If the killmail is an array, we try and insert it - if it already exists, we'll just update it.
-        if (is_array($killmail)) {
-            try {
-                $collection->insertOne($killmail);
-            } catch(\Exception $e) {
-                $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
-            }
-        }
+        if (is_array($killmail))
+            $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
 
         // Kick mail off to stomp!
         $loop = Factory::create();

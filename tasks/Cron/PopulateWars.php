@@ -57,7 +57,7 @@ class PopulateWars {
 
         $log->addInfo("CRON: Updating Wars from CREST");
         $data = $crestHelper->getWars();
-        $pageCount = $data["pageCount"];
+        $pageCount = $data["pageCount"] ?? 1;
         $currPage = 1;
 
         while($currPage <= $pageCount) {

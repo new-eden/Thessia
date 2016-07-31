@@ -33,6 +33,8 @@ use Thessia\Lib\Cache;
 
 class RunCron extends Command
 {
+    private $child;
+
     protected function configure()
     {
         $this
@@ -42,6 +44,7 @@ class RunCron extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln("Loading the cronjob task...");
         // Enable the garbage collector
         gc_enable();
 
@@ -49,77 +52,99 @@ class RunCron extends Command
         $container = getContainer();
         /** @var Logger $log */
         $log = $container->get("log");
+        /** @var Cache $cache */
+        $cache = $container->get("cache");
 
+        // Load the cronjobs
+        $cronjobs = glob(__DIR__ . "/../Cron/*.php");
+        foreach($cronjobs as $file) {
+            $baseName = str_replace(".php", "", basename($file));
+            $output->writeln("Loading: {$baseName}...");
+            require_once($file);
+        }
+
+        $output->writeln("Done loading cronjobs...");
+
+        // Setup the default variables for running and garbage collecting
         $run = true;
         $cnt = 0;
 
         do {
+            // If we've run through 5000 loops, we'll collect some garbage..
             if ($cnt >= 5000) {
                 $output->writeln("Collecting garbage..");
                 gc_collect_cycles();
                 $cnt = 0;
             }
+
+            // Increment the loop
             $cnt++;
 
-            $files = glob(__DIR__ . "/../Cron/*.php");
-            foreach ($files as $file) {
-                require_once($file);
+            // Iterate over all the cronjobs, and launch them as needed
+            foreach($cronjobs as $file) {
+                $status = 0;
                 $baseName = basename($file);
                 $className = str_replace(".php", "", $baseName);
+                $date = date("Y-m-d H:i:s");
                 $import = "\\Thessia\\Tasks\\Cron\\{$className}";
                 $md5 = md5($baseName);
                 $currentTime = time();
 
-                /** @var Cache $cache */
-                $cache = $container->get("cache");
-
-                // Lets check if the current cron is running
-                if ($cache->get($md5 . "_pid") !== false) {
+                // Check if the current cron is running
+                if($cache->exists($md5 . "_pid")) {
                     $pid = $cache->get($md5 . "_pid");
                     $status = pcntl_waitpid($pid, $status, WNOHANG);
-                    if ($status == -1) {
+
+                    if($status == -1)
                         $cache->delete($md5 . "_pid");
-                    } else {
-                        usleep(500000);
+                    else
                         continue;
-                    }
                 }
 
-                $lastRan = $cache->get($md5) > 0 ? $cache->get($md5) : 0;
+                // Figure out when it last ran
+                $lastRan = $cache->exists($md5) ? $cache->get($md5) : 0;
+
+                // Load the cronjob
                 $class = new $import();
-                $interval = $class->getRunTimes();
+                $interval = $class->getRuntimes();
 
-                if ($interval == 0) {
+                // If the interval is 0, we'll just skip it
+                if($interval == 0)
                     continue;
-                }
 
-                if ($currentTime > ($lastRan + $interval)) {
-                    $date = date("Y-m-d H:i:s");
-                    $log->addInfo("Running cronjob: {$className} (Interval: {$interval}");
+                // If it has been the required amount of time since it last ran, we'll run it again!
+                if($currentTime > ($lastRan + $interval)) {
+                    $log->addInfo("Running cronjob: {$className} (Interval: {$interval})");
                     $output->writeln("{$date}: Running cronjob: {$className} (Interval: {$interval})");
 
                     try {
-                        $pid = pcntl_fork();
-                        if ($pid === 0) {
+                        if(($pid = pcntl_fork()) == 0) {
+                            // Load the container in the child
                             $container = getContainer();
+                            // Load the cache in the child
                             $cache = $container->get("cache");
                             $pid = getmypid();
+                            // Insert the childs pid to the cache
                             $cache->set($md5 . "_pid", $pid);
+                            // Execute the execute function in the child
                             $class->execute($container);
+                            // Set when the child was run
+                            $cache->set($md5, time());
+                            // Exit the child
                             exit();
                         }
-
-                        $cache->set($md5, time());
                     } catch (\Exception $e) {
-                        $output->writeln("Error: (pid: " . getmypid() . ")" . $e->getMessage());
+                        $myPid = getmypid();
+                        $output->writeln("Error with pid: {$myPid}, exiting because of: {$e->getMessage()}");
                         $run = false;
-                        posix_kill(getmypid(), 9);
+                        posix_kill($myPid, 9);
                         exit();
                     }
                 }
             }
-            usleep(500000);
-        } while ($run == true);
 
+            // Sleep for a second between each loop
+            sleep(1);
+        } while ($run == true);
     }
 }

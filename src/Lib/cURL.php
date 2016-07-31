@@ -66,7 +66,7 @@ class cURL
             // Setup curl
             curl_setopt_array($curl, array(
                 CURLOPT_USERAGENT => "DataGetter for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)",
-                CURLOPT_TIMEOUT => 30,
+                CURLOPT_TIMEOUT => 60,
                 CURLOPT_POST => false,
                 CURLOPT_FORBID_REUSE => false,
                 CURLOPT_ENCODING => "",

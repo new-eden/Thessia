@@ -511,11 +511,11 @@ class Parser
     private function generateVictimPortion($data): array
     {
         $corpExists = $this->corporations->getAllByID($data["corporationID"]);
-        if(empty($corpExists))
+        if(empty($corpExists) && $data["corporationID"] > 0)
             \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $data["corporationID"]));
 
         $charExists = $this->characters->getAllByID($data["characterID"]);
-        if(empty($charExists))
+        if(empty($charExists) && $data["characterID"] > 0)
             \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCharacter', array("characterID" => $data["characterID"]));
 
         $victim = array();
@@ -557,11 +557,11 @@ class Parser
 
         foreach ($data as $attacker) {
             $corpExists = $this->corporations->getAllByID($attacker["corporationID"]);
-            if(empty($corpExists))
+            if(empty($corpExists) && $attacker["corporationID"] > 0)
                 \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $attacker["corporationID"]));
 
             $charExists = $this->characters->getAllByID($attacker["characterID"]);
-            if(empty($charExists))
+            if(empty($charExists) && $attacker["characterID"] > 0)
                 \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCharacter', array("characterID" => $attacker["characterID"]));
 
             $inner = array();
