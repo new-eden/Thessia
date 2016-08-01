@@ -106,54 +106,38 @@ $app->group("/api", function() use ($app) {
         $app->get("/find/{searchTerm:[^\\/]+}/", $controller("findCelestial"));
     });
 
+    $app->group("/kill", function() use ($app) {
+        //$app->post("/add/");
+        //$app->get("/count/");
+        //$app->get("/mail/killID/{killID:[0-9]+}/");
+        //$app->get("/mail/crestHash/{crestHash:[a-zA-Z0-9]+}/");
+    });
+
+    $app->group("/kills", function() use ($app) {
+        $controller = new \Thessia\Controller\API\KillsAPIController($app);
+        $app->get("/solarSystem/{solarSystemID:[0-9]+}/[{extraParams:.*}]", $controller("getSolarSystem"));
+        $app->get("/region/{regionID:[0-9]+}/[{extraParams:.*}]", $controller("getRegion"));
+        $app->get("/character/{characterID:[0-9]+}/[{extraParams:.*}]", $controller("getCharacter"));
+        $app->get("/corporation/{corporationID:[0-9]+}/[{extraParams:.*}]", $controller("getCorporation"));
+        $app->get("/alliance/{allianceID:[0-9]+}/[{extraParams:.*}]", $controller("getAlliance"));
+        $app->get("/faction/{factionID:[0-9]+}/[{extraParams:.*}]", $controller("getFaction"));
+        $app->get("/shipType/{shipTypeID:[0-9]+}/[{extraParams:.*}]", $controller("getShipType"));
+        $app->get("/weaponType/{weaponTypeID:[0-9]+}/[{extraParams:.*}]", $controller("getWeaponType"));
+        $app->get("/afterDate/{afterDate:[^\\/]+}/[{extraParams:.*}]", $controller("getAfterDate"));
+        $app->get("/beforeDate/{beforeDate:[^\\/]+}/[{extraParams:.*}]", $controller("getBeforeDate"));
+        $app->get("/betweenDates/{afterDate:[^\\/]+}/{beforeDate:[^\\/]+}/[{extraParams:.*}]", $controller("getBetweenDates"));
+    });
+
+    $app->group("/losses", function() use ($app) {
+        $controller = new \Thessia\Controller\API\LossesAPIController($app);
+        $app->get("/character/{characterID:[0-9]+}/[{extraParams:.*}]", $controller("getCharacter"));
+        $app->get("/corporation/{corporationID:[0-9]+}/[{extraParams:.*}]", $controller("getCorporation"));
+        $app->get("/alliance/{allianceID:[0-9]+}/[{extraParams:.*}]", $controller("getAlliance"));
+        $app->get("/faction/{factionID:[0-9]+}/[{extraParams:.*}]", $controller("getFaction"));
+        $app->get("/shipType/{shipTypeID:[0-9]+}/[{extraParams:.*}]", $controller("getShipType"));
+    });
 
     /*
-
-    $app->group("/celestial", function() use ($app) {
-        $app->get("/information/:celestialID/", function(int $celestialID) {
-
-        });
-
-        $app->get("/find/:searchTerm/", function($searchTerm) use ($app, $controller) {
-
-        });
-
-        $app->group("/top", function() use ($app, $controller) {
-            $app->get("/characters/:characterID(/:limit)/", function(int $characterID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/corporation/:corporationID(/:limit)/", function(int $corporationID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/alliances/:allianceID(/:limit)/", function(int $allianceID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/ships/:shipTypeID(/:limit)/", function(int $shipTypeID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/systems/:solarSystemID(/:limit)/", function(int $solarSystemID, int $limit = 10) use ($app, $controller) {
-
-            });
-            $app->get("/regions/:regionID(/:limit)/", function(int $regionID, int $limit = 10) use ($app, $controller) {
-
-            });
-        });
-    });
-
-    $app->group("/kill", function() use ($app) {
-        $app->post("/add/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/count/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/mail/:killID/", function(int $killID) use ($app, $controller) {
-
-        });
-    });
-
     $app->group("/killlist", function() use ($app) {
         $app->get("/latest/", function() use ($app, $controller) {
 
