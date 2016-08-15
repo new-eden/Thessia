@@ -510,11 +510,11 @@ class Parser
      */
     private function generateVictimPortion($data): array
     {
-        $corpExists = $this->corporations->getAllByID($data["corporationID"]);
+        $corpExists = $this->corporations->getAllByID((int) $data["corporationID"]);
         if(empty($corpExists) && $data["corporationID"] > 0)
             \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $data["corporationID"]));
 
-        $charExists = $this->characters->getAllByID($data["characterID"]);
+        $charExists = $this->characters->getAllByID((int) $data["characterID"]);
         if(empty($charExists) && $data["characterID"] > 0)
             \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCharacter', array("characterID" => $data["characterID"]));
 
@@ -539,6 +539,14 @@ class Parser
         $victim["factionID"] = (int)$data["factionID"];
         $victim["factionName"] = $data["factionName"];
         $victim["factionImageURL"] = $this->imageServer . "Alliance/" . $data["factionID"] . "_128.png";
+
+        // Increment all the stats for the characters/corporations/alliances involved
+        if($data["characterID"] > 0)
+            $this->characters->updateOne(array("characterID" => $data["characterID"]), array("\$inc" => array("losses" => 1)));
+        if($data["corporationID"] > 0)
+            $this->corporations->updateOne(array("corporationID" => $data["corporationID"]), array("\$inc" => array("losses" => 1)));
+        if($data["allianceID"] > 0)
+            $this->alliances->updateOne(array("allianceID" => $data["allianceID"]), array("\$inc" => array("losses" => 1)));
 
         return $victim;
     }
@@ -600,6 +608,16 @@ class Parser
                 $percentDamage = (int)$attacker["damageDone"] / $totalDamage;
                 $inner["points"] = $pointValue * $percentDamage;
             }
+
+            // Increment all the stats for the characters/corporations/alliances involved
+            if($attacker["characterID"] > 0)
+                $this->characters->updateOne(array("characterID" => $attacker["characterID"]), array("\$inc" => array("kills" => 1)));
+            if($attacker["corporationID"] > 0)
+                $this->corporations->updateOne(array("corporationID" => $attacker["corporationID"]), array("\$inc" => array("kills" => 1)));
+            if($attacker["allianceID"] > 0)
+                $this->alliances->updateOne(array("allianceID" => $attacker["allianceID"]), array("\$inc" => array("kills" => 1)));
+            if($inner["points"] > 0)
+                $this->characters->updateOne(array("characterID" => $attacker["characterID"]), array("\$inc" => array("points" => $inner["points"])));
 
             $attackers[] = $inner;
         }

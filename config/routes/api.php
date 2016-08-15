@@ -102,15 +102,16 @@ $app->group("/api", function() use ($app) {
     $app->group("/celestial", function() use ($app) {
         $controller = new \Thessia\Controller\API\CelestialAPIController($app);
         $app->get("/count/", $controller("celestialCount"));
-        $app->get("/information/{typeID:[0-9]+}/", $controller("celestialInformation"));
+        $app->get("/information/{solarSystemID:[0-9]+}/", $controller("celestialInformation"));
         $app->get("/find/{searchTerm:[^\\/]+}/", $controller("findCelestial"));
     });
 
     $app->group("/kill", function() use ($app) {
-        //$app->post("/add/");
-        //$app->get("/count/");
-        //$app->get("/mail/killID/{killID:[0-9]+}/");
-        //$app->get("/mail/crestHash/{crestHash:[a-zA-Z0-9]+}/");
+        $controller = new \Thessia\Controller\API\KillAPIController($app);
+        $app->post("/add/", $controller("addKill"));
+        $app->get("/count/", $controller("getKillCount"));
+        $app->get("/mail/killID/{killID:[0-9]+}/", $controller("getKillByID"));
+        $app->get("/mail/hash/{hash:[a-zA-Z0-9]+}/", $controller("getKillByHash"));
     });
 
     $app->group("/kills", function() use ($app) {
@@ -137,286 +138,79 @@ $app->group("/api", function() use ($app) {
         $app->get("/shipType/{shipTypeID:[0-9]+}/[{extraParams:.*}]", $controller("getShipType"));
     });
 
-    /*
     $app->group("/killlist", function() use ($app) {
-        $app->get("/latest/", function() use ($app, $controller) {
+        $controller = new \Thessia\Controller\API\KillListAPIController($app);
+        $app->get("/latest/[{page:[0-9]+}/]", $controller("getLatest"));
+        $app->get("/bigkills/[{page:[0-9]+}/]", $controller("getBigKills"));
+        $app->get("/wspace/[{page:[0-9]+}/]", $controller("getWSpace"));
+        $app->get("/highsec/[{page:[0-9]+}/]", $controller("getHighSec"));
+        $app->get("/lowsec/[{page:[0-9]+}/]", $controller("getLowSec"));
+        $app->get("/nullsec/[{page:[0-9]+}/]", $controller("getNullSec"));
+        $app->get("/solo/[{page:[0-9]+}/]", $controller("getSolo"));
+        $app->get("/npc/[{page:[0-9]+}/]", $controller("getNPC"));
+        $app->get("/5b/[{page:[0-9]+}/]", $controller("get5b"));
+        $app->get("/10b/[{page:[0-9]+}/]", $controller("get10b"));
+        $app->get("/citadels/[{page:[0-9]+}/]", $controller("getCitadels"));
+        $app->get("/t1/[{page:[0-9]+}/]", $controller("getT1"));
+        $app->get("/t2/[{page:[0-9]+}/]", $controller("getT2"));
+        $app->get("/t3/[{page:[0-9]+}/]", $controller("getT3"));
+        $app->get("/frigates/[{page:[0-9]+}/]", $controller("getFrigates"));
+        $app->get("/destroyers/[{page:[0-9]+}/]", $controller("getDestroyers"));
+        $app->get("/cruisers/[{page:[0-9]+}/]", $controller("getCruisers"));
+        $app->get("/battlecruisers/[{page:[0-9]+}/]", $controller("getBattleCruisers"));
+        $app->get("/battleships/[{page:[0-9]+}/]", $controller("getBattleShips"));
+        $app->get("/capitals/[{page:[0-9]+}/]", $controller("getCapitals"));
+        $app->get("/freighters/[{page:[0-9]+}/]", $controller("getFreighters"));
+        $app->get("/supercarriers/[{page:[0-9]+}/]", $controller("getSuperCarriers"));
+        $app->get("/titans/[{page:[0-9]+}/]", $controller("getTitans"));
 
-        });
-
-        $app->get("/bigkills/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/wspace/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/highsec/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/lowsec/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/nullsec/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/solo/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/5b/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/10b/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/capitals/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/freighters/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/supercarriers/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/titans/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/t1/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/t2/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/t3/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/frigates/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/destroyers/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/cruisers/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/battlecruisers/", function() use ($app, $controller) {
-
-        });
-
-        $app->get("/battleships/", function() use ($app, $controller) {
-
-        });
-
-    });
-
-    $app->group("/kills", function() use ($app) {
-        $app->get("/solarSystem/:solarSystemID/(:extraParameters+)", function (int $solarSystemID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/region/:regionID/(:extraParameters+)", function (int $regionID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/character/:characterID/(:extraParameters+)", function (int $characterID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/corporation/:corporationID/(:extraParameters+)", function (int $corporationID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/alliance/:allianceID/(:extraParameters+)", function (int $allianceID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/faction/:factionID/(:extraParameters+)", function (int $factionID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/shipType/:shipTypeID/(:extraParameters+)", function (int $shipTypeID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/group/:groupID/(:extraParameters+)", function (int $groupID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/weaponType/:weaponTypeID/(:extraParameters+)", function (int $weaponTypeID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/afterDate/:afterDate/(:extraParameters+)", function ($afterDate, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/beforeDate/:beforeDate/(:extraParameters+)", function ($beforeDate, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/betweenDates/:afterDate/:beforeDate/(:extraParameters+)", function ($afterDate, $beforeDate, $parameters = array()) use ($app, $controller) {
-
-        });
-    });
-
-    $app->group("/losses", function() use ($app) {
-        $app->get("/solarSystem/:solarSystemID/(:extraParameters+)", function (int $solarSystemID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/region/:regionID/(:extraParameters+)", function (int $regionID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/character/:characterID/(:extraParameters+)", function (int $characterID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/corporation/:corporationID/(:extraParameters+)", function (int $corporationID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/alliance/:allianceID/(:extraParameters+)", function (int $allianceID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/faction/:factionID/(:extraParameters+)", function (int $factionID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/shipType/:shipTypeID/(:extraParameters+)", function (int $shipTypeID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/group/:groupID/(:extraParameters+)", function (int $groupID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/weaponType/:weaponTypeID/(:extraParameters+)", function (int $weaponTypeID, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/afterDate/:afterDate/(:extraParameters+)", function ($afterDate, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/beforeDate/:beforeDate/(:extraParameters+)", function ($beforeDate, $parameters = array()) use ($app, $controller) {
-
-        });
-
-        $app->get("/betweenDates/:afterDate/:beforeDate/(:extraParameters+)", function ($afterDate, $beforeDate, $parameters = array()) use ($app, $controller) {
-
-        });
     });
 
     $app->group("/stats", function() use ($app) {
-        $app->get("/top10Characters/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/top10Corporations/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/top10Alliances/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/top10SolarSystems/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/top10Regions/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/mostValuableKillsLast7Days/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/sevenDayKillCount/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/currentlyActiveCharacters/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/currentlyActiveCorporations/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/currentlyActiveAlliances/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/currentlyActiveShipTypes/", function () use ($app, $controller) {
-
-        });
-
-        $app->get("/currentlyActiveSolarSystems/", function () use ($app, $controller) {
-
-        });
+        $controller = new \Thessia\Controller\API\StatsAPIController($app);
+        $app->get("/top10characters/", $controller("top10Characters"));
+        $app->get("/top10corporations/", $controller("top10Corporations"));
+        $app->get("/top10alliances/", $controller("top10Alliances"));
+        $app->get("/top10solarsystems/", $controller("top10SolarSystems"));
+        $app->get("/top10regions/", $controller("top10Regions"));
+//        $app->get("/mostvaluablekillslast7days/", $controller(""));
+//        $app->get("/sevendaykillcount/", $controller(""));
+//        $app->get("/currentlyactivecharacters/", $controller(""));
+//        $app->get("/currentlyactivecorporations/", $controller(""));
+//        $app->get("/currentlyactivealliances/", $controller(""));
+//        $app->get("/currentlyactiveshiptypes/", $controller(""));
+//        $app->get("/currentlyactivesolarsystems/", $controller(""));
     });
-
+/*
     $app->group("/search", function() use ($app) {
-        $app->get("(/:searchType)/:searchTerm/", function ($searchType = null, $searchTerm = null) use ($app, $controller) {
-            if (!$searchType)
-                $searchType = array("faction", "alliance", "corporation", "character", "item", "system", "region");
-        });
+        $controller = new \Thessia\Controller\API\SearchAPIController($app);
+        $app->get("/faction/{searchTerm:[A-Za-z0-9]+}/", $controller("findFaction"));
+        $app->get("/alliance/{searchTerm:[A-Za-z0-9]+}/", $controller("findAlliance"));
+        $app->get("/corporation/{searchTerm:[A-Za-z0-9]+}/", $controller("findCorporation"));
+        $app->get("/character/{searchTerm:[A-Za-z0-9]+}/", $controller("findCharacter"));
+        $app->get("/item/{searchTerm:[A-Za-z0-9]+}/", $controller("findItem"));
+        $app->get("/system/{searchTerm:[A-Za-z0-9]+}/", $controller("findSolarSystem"));
+        $app->get("/region/{searchTerm:[A-Za-z0-9]+}/", $controller("findRegion"));
+        $app->get("/celestial/{searchTerm:[A-Za-z0-9]+}/", $controller("findCelestial"));
     });
 
     $app->group("/tools", function() use ($app) {
-        $app->post("/calculateCrestHash/", function () use ($app) {
-
-        });
-
-        $app->post("/validateCrestUrl/", function () use ($app) {
-
-        });
+        $controller = new \Thessia\Controller\API\ToolsAPIController($app);
+        $app->post("/calculateCrestHash/", $controller(""));
+        $app->post("/validateCrestUrl/", $controller(""));
     });
 
     $app->group("/wars", function() use ($app) {
-        $app->get("/count/", function () use ($app) {
-
-        });
-
-        $app->get("/wars/", function () use ($app) {
-
-        });
-
-        $app->get("/kills/:warID/", function ($warID) use ($app) {
-
-        });
+        $controller = new \Thessia\Controller\API\WarsAPIController($app);
+        $app->get("/count/", $controller(""));
+        $app->get("/wars/", $controller(""));
+        $app->get("/kills/:warID/", $controller(""));
     });
 
     $app->group("/market", function() use ($app) {
-        $app->get("/price/:typeID/", function ($typeID) use ($app) {
-
-        });
-
-        $app->get("/prices/:typeID/", function ($typeID) use ($app) {
-
-        });
+        $controller = new \Thessia\Controller\API\MarketAPIController($app);
+        $app->get("/price/:typeID/", $controller(""));
+        $app->get("/prices/:typeID/", $controller(""));
     });
-
-    $app->group("/authed", function() use ($app) {
-
-    });*/
+    */
 });

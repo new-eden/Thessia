@@ -338,6 +338,10 @@ class Killmails extends Mongo
         );
     }
 
+    public function getKillmailCount() {
+        return $this->collection->count();
+    }
+
     /**
      * @param array $documents An array of arrays. eg: array(array(data), array(data2), array(data3))
      * @param array $options Options array, used for projection, sort, etc.

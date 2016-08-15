@@ -138,7 +138,7 @@ class Participants extends Mongo
      * @return array|mixed|null|object
      * @throws \Exception
      */
-    public function getByKillTime($killTime, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByKillTime($killTime, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($killTime . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -216,7 +216,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getBySolarSystemID($solarSystemID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getBySolarSystemID($solarSystemID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($solarSystemID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -242,7 +242,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByRegionID($regionID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByRegionID($regionID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($regionID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -269,7 +269,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByVictimCharacterID($characterID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByVictimCharacterID($characterID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize("victim" . $characterID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -323,7 +323,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByVictimCorporationID($corporationID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByVictimCorporationID($corporationID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize("victim" . $corporationID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -350,7 +350,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByAttackerCorporationID($corporationID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByAttackerCorporationID($corporationID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($corporationID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -377,7 +377,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByVictimAllianceID($allianceID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByVictimAllianceID($allianceID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize("victim" . $allianceID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -404,7 +404,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByAttackerAllianceID($allianceID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByAttackerAllianceID($allianceID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($allianceID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -431,7 +431,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByVictimFactionID($factionID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByVictimFactionID($factionID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize("victim" . $factionID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -458,7 +458,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByAttackerFactionID($factionID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByAttackerFactionID($factionID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($factionID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -485,7 +485,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByVictimShipTypeID($shipTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByVictimShipTypeID($shipTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize("victim" . $shipTypeID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -512,7 +512,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByAttackerShipTypeID($shipTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByAttackerShipTypeID($shipTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($shipTypeID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -540,7 +540,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getByAttackerWeaponTypeID($weaponTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getByAttackerWeaponTypeID($weaponTypeID, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($weaponTypeID . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -567,7 +567,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getAllKillsAfterDate($afterDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getAllKillsAfterDate($afterDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($afterDate . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -599,7 +599,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getAllKillsBeforeDate($beforeDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getAllKillsBeforeDate($beforeDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($beforeDate . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -632,7 +632,7 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getAllKillsBetweenDates($afterDate = null, $beforeDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
+    public function getAllKillsBetweenDates($afterDate = null, $beforeDate = null, $extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
         $killData = $this->cache->get(md5(serialize($afterDate . $beforeDate . implode("", $extraArguments) . $limit . $order . $offset)));
         if (!empty($killData)) {
             return $killData;
@@ -671,8 +671,8 @@ class Participants extends Mongo
      * @return array|mixed
      * @throws \Exception
      */
-    public function getAllKills($extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null ) {
-        $killData = $this->cache->get(md5(serialize($extraArguments . implode("", $extraArguments) . $limit . $order . $offset)));
+    public function getAllKills($extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
+        $killData = $this->cache->get(md5(serialize($extraArguments) . $limit . $order . $offset));
         if (!empty($killData)) {
             return $killData;
         }
@@ -683,7 +683,7 @@ class Participants extends Mongo
         foreach($killData as $key => $value)
             $killData[$key]["killTime"] = date("Y-m-d H:i:s", (string)$value["killTime"] / 1000);
 
-        $this->cache->set(md5(serialize($extraArguments . implode("", $extraArguments) . $limit . $order . $offset)), $killData, $cacheTime);
+        $this->cache->set(md5(serialize($extraArguments) . $limit . $order . $offset), $killData, $cacheTime);
         return $killData;
     }
 }

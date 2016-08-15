@@ -61,6 +61,7 @@ use Thessia\Model\Database\CCP\typeIDs;
 use Thessia\Model\Database\EVE\Alliances;
 use Thessia\Model\Database\EVE\Characters;
 use Thessia\Model\Database\EVE\Corporations;
+use Thessia\Model\Database\EVE\KillList;
 use Thessia\Model\Database\EVE\Top;
 use Thessia\Model\Database\Site\ApiKeyCharacters;
 use Thessia\Model\Database\Site\ApiKeyCheck;
@@ -126,6 +127,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         "ccpServer",
         "crestHelper",
         "top",
+        "killlist"
     ];
 
     /**
@@ -203,6 +205,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("apiKeys", ApiKeys::class);
         $container->share("search", Search::class)->withArgument("mongo");
         $container->share("top", Top::class)->withArgument("mongo");
+        $container->share("killlist", KillList::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
 
         // Add Pheal
         $container->share("pheal", Pheal::class)->withArgument("storage")->withArgument("mongo");
