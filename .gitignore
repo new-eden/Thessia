@@ -65,3 +65,4 @@ config/config.php
 cache/*
 logs/*
 phinx.yml
+public/apidoc/
