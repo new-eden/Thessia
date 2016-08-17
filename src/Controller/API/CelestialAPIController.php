@@ -74,7 +74,7 @@ class CelestialAPIController extends Controller
      * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function findConstellation(string $searchTerm) {
+    public function findCelestial(string $searchTerm) {
         return $this->json($this->search->search($searchTerm, array("celestial"), 50)["celestial"]);
     }
 }

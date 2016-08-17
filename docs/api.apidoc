@@ -322,7 +322,7 @@
 
 /**
  * @api {get} /celestial/count/ Show how many celestials are in the database
- * @apiName Information
+ * @apiName Count
  * @apiGroup celestial
  * @apiPermission public
  * @apiSampleRequest /api/celestial/count/
@@ -338,12 +338,12 @@
  */
 
 /**
- * @api {get} /celestial/information/:solarSystemID/ Show all celestials in a system
- * @apiName Information
+ * @api {get} /celestial/find/:solarSystemName/ Find all celestials in a system
+ * @apiName Find
  * @apiGroup celestial
  * @apiPermission public
- * @apiParam {Integer} solarSystemID the solarSystemID
- * @apiSampleRequest /api/celestial/information/:solarSystemID/
+ * @apiParam {Integer} solarSystemName the solarSystemName
+ * @apiSampleRequest /api/celestial/find/:solarSystemName/
  */
 
 /**
@@ -384,6 +384,15 @@
  * @apiParam {String} crestHash The Crest Hash
  * @apiSampleRequest /api/kill/mail/hash/:killID/
  */
+
+/**
+ * @api {get} /kill/dump/:date/ Output all killIDs and Crest Hashes of killmails for a single day
+ * @apiName killmail
+ * @apiGroup killmail
+ * @apiPermission public
+ * @apiParam {Integer} date Ymd date to specify which date to get killIDs for (Example: 20160817 (17th August, 2016))
+ * @apiSampleRequest /api/kill/dump/:date/
+*/
 
 /**
  * @api {get} /kills/solarSystem/:solarSystemID/ List kills that has happened in a certain solar system
@@ -1405,7 +1414,7 @@
 
 /**
  * @api {get} /wars/wars/ List all the wars
- * @apiName wars
+ * @apiName allWars
  * @apiGroup wars
  * @apiPermission public
  * @apiSampleRequest /api/wars/wars/
@@ -1417,7 +1426,7 @@
  * @apiGroup wars
  * @apiPermission public
  * @apiParam {Integer} warID The ID for the War to be viewed
- * @apiSampleRequest /api/wars/wars/
+ * @apiSampleRequest /api/wars/wars/:warID/
  */
 
 /**
