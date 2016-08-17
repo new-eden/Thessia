@@ -60,7 +60,7 @@ class PopulateWarKillmails
                 $hash = $parts[3] ?? null;
 
                 if($killID != null && $hash != null)
-                    \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $killID, "killHash" => $hash, "warID" => $warID));
+                    \Resque::enqueue("med", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $killID, "killHash" => $hash, "warID" => $warID));
             }
             $currPage++;
         }

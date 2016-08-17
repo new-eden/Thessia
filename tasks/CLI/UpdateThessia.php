@@ -37,7 +37,7 @@ class UpdateThessia extends Command
     protected function configure()
     {
         $this
-            ->setName("update")
+            ->setName("update:core")
             ->setDescription("Updates composer, phpstorm meta, phpdocs and other stuff");
     }
 
@@ -61,7 +61,7 @@ class UpdateThessia extends Command
 
     private function updateComposer() {
         chdir(__DIR__ . "/../../");
-        exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar update -o");
+        exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar updateOne -o");
     }
 
     private function phpStormMeta() {

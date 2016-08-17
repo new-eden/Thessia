@@ -38,7 +38,6 @@ use MongoDB\BSON\UTCDatetime;
 use MongoDB\Collection;
 use Monolog\Logger;
 use Thessia\Helper\CrestHelper;
-use Thessia\Lib\cURL;
 
 class PopulateWars {
     /**
@@ -104,8 +103,11 @@ class PopulateWars {
                     $collection->replaceOne(array("warID" => $innerData["id"]), $array, array("upsert" => true));
 
                     // Now pass off the killmail link to the Resque fetcher, so it can fetch all the killmails.. If there are any.
-                    if ($innerData["aggressor"]["shipsKilled"] > 0 || $innerData["defender"]["shipsKilled"] > 0)
+                    if ($innerData["aggressor"]["shipsKilled"] > 0 || $innerData["defender"]["shipsKilled"] > 0) {
+                        $totalCount = count($innerData["aggressor"]["shipsKilled"]) + count($innerData["defender"]["shipsKilled"]);
+                        $log->addInfo("CRON (Wars): Sending {$totalCount} kills to the parser...");
                         \Resque::enqueue("med", '\Thessia\Tasks\Resque\PopulateWarKillmails', array("href" => $innerData["killmails"], "warID" => $innerData["id"]));
+                    }
                 }
             }
 
