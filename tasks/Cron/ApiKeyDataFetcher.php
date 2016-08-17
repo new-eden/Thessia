@@ -35,6 +35,10 @@ use Thessia\Helper\EVEApi\Character;
 use Thessia\Helper\EVEApi\Corporation;
 use Thessia\Helper\Pheal;
 
+/**
+ * Class ApiKeyDataFetcher
+ * @package Thessia\Tasks\Cron
+ */
 class ApiKeyDataFetcher {
     /**
      * @param Container $container
@@ -47,14 +51,8 @@ class ApiKeyDataFetcher {
         $log = $container->get("log");
         /** @var Pheal $pheal */
         $pheal = $container->get("pheal");
-        /** @var Corporation $corporation */
-        $corporation = $container->get("ccpCorporation");
-        /** @var Character $character */
-        $character = $container->get("ccpCharacter");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("thessia", "apiKeys");
-        /** @var CrestHelper $crestHelper */
-        $crestHelper = $container->get("crestHelper");
 
         if($pheal->is904ed()) {
             $log->addInfo("CRON: 904ed..");
@@ -74,57 +72,65 @@ class ApiKeyDataFetcher {
             $vCode = $key["vCode"];
             $accessMask = (int) $key["accessMask"];
             $characterID = (int) $key["characters"]["characterID"];
-            $type = $key["keyType"];
+            $accountType = $key["keyType"];
             $cachedUntil = date("Y-m-d H:i:s", strtotime("+1 hour")) * 1000;
 
             // Killmails
-            if($accessMask & 256 > 0) {
-                // Fetch the killmail data, and pass it onto the killmail fetcher...
-                if ($type == "Account") { // It's a corporation key
-                    $data = $corporation->corporationKillMails($apiKey, $vCode);
-                    if(isset($data["cachedUntil"])) {
-                        $cachedUntil = strtotime($data["cachedUntil"]) * 1000;
-                        $killmails = $data["result"]["kills"];
-
-                        if (count($killmails) > 0) {
-                            foreach($killmails as $mail) {
-                                $killID = (int) $mail["killID"];
-                                $crestHash = $crestHelper->generateCRESTHash($mail);
-
-                                if($killID > 0 && is_string($crestHash)) {
-                                    $log->addInfo("Adding {$killID} from apiKey {$apiKey} to the database...");
-                                    \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser',
-                                        array("killID" => $killID, "killHash" => $crestHash));
-                                }
-                            }
-                        }
-                    }
-                } elseif ($type == "Character") { // It's a character key
-                    $data = $character->characterKillMails($apiKey, $vCode, $characterID);
-                    if(isset($data["cachedUntil"])) {
-                        $cachedUntil = strtotime($data["cachedUntil"]) * 1000;
-                        $killmails = $data["result"]["kills"];
-
-                        if (count($killmails) > 0) {
-                            foreach($killmails as $mail) {
-                                $killID = (int) $mail["killID"];
-                                $crestHash = $crestHelper->generateCRESTHash($mail);
-
-                                if($killID > 0 && is_string($crestHash)) {
-                                    $log->addInfo("Adding {$killID} from apiKey {$apiKey} to the database...");
-                                    \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser',
-                                        array("killID" => $killID, "killHash" => $crestHash));
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
+            if($accessMask & 256 > 0)
+                $cachedUntil = self::killmails($container, $apiKey, $vCode, $characterID, $accountType);
 
             // Update the cached until to last for an hour from now
             $collection->updateOne(array("keyID" => $apiKey, "characters.characterID" => $characterID), array("\$set" => array("characters.\$.cachedUntil" => new UTCDatetime($cachedUntil))));
         }
+    }
+
+    /**
+     * @param Container $container
+     * @param int $apiKey
+     * @param string $vCode
+     * @param int|null $characterID
+     * @param string $accountType
+     * @return int
+     */
+    private static function killmails(Container $container, int $apiKey, string $vCode, int $characterID = null, string $accountType): int {
+        /** @var Logger $log */
+        $log = $container->get("log");
+        /** @var Corporation $corporation */
+        $corporation = $container->get("ccpCorporation");
+        /** @var Character $character */
+        $character = $container->get("ccpCharacter");
+        /** @var CrestHelper $crestHelper */
+        $crestHelper = $container->get("crestHelper");
+
+        // Default cache time
+        $cachedUntil = date("Y-m-d H:i:s", strtotime("+1 hour")) * 1000;
+
+        // Fetch the killmail data, and pass it onto the killmail fetcher...
+        if ($accountType == "Account") // It's a corporation key
+            $data = $corporation->corporationKillMails($apiKey, $vCode);
+        elseif ($accountType == "Character") // It's a character key
+            $data = $character->characterKillMails($apiKey, $vCode, $characterID);
+
+        if(isset($data["cachedUntil"])) {
+            $cachedUntil = strtotime($data["cachedUntil"]) * 1000;
+            $killmails = $data["result"]["kills"];
+
+            if (count($killmails) > 0) {
+                foreach($killmails as $mail) {
+                    $killID = (int) $mail["killID"];
+                    $crestHash = $crestHelper->generateCRESTHash($mail);
+
+                    if($killID > 0 && is_string($crestHash)) {
+                        $log->addInfo("Adding {$killID} from apiKey {$apiKey} to the database...");
+                        \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser',
+                            array("killID" => $killID, "killHash" => $crestHash));
+                    }
+                }
+            }
+        }
+
+        // Return the cached until time
+        return $cachedUntil;
     }
 
     /**
