@@ -168,20 +168,22 @@ $app->group("/api", function() use ($app) {
 
     $app->group("/stats", function() use ($app) {
         $controller = new \Thessia\Controller\API\StatsAPIController($app);
-        $app->get("/top10characters/", $controller("top10Characters"));
-        $app->get("/top10corporations/", $controller("top10Corporations"));
-        $app->get("/top10alliances/", $controller("top10Alliances"));
-        $app->get("/top10solarsystems/", $controller("top10SolarSystems"));
-        $app->get("/top10regions/", $controller("top10Regions"));
-//        $app->get("/mostvaluablekillslast7days/", $controller(""));
-//        $app->get("/sevendaykillcount/", $controller(""));
-//        $app->get("/currentlyactivecharacters/", $controller(""));
-//        $app->get("/currentlyactivecorporations/", $controller(""));
-//        $app->get("/currentlyactivealliances/", $controller(""));
-//        $app->get("/currentlyactiveshiptypes/", $controller(""));
-//        $app->get("/currentlyactivesolarsystems/", $controller(""));
+        $app->get("/top10characters/[{allTime:[0-1]}/]", $controller("top10Characters"));
+        $app->get("/top10corporations/[{allTime:[0-1]}/]", $controller("top10Corporations"));
+        $app->get("/top10alliances/[{allTime:[0-1]}/]", $controller("top10Alliances"));
+        $app->get("/top10solarsystems/[{allTime:[0-1]}/]", $controller("top10SolarSystems"));
+        $app->get("/top10regions/[{allTime:[0-1]}/]", $controller("top10Regions"));
+        $app->get("/mostvaluablekillslast7days/[{limit:[0-9]+}/]", $controller("mostValuableKillsOverTheLast7Days"));
+        $app->get("/sevendaykillcount/", $controller("sevenDayKillCount"));
+        $app->get("/activeentities/[{allTime:[0-1]}/]", $controller("activeEntities"));
+        $app->get("/activecharacters/[{allTime:[0-1]}/]", $controller("activeCharacters"));
+        $app->get("/activecorporations/[{allTime:[0-1]}/]", $controller("activeCorporations"));
+        $app->get("/activealliances/[{allTime:[0-1]}/]", $controller("activeAlliances"));
+        $app->get("/activeshiptypes/[{allTime:[0-1]}/]", $controller("activeShipTypes"));
+        $app->get("/activesolarsystems/[{allTime:[0-1]}/]", $controller("activeSolarSystems"));
+        $app->get("/activeregions/[{allTime:[0-1]}/]", $controller("activeRegions"));
     });
-/*
+
     $app->group("/search", function() use ($app) {
         $controller = new \Thessia\Controller\API\SearchAPIController($app);
         $app->get("/faction/{searchTerm:[A-Za-z0-9]+}/", $controller("findFaction"));
@@ -194,23 +196,10 @@ $app->group("/api", function() use ($app) {
         $app->get("/celestial/{searchTerm:[A-Za-z0-9]+}/", $controller("findCelestial"));
     });
 
-    $app->group("/tools", function() use ($app) {
-        $controller = new \Thessia\Controller\API\ToolsAPIController($app);
-        $app->post("/calculateCrestHash/", $controller(""));
-        $app->post("/validateCrestUrl/", $controller(""));
-    });
-
     $app->group("/wars", function() use ($app) {
         $controller = new \Thessia\Controller\API\WarsAPIController($app);
-        $app->get("/count/", $controller(""));
-        $app->get("/wars/", $controller(""));
-        $app->get("/kills/:warID/", $controller(""));
+        $app->get("/count/", $controller("count"));
+        $app->get("/wars/[{warID:[0-9]+}/]", $controller("wars"));
+        $app->get("/kills/{warID:[0-9]+}/[{page:[0-9]+}/]", $controller("warMails"));
     });
-
-    $app->group("/market", function() use ($app) {
-        $controller = new \Thessia\Controller\API\MarketAPIController($app);
-        $app->get("/price/:typeID/", $controller(""));
-        $app->get("/prices/:typeID/", $controller(""));
-    });
-    */
 });

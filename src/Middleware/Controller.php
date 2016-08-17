@@ -26,6 +26,7 @@
 namespace Thessia\Middleware;
 
 use League\Container\Container;
+use MongoDB\BSON\UTCDatetime;
 use MongoDB\Client;
 use Psr\Http\Message\UriInterface;
 use Slim\App;
@@ -146,6 +147,26 @@ abstract class Controller
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * @param $dateTime
+     * @return UTCDatetime
+     */
+    public function makeTimeFromDateTime($dateTime): UTCDatetime {
+        $unixTime = strtotime($dateTime);
+        $milliseconds = $unixTime * 1000;
+
+        return new UTCDatetime($milliseconds);
+    }
+
+    /**
+     * @param $unixTime
+     * @return UTCDatetime
+     */
+    public function makeTimeFromUnixTime($unixTime): UTCDatetime {
+        $milliseconds = $unixTime * 1000;
+        return new UTCDatetime($milliseconds);
     }
 
     /**

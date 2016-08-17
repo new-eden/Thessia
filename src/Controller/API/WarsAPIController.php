@@ -33,9 +33,39 @@
 namespace Thessia\Controller\API;
 
 
+use Slim\App;
 use Thessia\Middleware\Controller;
 
-class WarsAPIController extends Controller
-{
+class WarsAPIController extends Controller {
+    private $collection;
+    private $killmails;
+    private $cache;
+
+    public function __construct(App $app) {
+        parent::__construct($app);
+        $this->cache = $this->container->get("cache");
+        $this->collection = $this->mongo->selectCollection("thessia", "wars");
+        $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
+    }
+
+    public function count() {
+        return $this->json(array("warCount" => $this->collection->count()));
+    }
+
+    public function wars(int $warID = null) {
+        if($warID > 0)
+            return $this->json($this->collection->find(array("warID" => $warID))->toArray());
+        return $this->json($this->collection->find()->toArray());
+    }
+
+    public function warMails(int $warID = null, int $page = 1) {
+        $limit = 100;
+        $offset = $limit * ($page - 1);
+
+        if(!$warID || $warID == 0)
+            return $this->json(array("Error" => "No warID selected..."));
+
+        return $this->json($this->killmails->find(array("warID" => $warID), array("offset" => $offset, "limit" => $limit))->toArray());
+    }
 
 }

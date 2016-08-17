@@ -56,13 +56,18 @@ class StatsAPIController extends Controller {
         $this->regions = $this->mongo->selectCollection("ccp", "regions");
     }
 
-    public function top10Characters() {
-        $md5 = md5("top10CharactersStatsAPI");
+    public function top10Characters(bool $allTime = false) {
+        $md5 = md5("top10CharactersStatsAPI" . $allTime ? "allTime" : "7days");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
+        if($allTime == true)
+            $match = array("\$match" => array("attackers.characterID" => array("\$gt" => 0)));
+        else
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$gt" => 0)));
+
         $data = $this->collection->aggregate(array(
-            array("\$match" => array("attackers.characterID" => array("\$gt" => 0))),
+            $match,
             array("\$group" => array("_id" => "\$attackers.characterID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "characterID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -80,13 +85,18 @@ class StatsAPIController extends Controller {
         return $this->json($data);
     }
 
-    public function top10Corporations() {
-        $md5 = md5("top10CorporationsStatsAPI");
+    public function top10Corporations(bool $allTime = false) {
+        $md5 = md5("top10CorporationsStatsAPI" . $allTime ? "allTime" : "7days");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
+        if($allTime == true)
+            $match = array("\$match" => array("attackers.corporationID" => array("\$gt" => 0)));
+        else
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$gt" => 0)));
+
         $data = $this->collection->aggregate(array(
-            array("\$match" => array("attackers.corporationID" => array("\$gt" => 0))),
+            $match,
             array("\$group" => array("_id" => "\$attackers.corporationID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "corporationID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -104,13 +114,18 @@ class StatsAPIController extends Controller {
         return $this->json($data);
     }
 
-    public function top10Alliances() {
-        $md5 = md5("top10AlliancesStatsAPI");
+    public function top10Alliances(bool $allTime = false) {
+        $md5 = md5("top10AlliancesStatsAPI" . $allTime ? "allTime" : "7days");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
+        if($allTime == true)
+            $match = array("\$match" => array("attackers.allianceID" => array("\$gt" => 0)));
+        else
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$gt" => 0)));
+
         $data = $this->collection->aggregate(array(
-            array("\$match" => array("attackers.allianceID" => array("\$gt" => 0))),
+            $match,
             array("\$group" => array("_id" => "\$attackers.allianceID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "allianceID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -128,13 +143,18 @@ class StatsAPIController extends Controller {
         return $this->json($data);
     }
 
-    public function top10SolarSystems() {
-        $md5 = md5("top10SolarSystemsStatsAPI");
+    public function top10SolarSystems(bool $allTime = false) {
+        $md5 = md5("top10SolarSystemsStatsAPI" . $allTime ? "allTime" : "7days");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
+        if($allTime == true)
+            $match = array("\$match" => array("solarSystemID" => array("\$gt" => 0)));
+        else
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "solarSystemID" => array("\$gt" => 0)));
+
         $data = $this->collection->aggregate(array(
-            array("\$match" => array("solarSystemID" => array("\$gt" => 0))),
+            $match,
             array("\$group" => array("_id" => "\$solarSystemID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "solarSystemID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -151,13 +171,18 @@ class StatsAPIController extends Controller {
         return $this->json($data);
     }
 
-    public function top10Regions() {
-        $md5 = md5("top10CRegionsStatsAPI");
+    public function top10Regions(bool $allTime = false) {
+        $md5 = md5("top10CRegionsStatsAPI" . $allTime ? "allTime" : "7days");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
+        if($allTime == true)
+            $match = array("\$match" => array("regionID" => array("\$gt" => 0)));
+        else
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "regionID" => array("\$gt" => 0)));
+
         $data = $this->collection->aggregate(array(
-            array("\$match" => array("regionID" => array("\$gt" => 0))),
+            $match,
             array("\$group" => array("_id" => "\$regionID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "regionID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -174,39 +199,181 @@ class StatsAPIController extends Controller {
         return $this->json($data);
     }
 
-    public function mostValuableKillsOverTheLast7Days() {
+    public function mostValuableKillsOverTheLast7Days(int $limit = 10) {
+        $md5 = md5("mostValuableKillsOverTheLast7Days");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
 
+        $data = $this->collection->find(array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days"))))), array("sort" => array("totalValue" => -1), "limit" => $limit))->toArray();
+
+        $this->cache->set($md5, $data, 3600);
+        return $this->json($data);
     }
 
     public function sevenDayKillCount() {
+        $md5 = md5("sevenDayKillCount");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
+        $data["sevenDayKillCount"] = $this->collection->count(array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days"))))));
+
+        $this->cache->set($md5, $data, 60);
+        return $this->json($data);
 
     }
 
-    public function countCurrentlyActiveEntities() {
+    public function activeEntities() {
+        $data = array(
+            "activeCharacters" => $this->activeCharacters(false),
+            "activeCorporations" => $this->activeCorporations(false),
+            "activeAlliances" => $this->activeAlliances(false),
+            "activeShipTypes" => $this->activeShipTypes(false),
+            "activeSolarSystems" => $this->activeSolarSystems(false),
+            "activeRegions" => $this->activeRegions(false),
+        );
+
+        return $this->json($data);
+    }
+
+    public function activeCharacters($json = true) {
+        $md5 = md5("activeCharacters");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
+
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$gt" => 0)));
+        $data = $this->collection->aggregate(array(
+            $match,
+            array("\$group" => array("_id" => "\$attackers.characterID")),
+            array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
+        ),
+            array("allowDiskUse" => true)
+        )->toArray();
+
+        $returnData["activeCharacters"] = count($data);
+
+        $this->cache->set($md5, count($data), 60);
+
+        if($json == false)
+            return count($data);
+
+        return $this->json($returnData);
+    }
+
+    public function activeCorporations($json = true) {
+        $md5 = md5("activeCorporations");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
+
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$gt" => 0)));
+        $data = $this->collection->aggregate(array(
+            $match,
+            array("\$group" => array("_id" => "\$attackers.corporationID")),
+            array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
+        ),
+            array("allowDiskUse" => true)
+        )->toArray();
+
+        $returnData["activeCorporations"] = count($data);
+        $this->cache->set($md5, count($data), 60);
+        if($json == false)
+            return count($data);
+
+        return $this->json($returnData);
 
     }
 
-    public function currentlyActiveCharacters() {
+    public function activeAlliances($json = true) {
+        $md5 = md5("activeAlliances");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
+
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$gt" => 0)));
+        $data = $this->collection->aggregate(array(
+            $match,
+            array("\$group" => array("_id" => "\$attackers.allianceID")),
+            array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
+        ),
+            array("allowDiskUse" => true)
+        )->toArray();
+
+        $returnData["activeAlliances"] = count($data);
+        $this->cache->set($md5, count($data), 60);
+        if($json == false)
+            return count($data);
+
+        return $this->json($returnData);
 
     }
 
-    public function currentlyActiveCorporations() {
+    public function activeShipTypes($json = true) {
+        $md5 = md5("activeShipTypes");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.shipTypeID" => array("\$gt" => 0)));
+        $data = $this->collection->aggregate(array(
+            $match,
+            array("\$group" => array("_id" => "\$attackers.shipTypeID")),
+            array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
+        ),
+            array("allowDiskUse" => true)
+        )->toArray();
+
+        $returnData["activeShipTypes"] = count($data);
+        $this->cache->set($md5, count($data), 60);
+        if($json == false)
+            return count($data);
+
+        return $this->json($returnData);
 
     }
 
-    public function currentlyActiveAlliances() {
+    public function activeSolarSystems($json = true) {
+        $md5 = md5("activeSolarSystems");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "solarSystemID" => array("\$gt" => 0)));
+        $data = $this->collection->aggregate(array(
+            $match,
+            array("\$group" => array("_id" => "\$solarSystemID")),
+            array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
+        ),
+            array("allowDiskUse" => true)
+        )->toArray();
+
+        $returnData["activeSolarSystems"] = count($data);
+        $this->cache->set($md5, count($data), 60);
+        if($json == false)
+            return count($data);
+
+        return $this->json($returnData);
 
     }
 
-    public function currentlyActiveShipTypes() {
+    public function activeRegions($json = true) {
+        $md5 = md5("activeRegions");
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
 
-    }
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "regionID" => array("\$gt" => 0)));
+        $data = $this->collection->aggregate(array(
+            $match,
+            array("\$group" => array("_id" => "\$regionID")),
+            array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
+        ),
+            array("allowDiskUse" => true)
+        )->toArray();
 
-    public function currentlyActiveSolarSystems() {
+        $returnData["activeRegions"] = count($data);
+        $this->cache->set($md5, count($data), 60);
+        if($json == false)
+            return count($data);
 
-    }
-
-    public function currentlyActiveRegions() {
+        return $this->json($returnData);
 
     }
 }
