@@ -1,0 +1,1431 @@
+/**
+ * @api {get} /character/count/ Total amount of characters in the system
+ * @apiName count
+ * @apiGroup character
+ * @apiPermission public
+ * @apiSampleRequest /api/character/count/
+ */
+/**
+ * @api {get} /character/information/:characterID/ Show a lot of aggregated information for a single character
+ * @apiName Information
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {Integer} characterID the characterID
+ * @apiSampleRequest /api/character/information/:characterID/
+ */
+/**
+ * @api {get} /character/find/:characterName/ Find a character
+ * @apiName Find
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {String} characterName the characterName
+ * @apiSampleRequest /api/character/find/:characterName/
+ */
+
+/**
+ * @api {get} /character/top/corporations/:characterID/:limit/ Show the top corporations in the character
+ * @apiName top10corporations
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {Integer} characterID The characterID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/character/top/corporations/:characterID/:limit/
+ */
+
+/**
+ * @api {get} /character/top/alliances/:characterID/:limit/ Show the top characters in the character
+ * @apiName top10characters
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {Integer} characterID The characterID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/character/top/characters/:characterID/:limit/
+ */
+
+/**
+ * @api {get} /character/top/ships/:characterID/:limit/ Show the top ships in the character
+ * @apiName top10ships
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {Integer} characterID The characterID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/character/top/ships/:characterID/:limit/
+ */
+
+/**
+ * @api {get} /character/top/systems/:characterID/:limit/ Show the top systems in the character
+ * @apiName top10systems
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {Integer} characterID The characterID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/character/top/systems/:characterID/:limit/
+ */
+
+/**
+ * @api {get} /character/top/regions/:characterID/:limit/ Show the top regions in the character
+ * @apiName top10regions
+ * @apiGroup character
+ * @apiPermission public
+ * @apiParam {Integer} characterID The characterID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/character/top/regions/:characterID/:limit/
+ */
+
+/**
+ * @api {get} /corporation/count/ Total amount of corporations in the system
+ * @apiName count
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiSampleRequest /api/corporation/count/
+ */
+
+/**
+ * @api {get} /corporation/information/:corporationID/ Show a lot of aggregated information for a single corporation
+ * @apiName Information
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID the corporationID
+ * @apiSampleRequest /api/corporation/information/:corporationID/
+ */
+
+/**
+ * @api {get} /corporation/find/:corporationName/ Find a corporation
+ * @apiName Find
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {String} corporationName the corporationName
+ * @apiSampleRequest /api/corporation/find/:corporationName/
+ */
+
+/**
+ * @api {get} /corporation/members/:corporationID/ Show all members in a corporation
+ * @apiName Members
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID the corporationID
+ * @apiSampleRequest /api/corporation/members/:corporationID/
+ */
+
+/**
+ * @api {get} /corporation/top/characters/:corporationID/:limit/ Show the top characters in the corporation
+ * @apiName top10characters
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID The corporationID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/corporation/top/characters/:corporationID/:limit/
+ */
+
+/**
+ * @api {get} /corporation/top/alliances/:corporationID/:limit/ Show the top alliances in the corporation
+ * @apiName top10alliances
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID The corporationID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/corporation/top/alliances/:corporationID/:limit/
+ */
+
+/**
+ * @api {get} /corporation/top/ships/:corporationID/:limit/ Show the top ships in the corporation
+ * @apiName top10ships
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID The corporationID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/corporation/top/ships/:corporationID/:limit/
+ */
+
+/**
+ * @api {get} /corporation/top/systems/:corporationID/:limit/ Show the top systems in the corporation
+ * @apiName top10systems
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID The corporationID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/corporation/top/systems/:corporationID/:limit/
+ */
+
+/**
+ * @api {get} /corporation/top/regions/:corporationID/:limit/ Show the top regions in the corporation
+ * @apiName top10regions
+ * @apiGroup corporation
+ * @apiPermission public
+ * @apiParam {Integer} corporationID The corporationID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/corporation/top/regions/:corporationID/:limit/
+ */
+
+/**
+ * @api {get} /alliance/count/ Total amount of alliances in the system
+ * @apiName count
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiSampleRequest /api/alliance/count/
+ */
+
+/**
+ * @api {get} /alliance/information/:allianceID/ Show a lot of aggregated information for a single alliance
+ * @apiName Information
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID the allianceID
+ * @apiSampleRequest /api/alliance/information/:allianceID/
+ */
+
+/**
+ * @api {get} /alliance/find/:allianceName/ Find a alliance
+ * @apiName Find
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {String} allianceName the allianceName
+ * @apiSampleRequest /api/alliance/find/:allianceName/
+ */
+
+/**
+ * @api {get} /alliance/members/:allianceID/ Show all members in a alliance
+ * @apiName Members
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID the allianceID
+ * @apiSampleRequest /api/alliance/members/:allianceID/
+ */
+
+/**
+ * @api {get} /alliance/top/characters/:allianceID/:limit/ Show the top characters in the alliance
+ * @apiName top10characters
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID The allianceID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/alliance/top/characters/:allianceID/:limit/
+ */
+
+/**
+ * @api {get} /alliance/top/corporations/:allianceID/:limit/ Show the top corporations in the alliance
+ * @apiName top10corporations
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID The allianceID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/alliance/top/corporations/:allianceID/:limit/
+ */
+
+/**
+ * @api {get} /alliance/top/ships/:allianceID/:limit/ Show the top ships in the alliance
+ * @apiName top10ships
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID The allianceID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/alliance/top/ships/:allianceID/:limit/
+ */
+
+/**
+ * @api {get} /alliance/top/systems/:allianceID/:limit/ Show the top systems in the alliance
+ * @apiName top10systems
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID The allianceID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/alliance/top/systems/:allianceID/:limit/
+ */
+
+/**
+ * @api {get} /alliance/top/regions/:allianceID/:limit/ Show the top regions in the alliance
+ * @apiName top10regions
+ * @apiGroup alliance
+ * @apiPermission public
+ * @apiParam {Integer} allianceID The allianceID
+ * @apiParam {Integer} [limit] Limiting the amount of returns
+ * @apiSampleRequest /api/alliance/top/regions/:allianceID/:limit/
+ */
+
+/**
+ * @api {get} /item/count/ Show how many items are in the database
+ * @apiName Count
+ * @apiGroup item
+ * @apiPermission public
+ * @apiSampleRequest /api/item/count/
+ */
+
+/**
+ * @api {get} /item/information/:itemID/ Show information for a single item
+ * @apiName Information
+ * @apiGroup item
+ * @apiPermission public
+ * @apiParam {Integer} itemID the itemID
+ * @apiSampleRequest /api/item/information/:itemID/
+ */
+
+/**
+ * @api {get} /item/find/:itemName/ Find a item
+ * @apiName Find
+ * @apiGroup item
+ * @apiPermission public
+ * @apiParam {String} itemName the itemName
+ * @apiSampleRequest /api/item/find/:itemName/
+ */
+
+/**
+ * @api {get} /system/count/ Show how many solar systems are in the database
+ * @apiName Count
+ * @apiGroup system
+ * @apiPermission public
+ * @apiSampleRequest /api/system/count/
+ */
+
+/**
+ * @api {get} /system/information/:systemID/ Show information for a single system
+ * @apiName Information
+ * @apiGroup system
+ * @apiPermission public
+ * @apiParam {Integer} systemID the systemID
+ * @apiSampleRequest /api/system/information/:systemID/
+ */
+
+/**
+ * @api {get} /system/find/:systemName/ Find a system
+ * @apiName Find
+ * @apiGroup system
+ * @apiPermission public
+ * @apiParam {String} systemName the systemName
+ * @apiSampleRequest /api/system/find/:systemName/
+ */
+
+/**
+ * @api {get} /region/count/ Show how many regions are in the database
+ * @apiName Count
+ * @apiGroup region
+ * @apiPermission public
+ * @apiSampleRequest /api/region/count/
+ */
+
+/**
+ * @api {get} /region/information/:regionID/ Show information for a single region
+ * @apiName Information
+ * @apiGroup region
+ * @apiPermission public
+ * @apiParam {Integer} regionID the regionID
+ * @apiSampleRequest /api/region/information/:regionID/
+ */
+
+/**
+ * @api {get} /region/find/:regionName/ Find a region
+ * @apiName Find
+ * @apiGroup region
+ * @apiPermission public
+ * @apiParam {String} regionName the regionName
+ * @apiSampleRequest /api/region/find/:regionName/
+ */
+
+/**
+ * @api {get} /celestial/count/ Show how many celestials are in the database
+ * @apiName Information
+ * @apiGroup celestial
+ * @apiPermission public
+ * @apiSampleRequest /api/celestial/count/
+ */
+
+/**
+ * @api {get} /celestial/information/:solarSystemID/ Show all celestials in a system
+ * @apiName Information
+ * @apiGroup celestial
+ * @apiPermission public
+ * @apiParam {Integer} solarSystemID the solarSystemID
+ * @apiSampleRequest /api/celestial/information/:solarSystemID/
+ */
+
+/**
+ * @api {get} /celestial/information/:solarSystemID/ Show all celestials in a system
+ * @apiName Information
+ * @apiGroup celestial
+ * @apiPermission public
+ * @apiParam {Integer} solarSystemID the solarSystemID
+ * @apiSampleRequest /api/celestial/information/:solarSystemID/
+ */
+
+/**
+ * @api {post} /kill/add/ Post a CREST killmail URL to the site for processing
+ * @apiName add
+ * @apiGroup killmail
+ * @apiPermission public
+ * @apiSampleRequest /api/kill/add/
+ * @apiParam {String} url The URL for the killmail
+ * @apiParamExample {String} Post-Example:
+ * https://public-crest.eveonline.com/killmails/53124530/7c74ad07861c7e0f6dd65ed78138963f9b1fd365/
+ * @apiSuccessExample {json} Example Return
+ * { "success": true }
+ */
+
+/**
+ * @api {get} /kill/count/ Total amount of kills in the system
+ * @apiName count
+ * @apiGroup killmail
+ * @apiPermission public
+ * @apiSampleRequest /api/kill/count/
+ */
+
+/**
+ * @api {get} /kill/mail/killID/:killID/ List a single killmails data
+ * @apiName killmail
+ * @apiGroup killmail
+ * @apiPermission public
+ * @apiParam {Integer} killID the killID
+ * @apiSampleRequest /api/kill/mail/killID/:killID/
+ */
+
+/**
+ * @api {get} /kill/mail/hash/:crestHash/ List a single killmails data
+ * @apiName killmail
+ * @apiGroup killmail
+ * @apiPermission public
+ * @apiParam {String} crestHash The Crest Hash
+ * @apiSampleRequest /api/kill/mail/hash/:killID/
+ */
+
+/**
+ * @api {get} /kills/solarSystem/:solarSystemID/ List kills that has happened in a certain solar system
+ * @apiName solarSystem
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} solarSystemID Limit to a specific solarSystemID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/solarSystem/:solarSystemID/
+ */
+
+/**
+ * @api {get} /kills/region/:regionID/ List kills that has happened in a certain region
+ * @apiName region
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} regionID Limit to a specific regionID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/region/:regionID/
+ */
+
+/**
+ * @api {get} /kills/character/:characterID/ List kills for a certain character
+ * @apiName character
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} characterID Limit to a specific characterID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/character/:characterID/
+ */
+
+/**
+ * @api {get} /kills/corporation/:corporationID/ List kills for a certain corporation
+ * @apiName corporation
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} corporationID Limit to a specific corporationID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/corporation/:corporationID/
+ */
+
+/**
+ * @api {get} /kills/alliance/:allianceID/ List kills for a certain alliance
+ * @apiName alliance
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} allianceID Limit to a specific allianceID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/alliance/:allianceID/
+ */
+
+/**
+ * @api {get} /kills/faction/:factionID/ List kills for a certain faction
+ * @apiName faction
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} factionID Limit to a specific factionID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/faction/:factionID/
+ */
+
+/**
+ * @api {get} /kills/shipType/:shipTypeID/ List kills for a certain shipType
+ * @apiName shipType
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} shipTypeID Limit to a specific shipTypeID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/shipType/:shipTypeID/
+ */
+
+/**
+ * @api {get} /kills/group/:groupID/ List kills for a certain group
+ * @apiName group
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} groupID Limit to a specific groupID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/group/:groupID/
+ */
+
+/**
+ * @api {get} /kills/vGroup/:vGroupID/ List kills for a certain vGroup
+ * @apiName vGroup
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} vGroupID Limit to a specific vGroupID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/vGroup/:vGroupID/
+ */
+
+/**
+ * @api {get} /kills/weaponType/:weaponTypeID/ List kills for a certain weaponType
+ * @apiName weaponType
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {Integer} weaponTypeID Limit to a specific weaponTypeID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/weaponType/:weaponTypeID/
+ */
+
+/**
+ * @api {get} /kills/afterDate/:afterDate/ List kills happening after a certain date
+ * @apiName afterDate
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {DateTime} afterDate Return kills after a certain date (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/afterDate/:afterDate/
+ */
+
+/**
+ * @api {get} /kills/beforeDate/:beforeDate/ List kills happening before a certain date
+ * @apiName beforeDate
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {DateTime} beforeDate Return kills before a certain date (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/beforeDate/:beforeDate/
+ */
+
+/**
+ * @api {get} /kills/betweenDates/:afterDate/:beforeDate/ List kills between two dates
+ * @apiName betweenDates
+ * @apiGroup kills
+ * @apiPermission public
+ * @apiParam {DateTime} afterDate Get kills after this date (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {DateTime} beforeDate But before this date (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/kills/betweenDates/:afterDate/:beforeDate/
+ */
+
+/**
+ * @api {get} /losses/character/:characterID/ List losses for a certain character
+ * @apiName character
+ * @apiGroup losses
+ * @apiPermission public
+ * @apiParam {Integer} characterID Limit to a specific characterID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/losses/character/:characterID/
+ */
+
+/**
+ * @api {get} /losses/corporation/:corporationID/ List losses for a certain corporation
+ * @apiName corporation
+ * @apiGroup losses
+ * @apiPermission public
+ * @apiParam {Integer} corporationID Limit to a specific corporationID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/losses/corporation/:corporationID/
+ */
+
+/**
+ * @api {get} /losses/alliance/:allianceID/ List losses for a certain alliance
+ * @apiName alliance
+ * @apiGroup losses
+ * @apiPermission public
+ * @apiParam {Integer} allianceID Limit to a specific allianceID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/losses/alliance/:allianceID/
+ */
+
+/**
+ * @api {get} /losses/faction/:factionID/ List losses for a certain faction
+ * @apiName faction
+ * @apiGroup losses
+ * @apiPermission public
+ * @apiParam {Integer} factionID Limit to a specific factionID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/losses/faction/:factionID/
+ */
+
+/**
+ * @api {get} /losses/shipType/:shipTypeID/ List losses for a certain shipType
+ * @apiName shipType
+ * @apiGroup losses
+ * @apiPermission public
+ * @apiParam {Integer} shipTypeID Limit to a specific shipTypeID
+ * @apiParam {DateTime} [killTime] Limit to a specific time (YYYY-mm-dd HH:ii:ss)
+ * @apiParam {Integer} [solarSystemID] Limit to a specific solarSystemID
+ * @apiParam {Integer} [regionID] Limit to a specific regionID
+ * @apiParam {Float} [shipValue]
+ * @apiParam {Float} [fittingValue]
+ * @apiParam {Float} [totalValue]
+ * @apiParam {Integer} [isNPC] (1 or 0)
+ * @apiParam {Integer} [isSolo] (1 or 0)
+ * @apiParam {Integer} [victim.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [victim.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [victim.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [victim.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [victim.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.characterID] Limit to a specific characterID
+ * @apiParam {Integer} [attackers.corporationID] Limit to a specific corporationID
+ * @apiParam {Integer} [attackers.allianceID] Limit to a specific allianceID
+ * @apiParam {Integer} [attackers.factionID] Limit to a specific factionID
+ * @apiParam {Integer} [attackers.shipTypeID] Limit to a specific shipTypeID
+ * @apiParam {Integer} [attackers.weaponTypeID] Limit to a specific weaponTypeID
+ * @apiParam {Integer} [attackers.finalBlow] (1 or 0)
+ * @apiParam {Integer} [items.typeID]
+ * @apiParam {Integer} [items.groupID]
+ * @apiParam {Integer} [items.categoryID]
+ * @apiParam {Integer} [page] Go to the next 100 results. (limit * page)
+ * @apiParam {Integer} [limit] 1 to 100
+ * @apiParam {String} [order] asc or desc (case sensitive)
+ * @apiSampleRequest /api/losses/shipType/:shipTypeID/
+ */
+
+/**
+ * @api {get} /killlist/latest/ Shows the 100 latest killmails
+ * @apiName kill
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/latest/
+ */
+
+/**
+ * @api {get} /killlist/bigkills/ Show the last 100 big kills (>5b in value)
+ * @apiName bigkills
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/bigkills/
+ */
+
+/**
+ * @api {get} /killlist/wspace/ Show the last 100 kills done in Wormhole space
+ * @apiName wspace
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/wspace/
+ */
+
+/**
+ * @api {get} /killlist/highsec/ Show the last 100 kills done in high security space
+ * @apiName highsec
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/highsec/
+ */
+
+/**
+ * @api {get} /killlist/lowsec/ Show the last 100 kills done in low security space
+ * @apiName lowsec
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/lowsec/
+ */
+
+/**
+ * @api {get} /killlist/nullsec/ Show the last 100 kills done in null security space
+ * @apiName nullsec
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/nullsec/
+ */
+
+/**
+ * @api {get} /killlist/solo/ Show the last 100 solo kills
+ * @apiName solo
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/solo/
+ */
+
+/**
+ * @api {get} /killlist/npc/ Show the last 100 npc kills
+ * @apiName npc
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/npc/
+ */
+
+/**
+ * @api {get} /killlist/5b/ Show the last 100 kills with a value of minimum 5b isk
+ * @apiName 5b
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/5b/
+ */
+
+/**
+ * @api {get} /killlist/10b/ Show the last 100 kills with a value of minimum 10b isk
+ * @apiName 10b
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/10b/
+ */
+
+/**
+ * @api {get} /killlist/capitals/ Show the latest carrier kills
+ * @apiDescription FAX machines fall into this one aswell
+ * @apiName capitals
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/capitals/
+ */
+
+/**
+ * @api {get} /killlist/freighters/ Show the latest freighter kills
+ * @apiDescription Rorq and Orca fall into this one aswell
+ * @apiName freighters
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/freighters/
+ */
+
+/**
+ * @api {get} /killlist/supercarriers/ Show the latest super carrier kills
+ * @apiName supercarriers
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/supercarriers/
+ */
+
+/**
+ * @api {get} /killlist/titans/ Show the latest titan kills
+ * @apiName titans
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/titans/
+ */
+
+/**
+ * @api {get} /killlist/t1/ Show the latest t1 kills
+ * @apiName t1
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/t1/
+ */
+
+/**
+ * @api {get} /killlist/t2/ Show the latest t2 kills
+ * @apiName t2
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/t2/
+ */
+
+/**
+ * @api {get} /killlist/t3/ Show the latest t3 kills
+ * @apiName t3
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/t3/
+ */
+
+/**
+ * @api {get} /killlist/frigates/ Show the latest frigates kills
+ * @apiName frigates
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/frigates/
+ */
+
+/**
+ * @api {get} /killlist/destroyers/ Show the latest destroyers kills
+ * @apiName destroyers
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/destroyers/
+ */
+
+/**
+ * @api {get} /killlist/cruisers/ Show the latest cruisers kills
+ * @apiName cruisers
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/cruisers/
+ */
+
+/**
+ * @api {get} /killlist/battlecruisers/ Show the latest battlecruisers kills
+ * @apiName battlecruisers
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/battlecruisers/
+ */
+
+/**
+ * @api {get} /killlist/battleships/ Show the latest battleships kills
+ * @apiName battleships
+ * @apiGroup killlist
+ * @apiPermission public
+ * @apiSampleRequest /api/killlist/battleships/
+ */
+
+/**
+ * @api {get} /stats/top10Characters/ List the top10 Characters
+ * @apiName top10Characters
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/top10characters/
+ */
+
+/**
+ * @api {get} /stats/top10Corporations/ List the top10 Corporations
+ * @apiName top10Corporations
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/top10corporations/
+ */
+
+/**
+ * @api {get} /stats/top10Alliances/ List the top10 Alliances
+ * @apiName top10Alliances
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/top10alliances/
+ */
+
+/**
+ * @api {get} /stats/top10ShipTypes/ List the top10 Ship Types
+ * @apiName top10ShipTypes
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/top10shiptypes/
+ */
+
+/**
+ * @api {get} /stats/top10SolarSystems/ List the top10 Solar Systems
+ * @apiName top10SolarSystems
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/top10solarsystems/
+ */
+
+/**
+ * @api {get} /stats/top10Regions/ List the top10 Regions
+ * @apiName top10Regions
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/top10regions/
+ */
+
+/**
+ * @api {get} /stats/mostValuableKillsLast7Days/ List the most valuable kills done over the last 7 days
+ * @apiName mostValuableKillsLast7Days
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/mostvaluablekillslast7days/
+ */
+
+/**
+ * @api {get} /stats/sevenDayKillCount/ List the amount of kills done over the last 7 days
+ * @apiName sevenDayKillCount
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/sevendaykillcount/
+ */
+
+/**
+ * @api {get} /stats/activeEntities/ List all the entities currently active
+ * @apiName currentlyActiveCharacters
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activeentities/
+ */
+
+/**
+ * @api {get} /stats/activeCharacters/ List the amount of currently active characters
+ * @apiName activeCharacters
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activecharacters/
+ */
+
+/**
+ * @api {get} /stats/activeCorporations/ List the amount of currently active corporations
+ * @apiName activeCorporations
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activeaorporations/
+ */
+
+/**
+ * @api {get} /stats/activeAlliances/ List the amount of currently active alliances
+ * @apiName activeAlliances
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activealliances/
+ */
+
+/**
+ * @api {get} /stats/activeShipTypes/ List the amount of currently active ship types
+ * @apiName activeShipTypes
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activeshiptypes/
+ */
+
+/**
+ * @api {get} /stats/activeSolarSystems/ List the amount of currently active solar systems
+ * @apiName activeSolarSystems
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activesolarsystems/
+ */
+
+/**
+ * @api {get} /stats/activeRegions/ List the amount of currently active regions
+ * @apiName activeRegions
+ * @apiGroup stats
+ * @apiPermission public
+ * @apiSampleRequest /api/stats/activeregions/
+ */
+
+/**
+ * @api {get} /search/:searchTerm/ Do a multi-search, looking into every category
+ * @apiName findAny
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} searchTerm A String to try and match to..
+ * @apiSampleRequest /api/search/any/:searchTerm/
+ */
+
+/**
+ * @api {get} /search/faction/:factionName/ Search for a Faction
+ * @apiName findFaction
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} factionName Partial Strings are accepted
+ * @apiSampleRequest /api/search/faction/:factionName/
+ */
+
+/**
+ * @api {get} /search/alliance/:allianceName/ Search for an Alliance
+ * @apiName findAlliance
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} allianceName Partial Strings are accepted
+ * @apiSampleRequest /api/search/alliance/:allianceName/
+ */
+
+/**
+ * @api {get} /search/corporation/:corporationName/ Search for a Corporation
+ * @apiName findCorporation
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} corporationName Partial Strings are accepted
+ * @apiSampleRequest /api/search/corporation/:corporationName/
+ */
+
+/**
+ * @api {get} /search/character/:characterName/ Search for a Character
+ * @apiName findCharacter
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} characterName Partial Strings are accepted
+ * @apiSampleRequest /api/search/character/:characterName/
+ */
+
+/**
+ * @api {get} /search/item/:itemName/ Search for an Item
+ * @apiName findItem
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} itemName Partial Strings are accepted
+ * @apiSampleRequest /api/search/item/:itemName/
+ */
+
+/**
+ * @api {get} /search/system/:systemName/ Search for a System
+ * @apiName findSystem
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} systemName Partial Strings are accepted
+ * @apiSampleRequest /api/search/system/:systemName/
+ */
+
+/**
+ * @api {get} /search/region/:regionName/ Search for a Region
+ * @apiName findRegion
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} regionName  Partial Strings are accepted
+ * @apiSampleRequest /api/search/region/:regionName/
+ */
+
+/**
+ * @api {get} /search/celestial/:SolarSystemName/ Search for celestials in a Solar System
+ * @apiName findCelestial
+ * @apiGroup search
+ * @apiPermission public
+ * @apiParam {String} SolarSystemName Partial Strings are accepted
+ * @apiSampleRequest /api/search/celestial/:SolarSystemName/
+ */
+
+/**
+ * @api {get} /wars/count/ Total amount of wars in the system
+ * @apiName count
+ * @apiGroup wars
+ * @apiPermission public
+ * @apiSampleRequest /api/wars/count/
+ */
+
+/**
+ * @api {get} /wars/wars/ List all the wars
+ * @apiName wars
+ * @apiGroup wars
+ * @apiPermission public
+ * @apiSampleRequest /api/wars/wars/
+ */
+
+/**
+ * @api {get} /wars/wars/:warID/ List a single war
+ * @apiName wars
+ * @apiGroup wars
+ * @apiPermission public
+ * @apiParam {Integer} warID The ID for the War to be viewed
+ * @apiSampleRequest /api/wars/wars/
+ */
+
+/**
+ * @api {get} /wars/kills/:warID/:pageID/ List all the kills done in a war
+ * @apiName kills
+ * @apiGroup wars
+ * @apiPermission public
+ * @apiParam {Integer} warID the ID of the war to lookup kills for
+ * @apiParam {Integer} pageID The ID of the page to view (Max 100 kills pr. page)
+ * @apiSampleRequest /api/wars/kills/:warID/:pageID/
+ */

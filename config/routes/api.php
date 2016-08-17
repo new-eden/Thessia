@@ -112,6 +112,7 @@ $app->group("/api", function() use ($app) {
         $app->get("/count/", $controller("getKillCount"));
         $app->get("/mail/killID/{killID:[0-9]+}/", $controller("getKillByID"));
         $app->get("/mail/hash/{hash:[a-zA-Z0-9]+}/", $controller("getKillByHash"));
+        $app->get("/dump/{date:[0-9]+}/", $controller("getKillsByDate"));
     });
 
     $app->group("/kills", function() use ($app) {
@@ -163,7 +164,6 @@ $app->group("/api", function() use ($app) {
         $app->get("/freighters/[{page:[0-9]+}/]", $controller("getFreighters"));
         $app->get("/supercarriers/[{page:[0-9]+}/]", $controller("getSuperCarriers"));
         $app->get("/titans/[{page:[0-9]+}/]", $controller("getTitans"));
-
     });
 
     $app->group("/stats", function() use ($app) {

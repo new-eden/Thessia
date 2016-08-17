@@ -1,0 +1,14 @@
+{
+  "name": "EVEData",
+  "title": "EVEData API",
+  "url" : "https://neweden.xyz/api",
+  "template": {
+    "forceLanguage": "en",
+    "withCompare": false,
+    "withGenerator": true
+  },
+  "header": {
+    "title": "Preface",
+    "filename": "docs/apidoc.md"
+  }
+}

@@ -59,17 +59,17 @@ class Participants extends Mongo
         "totalValue",
         "isNPC",
         "isSolo",
-        "victim.shipTypeID",
-        "victim.characterID",
-        "victim.corporationID",
-        "victim.allianceID",
-        "victim.factionID",
-        "attackers.shipTypeID",
+        "victim.shipTypeID",-
+        "victim.characterID",-
+        "victim.corporationID",-
+        "victim.allianceID",-
+        "victim.factionID",-
+        "attackers.shipTypeID",-
         "attackers.weaponTypeID",
-        "attackers.characterID",
-        "attackers.corporationID",
-        "attackers.allianceID",
-        "attackers.factionID",
+        "attackers.characterID",-
+        "attackers.corporationID",-
+        "attackers.allianceID",-
+        "attackers.factionID",-
         "attackers.finalBlow",
         "items.typeID",
         "items.groupID",

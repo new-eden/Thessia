@@ -37,12 +37,15 @@ class UpdateThessia extends Command
     protected function configure()
     {
         $this
-            ->setName("update:core")
+            ->setName("update")
             ->setDescription("Updates composer, phpstormmeta, phpdocs and other stuff");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Update the api docs
+        $this->generateApiDoc();
+
         // Generate the .phpstorm.meta.php file
         $this->phpStormMeta();
 
@@ -50,6 +53,17 @@ class UpdateThessia extends Command
         $this->updateComposer();
 
         // @todo Update phpdoc
+    }
+
+    private function generateApiDoc() {
+        // If the file doesn't exist there, just return..
+        if(!file_exists("/usr/local/bin/apidoc"))
+            return;
+
+        $docsPath = __DIR__ . "/../../docs";
+        $outputDir = __DIR__ . "/../../public/apidoc/";
+        $filter = ".*\\.apidoc$";
+        exec("/usr/local/bin/apidoc -i {$docsPath} -f {$filter} -o {$outputDir}");
     }
 
     private function updateComposer() {

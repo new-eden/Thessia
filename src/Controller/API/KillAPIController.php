@@ -52,4 +52,23 @@ class KillAPIController extends Controller
     public function getKillByHash(string $crestHash) {
         return $this->json($this->killmails->findOne(array("crestHash" => $crestHash)));
     }
+
+    public function getKillsByDate($timeStamp) {
+        $startDate = $this->makeTimeFromDateTime(date("Y-m-d", strtotime($timeStamp)));
+        $endDate = $this->makeTimeFromDateTime(date("Y-m-d", strtotime($timeStamp) + 86400));
+
+        $formatData = array();
+        $data = $this->killmails->find(
+            array("killTime" => array("\$gte" => $startDate, "\$lte" => $endDate)),
+            array(
+                "projection" => array("_id" => 0, "killID" => 1, "crestHash" => 1),
+                "sort" => array("killID" => -1)
+            )
+        )->toArray();
+
+        foreach($data as $km)
+            $formatData[$km["killID"]] = $km["crestHash"];
+
+        return $this->json($formatData);
+    }
 }
