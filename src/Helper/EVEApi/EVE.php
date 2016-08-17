@@ -119,7 +119,7 @@ class EVE {
             $result = $p->CharacterInfo($requestArray)->toArray();
             return $result;
         } catch(\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }

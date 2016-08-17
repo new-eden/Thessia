@@ -81,16 +81,16 @@ class ApiKeyChecker {
                     );
 
                     foreach ($key["characters"] as $char) {
-                        $keyData["characters"][$char["characterID"]] = array(
-                            "characterID" => $char["characterID"],
+                        $keyData["characters"][] = array(
+                            "characterID" => (int) $char["characterID"],
                             "characterName" => $char["characterName"],
-                            "corporationID" => $char["corporationID"],
+                            "corporationID" => (int) $char["corporationID"],
                             "corporationName" => $char["corporationName"],
-                            "allianceID" => $char["allianceID"],
+                            "allianceID" => (int) $char["allianceID"],
                             "allianceName" => $char["allianceName"],
-                            "factionID" => $char["factionID"],
+                            "factionID" => (int) $char["factionID"],
                             "factionName" => $char["factionName"],
-                            "isDirector" => $keyType == "Corporation" ? true : false,
+                            "isDirector" => (bool) $keyType == "Corporation" ? true : false,
                             "cachedUntil" => new UTCDatetime(null),
                         );
                     }

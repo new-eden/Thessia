@@ -256,4 +256,31 @@ class CrestHelper {
         json_decode($json);
         return (json_last_error() == JSON_ERROR_NONE);
     }
+
+    /**
+     * Generates a CREST hash based on the killmail data
+     * @param $killData
+     * @return string
+     */
+    public function generateCRESTHash($killData)
+    {
+        $victim = $killData["victim"];
+        $victimID = $victim["characterID"] == 0 ? "None" : $victim["characterID"];
+        $shipTypeID = $victim["shipTypeID"];
+        $attackers = $killData["attackers"];
+        $attacker = null;
+
+        if ($attackers != null)
+            foreach ($attackers as $attackerData)
+                if ($attackerData["finalBlow"] != 0)
+                    $attacker = $attackerData;
+
+        if ($attacker == null)
+            $attacker = $attackers[0];
+
+        $attackerID = $attacker["characterID"] == 0 ? "None" : $attacker["characterID"];
+        $killDate = (strtotime($killData["killTime"]) * 10000000) + 116444736000000000;
+
+        return sha1("$victimID$attackerID$shipTypeID$killDate");
+    }
 }

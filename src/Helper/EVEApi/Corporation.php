@@ -56,7 +56,7 @@ class Corporation {
             $result = $p->AccountBalance(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -76,7 +76,7 @@ class Corporation {
             $result = $p->AssetList(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -95,7 +95,7 @@ class Corporation {
             $result = $p->Blueprints(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -117,7 +117,7 @@ class Corporation {
             $result = $p->ContactList(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -137,7 +137,7 @@ class Corporation {
             $result = $p->ContainerLog(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -158,7 +158,7 @@ class Corporation {
             $result = $p->ContractBids(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -180,7 +180,7 @@ class Corporation {
             $result = $p->ContractItems(array("characterID" => $characterID, "contractID" => $contractID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -207,7 +207,7 @@ class Corporation {
             $result = $p->Contracts($requestArray)->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -237,7 +237,7 @@ class Corporation {
             $result = $p->CorporationSheet($requestArray)->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }
@@ -257,7 +257,7 @@ class Corporation {
             $result = $p->CustomsOffices(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -277,7 +277,7 @@ class Corporation {
             $result = $p->FacWarStats(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -294,7 +294,7 @@ class Corporation {
             $result = $p->Facilities()->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }
@@ -312,7 +312,7 @@ class Corporation {
             $result = $p->IndustryJobs(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -330,7 +330,7 @@ class Corporation {
             $result = $p->IndustryJobsHistory(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -360,7 +360,7 @@ class Corporation {
             $result = $p->KillMails($requestArray)->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }
@@ -382,7 +382,7 @@ class Corporation {
             $result = $p->Locations(array("characterID" => $characterID, "IDs" => implode(",", $IDs)))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -408,7 +408,7 @@ class Corporation {
             $result = $p->MarketOrders($requestArray)->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -428,7 +428,7 @@ class Corporation {
             $result = $p->Medals(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -448,7 +448,7 @@ class Corporation {
             $result = $p->MemberMedals(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -468,7 +468,7 @@ class Corporation {
             $result = $p->MemberSecurity(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -488,7 +488,7 @@ class Corporation {
             $result = $p->MemberSecurityLog(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -508,7 +508,7 @@ class Corporation {
             $result = $p->MemberTracking(array("extended" => $extended))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }
@@ -528,7 +528,7 @@ class Corporation {
             $result = $p->OutpostList(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -549,7 +549,7 @@ class Corporation {
             $result = $p->OutpostServiceDetail(array("characterID" => $characterID, "itemID" => $itemID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -569,7 +569,7 @@ class Corporation {
             $result = $p->Shareholders(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -589,7 +589,7 @@ class Corporation {
             $result = $p->Standings(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -609,7 +609,7 @@ class Corporation {
             $result = $p->StarbaseDetail(array("itemID" => $itemID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }
@@ -628,7 +628,7 @@ class Corporation {
             $result = $p->StarbaseList()->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, null, $exception);
             return array();
         }
     }
@@ -648,7 +648,7 @@ class Corporation {
             $result = $p->Titles(array("characterID" => $characterID))->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -681,7 +681,7 @@ class Corporation {
             $result = $p->WalletJournal($requestArray)->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
@@ -714,7 +714,7 @@ class Corporation {
             $result = $p->WalletTransactions($requestArray)->toArray();
             return $result;
         } catch (\Exception $exception) {
-            $this->pheal->handleApiException($apiKey, $vCode, $exception);
+            $this->pheal->handleApiException($apiKey, $characterID, $exception);
             return array();
         }
     }
