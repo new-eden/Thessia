@@ -74,7 +74,7 @@ class RunCron extends Command
                 $className = str_replace(".php", "", $baseName);
                 if($className == $manualScript) {
                     $output->writeln("Will run {$manualScript}...");
-                    $import = "\\Thessia\\Tasks\Cron\\{$className}";
+                    $import = "\\Thessia\\Tasks\\Cron\\{$className}";
                     $class = new $import();
                     $class->execute($container);
                 }

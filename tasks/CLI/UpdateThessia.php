@@ -38,7 +38,7 @@ class UpdateThessia extends Command
     {
         $this
             ->setName("update:core")
-            ->setDescription("Updates composer, phpstorm meta, phpdocs and other stuff");
+            ->setDescription("Updates composer, phpstormmeta, phpdocs and other stuff");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -46,22 +46,20 @@ class UpdateThessia extends Command
         // Generate the .phpstorm.meta.php file
         $this->phpStormMeta();
 
-        // Update composer @todo move into the updateComposer function
-        if(!file_exists(__DIR__ . "/../../composer.phar")) {
-            file_put_contents(__DIR__ . "/../../composer.phar",
-                file_get_contents("https://getcomposer.org/composer.phar"));
-
-            $this->updateComposer();
-        } else {
-            $this->updateComposer();
-        }
+        // Update composer
+        $this->updateComposer();
 
         // @todo Update phpdoc
     }
 
     private function updateComposer() {
-        chdir(__DIR__ . "/../../");
-        exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar update -o");
+        if(!file_exists(__DIR__ . "/../../composer.phar"))
+            file_put_contents(__DIR__ . "/../../composer.phar", file_get_contents("https://getcomposer.org/composer.phar"));
+
+        if(!file_exists(__DIR__ . "/../../vendor"))
+            exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar install -o");
+        else
+            exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar update -o");
     }
 
     private function phpStormMeta() {

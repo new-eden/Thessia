@@ -2266,12 +2266,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "2a556af39e2f90d149bbe5d505b24e31896d2b92"
+                "reference": "472367d63660b5f1426b33b87ba0558b3487945a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/2a556af39e2f90d149bbe5d505b24e31896d2b92",
-                "reference": "2a556af39e2f90d149bbe5d505b24e31896d2b92",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/472367d63660b5f1426b33b87ba0558b3487945a",
+                "reference": "472367d63660b5f1426b33b87ba0558b3487945a",
                 "shasum": ""
             },
             "require": {
@@ -2311,7 +2311,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-17 14:08:33"
+            "time": "2016-08-16 16:09:30"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2378,12 +2378,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "489010d6598a9e3d0f52bba5b3c14cb130d5f7cc"
+                "reference": "2d6011bd6f6086b3409f85c6dd0ec61b90091a04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/489010d6598a9e3d0f52bba5b3c14cb130d5f7cc",
-                "reference": "489010d6598a9e3d0f52bba5b3c14cb130d5f7cc",
+                "url": "https://api.github.com/repos/symfony/process/zipball/2d6011bd6f6086b3409f85c6dd0ec61b90091a04",
+                "reference": "2d6011bd6f6086b3409f85c6dd0ec61b90091a04",
                 "shasum": ""
             },
             "require": {
@@ -2419,7 +2419,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-08-07 15:19:41"
+            "time": "2016-08-16 16:09:30"
         },
         {
             "name": "symfony/routing",
@@ -2427,12 +2427,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "296b78a5f3f31fec36ca8ea556f95713df9bfe2d"
+                "reference": "917c956f902fea0d3f68dcfaebf39141e59cebb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/296b78a5f3f31fec36ca8ea556f95713df9bfe2d",
-                "reference": "296b78a5f3f31fec36ca8ea556f95713df9bfe2d",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/917c956f902fea0d3f68dcfaebf39141e59cebb6",
+                "reference": "917c956f902fea0d3f68dcfaebf39141e59cebb6",
                 "shasum": ""
             },
             "require": {
@@ -2494,7 +2494,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2016-08-07 15:19:41"
+            "time": "2016-08-16 16:09:30"
         },
         {
             "name": "symfony/translation",
@@ -2647,12 +2647,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b7cd3a88dcab5189a7f6d7f8756b17cd25faf759"
+                "reference": "21039777d8519dacf81e070489c953e92164842d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b7cd3a88dcab5189a7f6d7f8756b17cd25faf759",
-                "reference": "b7cd3a88dcab5189a7f6d7f8756b17cd25faf759",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/21039777d8519dacf81e070489c953e92164842d",
+                "reference": "21039777d8519dacf81e070489c953e92164842d",
                 "shasum": ""
             },
             "require": {
@@ -2700,7 +2700,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-07-28 20:58:48"
+            "time": "2016-08-15 17:25:09"
         },
         {
             "name": "zendframework/zend-diactoros",
