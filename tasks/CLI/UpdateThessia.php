@@ -61,7 +61,7 @@ class UpdateThessia extends Command
 
     private function updateComposer() {
         chdir(__DIR__ . "/../../");
-        exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar updateOne -o");
+        exec("/usr/bin/php7.0 " . __DIR__ . "/../../composer.phar update -o");
     }
 
     private function phpStormMeta() {
