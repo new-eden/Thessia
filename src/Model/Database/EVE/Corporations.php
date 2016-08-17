@@ -136,12 +136,26 @@ class Corporations extends Mongo
     }
 
     /**
+     * @param array $filter
+     * @param array $update
+     * @param array $options
+     * @return \MongoDB\UpdateResult|string
+     */
+    public function updateOne(array $filter, array $update, array $options = []) {
+        try {
+            return $this->collection->updateOne($filter, $update, $options);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * @param array $filter A Filter query, eg: array("killID" => 1).
      * @param array $replacement The new data array to replace the old one with.
      * @param array $options Options array, used for projection, sort, etc.
      * @return \MongoDB\UpdateResult|string
      */
-    public function updateOne(array $filter, array $replacement, array $options = [])
+    public function replaceOne(array $filter, array $replacement, array $options = [])
     {
         try {
             return $this->collection->replaceOne($filter, $replacement, $options);

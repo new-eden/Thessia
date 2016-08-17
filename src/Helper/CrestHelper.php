@@ -147,6 +147,18 @@ class CrestHelper {
     }
 
     /**
+     * Return the data for a killmail
+     *
+     * @param $killID
+     * @param $killHash
+     * @return array
+     */
+    public function getKillmail($killID, $killHash) {
+        $url = "/killmails/{$killID}/{$killHash}/";
+        return $this->getData($url, 3600);
+    }
+
+    /**
      * Return all the Types available in EVE
      *
      * @cacheTime 1 hour

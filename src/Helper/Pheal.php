@@ -181,7 +181,7 @@ class Pheal
                 break;
 
             // Login denied by account status
-            // Remove characters, will revalidate with next key update
+            // Remove characters, will revalidate with next key updateOne
             case 211:
                 $collection->updateOne(array("keyID" => $apiKey), array("\$set" => array("characters" => array())));
                 $collection->updateOne(array("keyID" => $apiKey), array("\$set" => array("errorCode" => $code)));

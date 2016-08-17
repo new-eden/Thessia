@@ -28,6 +28,7 @@ namespace Thessia\Model\EVE;
 
 use MongoDB\BSON\UTCDatetime;
 use MongoDB\Client;
+use Thessia\Helper\CrestHelper;
 use Thessia\Lib\Cache;
 use Thessia\Lib\cURL;
 use Thessia\Model\Database\CCP\groupIDs;
@@ -97,6 +98,10 @@ class Parser
      * @var Client
      */
     private $mongo;
+    /**
+     * @var CrestHelper
+     */
+    private $crestHelper;
 
     /**
      * Parser constructor.
@@ -113,7 +118,7 @@ class Parser
      * @param Cache $cache
      * @param Client $mongo
      */
-    public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo) {
+    public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo, CrestHelper $crestHelper) {
         $this->typeIDs = $typeIDs;
         $this->solarSystems = $solarSystems;
         $this->prices = $prices;
@@ -126,6 +131,7 @@ class Parser
         $this->curl = $cURL;
         $this->cache = $cache;
         $this->mongo = $mongo;
+        $this->crestHelper = $crestHelper;
         $this->imageServer = "https://image.eveonline.com/";
     }
 
@@ -139,10 +145,10 @@ class Parser
      */
     public function parseCrestKillmail(int $killID, string $killHash, int $warID = 0)
     {
-        $url = "https://crest.eveonline.com/killmails/{$killID}/{$killHash}/";
-        $data = json_decode($this->curl->getData($url), true);
+        // Get the killmail from CREST
+        $data = $this->crestHelper->getKillmail($killID, $killHash);
 
-        // Generate the mail from CREST data
+        // Generate the mail from the CREST data
         $killmail = $this->crest->generateFromCREST(array("killID" => $killID, "killmail" => $data));
 
         // Parse the killmail data and return it..
@@ -193,15 +199,24 @@ class Parser
      *
      * @param $data
      * @param string $killHash
-     * @param int $warID
+     * @param int|null $warID
      * @return array
      */
-    private function generateTopPortion($data, $killHash, $warID): array
+    private function generateTopPortion($data, $killHash, $warID = null): array
     {
         $top = array();
 
         $top["solarSystemID"] = (int)$data["solarSystemID"];
-        $solarData = $this->solarSystems->getAllBySolarSystemID($data["solarSystemID"])->toArray()[0];
+        $solarData = $this->solarSystems->getAllBySolarSystemID($data["solarSystemID"])->toArray();
+
+        // If it doesn't exists, the mail is fucked... which shouldn't happen - but it does.. fucking CCP...
+        if(!isset($solarData[0])) {
+            // Put it back into the queue for retrial at a later time...
+            \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $data["killID"], "killHash" => $killHash));
+            exit;
+        }
+
+        $solarData = $solarData[0];
         $top["solarSystemName"] = $solarData["solarSystemName"];
         $top["regionID"] = (int)$solarData["regionID"];
         $top["regionName"] = $solarData["regionName"];
@@ -251,8 +266,7 @@ class Parser
         $celestialName = "";
 
         foreach ($celestials as $celestial) {
-            $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z,
-                    2));
+            $distance = sqrt(pow($celestial["x"] - $x, 2) + pow($celestial["y"] - $y, 2) + pow($celestial["z"] - $z, 2));
 
             if ($minimumDistance === null) {
                 $minimumDistance = $distance;
@@ -540,11 +554,11 @@ class Parser
         $victim["factionName"] = $data["factionName"];
         $victim["factionImageURL"] = $this->imageServer . "Alliance/" . $data["factionID"] . "_128.png";
 
-        // Increment all the stats for the characters/corporations/alliances involved
-        if($data["characterID"] > 0)
-            $this->characters->updateOne(array("characterID" => $data["characterID"]), array("\$inc" => array("losses" => 1)));
-        if($data["corporationID"] > 0)
-            $this->corporations->updateOne(array("corporationID" => $data["corporationID"]), array("\$inc" => array("losses" => 1)));
+        // Increment char and corp losses by 1
+        $this->characters->updateOne(array("characterID" => $data["characterID"]), array("\$inc" => array("losses" => 1)));
+        $this->corporations->updateOne(array("corporationID" => $data["corporationID"]), array("\$inc" => array("losses" => 1)));
+
+        // If alliance exists, increment it's loss by 1 as well
         if($data["allianceID"] > 0)
             $this->alliances->updateOne(array("allianceID" => $data["allianceID"]), array("\$inc" => array("losses" => 1)));
 
@@ -606,18 +620,21 @@ class Parser
                 $inner["points"] = 0;
             } else {
                 $percentDamage = (int)$attacker["damageDone"] / $totalDamage;
-                $inner["points"] = $pointValue * $percentDamage;
+                $points = $pointValue * $percentDamage;
+                if($points > 0) {
+                    $inner["points"] = $points;
+                    // Increment the point stats for the character by the amount of points awarded
+                    $this->characters->updateOne(array("characterID" => $attacker["characterID"]), array("\$inc" => array("points" => $inner["points"])));
+                }
             }
 
-            // Increment all the stats for the characters/corporations/alliances involved
-            if($attacker["characterID"] > 0)
-                $this->characters->updateOne(array("characterID" => $attacker["characterID"]), array("\$inc" => array("kills" => 1)));
-            if($attacker["corporationID"] > 0)
-                $this->corporations->updateOne(array("corporationID" => $attacker["corporationID"]), array("\$inc" => array("kills" => 1)));
+            // Increment kills done for char and corp by 1
+            $this->characters->updateOne(array("characterID" => $attacker["characterID"]), array("\$inc" => array("kills" => 1)));
+            $this->corporations->updateOne(array("corporationID" => $attacker["corporationID"]), array("\$inc" => array("kills" => 1)));
+
+            // If alliance exists, increment kills by 1 for that
             if($attacker["allianceID"] > 0)
                 $this->alliances->updateOne(array("allianceID" => $attacker["allianceID"]), array("\$inc" => array("kills" => 1)));
-            if($inner["points"] > 0)
-                $this->characters->updateOne(array("characterID" => $attacker["characterID"]), array("\$inc" => array("points" => $inner["points"])));
 
             $attackers[] = $inner;
         }

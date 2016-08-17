@@ -173,6 +173,12 @@ class SystemServiceProvider extends AbstractServiceProvider
         // Add cURL
         $container->share("curl", cURL::class)->withArgument("cache");
 
+        // Crest Helper
+        $container->share("crestHelper", CrestHelper::class)->withArgument("cache")->withArgument("curl");
+
+        // Add Pheal
+        $container->share("pheal", Pheal::class)->withArgument("storage")->withArgument("mongo");
+
         // Models
         $container->share("blueprints", blueprints::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("categoryIDs", categoryIDs::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
@@ -198,7 +204,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("killmails", Killmails::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("parser", Parser::class)
             ->withArgument("typeIDs")->withArgument("solarSystems")->withArgument("prices")->withArgument("killmails")->withArgument("alliances")->withArgument("corporations")
-            ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo");
+            ->withArgument("characters")->withArgument("groupIDs")->withArgument("crest")->withArgument("curl")->withArgument("cache")->withArgument("mongo")->withArgument("crestHelper");
         $container->share("storage", Storage::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
         $container->share("apiKeyCharacters", ApiKeyCharacters::class);
         $container->share("apiKeyCheck", ApiKeyCheck::class);
@@ -206,9 +212,6 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("search", Search::class)->withArgument("mongo");
         $container->share("top", Top::class)->withArgument("mongo");
         $container->share("killlist", KillList::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
-
-        // Add Pheal
-        $container->share("pheal", Pheal::class)->withArgument("storage")->withArgument("mongo");
 
         // Add CCP XML Interface Shim thing
         $container->share("ccpAccount", Account::class)->withArgument("pheal");
@@ -218,8 +221,5 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("ccpEVE", EVE::class)->withArgument("pheal");
         $container->share("ccpMap", Map::class)->withArgument("pheal");
         $container->share("ccpServer", Server::class)->withArgument("pheal");
-
-        // Crest Helper
-        $container->share("crestHelper", CrestHelper::class)->withArgument("cache")->withArgument("curl");
     }
 }
