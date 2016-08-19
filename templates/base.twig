@@ -1,105 +1,98 @@
 <!DOCTYPE html>
-<!--
-  ~ The MIT License (MIT)
-  ~
-  ~ Copyright (c) 2016. Michael Karbowiak
-  ~
-  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
-  ~ of this software and associated documentation files (the "Software"), to deal
-  ~ in the Software without restriction, including without limitation the rights
-  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  ~ copies of the Software, and to permit persons to whom the Software is
-  ~ furnished to do so, subject to the following conditions:
-  ~
-  ~ The above copyright notice and this permission notice shall be included in all
-  ~ copies or substantial portions of the Software.
-  ~
-  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  ~ SOFTWARE.
-  -->
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Embrace Eternity</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <!-- Compiled and minified CSS -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css" media="screen,projection"/>
+    <!-- Title -->
+    <title>New Eden</title>
 
-    <style>
-        body {
-            background-image: url(/img/thessia_by_graceyn-d5822lu.jpg);
-            background-color: rgb(60, 74, 136);
-            background-blend-mode: darken;
-        }
-    </style>
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap core CSS -->
+    <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/global.css" rel="stylesheet">
 </head>
+
 <body>
-    <!-- Navbar-->
-    <nav class="grey darken-4">
-        <div class="nav-wrapper">
-            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">view_headline</i></a>
-            <ul class="left hide-on-med-and-down">
-                <li><a href="#">Home</a></li>
-            </ul>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="#">Stuff</a></li>
-                <li><a href="#">More stuff</a></li>
-                <li><a href="#">Even more stuff</a></li>
-                <li><a href="#">Less stuff</a></li>
-            </ul>
-            <ul>
-                <li><a href="#">Other stuff</a></li>
-            </ul>
-            <ul id="slide-out" class="side-nav">
-                <li><div class="userView">
-                        <img class="background" src="http://materializecss.com/images/office.jpg">
-                        <a href="#!user"><img class="circle" src="http://materializecss.com/images/yuna.jpg"></a>
-                        <a href="#!name"><span class="white-text name">John Doe</span></a>
-                        <a href="#!email"><span class="white-text email">jdandturk@gmail.com</span></a>
-                    </div></li>
-                <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
-                <li><a href="#!">Second Link</a></li>
-                <li><div class="divider"></div></li>
-                <li><a class="subheader">Subheader</a></li>
-                <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
-            </ul>
+
+<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+    <a class="navbar-brand" href="#">Project name</a>
+    <ul class="nav navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-10">
+            <!-- Most Valuable kills -->
+            <div id="mostValuableKills" class="hidden-md-down row flex-items-xs-center">
+            </div>
+
+
+            <!-- The Killlist -->
+            <div class="table-responsive">
+                <table id="killlist" class="table table-striped table-hover table-sm">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th class='hidden-sm-down'>Time</th>
+                        <th class='hidden-md-down'>Ship</th>
+                        <th>Place</th>
+                        <th class='hidden-md-down'></th>
+                        <th>Victim</th>
+                        <th class='hidden-md-down'></th>
+                        <th>Final Blow</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
-    </nav>
-
-    <!-- The body -->
-    <div class="valign center-align">
-        <img src="/img/logo_370.svg" style="padding-top: 100px; width: 350px">
+        <div class="col-xs-6 col-md-2 hidden-md-down">
+            <div id="topCharacters"></div>
+            <div id="topCorporations"></div>
+            <div id="topAlliances"></div>
+            <div id="topSolarSystems"></div>
+            <div id="topRegions"></div>
+        </div>
     </div>
+</div>
 
-    <div class="container">
 
-    </div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="https://v4-alpha.getbootstrap.com/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+<script src="https://v4-alpha.getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
 
-    <!-- Compiled and minified JavaScript -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<!-- All the site specific js - yes it will change and become less nasty - but all in due time ! -->
+<script src="/js/common.js"></script>
+<script src="/js/topkills.js"></script>
+<script src="/js/top10Characters.js"></script>
+<script src="/js/top10Corporations.js"></script>
+<script src="/js/top10Alliances.js"></script>
+<script src="/js/top10SolarSystems.js"></script>
+<script src="/js/top10Regions.js"></script>
+<script src="/js/killlist.js"></script>
 
-    <!-- Custom JS -->
-    <script>
-        $( document ).ready(function() {
-            $(".button-collapse").sideNav({
-                menuWidth: 300,
-                edge: "left",
-                closeOnClick: true
-            });
-
-            $('.parallax').parallax();
-        })
-    </script>
-
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

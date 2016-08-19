@@ -117,6 +117,7 @@ class Parser
      * @param cURL $cURL
      * @param Cache $cache
      * @param Client $mongo
+     * @param CrestHelper $crestHelper
      */
     public function __construct(typeIDs $typeIDs, solarSystems $solarSystems, Prices $prices, Killmails $killmails, Alliances $alliances, Corporations $corporations, Characters $characters, groupIDs $groupIDs, Crest $crest, cURL $cURL, Cache $cache, Client $mongo, CrestHelper $crestHelper) {
         $this->typeIDs = $typeIDs;

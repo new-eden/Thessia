@@ -57,7 +57,7 @@ class StatsAPIController extends Controller {
     }
 
     public function top10Characters(bool $allTime = false) {
-        $md5 = md5("top10CharactersStatsAPI" . $allTime ? "allTime" : "7days");
+        $md5 = md5("top10CharactersStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
@@ -68,6 +68,7 @@ class StatsAPIController extends Controller {
 
         $data = $this->collection->aggregate(array(
             $match,
+            array("\$unwind" => "\$attackers"),
             array("\$group" => array("_id" => "\$attackers.characterID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "characterID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -77,8 +78,9 @@ class StatsAPIController extends Controller {
         )->toArray();
 
         foreach($data as $key => $character) {
-            $data[$key]["characterName"] = $this->characters->findOne(array("characterID" => $character["characterID"][0]))["characterName"];
-            $data[$key]["characterID"] = $character["characterID"][0];
+            $count = $data[$key]["count"];
+            $data[$key] = $this->characters->findOne(array("characterID" => $character["characterID"]));
+            $data[$key]["count"] = $count;
         }
 
         $this->cache->set($md5, $data, 3600);
@@ -86,7 +88,7 @@ class StatsAPIController extends Controller {
     }
 
     public function top10Corporations(bool $allTime = false) {
-        $md5 = md5("top10CorporationsStatsAPI" . $allTime ? "allTime" : "7days");
+        $md5 = md5("top10CorporationsStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
@@ -97,17 +99,19 @@ class StatsAPIController extends Controller {
 
         $data = $this->collection->aggregate(array(
             $match,
+            array("\$unwind" => "\$attackers"),
             array("\$group" => array("_id" => "\$attackers.corporationID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "corporationID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
-            array("\$limit" => 10)
+            array("\$limit" => 10),
         ),
             array("allowDiskUse" => true)
         )->toArray();
 
         foreach($data as $key => $corporation) {
-            $data[$key]["corporationName"] = $this->corporations->findOne(array("corporationID" => $corporation["corporationID"][0]))["corporationName"];
-            $data[$key]["corporationID"] = $corporation["corporationID"][0];
+            $count = $data[$key]["count"];
+            $data[$key] = $this->corporations->findOne(array("corporationID" => $corporation["corporationID"]));
+            $data[$key]["count"] = $count;
         }
 
         $this->cache->set($md5, $data, 3600);
@@ -115,7 +119,7 @@ class StatsAPIController extends Controller {
     }
 
     public function top10Alliances(bool $allTime = false) {
-        $md5 = md5("top10AlliancesStatsAPI" . $allTime ? "allTime" : "7days");
+        $md5 = md5("top10AlliancesStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
@@ -126,6 +130,7 @@ class StatsAPIController extends Controller {
 
         $data = $this->collection->aggregate(array(
             $match,
+            array("\$unwind" => "\$attackers"),
             array("\$group" => array("_id" => "\$attackers.allianceID", "count" => array("\$sum" => 1))),
             array("\$project" => array("_id" => 0, "count" => "\$count", "allianceID"=> "\$_id")),
             array("\$sort" => array("count" => -1)),
@@ -135,8 +140,9 @@ class StatsAPIController extends Controller {
         )->toArray();
 
         foreach($data as $key => $alliance) {
-            $data[$key]["allianceName"] = $this->alliances->findOne(array("allianceID" => $alliance["allianceID"][0]))["allianceName"];
-            $data[$key]["allianceID"] = $alliance["allianceID"][0];
+            $count = $data[$key]["count"];
+            $data[$key] = $this->alliances->findOne(array("allianceID" => $alliance["allianceID"]), array("projection" => array("_id" => 0, "corporations" => 0, "description" => 0)));
+            $data[$key]["count"] = $count;
         }
 
         $this->cache->set($md5, $data, 3600);
@@ -144,7 +150,7 @@ class StatsAPIController extends Controller {
     }
 
     public function top10SolarSystems(bool $allTime = false) {
-        $md5 = md5("top10SolarSystemsStatsAPI" . $allTime ? "allTime" : "7days");
+        $md5 = md5("top10SolarSystemsStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
@@ -172,7 +178,7 @@ class StatsAPIController extends Controller {
     }
 
     public function top10Regions(bool $allTime = false) {
-        $md5 = md5("top10CRegionsStatsAPI" . $allTime ? "allTime" : "7days");
+        $md5 = md5("top10CRegionsStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
@@ -200,7 +206,7 @@ class StatsAPIController extends Controller {
     }
 
     public function mostValuableKillsOverTheLast7Days(int $limit = 10) {
-        $md5 = md5("mostValuableKillsOverTheLast7Days");
+        $md5 = md5("mostValuableKillsOverTheLast7Days{$limit}");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
