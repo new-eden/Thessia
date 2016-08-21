@@ -26,6 +26,7 @@
 namespace Thessia\Lib;
 
 use Closure;
+use Predis\Client;
 use Redis;
 
 /**
@@ -49,12 +50,13 @@ class Cache
      */
     function __construct(Config $config)
     {
-        $this->redis = new \Redis();
-        if ($this->persistence == false) {
-            $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        } else {
-            $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        }
+        $this->redis = new Client();
+        //$this->redis = new \Redis();
+        //if ($this->persistence == false) {
+        //    $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        //} else {
+        //    $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
+        //}
     }
 
     /**
@@ -87,7 +89,7 @@ class Cache
      * @param integer $timeout
      * @return bool
      */
-    public function set(string $key, $value, int $timeout = 0): bool
+    public function set(string $key, $value, int $timeout = 0)
     {
         $result = $this->redis->set($key, json_encode($value));
         if ($timeout > 0) {
