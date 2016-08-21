@@ -59,6 +59,7 @@ var top10ListGenerator = function (url, type, outputTo) {
             $.each(data, function (i, kill) {
                 trHTML +=
                     '<tr data-container="body" data-trigger="hover" data-toggle="popover" data-placement="left" data-html="true" data-content="' +
+                    '<div class=text-xs-center><img class=img-circle src=https://imageserver.eveonline.com/Corporation/'+kill.corporationID+'_128.png/><div><br>' +
                     'Corporation: ' + kill.corporationName + '<br>';
                     if(kill.allianceID > 0) {
                         trHTML += 'Alliance: ' + kill.allianceName + '<br>';
