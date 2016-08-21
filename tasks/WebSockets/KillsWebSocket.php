@@ -68,6 +68,7 @@ class KillsWebSocket implements WampServerInterface
      */
     function onOpen(ConnectionInterface $conn)
     {
+        //@todo add this connect to some stats
         $this->clients->attach($conn);
     }
 
@@ -78,6 +79,7 @@ class KillsWebSocket implements WampServerInterface
      */
     function onClose(ConnectionInterface $conn)
     {
+        //@todo add this disconnect to some stats
         $this->clients->detach($conn);
         $conn->close();
     }

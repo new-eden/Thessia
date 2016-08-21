@@ -202,4 +202,13 @@ $app->group("/api", function() use ($app) {
         $app->get("/wars/[{warID:[0-9]+}/]", $controller("wars"));
         $app->get("/kills/{warID:[0-9]+}/[{page:[0-9]+}/]", $controller("warMails"));
     });
+
+    $app->group("/image", function() use ($app) {
+        $controller = new \Thessia\Controller\API\ImageAPIController($app);
+        $app->get("/alliance/{allianceID:[0-9]+}_{imageSize:[0-9]+}.png", $controller("getAllianceImage"));
+        $app->get("/corporation/{corporationID:[0-9]+}_{imageSize:[0-9]+}.png", $controller("getCorporationImage"));
+        $app->get("/character/{characterID:[0-9]+}_{imageSize:[0-9]+}.jpg", $controller("getCharacterImage"));
+        $app->get("/inventory/{inventoryID:[0-9]+}_{imageSize:[0-9]+}.jpg", $controller("getInventoryImage"));
+        $app->get("/ship/{shipID:[0-9]+}_{imageSize:[0-9]+}.jpg", $controller("getShipImage"));
+    });
 });

@@ -34,6 +34,7 @@ use Thessia\Helper\EVEApi\Account;
 use Thessia\Helper\EVEApi\Character;
 use Thessia\Helper\EVEApi\Corporation;
 use Thessia\Helper\Pheal;
+use Thessia\Model\Database\EVE\Killmails;
 
 /**
  * Class ApiKeyDataFetcher
@@ -101,6 +102,8 @@ class ApiKeyDataFetcher {
         $character = $container->get("ccpCharacter");
         /** @var CrestHelper $crestHelper */
         $crestHelper = $container->get("crestHelper");
+        /** @var Killmails $kms */
+        $kms = $container->get("killmails");
 
         // Default cache time
         $cachedUntil = date("Y-m-d H:i:s", strtotime("+1 hour")) * 1000;
@@ -118,12 +121,19 @@ class ApiKeyDataFetcher {
             if (count($killmails) > 0) {
                 foreach($killmails as $mail) {
                     $killID = (int) $mail["killID"];
+
+                    // Check if the killmail isn't already in the database
+                    $exists = $kms->getAllByKillID($killID)->toArray();
+                    if(!empty($exists))
+                        continue;
+
+                    // Generate the crest hash
                     $crestHash = $crestHelper->generateCRESTHash($mail);
 
-                    if($killID > 0 && is_string($crestHash)) {
+                    // If crestHash was generated properly, we'll post the mail!
+                    if(is_string($crestHash)) {
                         $log->addInfo("Adding {$killID} from apiKey {$apiKey} to the database...");
-                        \Resque::enqueue("high", '\Thessia\Tasks\Resque\KillmailParser',
-                            array("killID" => $killID, "killHash" => $crestHash));
+                        \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $killID, "killHash" => $crestHash));
                     }
                 }
             }

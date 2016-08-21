@@ -668,17 +668,18 @@ class Participants extends Mongo
      * @param int $cacheTime
      * @param string $order
      * @param null $offset
+     * @param array $extraOptions
      * @return array|mixed
-     * @throws \Exception
      */
-    public function getAllKills($extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null) {
-        //$killData = $this->cache->get(md5(serialize($extraArguments) . $limit . $order . $offset));
-        //if (!empty($killData)) {
-        //    return $killData;
-        //}
+    public function getAllKills($extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null, array $extraOptions = array()) {
+        $killData = $this->cache->get(md5(serialize($extraArguments) . $limit . $order . $offset));
+        if (!empty($killData)) {
+            return $killData;
+        }
 
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
-        $killData = $this->collection->find($array["filter"], $array["options"])->toArray();
+        $options = array_merge($array["options"], $extraOptions);
+        $killData = $this->collection->find($array["filter"], $options)->toArray();
 
         foreach($killData as $key => $value)
             $killData[$key]["killTime"] = date(DateTime::ISO8601, $value["killTime"]->__toString() / 1000);

@@ -30,7 +30,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RunRedisQ extends Command {
+class RunRedisQ extends Command
+{
     protected function configure()
     {
         $this
@@ -61,17 +62,15 @@ class RunRedisQ extends Command {
                         continue;
                     }
 
-                    if ($killID && $killHash) {
-                        // Logging
-                        $log->info("Got killmail from RedisQ");
+                    // Logging
+                    $log->info("Got killmail from RedisQ");
 
-                        // Enqueue the mail for processing
-                        \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser',
-                            array("killID" => $killID, "killHash" => $killHash, "warID" => $warID));
-                    }
+                    // Enqueue the mail for processing
+                    \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $killID, "killHash" => $killHash, "warID" => $warID));
                 }
             } catch (\Exception $e) {
-                echo "Error: " . $e->getMessage();
+                $log->addError("RedisQ Error: " . $e->getMessage());
+                $run = false;
             }
         } while($run == true);
     }

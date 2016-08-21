@@ -22,35 +22,42 @@
  * SOFTWARE.
  */
 
-var generateKillList = function(kill) {
-    var trHTML = "";
+var generateKillList = function(url) {
+    var maxKillID = 0;
+    var highestKillID = function(newID) {
+        maxKillID = Math.max(maxKillID, newID);
+        return maxKillID;
+    };
 
-    // Convert the killTime from MongoISODateUTC thing to an ISOString for timeAgo
-    // Stitch together the html that we want to output..
-    trHTML += "" +
-        "<tr onclick=\"window.location='/kill/" + kill.killID + "/'\">" +
+    var generateKillList = function(kill) {
+        var trHTML = "";
+
+        // Convert the killTime from MongoISODateUTC thing to an ISOString for timeAgo
+        // Stitch together the html that we want to output..
+        trHTML += "" +
+            "<tr onclick=\"window.location='/kill/" + kill.killID + "/'\">" +
             "<th class='hidden-sm-down' scope='row' data-toggle='tooltip' data-placement='right' title='" + new Date(kill.killTime).toString() + "'>" +
-                "<span data-livestamp='" + kill.killTime + "'></span>" +
-                "<br>" + millionBillion(kill.totalValue) +
+            "<span data-livestamp='" + kill.killTime.toString() + "'></span>" +
+            "<br>" + millionBillion(kill.totalValue) +
             "</th>" +
             "<td class='hidden-md-down'>" +
-                "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.shipTypeName + "' class='img-circle' src='https://imageserver.eveonline.com/Type/" + kill.victim.shipTypeID + "_64.png'/>" +
+            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.shipTypeName + "' class='img-circle' src='https://imageserver.eveonline.com/Type/" + kill.victim.shipTypeID + "_64.png'/>" +
             "</td>" +
             "<td>" +
-                "<a href='/solarsystem/" + kill.solarSystemID + "/'>" + kill.solarSystemName + "</a>" +
-                "<br>" +
-                "<a href='/region/" + kill.regionID + "'>" + truncate(kill.regionName, 15) + "</a>" +
+            "<a href='/solarsystem/" + kill.solarSystemID + "/'>" + kill.solarSystemName + "</a>" +
+            "<br>" +
+            "<a href='/region/" + kill.regionID + "'>" + truncate(kill.regionName, 15) + "</a>" +
             "</td>" +
             "<td class='hidden-md-down'>" +
-                "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.characterName + "' class='img-circle' src='https://imageserver.eveonline.com/Character/" + kill.victim.characterID + "_64.jpg'/>" +
+            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.characterName + "' class='img-circle' src='https://imageserver.eveonline.com/Character/" + kill.victim.characterID + "_64.jpg'/>" +
             "</td>" +
             "<td>" +
-                "<a href='/character/" + kill.victim.characterID + "/'>" + kill.victim.characterName + " (<a href='/ship/" + kill.victim.shipTypeID + "/'>" + kill.victim.shipTypeName + "</a>)</a>" +
-                "<br>" +
-                "<a href='/corporation/" + kill.victim.corporationID + "/'>" + truncate(kill.victim.corporationName, 20) + "</a> ";
-            if (kill.victim.allianceID > 0) {
-                trHTML += "/ <a href='/alliance/" + kill.victim.allianceID + "/'>" + truncate(kill.victim.allianceName, 20) + "</a>";
-            }
+            "<a href='/character/" + kill.victim.characterID + "/'>" + kill.victim.characterName + " (<a href='/ship/" + kill.victim.shipTypeID + "/'>" + kill.victim.shipTypeName + "</a>)</a>" +
+            "<br>" +
+            "<a href='/corporation/" + kill.victim.corporationID + "/'>" + truncate(kill.victim.corporationName, 20) + "</a>";
+        if (kill.victim.allianceID > 0) {
+            trHTML += "/ <a href='/alliance/" + kill.victim.allianceID + "/'>" + truncate(kill.victim.allianceName, 20) + "</a>";
+        }
 
         trHTML +=
             "</td>";
@@ -63,10 +70,10 @@ var generateKillList = function(kill) {
             if (attacker.finalBlow == 1) {
                 trHTML +=
                     "<td class='hidden-md-down'>" +
-                        "<img data-toggle='tooltip' data-placement='right' title='" + attacker.characterName + "' class='img-circle' src='https://imageserver.eveonline.com/Corporation/" + attacker.corporationID + "_64.png'/>" +
+                    "<img data-toggle='tooltip' data-placement='right' title='" + attacker.characterName + "' class='img-circle' src='https://imageserver.eveonline.com/Corporation/" + attacker.corporationID + "_64.png'/>" +
                     "</td>" +
                     "<td>" +
-                        "<a href='/character/" + attacker.characterID + "/'>" + attacker.characterName + " (" + attackerCount + ")</a><br><a href='/corporation/" + attacker.corporationID + "/'>" + truncate(attacker.corporationName, 20) + "</a>";
+                    "<a href='/character/" + attacker.characterID + "/'>" + attacker.characterName + " (" + attackerCount + ")</a><br><a href='/corporation/" + attacker.corporationID + "/'>" + truncate(attacker.corporationName, 20) + "</a>";
                 if (attacker.allianceID > 0) {
                     trHTML += "/ <a href='/alliance/" + attacker.allianceID + "/'>" + truncate(attacker.allianceName, 20) + "</a>";
                 }
@@ -75,26 +82,107 @@ var generateKillList = function(kill) {
             }
         });
 
-    trHTML += "</tr>";
+        trHTML += "</tr>";
 
-    return trHTML;
-};
-
-var webSocket = function(websocketUrl, prependTo) {
-    var trHTML = "";
-    var currentTime = new Date().getTime();
-    ws = new WebSocket(websocketUrl);
-    ws.onmessage = function(event) {
-        var data = JSON.parse(event["data"]);
-        var tmpTime = new Date(data.killTime);
-        var killmailTime = tmpTime.getTime();
-        if(data.killID > 0 && (killmailTime >= currentTime)) {
-            trHTML = generateKillList(data);
-            $(prependTo).prepend(trHTML);
-        }
+        return trHTML;
     };
-};
 
+    var webSocket = function(websocketUrl, prependTo, maxKillID) {
+        ws = new WebSocket(websocketUrl);
+        ws.onmessage = function(event) {
+            var data = JSON.parse(event["data"]);
+            if(data.killID > maxKillID && (typeof data.killTime_str != "undefined" && data.killTime_str !== null)) {
+                maxKillID = data.killID;
+                var trHTML = generateKillList(data);
+                $(prependTo).prepend(trHTML);
+                $("[data-toggle='tooltip']").tooltip();
+            }
+        };
+    };
+
+    var loadMoreOnScroll = function(url) {
+        var page = 1, isPreviousPageLoaded = true;
+        $(window).scroll(function() {
+            if($(document).height() - 500 <= $(window).scrollTop() + $(window).height()) {
+                if(isPreviousPageLoaded) {
+                    isPreviousPageLoaded = false;
+                    var address = window.location.origin + url + (page + 1) + "/";
+                    $.ajax({
+                        type: "GET",
+                        url: address,
+                        data: "{}",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        cache: false,
+                        success: function(data) {
+                            var trHTML = "";
+                            $.each(data, function(i, kill) {
+                                trHTML += generateKillList(kill);
+                            });
+
+                            $("#killlist").append(trHTML);
+
+                            page++;
+                            isPreviousPageLoaded = true;
+                        },
+                        error: function(msg) {
+                            alert(msg.responseText);
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    // Turn on CORS support for jQuery
+    jQuery.support.cors = true;
+
+    // Define the current origin url (eg: https://neweden.xyz)
+    var currentOrigin = window.location.origin;
+
+    // Get the data from the JSON API and output it as a killlist...
+    $.ajax({
+        // Define the type of call this is
+        type: "GET",
+        // Define the url we're getting data from
+        url: currentOrigin + url,
+        // Predefine the data field.. it's just an empty array
+        data: "{}",
+        // Define the content type we're getting
+        contentType: "application/json; charset=utf-8",
+        // Set the data type to json
+        dataType: "json",
+        // Don't cache it - the backend does that for us
+        cache: false,
+        success: function (data) {
+            var maxKillID = 0;
+            var trHTML = "";
+            // data-toggle='tooltip' data-html='true' data-placement='left' title='"+kill.killTime.toString()+"'
+            // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
+            $.each(data, function (i, kill) {
+                maxKillID = highestKillID(kill.killID);
+                trHTML += generateKillList(kill); //This isn't exactly pretty - but it does the job for now... Until someone decides to cause an argument over it, and finally fixes it
+            });
+
+            // Append the killlist element to the killlist table
+            $("#killlist").append(trHTML);
+
+            // Turn on popovers
+            $('[data-toggle="popover"]').popover();
+
+            // Turn on tooltips for the killlist - having this outside apparently turns it off... js.. /o\
+            $("[data-toggle='tooltip']").tooltip();
+
+            // Fire up the Websocket
+            webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
+
+            // Turn on loading more on scroll
+            loadMoreOnScroll(url);
+        },
+        error: function (msg) {
+            alert(msg.responseText);
+        }
+    });
+};
 //@todo fix so that it unloads data when it gets over 1k items
-webSocket("wss://ws.eve-kill.net/kills", "#killlist");
-htmlGenerator("/api/killlist/latest/", "generateKillList", "#killlist");
+generateKillList("/api/killlist/latest/");

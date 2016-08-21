@@ -67,7 +67,7 @@ class AllianceAPIController extends Controller
      */
     public function allianceCount() {
         $count = $this->alliance->getAllianceCount();
-        return $this->json(array("allianceCount" => $count));
+        return $this->json(array("allianceCount" => $count), 360);
     }
 
     /**
@@ -76,7 +76,7 @@ class AllianceAPIController extends Controller
      */
     public function allianceInformation(int $corporationID) {
         $information = $this->alliance->getAllianceInformation($corporationID);
-        return $this->json($information);
+        return $this->json($information, 360);
     }
 
     /**
@@ -84,7 +84,7 @@ class AllianceAPIController extends Controller
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function findAlliance(string $searchTerm) {
-        return $this->json($this->search->search($searchTerm, array("alliance"), 50)["alliance"]);
+        return $this->json($this->search->search($searchTerm, array("alliance"), 50)["alliance"], 360);
     }
 
     /**
@@ -93,7 +93,7 @@ class AllianceAPIController extends Controller
      */
     public function allianceMembers(int $corporationID) {
         $characters = $this->alliance->getAllianceMembers($corporationID);
-        return $this->json($characters);
+        return $this->json($characters, 360);
     }
 
     /**
@@ -103,7 +103,7 @@ class AllianceAPIController extends Controller
      */
     public function topCharacters(int $allianceID, int $limit = 10) {
         $data = $this->top->topCharacters("allianceID", $allianceID, $limit);
-        return $this->json($data);
+        return $this->json($data, 360);
     }
 
     /**
@@ -113,7 +113,7 @@ class AllianceAPIController extends Controller
      */
     public function topCorporations(int $allianceID, int $limit = 10) {
         $data = $this->top->topCorporations("allianceID", $allianceID, $limit);
-        return $this->json($data);
+        return $this->json($data, 360);
     }
 
     /**
@@ -123,7 +123,7 @@ class AllianceAPIController extends Controller
      */
     public function topShips(int $allianceID, int $limit = 10) {
         $data = $data = $this->top->topShips("allianceID", $allianceID, $limit);
-        return $this->json($data);
+        return $this->json($data, 360);
     }
 
     /**
@@ -133,7 +133,7 @@ class AllianceAPIController extends Controller
      */
     public function topSystems(int $allianceID, int $limit = 10) {
         $data = $data = $this->top->topSystems("allianceID", $allianceID, $limit);
-        return $this->json($data);
+        return $this->json($data, 360);
     }
 
     /**
@@ -143,6 +143,6 @@ class AllianceAPIController extends Controller
      */
     public function topRegions(int $allianceID, int $limit = 10) {
         $data = $data = $this->top->topRegions("allianceID", $allianceID, $limit);
-        return $this->json($data);
+        return $this->json($data, 360);
     }
 }

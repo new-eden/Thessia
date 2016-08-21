@@ -73,8 +73,7 @@ class RunStomp extends Command {
                                 $log->info("Got killmail from Stomp");
 
                                 // Enqueue the mail for processing
-                                \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser',
-                                    array("killID" => $killID, "killHash" => $killHash));
+                                \Resque::enqueue("rt", '\Thessia\Tasks\Resque\KillmailParser', array("killID" => $killID, "killHash" => $killHash));
                             }
                         }
 

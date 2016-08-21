@@ -50,94 +50,94 @@ class KillListAPIController extends Controller {
     }
 
     public function getLatest($page = 1) {
-        return $this->json($this->killList->getLatest($page));
+        return $this->json($this->killList->getLatest($page), 30);
     }
 
     public function getBigKills($page = 1) {
-        return $this->json($this->killList->getBigKills($page));
+        return $this->json($this->killList->getBigKills($page), 30);
     }
 
     public function getWSpace($page = 1) {
-        return $this->json($this->killList->getWSpace($page));
+        return $this->json($this->killList->getWSpace($page), 30);
     }
 
     public function getHighSec($page = 1) {
-        return $this->json($this->killList->getHighSec($page));
+        return $this->json($this->killList->getHighSec($page), 30);
     }
 
     public function getLowSec($page = 1) {
-        return $this->json($this->killList->getLowSec($page));
+        return $this->json($this->killList->getLowSec($page), 30);
     }
 
     public function getNullSec($page = 1) {
-        return $this->json($this->killList->getNullSec($page));
+        return $this->json($this->killList->getNullSec($page), 30);
     }
 
     public function getSolo($page = 1) {
-        return $this->json($this->killList->getSolo($page));
+        return $this->json($this->killList->getSolo($page), 30);
     }
 
     public function getNPC($page = 1) {
-        return $this->json($this->killList->getNPC($page));
+        return $this->json($this->killList->getNPC($page), 30);
     }
 
     public function get5b($page = 1) {
-        return $this->json($this->killList->get5b($page));
+        return $this->json($this->killList->get5b($page), 30);
     }
 
     public function get10b($page = 1) {
-        return $this->json($this->killList->get10b($page));
+        return $this->json($this->killList->get10b($page), 30);
     }
 
     public function getCitadels($page = 1) {
-        return $this->json($this->killList->getCitadels($page));
+        return $this->json($this->killList->getCitadels($page), 30);
     }
 
     public function getT1($page = 1) {
-        return $this->json($this->killList->getT1($page));
+        return $this->json($this->killList->getT1($page), 30);
     }
 
     public function getT2($page = 1) {
-        return $this->json($this->killList->getT2($page));
+        return $this->json($this->killList->getT2($page), 30);
     }
 
     public function getT3($page = 1) {
-        return $this->json($this->killList->getT3($page));
+        return $this->json($this->killList->getT3($page), 30);
     }
 
     public function getFrigates($page = 1) {
-        return $this->json($this->killList->getFrigates($page));
+        return $this->json($this->killList->getFrigates($page), 30);
     }
 
     public function getDestroyers($page = 1) {
-        return $this->json($this->killList->getDestroyers($page));
+        return $this->json($this->killList->getDestroyers($page), 30);
     }
 
     public function getCruisers($page = 1) {
-        return $this->json($this->killList->getCruisers($page));
+        return $this->json($this->killList->getCruisers($page), 30);
     }
 
     public function getBattleCruisers($page = 1) {
-        return $this->json($this->killList->getBattleCruisers($page));
+        return $this->json($this->killList->getBattleCruisers($page), 30);
     }
 
     public function getBattleShips($page = 1) {
-        return $this->json($this->killList->getBattleShips($page));
+        return $this->json($this->killList->getBattleShips($page), 30);
     }
 
     public function getCapitals($page = 1) {
-        return $this->json($this->killList->getCapitals($page));
+        return $this->json($this->killList->getCapitals($page), 30);
     }
 
     public function getFreighters($page = 1) {
-        return $this->json($this->killList->getFreighters($page));
+        return $this->json($this->killList->getFreighters($page), 30);
     }
 
     public function getSuperCarriers($page = 1) {
-        return $this->json($this->killList->getSuperCarriers($page));
+        return $this->json($this->killList->getSuperCarriers($page), 30);
     }
 
     public function getTitans($page = 1) {
-        return $this->json($this->killList->getTitans($page));
+        return $this->json($this->killList->getTitans($page), 30);
     }
 }

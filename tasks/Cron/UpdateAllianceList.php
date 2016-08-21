@@ -84,7 +84,6 @@ class UpdateAllianceList
             }
 
             $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
-            $log->info("CRON UpdateAllianceList: Updating {$allianceName}");
             try {
                 $collection->insertOne($array);
             } catch (\Exception $e) {

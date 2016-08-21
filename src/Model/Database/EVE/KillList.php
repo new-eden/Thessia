@@ -36,14 +36,14 @@ class KillList extends Participants {
     }
 
     public function getLatest($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
-
-        return $this->getAllKills(array(), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array(), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getBigKills($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -52,11 +52,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getWSpace($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -65,11 +66,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $solarSystemIDs[] = $t["solarSystemID"];
 
-        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getHighSec($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -78,11 +80,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $solarSystemIDs[] = $t["solarSystemID"];
 
-        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getLowSec($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -91,11 +94,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $solarSystemIDs[] = $t["solarSystemID"];
 
-        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getNullSec($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -104,39 +108,44 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $solarSystemIDs[] = $t["solarSystemID"];
 
-        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("solarSystemID" => array("\$in" => $solarSystemIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getSolo($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
-        return $this->getAllKills(array("isSolo" => true), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("isSolo" => true), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getNPC($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
-        return $this->getAllKills(array("isNPC" => true), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("isNPC" => true), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function get5b($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
-        return $this->getAllKills(array("totalValue" => array("\$gte" => "5000000000")), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("totalValue" => array("\$gte" => "5000000000")), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function get10b($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
-        return $this->getAllKills(array("totalValue" => array("\$gte" => "10000000000")), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("totalValue" => array("\$gte" => "10000000000")), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getCitadels($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -145,11 +154,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getT1($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -158,11 +168,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getT2($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -171,11 +182,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getT3($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -184,11 +196,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getFrigates($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -197,11 +210,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getDestroyers($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -210,11 +224,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getCruisers($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -223,11 +238,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getBattleCruisers($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -236,11 +252,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getBattleShips($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -249,11 +266,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getCapitals($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -262,11 +280,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getFreighters($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -275,11 +294,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getSuperCarriers($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -288,11 +308,12 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getTitans($page = 1) {
-        $limit = 100;
+        $limit = 50;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -301,6 +322,7 @@ class KillList extends Participants {
         foreach($queryIDs as $t)
             $shipIDs[] = $t["typeID"];
 
-        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 360, "DESC", $offset);
+        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
+        return $this->getAllKills(array("victim.shipTypeID" => array("\$in" => $shipIDs)), $limit, 30, "DESC", $offset, $extras);
     }
 }

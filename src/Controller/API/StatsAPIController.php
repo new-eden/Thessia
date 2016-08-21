@@ -62,9 +62,9 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
         if($allTime == true)
-            $match = array("\$match" => array("attackers.characterID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("attackers.characterID" => array("\$ne" => 0)));
         else
-            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$ne" => 0)));
 
         $data = $this->collection->aggregate(array(
             $match,
@@ -93,9 +93,9 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
         if($allTime == true)
-            $match = array("\$match" => array("attackers.corporationID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("attackers.corporationID" => array("\$ne" => 0)));
         else
-            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$ne" => 0)));
 
         $data = $this->collection->aggregate(array(
             $match,
@@ -124,9 +124,9 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
         if($allTime == true)
-            $match = array("\$match" => array("attackers.allianceID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("attackers.allianceID" => array("\$ne" => 0)));
         else
-            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$ne" => 0)));
 
         $data = $this->collection->aggregate(array(
             $match,
@@ -155,9 +155,9 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
         if($allTime == true)
-            $match = array("\$match" => array("solarSystemID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("solarSystemID" => array("\$ne" => 0)));
         else
-            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "solarSystemID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "solarSystemID" => array("\$ne" => 0)));
 
         $data = $this->collection->aggregate(array(
             $match,
@@ -183,9 +183,9 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
         if($allTime == true)
-            $match = array("\$match" => array("regionID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("regionID" => array("\$ne" => 0)));
         else
-            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "regionID" => array("\$gt" => 0)));
+            $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "regionID" => array("\$ne" => 0)));
 
         $data = $this->collection->aggregate(array(
             $match,
@@ -210,8 +210,7 @@ class StatsAPIController extends Controller {
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-        $data = $this->collection->find(array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days"))))), array("sort" => array("totalValue" => -1), "limit" => $limit))->toArray();
-
+        $data = $this->collection->find(array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days"))))), array("sort" => array("totalValue" => -1), "limit" => $limit, "projection" => array("_id" => 0, "items" => 0, "osmium" => 0)))->toArray();
         $this->cache->set($md5, $data, 3600);
         return $this->json($data);
     }
@@ -247,7 +246,7 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
 
-        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$gt" => 0)));
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
             array("\$group" => array("_id" => "\$attackers.characterID")),
@@ -272,7 +271,7 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
 
-        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$gt" => 0)));
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
             array("\$group" => array("_id" => "\$attackers.corporationID")),
@@ -296,7 +295,7 @@ class StatsAPIController extends Controller {
             return $this->json($this->cache->get($md5));
 
 
-        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$gt" => 0)));
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
             array("\$group" => array("_id" => "\$attackers.allianceID")),
@@ -319,7 +318,7 @@ class StatsAPIController extends Controller {
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.shipTypeID" => array("\$gt" => 0)));
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.shipTypeID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
             array("\$group" => array("_id" => "\$attackers.shipTypeID")),
@@ -342,7 +341,7 @@ class StatsAPIController extends Controller {
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "solarSystemID" => array("\$gt" => 0)));
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "solarSystemID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
             array("\$group" => array("_id" => "\$solarSystemID")),
@@ -365,7 +364,7 @@ class StatsAPIController extends Controller {
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "regionID" => array("\$gt" => 0)));
+        $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "regionID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
             array("\$group" => array("_id" => "\$regionID")),

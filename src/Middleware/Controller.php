@@ -211,11 +211,12 @@ abstract class Controller
      * @param array $args
      * @param int $status
      * @param String $contentType
+     * @param int $cacheTime
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function json($args = array(), int $status = 200, String $contentType = "application/json; charset=UTF-8")
+    protected function json($args = array(), int $cacheTime = 30, int $status = 200, String $contentType = "application/json; charset=UTF-8")
     {
-        return $this->render->render("", $args, $status, $contentType);
+        return $this->render->render("", $args, $status, $contentType, $cacheTime);
     }
 
     /**
@@ -224,11 +225,25 @@ abstract class Controller
      * @param array $args
      * @param int $status
      * @param String $contentType
+     * @param int $cacheTime
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function xml($args = array(), int $status = 200, String $contentType = "application/xml; charset=UTF-8")
+    protected function xml($args = array(), int $cacheTime = 30, int $status = 200, String $contentType = "application/xml; charset=UTF-8")
     {
-        return $this->render->render("", $args, $status, $contentType);
+        return $this->render->render("", $args, $status, $contentType, $cacheTime);
+    }
+
+    /**
+     * Render an image
+     *
+     * @param $imageData
+     * @param int $cacheTime
+     * @param int $status
+     * @param String $contentType
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function image($imageData, int $cacheTime = 30, int $status = 200, String $contentType) {
+        return $this->render->render("", $imageData, $status, $contentType, $cacheTime);
     }
 
     /**

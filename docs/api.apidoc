@@ -23,7 +23,7 @@
  */
 
 /**
- * @api {get} /character/top/corporations/:characterID/:limit/ Show the top corporations in the character
+ * @api {get} /character/top/corporations/:characterID/:limit/ Show the top corporations for the character
  * @apiName top10corporations
  * @apiGroup character
  * @apiPermission public
@@ -33,7 +33,7 @@
  */
 
 /**
- * @api {get} /character/top/alliances/:characterID/:limit/ Show the top characters in the character
+ * @api {get} /character/top/alliances/:characterID/:limit/ Show the top alliances for the character
  * @apiName top10characters
  * @apiGroup character
  * @apiPermission public
@@ -43,7 +43,7 @@
  */
 
 /**
- * @api {get} /character/top/ships/:characterID/:limit/ Show the top ships in the character
+ * @api {get} /character/top/ships/:characterID/:limit/ Show the top ships for the character
  * @apiName top10ships
  * @apiGroup character
  * @apiPermission public
@@ -53,7 +53,7 @@
  */
 
 /**
- * @api {get} /character/top/systems/:characterID/:limit/ Show the top systems in the character
+ * @api {get} /character/top/systems/:characterID/:limit/ Show the top systems for the character
  * @apiName top10systems
  * @apiGroup character
  * @apiPermission public
@@ -63,7 +63,7 @@
  */
 
 /**
- * @api {get} /character/top/regions/:characterID/:limit/ Show the top regions in the character
+ * @api {get} /character/top/regions/:characterID/:limit/ Show the top regions for the character
  * @apiName top10regions
  * @apiGroup character
  * @apiPermission public

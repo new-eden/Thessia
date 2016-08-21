@@ -26,6 +26,7 @@
 namespace Thessia\Tasks\Resque;
 
 
+use DateTime;
 use League\Container\Container;
 use MongoDB\Client;
 use MongoDB\Collection;
@@ -52,6 +53,7 @@ class KillmailParser
         $parser = $this->container->get("parser");
         /** @var Config $config */
         $config = $this->container->get("config");
+        $log = $this->container->get("log");
 
         $killID = (int) $this->args["killID"];
         $killHash = (string) $this->args["killHash"];
@@ -82,8 +84,8 @@ class KillmailParser
         $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
         $client = $factory->createClient($clientArray);
         $client->connect()
-            ->then(function(\React\Stomp\Client $client) use ($killmail) {
-                $killmail["killTime"] = $killmail["killTime_str"];
+            ->then(function(\React\Stomp\Client $client) use ($killmail, $log) {
+                $killmail["killTime"] = date(DateTime::ISO8601, $killmail["killTime"]->__toString() / 1000);
                 $client->send("/topic/kills", json_encode($killmail, JSON_NUMERIC_CHECK));
                 $client->disconnect();
             });
