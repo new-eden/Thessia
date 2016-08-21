@@ -53,43 +53,49 @@ class UpdateAllianceList
 
         $log->info("CRON: Inserting/Updating alliances...");
         $data = $eve->eveAllianceList();
-        foreach ($data["result"]["alliances"] as $alliance) {
-            $allianceID = (int) $alliance["allianceID"];
-            $moreData = $crestHelper->getAlliance($allianceID);
-            $allianceName = $moreData["name"];
-            $ticker = $moreData["shortName"];
-            $memberCount = (int) $alliance["memberCount"];
-            $executorCorpID = (int) $alliance["executorCorpID"];
-            $executorCorpName = $moreData["executorCorporation"]["name"];
-            $startDate = $alliance["startDate"];
-            $description = $moreData["description"];
+        if(isset($data["result"]["alliances"]) && !empty($data["result"]["alliances"])) {
+            foreach ($data["result"]["alliances"] as $alliance) {
+                $allianceID = (int)$alliance["allianceID"];
+                $moreData = $crestHelper->getAlliance($allianceID);
+                $allianceName = $moreData["name"];
+                $ticker = $moreData["shortName"];
+                $memberCount = (int)$alliance["memberCount"];
+                $executorCorpID = (int)$alliance["executorCorpID"];
+                $executorCorpName = $moreData["executorCorporation"]["name"];
+                $startDate = $alliance["startDate"];
+                $description = $moreData["description"];
 
-            $array = array(
-                "allianceID" => (int) $allianceID,
-                "allianceName" => $allianceName,
-                "ticker" => $ticker,
-                "memberCount" => (int) $memberCount,
-                "executorCorporationID" => (int) $executorCorpID,
-                "executorCorporationName" => $executorCorpName,
-                "startDate" => $startDate,
-                "description" => $description,
-                "lastUpdated" => date("Y-m-d H:i:s")
-            );
+                $array = array(
+                    "allianceID" => (int)$allianceID,
+                    "allianceName" => $allianceName,
+                    "ticker" => $ticker,
+                    "memberCount" => (int)$memberCount,
+                    "executorCorporationID" => (int)$executorCorpID,
+                    "executorCorporationName" => $executorCorpName,
+                    "startDate" => $startDate,
+                    "description" => $description,
+                    "lastUpdated" => date("Y-m-d H:i:s")
+                );
 
-            $corpIDs = array();
-            foreach ($moreData["corporations"] as $corp) {
-                $corpID = $corp["id"];
-                $corpIDs[] = $corpID;
-                \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $corpID));
-            }
+                $corpIDs = array();
+                foreach ($moreData["corporations"] as $corp) {
+                    $corpID = $corp["id"];
+                    $corpIDs[] = $corpID;
+                    \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation',
+                        array("corporationID" => $corpID));
+                }
 
-            $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)), array("projection" => array("_id" => 0)))->toArray();
-            try {
-                $collection->insertOne($array);
-            } catch (\Exception $e) {
-                $collection->replaceOne(array("allianceID" => $allianceID), $array);
+                $array["corporations"] = $corporationCollection->find(array("corporationID" => array("\$in" => $corpIDs)),
+                    array("projection" => array("_id" => 0)))->toArray();
+                try {
+                    $collection->insertOne($array);
+                } catch (\Exception $e) {
+                    $collection->replaceOne(array("allianceID" => $allianceID), $array);
+                }
             }
         }
+
+        exit;
     }
 
     /**

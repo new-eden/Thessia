@@ -114,6 +114,8 @@ class PopulateWars {
             // Increment the current page
             $currPage++;
         }
+
+        exit;
     }
 
     /**

@@ -45,13 +45,15 @@ class UpdateCharacters
         $collection = $mongo->selectCollection("thessia", "characters");
 
         $log->addInfo("CRON: Updating Characters from the EVE API");
-        $date = strtotime(date("Y-m-d H:i:s", strtotime("-1 week"))) * 1000;
-        $charactersToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 850))->toArray();
+        $date = strtotime(date("Y-m-d H:i:s", strtotime("-9 days"))) * 1000;
+        $charactersToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 1000))->toArray();
 
         foreach($charactersToUpdate as $char) {
             if($char["characterID"] > 0)
                 \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCharacter', array("characterID" => $char["characterID"]));
         }
+
+        exit;
     }
 
     /**

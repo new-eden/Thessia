@@ -77,6 +77,8 @@ class UpdatePrices
                 $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
             }
         }
+
+        exit;
     }
 
     /**

@@ -83,6 +83,8 @@ class ApiKeyDataFetcher {
             // Update the cached until to last for an hour from now
             $collection->updateOne(array("keyID" => $apiKey, "characters.characterID" => $characterID), array("\$set" => array("characters.\$.cachedUntil" => new UTCDatetime($cachedUntil))));
         }
+
+        exit;
     }
 
     /**

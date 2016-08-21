@@ -45,13 +45,15 @@ class UpdateCorporations
         $collection = $mongo->selectCollection("thessia", "corporations");
 
         $log->addInfo("CRON: Updating Corporations from the EVE API");
-        $date = strtotime(date("Y-m-d H:i:s", strtotime("-3 days"))) * 1000;
-        $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 850))->toArray();
+        $date = strtotime(date("Y-m-d H:i:s", strtotime("-5 days"))) * 1000;
+        $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 1000))->toArray();
 
         foreach($corporationsToUpdate as $corp) {
             if($corp["corporationID"] > 0)
                 \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $corp["corporationID"]));
         }
+
+        exit;
     }
 
     /**

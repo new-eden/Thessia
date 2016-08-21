@@ -64,7 +64,7 @@ class ApiKeyChecker {
 
             $keyInfo = $account->accountAPIKeyInfo($keyID, $vCode);
 
-            if(isset($keyInfo["result"])) {
+            if(isset($keyInfo["result"]) && !empty($keyInfo["result"])) {
                 foreach ($keyInfo["result"] as $key) {
                     $keyType = $key["type"];
                     $accessMask = $key["accessMask"];
@@ -99,6 +99,7 @@ class ApiKeyChecker {
                 }
             }
         }
+        exit;
     }
 
     /**
