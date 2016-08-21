@@ -41,7 +41,7 @@ var generateKillList = function(url) {
             "<br>" + millionBillion(kill.totalValue) +
             "</th>" +
             "<td class='hidden-md-down'>" +
-            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.shipTypeName + "' class='img-circle' src='https://imageserver.eveonline.com/Type/" + kill.victim.shipTypeID + "_64.png'/>" +
+            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.shipTypeName + "' class='img-circle' height='44px' src='https://imageserver.eveonline.com/Type/" + kill.victim.shipTypeID + "_64.png'/>" +
             "</td>" +
             "<td>" +
             "<a href='/solarsystem/" + kill.solarSystemID + "/'>" + kill.solarSystemName + "</a>" +
@@ -49,7 +49,7 @@ var generateKillList = function(url) {
             "<a href='/region/" + kill.regionID + "'>" + truncate(kill.regionName, 15) + "</a>" +
             "</td>" +
             "<td class='hidden-md-down'>" +
-            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.characterName + "' class='img-circle' src='https://imageserver.eveonline.com/Character/" + kill.victim.characterID + "_64.jpg'/>" +
+            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.characterName + "' class='img-circle' height='44px' src='https://imageserver.eveonline.com/Character/" + kill.victim.characterID + "_64.jpg'/>" +
             "</td>" +
             "<td>" +
             "<a href='/character/" + kill.victim.characterID + "/'>" + kill.victim.characterName + " (<a href='/ship/" + kill.victim.shipTypeID + "/'>" + kill.victim.shipTypeName + "</a>)</a>" +
@@ -70,7 +70,7 @@ var generateKillList = function(url) {
             if (attacker.finalBlow == 1) {
                 trHTML +=
                     "<td class='hidden-md-down'>" +
-                    "<img data-toggle='tooltip' data-placement='right' title='" + attacker.characterName + "' class='img-circle' src='https://imageserver.eveonline.com/Corporation/" + attacker.corporationID + "_64.png'/>" +
+                    "<img data-toggle='tooltip' data-placement='right' title='" + attacker.characterName + "' class='img-circle' height='44px' src='https://imageserver.eveonline.com/Corporation/" + attacker.corporationID + "_64.png'/>" +
                     "</td>" +
                     "<td>" +
                     "<a href='/character/" + attacker.characterID + "/'>" + attacker.characterName + " (" + attackerCount + ")</a><br><a href='/corporation/" + attacker.corporationID + "/'>" + truncate(attacker.corporationName, 20) + "</a>";
