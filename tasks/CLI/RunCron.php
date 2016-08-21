@@ -109,12 +109,11 @@ class RunCron extends Command
                     if ($cache->exists($md5 . "_pid")) {
                         $pid = $cache->get($md5 . "_pid");
                         $status = pcntl_waitpid($pid, $status, WNOHANG);
-
-                        if ($status == -1) {
+                        if ($status == -1 && !$cache->exists($md5 . "_pid")) {
                             $cache->delete($md5 . "_pid");
-                        } else {
-                            continue;
                         }
+
+                        continue;
                     }
 
                     // Figure out when it last ran
@@ -150,7 +149,7 @@ class RunCron extends Command
                                 $pid = getmypid();
 
                                 // Insert the childs pid to the cache
-                                $cache->set($md5 . "_pid", $pid);
+                                $cache->set($md5 . "_pid", $pid, $interval);
 
                                 // Execute the execute function in the child
                                 $class->execute($container);
