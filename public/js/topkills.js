@@ -25,13 +25,25 @@
 var generateTopKillsHeader = function(kill) {
     var trHTML = "";
 
+    // @todo add a popover with information on the victim ?
     // The HTML to populate pr. top kill
     trHTML += '' +
-        '<div class="col-sm-2" style="text-align: center; height: 140px;">' +
-            '<img data-toggle="tooltip" data-placement="top" title="'+kill.victim.shipTypeName+'" class="img-circle" src="https://imageserver.eveonline.com/Render/'+kill.victim.shipTypeID+'_64.png" height="64" width="64"/>' +
+        '<div class="col-sm-2" style="text-align: center; height: 140px;" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-html="true" data-content="' +
+        '<div class=text-xs-center><img class=img-circle src=https://imageserver.eveonline.com/Character/'+kill.victim.characterID+'_128.jpg/><div><br>' +
+        'Character: ' + kill.victim.characterName + '<br>' +
+        'Corporation: ' + kill.victim.corporationName + '<br>';
+
+        if(kill.victim.allianceID > 0) {
+            trHTML += 'Alliance: ' + kill.victim.allianceName + '<br>';
+        }
+        trHTML += 'System: ' + kill.solarSystemName + '<br>' +
+        'Region: ' + kill.regionName + '<br>' +
+        'Fitting Value: ' + millionBillion(kill.fittingValue) + '<br>' +
+        'Ship value: ' + millionBillion(kill.shipValue) + '<br>">' +
+            '<a href="/kill/'+kill.killID+'/"><img class="img-circle" src="https://imageserver.eveonline.com/Render/'+kill.victim.shipTypeID+'_128.png" height="90"/></a>' +
             '<br/>' +
             '<span class="hidden-xs">' +
-                '<a href="#">'+kill.victim.characterName+'</a>' +
+                '<a href="/character/'+kill.victim.characterID+'/">'+truncate(kill.victim.characterName, 20)+'</a>' +
                 '<br/>' +
             '</span>' +
             '<h6>' + millionBillion(kill.totalValue) + '</h6>' +

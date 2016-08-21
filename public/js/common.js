@@ -62,17 +62,24 @@ var htmlGenerator = function (url, generateFrom, outputTo) {
                 trHTML += window[generateFrom](kill); //This isn't exactly pretty - but it does the job for now... Until someone decides to cause an argument over it, and finally fixes it
             });
 
+            // Turn on tooltips, popovers etc.
+            turnOnFunctions();
+
             // Append the killlist element to the killlist table
             $(outputTo).append(trHTML);
-
-            // Turn on popovers
-            $('[data-toggle="popover"]').popover()
-
-            // Turn on tooltips for the killlist - having this outside apparently turns it off... js.. /o\
-            $("[data-toggle='tooltip']").tooltip()
         },
         error: function (msg) {
             alert(msg.responseText);
         }
     });
+};
+
+var turnOnFunctions = function() {
+    // Turn on popovers
+    $('[data-toggle="popover"]').popover({
+        delay: {"show": 250, "hide": 100},
+    });
+
+    // Turn on tooltips for the killlist - having this outside apparently turns it off... js.. /o\
+    $("[data-toggle='tooltip']").tooltip();
 };

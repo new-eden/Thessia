@@ -46,7 +46,7 @@ var top10ListGenerator = function (url, type, outputTo) {
         cache: false,
         success: function (data) {
             trHTML +=
-                '<table class="table">' +
+                '<table class="table table-striped">' +
                 '<thead class="thead-inverse">' +
                 '<tr><th>#</th><th>' + type + '</th><th>Kills</th></tr>' +
                 '</thead>' +
@@ -65,7 +65,7 @@ var top10ListGenerator = function (url, type, outputTo) {
                     'Losses: ' + kill.losses + '<br>' +
                     'Points: ' + kill.points + '<br>">' +
                     '<th scope="row">'+number+'</th>' +
-                    '<td>'+ kill.allianceName +'</td>' +
+                    '<td><a href="/alliance/'+kill.allianceID+'/">'+ kill.allianceName +'</a></td>' +
                     '<td>'+ kill.count +'</td>' +
                     '</tr>';
 
@@ -76,11 +76,11 @@ var top10ListGenerator = function (url, type, outputTo) {
                 '</tbody>' +
                 '</table>';
 
+            // Turn on tooltips, popovers etc.
+            turnOnFunctions();
+
             // Append the killlist element to the killlist table
             $(outputTo).append(trHTML);
-
-            // Turn on popovers
-            $('[data-toggle="popover"]').popover();
         },
         error: function (msg) {
             alert(msg.responseText);

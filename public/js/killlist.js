@@ -95,7 +95,7 @@ var generateKillList = function(url) {
                 maxKillID = data.killID;
                 var trHTML = generateKillList(data);
                 $(prependTo).prepend(trHTML);
-                $("[data-toggle='tooltip']").tooltip();
+                turnOnFunctions();
             }
         };
     };
@@ -167,11 +167,8 @@ var generateKillList = function(url) {
             // Append the killlist element to the killlist table
             $("#killlist").append(trHTML);
 
-            // Turn on popovers
-            $('[data-toggle="popover"]').popover();
-
-            // Turn on tooltips for the killlist - having this outside apparently turns it off... js.. /o\
-            $("[data-toggle='tooltip']").tooltip();
+            // Turn on tooltips/popovers
+            turnOnFunctions();
 
             // Fire up the Websocket
             webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
