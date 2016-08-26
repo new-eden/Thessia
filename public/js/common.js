@@ -33,47 +33,6 @@ var truncate = function (string, length) {
     return string.length > length ? string.substring(0, length - 3) + "..." : string;
 };
 
-var htmlGenerator = function (url, generateFrom, outputTo) {
-    // Turn on CORS support for jQuery
-    jQuery.support.cors = true;
-
-    // Define the current origin url (eg: https://neweden.xyz)
-    var currentOrigin = window.location.origin;
-
-    // Get the data from the JSON API and output it as a killlist...
-    $.ajax({
-        // Define the type of call this is
-        type: "GET",
-        // Define the url we're getting data from
-        url: currentOrigin + url,
-        // Predefine the data field.. it's just an empty array
-        data: "{}",
-        // Define the content type we're getting
-        contentType: "application/json; charset=utf-8",
-        // Set the data type to json
-        dataType: "json",
-        // Don't cache it - the backend does that for us
-        cache: false,
-        success: function (data) {
-            var trHTML = "";
-            // data-toggle='tooltip' data-html='true' data-placement='left' title='"+kill.killTime.toString()+"'
-            // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
-            $.each(data, function (i, kill) {
-                trHTML += window[generateFrom](kill); //This isn't exactly pretty - but it does the job for now... Until someone decides to cause an argument over it, and finally fixes it
-            });
-
-            // Turn on tooltips, popovers etc.
-            turnOnFunctions();
-
-            // Append the killlist element to the killlist table
-            $(outputTo).append(trHTML);
-        },
-        error: function (msg) {
-            alert(msg.responseText);
-        }
-    });
-};
-
 var turnOnFunctions = function() {
     // Turn on popovers
     $('[data-toggle="popover"]').popover({
@@ -82,4 +41,8 @@ var turnOnFunctions = function() {
 
     // Turn on tooltips for the killlist - having this outside apparently turns it off... js.. /o\
     $("[data-toggle='tooltip']").tooltip();
+};
+
+var largestID = function(oldID, newID) {
+    return Math.max(oldID, newID);
 };

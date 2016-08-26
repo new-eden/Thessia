@@ -122,6 +122,9 @@ var generateKillList = function(url) {
 
                             $("#killlist").append(trHTML);
 
+                            // Turn on tooltips, popovers etc.
+                            turnOnFunctions();
+
                             page++;
                             isPreviousPageLoaded = true;
                         },

@@ -28,7 +28,8 @@ var generateTopKillsHeader = function(kill) {
     // @todo add a popover with information on the victim ?
     // The HTML to populate pr. top kill
     trHTML += '' +
-        '<div class="col-sm-2" style="text-align: center; height: 140px;" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-html="true" data-content="' +
+        '<div class="col-sm-2" style="text-align: center; height: 140px;" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-html="true" ' +
+        'data-content="' +
         '<div class=text-xs-center><img class=img-circle src=https://imageserver.eveonline.com/Character/'+kill.victim.characterID+'_128.jpg/><div><br>' +
         'Character: ' + kill.victim.characterName + '<br>' +
         'Corporation: ' + kill.victim.corporationName + '<br>';
@@ -48,11 +49,45 @@ var generateTopKillsHeader = function(kill) {
             '</span>' +
             '<h6>' + millionBillion(kill.totalValue) + '</h6>' +
             '<br/>' +
-        '</div class="col-sm-2">';
+        '</div>';
     return trHTML;
 };
 
-//@todo fix so that it unloads data when it gets over 1k items
-htmlGenerator("/api/stats/mostvaluablekillslast7days/6/", "generateTopKillsHeader", "#mostValuableKills");
+// Turn on CORS support for jQuery
+jQuery.support.cors = true;
 
-//data-toggle='tooltip' data-placement='left' title='" + kill.victim.shipTypeName + "'
+// Define the current origin url (eg: https://neweden.xyz)
+var currentOrigin = window.location.origin;
+
+// Get the data from the JSON API and output it as a killlist...
+$.ajax({
+    // Define the type of call this is
+    type: "GET",
+    // Define the url we're getting data from
+    url: currentOrigin + "/api/stats/mostvaluablekillslast7days/6/",
+    // Predefine the data field.. it's just an empty array
+    data: "{}",
+    // Define the content type we're getting
+    contentType: "application/json; charset=utf-8",
+    // Set the data type to json
+    dataType: "json",
+    // Don't cache it - the backend does that for us
+    cache: false,
+    success: function (data) {
+        var trHTML = "";
+        // data-toggle='tooltip' data-html='true' data-placement='left' title='"+kill.killTime.toString()+"'
+        // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
+        $.each(data, function (i, kill) {
+            trHTML += generateTopKillsHeader(kill); //This isn't exactly pretty - but it does the job for now... Until someone decides to cause an argument over it, and finally fixes it
+        });
+
+        // Append the killlist element to the killlist table
+        $("#mostValuableKills").append(trHTML);
+
+        // Turn on tooltips, popovers etc.
+        turnOnFunctions();
+    },
+    error: function (msg) {
+        alert(msg.responseText);
+    }
+});

@@ -23,7 +23,6 @@
  */
 
 var top10ListGenerator = function (url, type, outputTo) {
-    var trHTML = "";
     // Turn on CORS support for jQuery
     jQuery.support.cors = true;
 
@@ -45,7 +44,7 @@ var top10ListGenerator = function (url, type, outputTo) {
         // Don't cache it - the backend does that for us
         cache: false,
         success: function (data) {
-            trHTML +=
+            var trHTML =
                 '<table class="table table-striped">' +
                 '<thead class="thead-inverse">' +
                 '<tr><th>#</th><th>' + type + '</th><th>Kills</th></tr>' +
@@ -58,7 +57,7 @@ var top10ListGenerator = function (url, type, outputTo) {
             // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
             $.each(data, function (i, kill) {
                 trHTML +=
-                    '<tr>' +
+                    '<tr id="system'+number+'">' +
                     '<th scope="row">'+number+'</th>' +
                     '<td><a href="/solarSystem/'+kill.solarSystemID+'/">'+ kill.solarSystemName +'</a></td>' +
                     '<td>'+ kill.count +'</td>' +
@@ -71,11 +70,11 @@ var top10ListGenerator = function (url, type, outputTo) {
                 '</tbody>' +
                 '</table>';
 
-            // Turn on tooltips, popovers etc.
-            turnOnFunctions();
-
             // Append the killlist element to the killlist table
             $(outputTo).append(trHTML);
+
+            // Turn on tooltips, popovers etc.
+            turnOnFunctions();
         },
         error: function (msg) {
             alert(msg.responseText);

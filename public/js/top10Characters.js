@@ -23,7 +23,6 @@
  */
 
 var top10ListGenerator = function (url, type, outputTo) {
-    var trHTML = "";
     // Turn on CORS support for jQuery
     jQuery.support.cors = true;
 
@@ -45,8 +44,8 @@ var top10ListGenerator = function (url, type, outputTo) {
         // Don't cache it - the backend does that for us
         cache: false,
         success: function (data) {
-            trHTML +=
-                '<table class="table table-striped">' +
+            var trHTML =
+                '<table class="table">' +
                 '<thead class="thead-inverse">' +
                 '<tr><th>#</th><th>' + type + '</th><th>Kills</th></tr>' +
                 '</thead>' +
@@ -58,7 +57,7 @@ var top10ListGenerator = function (url, type, outputTo) {
             // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
             $.each(data, function (i, kill) {
                 trHTML +=
-                    '<tr data-container="body" data-trigger="hover" data-toggle="popover" data-placement="left" data-html="true" data-content="' +
+                    '<tr id="char'+number+'" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="left" data-html="true" data-content="' +
                     '<div class=text-xs-center><img class=img-circle src=https://imageserver.eveonline.com/Character/'+kill.characterID+'_128.jpg/><div><br>' +
                     'Name: ' + kill.characterName + '<br>' +
                     'Corporation: ' + kill.corporationName + '<br>';
@@ -80,11 +79,11 @@ var top10ListGenerator = function (url, type, outputTo) {
                 '</tbody>' +
                 '</table>';
 
-            // Turn on tooltips, popovers etc.
-            turnOnFunctions();
-
             // Append the killlist element to the killlist table
             $(outputTo).append(trHTML);
+
+            // Turn on tooltips, popovers etc.
+            turnOnFunctions();
         },
         error: function (msg) {
             alert(msg.responseText);
