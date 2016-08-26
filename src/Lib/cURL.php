@@ -58,7 +58,7 @@ class cURL
 
         if (!$result) {
             // Merge the headers from the request with the default headers
-            $headers = array_merge(array("Connection: keep-alive", "Keep-Alive: timeout=10, max=1000"), $headers);
+            $headers = array_merge(array("Connection: keep-alive", "Keep-Alive: timeout=60, max=1000"), $headers);
 
             // Init curl
             $curl = curl_init();
@@ -66,7 +66,7 @@ class cURL
             // Setup curl
             curl_setopt_array($curl, array(
                 CURLOPT_USERAGENT => "DataGetter for Thessia (email: karbowiak@gmail.com / slack (tweetfleet): karbowiak / irc (coldfront): karbowiak)",
-                CURLOPT_TIMEOUT => 60,
+                CURLOPT_TIMEOUT => 180,
                 CURLOPT_POST => false,
                 CURLOPT_FORBID_REUSE => false,
                 CURLOPT_ENCODING => "",
