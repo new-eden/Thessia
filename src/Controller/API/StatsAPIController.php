@@ -60,35 +60,36 @@ class StatsAPIController extends Controller {
         $md5 = md5("top10CharactersStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
-        return array();
+        return $this->json(array());
     }
 
     public function top10Corporations(bool $allTime = false) {
         $md5 = md5("top10CorporationsStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
-        return array();
+        return $this->json(array());
     }
 
     public function top10Alliances(bool $allTime = false) {
         $md5 = md5("top10AlliancesStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
-        return array();
+        return $this->json(array());
     }
 
     public function top10SolarSystems(bool $allTime = false) {
         $md5 = md5("top10SolarSystemsStatsAPI" . $allTime);
-        if($this->cache->exists($md5))
+        if($this->cache->exists($md5)) {
             return $this->json($this->cache->get($md5));
-        return array();
+        }
+        return $this->json(array());
     }
 
     public function top10Regions(bool $allTime = false) {
         $md5 = md5("top10CRegionsStatsAPI" . $allTime);
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
-        return array();
+        return $this->json(array());
     }
 
     public function mostValuableKillsOverTheLast7Days(int $limit = 10) {
@@ -131,7 +132,6 @@ class StatsAPIController extends Controller {
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-
         $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.characterID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
@@ -156,7 +156,6 @@ class StatsAPIController extends Controller {
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-
         $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.corporationID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(
             $match,
@@ -179,7 +178,6 @@ class StatsAPIController extends Controller {
         $md5 = md5("activeAlliances");
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
-
 
         $match = array("\$match" => array("killTime" => array("\$gte" => $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime("-7 days")))), "attackers.allianceID" => array("\$ne" => 0)));
         $data = $this->collection->aggregate(array(

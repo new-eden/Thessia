@@ -25,6 +25,7 @@
 
 namespace Thessia\Controller\API;
 
+use DateTime;
 use Slim\App;
 use Thessia\Middleware\Controller;
 
@@ -46,11 +47,15 @@ class KillAPIController extends Controller
     }
 
     public function getKillByID(int $killID) {
-        return $this->json($this->killmails->findOne(array("killID" => $killID)));
+        $data = $this->killmails->findOne(array("killID" => $killID), array("projection" => array("_id" => 0)));
+        $data["killTime"] = date(DateTime::ISO8601, $data["killTime"]->__toString() / 1000);
+        return $this->json($data);
     }
 
     public function getKillByHash(string $crestHash) {
-        return $this->json($this->killmails->findOne(array("crestHash" => $crestHash)));
+        $data = $this->killmails->findOne(array("crestHash" => $crestHash), array("projection" => array("_id" => 0)));
+        $data["killTime"] = date(DateTime::ISO8601, $data["killTime"]->__toString() / 1000);
+        return $this->json($data);
     }
 
     public function getKillsByDate($timeStamp) {
