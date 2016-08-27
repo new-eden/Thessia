@@ -71,11 +71,11 @@ class AllianceAPIController extends Controller
     }
 
     /**
-     * @param int $corporationID
+     * @param int $allianceID
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function allianceInformation(int $corporationID) {
-        $information = $this->alliance->getAllianceInformation($corporationID);
+    public function allianceInformation(int $allianceID) {
+        $information = $this->alliance->getAllianceInformation($allianceID);
         return $this->json($information, 360);
     }
 
@@ -88,11 +88,11 @@ class AllianceAPIController extends Controller
     }
 
     /**
-     * @param int $corporationID
+     * @param int $allianceID
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function allianceMembers(int $corporationID) {
-        $characters = $this->alliance->getAllianceMembers($corporationID);
+    public function allianceMembers(int $allianceID) {
+        $characters = $this->alliance->getAllianceMembers($allianceID);
         return $this->json($characters, 360);
     }
 

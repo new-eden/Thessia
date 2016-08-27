@@ -79,6 +79,10 @@ class Mongo
         $this->collection = $mongodb->selectCollection($db, $this->collectionName);
     }
 
+    /**
+     * @param $dateTime
+     * @return UTCDatetime
+     */
     public function makeTimeFromDateTime($dateTime): UTCDatetime {
         $unixTime = strtotime($dateTime);
         $milliseconds = $unixTime * 1000;
@@ -86,6 +90,10 @@ class Mongo
         return new UTCDatetime($milliseconds);
     }
 
+    /**
+     * @param $unixTime
+     * @return UTCDatetime
+     */
     public function makeTimeFromUnixTime($unixTime): UTCDatetime {
         $milliseconds = $unixTime * 1000;
         return new UTCDatetime($milliseconds);
