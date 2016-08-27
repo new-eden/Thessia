@@ -116,7 +116,7 @@ class Cache
      *
      * @return bool
      */
-    protected function expire(string $key, int $timeout): bool
+    protected function expire(string $key, int $timeout)
     {
         return $this->redis->expire($key, $timeout);
     }
