@@ -58,17 +58,19 @@ class KillmailParser
         $killID = (int) $this->args["killID"];
         $killHash = (string) $this->args["killHash"];
         $warID = isset($this->args["warID"]) ? (int) $this->args["warID"] : 0;
+        $forceParse = isset($this->args["forceParse"]) ? true : false;
 
         // It happens that there are a \n in the hash, remove it so the hash functions
         if(stristr($killHash, "\n"))
             $killHash = str_replace("\n", "", $killHash);
 
-        // @todo add a way to force update a mail
-        // Make sure the mail doesn't already exist before we bother CREST
-        $exists = $collection->findOne(array("killID" => $killID));
-        if(!empty($exists)) {
-            echo "Killmail already exists...\n";
-            exit;
+        if($forceParse == false) {
+            // Make sure the mail doesn't already exist before we bother CREST
+            $exists = $collection->findOne(array("killID" => $killID));
+            if (!empty($exists)) {
+                echo "Killmail already exists...\n";
+                exit;
+            }
         }
 
         // Throw the killID, hash and warID (if there is one) at the parser, and let it generate a nice pretty killmail for us.
@@ -78,20 +80,13 @@ class KillmailParser
         if (is_array($killmail))
             $collection->replaceOne(array("killID" => $killID), $killmail, array("upsert" => true));
 
-        // Kick mail off to stomp!
-        $loop = Factory::create();
-        $factory = new StompFactory($loop);
-        $clientArray = array("vhost" => "/", "login" => $config->get("username", "stomp"), "passcode" => $config->get("password", "stomp"));
-        $client = $factory->createClient($clientArray);
-        $client->connect()
-            ->then(function(\React\Stomp\Client $client) use ($killmail, $log) {
-                $killmail["killTime"] = date(DateTime::ISO8601, $killmail["killTime"]->__toString() / 1000);
-                $client->send("/topic/kills", json_encode($killmail, JSON_NUMERIC_CHECK));
-                $client->disconnect();
-            });
+        // Send to ZMQ
+        $context = new \ZMQContext();
+        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, "killmail");
+        $socket->connect("tcp://localhost:5555");
+        $killmail["killTime"] = date(DateTime::ISO8601, $killmail["killTime"]->__toString() / 1000);
+        $socket->send(json_encode($killmail, JSON_NUMERIC_CHECK));
 
-        // Run the Stomp loop, it'll only run once tho..
-        $loop->run();
         exit();
     }
 

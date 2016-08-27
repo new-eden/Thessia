@@ -77,7 +77,7 @@ class ApiKeyDataFetcher {
             $cachedUntil = date("Y-m-d H:i:s", strtotime("+1 hour")) * 1000;
 
             // Killmails
-            if($accessMask & 256 > 0)
+            if(($accessMask & 256) > 0)
                 $cachedUntil = self::killmails($container, $apiKey, $vCode, $characterID, $accountType);
 
             // Update the cached until to last for an hour from now
