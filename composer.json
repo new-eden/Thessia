@@ -41,6 +41,7 @@
     "zkillboard/redisq": "1.*",
     "3rdpartyeve/phealng": "2.3.*",
     "bandwidth-throttle/token-bucket": "1.0.*",
-    "predis/predis": "1.1.*"
+    "predis/predis": "1.1.*",
+    "psy/psysh": "0.7.*"
   }
 }
