@@ -25,154 +25,109 @@
 
 namespace Thessia\Tasks\CLI;
 
-use Monolog\Logger;
+namespace Thessia\Tasks\CLI;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Thessia\Lib\Cache;
 
 class RunCron extends Command
 {
-    private $child;
+    private $cronjobs = array();
+    private $runningJobs;
 
     protected function configure()
     {
         $this
             ->setName("run:cron")
-            ->addOption("script", "s", InputOption::VALUE_OPTIONAL, "If specified, it will run a single cron script", null)
             ->setDescription("Run cronjobs");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("Loading the cronjob task...");
-        // Enable the garbage collector
+        // Enable garbage collection
         gc_enable();
 
-        // Import the container
+        // Load the container
         $container = getContainer();
-        /** @var Logger $log */
         $log = $container->get("log");
-        /** @var Cache $cache */
         $cache = $container->get("cache");
 
-        // Load the cronjobs
-        $cronjobs = glob(__DIR__ . "/../Cron/*.php");
-        foreach($cronjobs as $file) {
-            $baseName = str_replace(".php", "", basename($file));
-            $output->writeln("Loading: {$baseName}...");
+        // Populate runningJobs from Redis
+        $this->runningJobs = unserialize($cache->get("runningCronJobs"));
+
+        // Load all the cronjobs and populate the cronjobs array
+        $files = glob(__DIR__ . "/../Cron/*.php");
+        foreach ($files as $file) {
             require_once($file);
+            $baseName = basename($file);
+            $className = str_replace(".php", "", $baseName);
+            $nameSpace = "\\Thessia\\Tasks\\Cron\\{$className}";
+            $load = new $nameSpace();
+            $runTime = $load->getRuntimes();
+            $output->writeln("Adding {$nameSpace} to list of cronjobs, with an interval of {$runTime} seconds");
+
+            $this->cronjobs[$nameSpace] = $runTime;
         }
 
-        $output->writeln("Done loading cronjobs...");
+        // Spit out some diagnostic info for the terminal..
+        $cronjobCount = count($this->cronjobs);
+        $output->writeln("Loaded {$cronjobCount} cronjobs...");
 
-        $manualScript = $input->getOption("script");
-        if($manualScript) {
-            foreach($cronjobs as $file) {
-                $baseName = basename($file);
-                $className = str_replace(".php", "", $baseName);
-                if($className == $manualScript) {
-                    $output->writeln("Will run {$manualScript}...");
-                    $import = "\\Thessia\\Tasks\\Cron\\{$className}";
-                    $class = new $import();
-                    $class->execute($container);
-                }
+        // Startup the main loop
+        $run = true;
+        $loopCount = 0;
+        do {
+            if ($loopCount >= 500) {
+                $output->writeln("Doing garbage collection...");
+                gc_collect_cycles();
+                $loopCount = 0;
             }
-        } else {
-            // Setup the default variables for running and garbage collecting
-            $run = true;
-            $cnt = 0;
 
-            do {
-                // If we've run through 5000 loops, we'll collect some garbage..
-                if ($cnt >= 5000) {
-                    $output->writeln("Collecting garbage..");
-                    gc_collect_cycles();
-                    $cnt = 0;
-                }
+            // Increment the loopCount
+            $loopCount++;
 
-                // Increment the loop
-                $cnt++;
-
-                // Iterate over all the cronjobs, and launch them as needed
-                foreach ($cronjobs as $file) {
-                    $status = 0;
-                    $baseName = basename($file);
-                    $className = str_replace(".php", "", $baseName);
+            foreach ($this->cronjobs as $class => $time) {
+                // Check and make sure it's not in the runningJobs array
+                if (isset($this->runningJobs[$class])) {
+                    $pid = $this->runningJobs[$class]["pid"];
+                    $lastRan = $this->runningJobs[$class]["lastRan"];
+                    $timeSinceItRanLast = time() - $lastRan;
+                    $pidStatus = pcntl_waitpid($pid, $pidStatus, WNOHANG);
+                    if ($timeSinceItRanLast >= $time && $pidStatus == -1) {
+                        unset($this->runningJobs[$class]);
+                    }
+                } else {
                     $date = date("Y-m-d H:i:s");
-                    $import = "\\Thessia\\Tasks\\Cron\\{$className}";
-                    $md5 = md5($baseName);
-                    $currentTime = time();
+                    $log->addInfo("Running cronjob: {$class} (Interval: {$time})");
+                    $output->writeln("{$date}: Running cronjob: {$class} (Interval: {$time})");
 
-                    // Check if the current cron is running
-                    if ($cache->exists($md5 . "_pid")) {
-                        $pid = $cache->get($md5 . "_pid");
-                        $status = pcntl_waitpid($pid, $status, WNOHANG);
-                        if ($status == -1 && !$cache->exists($md5 . "_pid")) {
-                            $cache->delete($md5 . "_pid");
+                    try {
+                        // Forking into the child and executing cronjob
+                        if (($pid = pcntl_fork()) == 0) {
+                            $container = getContainer();
+                            $class = new $class();
+                            $class->execute($container);
                         }
-
-                        continue;
+                        $this->runningJobs[$class] = array("pid" => $pid, "lastRan" => time());
+                    } catch (\Exception $e) {
+                        $log->addError("Cronjob error: {$e->getMessage()}...");
+                        $output->writeln("Error: {$e->getMessage()}...");
+                        $output->writeln("Exiting...");
+                        die();
                     }
 
-                    // Figure out when it last ran
-                    $lastRan = $cache->exists($md5) ? $cache->get($md5) : 0;
-
-                    // Load the cronjob
-                    $class = new $import();
-                    $interval = $class->getRuntimes();
-
-                    // If the interval is 0, we'll just skip it
-                    if ($interval == 0) {
-                        continue;
-                    }
-
-                    // If it has been the required amount of time since it last ran, we'll run it again!
-                    if ($currentTime > ($lastRan + $interval)) {
-                        $log->addInfo("Running cronjob: {$className} (Interval: {$interval})");
-                        $output->writeln("{$date}: Running cronjob: {$className} (Interval: {$interval})");
-
-                        try {
-                            if (($pid = pcntl_fork()) == 0) {
-                                // Load the container in the child
-                                $container = getContainer();
-
-                                // Load the cache in the child (It has to be new, and non-persistent for shit to not die)
-                                $config = $container->get("config");
-                                $newCache = new Cache($config);
-                                $newCache->persistence = false;
-                                $container->share("cache", $newCache);
-                                $cache = $container->get("cache");
-
-                                // Get the PID of the child
-                                $pid = getmypid();
-
-                                // Insert the childs pid to the cache
-                                $cache->set($md5 . "_pid", $pid, $interval);
-
-                                // Execute the execute function in the child
-                                $class->execute($container);
-
-                                // Set when the child was run
-                                $cache->set($md5, time());
-
-                                // Exit the child
-                                exit();
-                            }
-                        } catch (\Exception $e) {
-                            $myPid = getmypid();
-                            $output->writeln("Error with pid: {$myPid}, exiting because of: {$e->getMessage()}");
-                            $run = false;
-                            posix_kill($myPid, 9);
-                            exit();
-                        }
-                    }
+                    // Insert the runningCronJobs array into Redis, in case we die..
+                    $serialized = serialize($this->runningJobs);
+                    $cache->set("runningCronJobs", $serialized, 3600);
                 }
 
-                // Sleep for a second between each loop
-                sleep(1);
-            } while ($run == true);
-        }
+                // Sleep for half a second...
+                usleep(500000);
+            }
+
+            // Sleep for a second between runs, so we don't go and eat 99.99% cpu
+            sleep(1);
+        } while ($run == true);
     }
 }
