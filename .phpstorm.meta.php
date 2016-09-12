@@ -43,6 +43,7 @@ namespace PHPSTORM_META {
           'crestHelper' instanceof Thessia\Helper\CrestHelper,
           'top' instanceof Thessia\Model\Database\EVE\Top,
           'killlist' instanceof Thessia\Model\Database\EVE\KillList,
+          'character' instanceof Thessia\Model\EVE\Character,
           'environment' instanceof Slim\Http\Environment,
           'request' instanceof Slim\Http\Request,
           'response' instanceof Slim\Http\Response,
