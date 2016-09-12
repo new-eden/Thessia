@@ -45,32 +45,17 @@ class UpdateCorporation
         $mongodb = $this->container->get("mongo");
         /** @var Collection $collection */
         $collection = $mongodb->selectCollection("thessia", "corporations");
-        /** @var Corporation $corporation */
-        $corporation = $this->container->get("ccpCorporation");
-        /** @var Alliances $alliance */
-        $alliance = $this->container->get("alliances");
+        $corporation = $this->container->get("corporation");
 
         $corporationID = (int) $this->args["corporationID"];
 
         if($corporationID == 0)
             exit;
 
-        $sheet = $corporation->corporationCorporationSheet(null, null, $corporationID);
-        if(isset($sheet["result"]["corporationName"])) {
-            $data = array(
-                "corporationID" => (int) $sheet["result"]["corporationID"],
-                "corporationName" => $sheet["result"]["corporationName"],
-                "allianceID" => (int) isset($sheet["result"]["allianceID"]) ? $sheet["result"]["allianceID"] : 0,
-                "allianceName" => isset($sheet["result"]["allianceID"]) ? $alliance->getAllByID($sheet["result"]["allianceID"])["allianceName"] : "",
-                "ceoID" => (int) $sheet["result"]["ceoID"],
-                "ticker" => $sheet["result"]["ticker"],
-                "memberCount" => (int) $sheet["result"]["memberCount"],
-                "lastUpdated" => new UTCDatetime(time() * 1000),
-                "information" => $sheet
-            );
-
+        $data = $corporation->getCorporationInfo($corporationID);
+        if(!empty($data))
             $collection->replaceOne(array("corporationID" => $corporationID), $data, array("upsert" => true));
-        }
+
         exit();
     }
 

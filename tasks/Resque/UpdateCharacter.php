@@ -44,33 +44,17 @@ class UpdateCharacter
         $mongodb = $this->container->get("mongo");
         /** @var Collection $collection */
         $collection = $mongodb->selectCollection("thessia", "characters");
-        /** @var EVE $character */
-        $eve = $this->container->get("ccpEVE");
+        $character = $this->container->get("character");
 
         $characterID = (int) $this->args["characterID"];
 
         if($characterID == 0)
             exit;
 
-        $sheet = $eve->eveCharacterInfo($characterID);
-        if(isset($sheet["result"]["characterName"])) {
-            $data = array(
-                "characterID" => (int) $sheet["result"]["characterID"],
-                "characterName" => $sheet["result"]["characterName"],
-                "corporationID" => (int) $sheet["result"]["corporationID"],
-                "corporationName" => $sheet["result"]["corporation"],
-                "corporationJoinDate" => new UTCDatetime(strtotime($sheet["result"]["corporationDate"]) * 1000),
-                "allianceID" => (int) isset($sheet["result"]["allianceID"]) ? $sheet["result"]["allianceID"] : 0,
-                "allianceName" => isset($sheet["result"]["alliance"]) ? $sheet["result"]["alliance"] : "",
-                "allianceJoinDate" => isset($sheet["result"]["allianceDate"]) ? new UTCDatetime(strtotime($sheet["result"]["allianceDate"]) * 1000) : null,
-                "securityStatus" => (float) $sheet["result"]["securityStatus"],
-                "race" => $sheet["result"]["race"],
-                "lastUpdated" => new UTCDatetime(time() * 1000),
-                "history" => $sheet["result"]["employmentHistory"]
-            );
-
+        $data = $character->getCharacterInfo($characterID);
+        if(!empty($data))
             $collection->replaceOne(array("characterID" => $characterID), $data, array("upsert" => true));
-        }
+
         exit();
     }
 

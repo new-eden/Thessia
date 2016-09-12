@@ -127,7 +127,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         "ccpServer",
         "crestHelper",
         "top",
-        "killlist"
+        "killlist",
+        "character"
     ];
 
     /**
@@ -221,5 +222,9 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("ccpEVE", EVE::class)->withArgument("pheal");
         $container->share("ccpMap", Map::class)->withArgument("pheal");
         $container->share("ccpServer", Server::class)->withArgument("pheal");
+
+        // More models
+        $container->share("character", \Thessia\Model\EVE\Character::class)->withArgument("mongo")->withArgument("ccpEVE");
+        $container->share("corporation", \Thessia\Model\EVE\Corporation::class)->withArgument("mongo")->withArgument("ccpCorporation")->withArgument("alliances");
     }
 }
