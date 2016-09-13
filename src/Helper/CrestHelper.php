@@ -63,8 +63,8 @@ class CrestHelper {
         $fs = new FileStorage(__DIR__ . "/../../cache/crest.bucket");
         $rate = new Rate(150, Rate::SECOND);
         $bucket = new TokenBucket(150, $rate, $fs);
-        $this->consumer = new BlockingConsumer($bucket);
         $bucket->bootstrap(150);
+        $this->consumer = new BlockingConsumer($bucket);
     }
 
     /**

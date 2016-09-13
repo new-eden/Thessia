@@ -6,17 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
+    <meta name="description" content="{{ description }}">
     <meta name="author" content="">
+    <meta name="title" content="New Eden{% if title != "" %} | {{ title }}{% endif %}">
+    <meta name="keywords" content="eve-online, eve, ccp, ccp games, kills, kill, massively, multiplayer, online, role, playing, game, mmorpg, rank, isk, mmorpg, killboard, neweden">
+    <meta name="robots" content="index,follow">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta property="fb:admins" content="karbowiak">
+    <meta name="og:locale" content="en_US">
+    <meta name="og:type" content="website">
+    <meta name="og:site_name" content="New Eden">
+    <meta name="og:title" content="New Eden{% if title != "" %} | {{ title }}{% endif %}">
+    <meta name="og:description" content="{{ description }}">
+
+    <!-- Open Search Description -->
+    <link rel="search" type="application/opensearchdescription+xml" href="/search.xml" title="search">
+
+    <!-- Google Analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-84082305-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
 
     <!-- Title -->
-    <title>New Eden</title>
+    <title>New Eden{% if title != "" %} | {{ title }}{% endif %}</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
     <link href="/css/global.css" rel="stylesheet">
+
+    <!-- Page specific CSS-->
+    {% block css %}
+    {% endblock %}
 
     <!-- Javascript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -26,71 +55,18 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
 
-    <!-- All the site specific js - yes it will change and become less nasty - but all in due time ! -->
-    <script src="/js/common.js"></script>
-    <script src="/js/topkills.js"></script>
-    <script src="/js/top10Characters.js"></script>
-    <script src="/js/top10Corporations.js"></script>
-    <script src="/js/top10Alliances.js"></script>
-    <script src="/js/top10SolarSystems.js"></script>
-    <script src="/js/top10Regions.js"></script>
-    <script src="/js/killlist.js"></script>
+    <!-- Page specific JS -->
+    {% block js %}
+    {% endblock %}
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
-        <a class="navbar-brand" href="#">Project name</a>
-        <ul class="nav navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
-            </li>
-        </ul>
-    </nav>
+    {% include "global/navbar.twig" %}
 
-    <div class="container">
-        <div class="row">
-            <!-- left column -->
-            <div class="col-xs-12 col-sm-8 col-md-10">
-                <!-- Most Valuable kills -->
-                <div id="mostValuableKills" class="hidden-md-down row flex-items-xs-center">
-                </div>
-
-                <!-- The Killlist -->
-                <div class="table-responsive">
-                    <table id="killlist" class="table table-striped table-hover table-sm">
-                        <thead class="thead-inverse">
-                        <tr>
-                            <th class='hidden-sm-down'>Time</th>
-                            <th class='hidden-md-down'>Ship</th>
-                            <th>Place</th>
-                            <th class='hidden-md-down'></th>
-                            <th>Victim</th>
-                            <th class='hidden-md-down'></th>
-                            <th>Final Blow</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <!-- right column -->
-            <div class="col-xs-6 col-md-2 hidden-md-down">
-                <!-- Top 10 lists -->
-                <div id="topCharacters"></div>
-                <div id="topCorporations"></div>
-                <div id="topAlliances"></div>
-                <div id="topSolarSystems"></div>
-                <div id="topRegions"></div>
-            </div>
-        </div>
-    </div>
+    {% block container %}
+    {% endblock %}
 </body>
 </html>

@@ -33,21 +33,7 @@ class IndexController extends Controller
 {
     public function index()
     {
-        $container = $this->getContainer();
-        /** @var typeIDs $typeIDs */
-        $typeIDs = $container->get("typeIDs");
-        /** @var Participants $participants */
-        $participants = $container->get("participants");
-
-        //$kills = $participants->getAllKills();
-        //foreach ($kills as $kill) {
-        //    var_dump($kill);
-        //}
-
-        //$data1 = $typeIDs->getAllByTypeID(638)->toArray();
-        //$data2 = $typeIDs->getAllByName("Raven")->toArray();
-        //var_dump($data1);
-        //var_dump($data2);
-        return $this->render("base.twig", array());
+        //@todo add information from the login data, if the person is logged in that is..
+        return $this->render("pages/frontpage.twig", array());
     }
 }
