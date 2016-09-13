@@ -1,11 +1,8 @@
 {% extends "base.twig" %}
 
 {% set title = "" %}
-{% set description = "" %}
-
 
 {% block js %}
-    <script src="/js/common.js"></script>
     <script src="/js/topkills.js"></script>
     <script src="/js/top10Characters.js"></script>
     <script src="/js/top10Corporations.js"></script>
@@ -13,6 +10,10 @@
     <script src="/js/top10SolarSystems.js"></script>
     <script src="/js/top10Regions.js"></script>
     <script src="/js/killlist.js"></script>
+    <script>
+        // Generate the killlist
+        generateKillList("/api/killlist/latest/", true, 1);
+    </script>
 {% endblock %}
 
 {% block css %}

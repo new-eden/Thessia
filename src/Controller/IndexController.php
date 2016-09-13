@@ -36,4 +36,8 @@ class IndexController extends Controller
         //@todo add information from the login data, if the person is logged in that is..
         return $this->render("pages/frontpage.twig", array());
     }
+
+    private function getLoginData() {
+
+    }
 }

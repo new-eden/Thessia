@@ -1,13 +1,15 @@
+{% set description = "New Eden is a new killboard for EVE-Online, that aims for simplicity." %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- These 3 meta tags must come first-->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- More Meta Tags -->
     <meta name="description" content="{{ description }}">
-    <meta name="author" content="">
     <meta name="title" content="New Eden{% if title != "" %} | {{ title }}{% endif %}">
     <meta name="keywords" content="eve-online, eve, ccp, ccp games, kills, kill, massively, multiplayer, online, role, playing, game, mmorpg, rank, isk, mmorpg, killboard, neweden">
     <meta name="robots" content="index,follow">
@@ -28,10 +30,8 @@
                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
         ga('create', 'UA-84082305-1', 'auto');
         ga('send', 'pageview');
-
     </script>
 
     <!-- Title -->
@@ -44,8 +44,7 @@
     <link href="/css/global.css" rel="stylesheet">
 
     <!-- Page specific CSS-->
-    {% block css %}
-    {% endblock %}
+    {% block css %}{% endblock %}
 
     <!-- Javascript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -55,9 +54,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
 
+    <!-- Site common JS -->
+    <script src="/js/common.js"></script>
+
     <!-- Page specific JS -->
-    {% block js %}
-    {% endblock %}
+    {% block js %}{% endblock %}
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
@@ -66,7 +67,6 @@
 <body>
     {% include "global/navbar.twig" %}
 
-    {% block container %}
-    {% endblock %}
+    {% block container %}{% endblock %}
 </body>
 </html>

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-var generateKillList = function(url) {
+var generateKillList = function(url, loadWebsocket, page) {
     var maxKillID = 0;
     var highestKillID = function(newID) {
         maxKillID = Math.max(maxKillID, newID);
@@ -100,12 +100,15 @@ var generateKillList = function(url) {
         };
     };
 
-    var loadMoreOnScroll = function(url) {
-        var page = 1, isPreviousPageLoaded = true;
+    var loadMoreOnScroll = function(url, page) {
+        var page = typeof page !== 'undefined' ? page : 1;
+        var isPreviousPageLoaded = true;
+
         $(window).scroll(function() {
             if($(document).height() - 500 <= $(window).scrollTop() + $(window).height()) {
                 if(isPreviousPageLoaded) {
                     isPreviousPageLoaded = false;
+                    //@todo fix so that https://neweden.xyz/freighters/1/ works
                     var address = window.location.origin + url + (page + 1) + "/";
                     $.ajax({
                         type: "GET",
@@ -173,16 +176,16 @@ var generateKillList = function(url) {
             // Turn on tooltips/popovers
             turnOnFunctions();
 
-            // Fire up the Websocket
-            webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
+            if(loadWebsocket == true) {
+                // Fire up the Websocket
+                webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
+            }
 
             // Turn on loading more on scroll
-            loadMoreOnScroll(url);
+            loadMoreOnScroll(url, page);
         },
         error: function (msg) {
             alert(msg.responseText);
         }
     });
 };
-//@todo fix so that it unloads data when it gets over 1k items
-generateKillList("/api/killlist/latest/");
