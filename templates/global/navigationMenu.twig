@@ -1,0 +1,20 @@
+{% if menu != null %}
+<table class="kb-table kb-box">
+    <tr>
+        <td class="kb-table-header">Menu</td>
+    </tr>
+    <tr class="kb-table-row-even">
+        <td>
+            <div class="menu-wrapper">
+                <div class="menu-caption">Navigation</div>
+                {% for key,val in menu %}
+                    <div class="menu-item">
+                        <img src="" width="6" height="6" alt="menu item"/>
+                        <a href="{{ val }}">{{ key }}</a><br />
+                    </div>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
+</table>
+{% endif %}

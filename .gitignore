@@ -66,3 +66,4 @@ cache/*
 logs/*
 phinx.yml
 public/apidoc/
+bootstrap/

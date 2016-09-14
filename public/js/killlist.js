@@ -30,61 +30,76 @@ var generateKillList = function(url, loadWebsocket, page) {
     };
 
     var generateKillList = function(kill) {
-        var trHTML = "";
+        var h = "";
 
-        // Convert the killTime from MongoISODateUTC thing to an ISOString for timeAgo
-        // Stitch together the html that we want to output..
-        trHTML += "" +
-            "<tr onclick=\"window.location='/kill/" + kill.killID + "/'\">" +
-            "<th class='hidden-sm-down' scope='row' data-toggle='tooltip' data-placement='right' title='" + new Date(kill.killTime).toString() + "'>" +
-            "<span data-livestamp='" + kill.killTime.toString() + "'></span>" +
-            "<br>" + millionBillion(kill.totalValue) +
-            "</th>" +
-            "<td class='hidden-md-down'>" +
-            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.shipTypeName + "' class='img-circle' height='44px' src='https://imageserver.eveonline.com/Type/" + kill.victim.shipTypeID + "_64.png'/>" +
-            "</td>" +
-            "<td>" +
-            "<a href='/solarsystem/" + kill.solarSystemID + "/'>" + kill.solarSystemName + "</a>" +
-            "<br>" +
-            "<a href='/region/" + kill.regionID + "'>" + truncate(kill.regionName, 15) + "</a>" +
-            "</td>" +
-            "<td class='hidden-md-down'>" +
-            "<img data-toggle='tooltip' data-placement='right' title='" + kill.victim.characterName + "' class='img-circle' height='44px' src='https://imageserver.eveonline.com/Character/" + kill.victim.characterID + "_64.jpg'/>" +
-            "</td>" +
-            "<td>" +
-            "<a href='/character/" + kill.victim.characterID + "/'>" + kill.victim.characterName + " (<a href='/ship/" + kill.victim.shipTypeID + "/'>" + kill.victim.shipTypeName + "</a>)</a>" +
-            "<br>" +
-            "<a href='/corporation/" + kill.victim.corporationID + "/'>" + truncate(kill.victim.corporationName, 20) + "</a>";
-        if (kill.victim.allianceID > 0) {
-            trHTML += "/ <a href='/alliance/" + kill.victim.allianceID + "/'>" + truncate(kill.victim.allianceName, 20) + "</a>";
+        // Ship type portion
+        h += '<tr class="kb-table-row-kill" onclick="window.location.href=\'/kill/' + kill.killID + '\';">';
+        h += '<td class="kb-table-imgcell">' +
+            '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Render/'+ kill.victim.shipTypeID +'_32.png" style="width: 32px; height: 32px;"/>' +
+            '</td>' +
+            '<td class="kl-shiptype-text">' +
+            '<div class="no_stretch kl-shiptype-text">' +
+            '<b>'+ kill.victim.shipTypeName +'</b>' +
+            '<br/>' +
+            millionBillion(kill.totalValue) +
+            '</div>' +
+            '</td>';
+
+        // Victim portion
+        if(kill.victim.allianceID > 0) {
+            h += '<td class="kb-table-imgcell">'+
+                '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+ kill.victim.allianceName +'" data-position="s" src="https://imageserver.eveonline.com/Alliance/' + kill.victim.allianceID + '_32.png" style="border: 0px; width: 32px; height: 32px;" title="'+ kill.victim.allianceName +'" alt="'+ kill.victim.allianceName +'"/>' +
+                '</td>';
+        } else {
+            h += '<td class="kb-table-imgcell">'+
+                '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.corporationName+'" data-position="s" src="https://imageserver.eveonline.com/Corporation/' + kill.victim.corporationID + '_32.png" style="border: 0px; width: 32px; height: 32px;" title="'+kill.victim.corporationName+'" alt="'+kill.victim.corporationName+'"/>' +
+                '</td>';
         }
 
-        trHTML +=
-            "</td>";
+        h += '<td class="kl-victim-text">' +
+            '<div class="no_stretch kl-victim-text">' +
+            '<a href="/character/'+kill.victim.characterID+'/"><b>'+kill.victim.characterName+'</b></a><br/>';
 
-        // Figure how many attackers are in the attackers array
-        var attackerCount = kill.attackers.length;
+        if(kill.victim.allianceID > 0) {
+            h += '<a href="/alliance/'+kill.victim.allianceID+'/">'+kill.victim.allianceName+'</a>';
+        } else {
+            h += '<a href="/corporation/'+kill.victim.corporationID+'/">'+kill.victim.corporationName+'</a>';
+        }
 
-        // Loop over the attackers array, to find the finalBlow attacker, so we can finish this killlist element
-        kill.attackers.forEach(function (attacker) {
-            if (attacker.finalBlow == 1) {
-                trHTML +=
-                    "<td class='hidden-md-down'>" +
-                    "<img data-toggle='tooltip' data-placement='right' title='" + attacker.characterName + "' class='img-circle' height='44px' src='https://imageserver.eveonline.com/Corporation/" + attacker.corporationID + "_64.png'/>" +
-                    "</td>" +
-                    "<td>" +
-                    "<a href='/character/" + attacker.characterID + "/'>" + attacker.characterName + " (" + attackerCount + ")</a><br><a href='/corporation/" + attacker.corporationID + "/'>" + truncate(attacker.corporationName, 20) + "</a>";
-                if (attacker.allianceID > 0) {
-                    trHTML += "/ <a href='/alliance/" + attacker.allianceID + "/'>" + truncate(attacker.allianceName, 20) + "</a>";
-                }
-                trHTML +=
-                    "</td>";
+        // Final blow portion
+        kill.attackers.forEach(function(attacker) {
+            if(attacker.finalBlow == 1) {
+                h += '<td class="kb-table-imgcell">' +
+                    '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.corporationName+'" data-position="s" src="https://imageserver.eveonline.com/Corporation/'+attacker.corporationID+'_32.png" style="border: 0px; width: 32px; height: 32px;" title="'+attacker.corporationName+'" alt="'+attacker.corporationName+'"/>' +
+                    '</td>' +
+                    '<td class="kl-finalblow">' +
+                    '<div class="no_stretch kl-finalblow">' +
+                    '<a href="/character/'+attacker.characterID+'/"><b>'+attacker.characterName+'</b></a>' +
+                    '<br/>' +
+                    '<a href="/corporation/'+attacker.corporationID+'/">'+attacker.corporationName+'</a>' +
+                    '</div>' +
+                    '</td>';
             }
         });
 
-        trHTML += "</tr>";
+        // Location
+        var attackerCount = kill.attackers.length;
+        var date = new Date(kill.killTime);
+        var killTime = ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
+        
+        h += '<td class="kb-table-cell kl-location">' +
+            '<div class="kl-location">'+kill.regionName+', '+kill.solarSystemName+'<br/>' +
+            '</div>' +
+            '<div class="kl-inv-comm">' +
+            '<img src="/img/involved10_10.png" alt="I:"/> ' + attackerCount +
+            '</div>' +
+            '<div class="kl-date">' +
+            '<a href="/related/"><b>'+killTime+'</b></a>' +
+            '</div>' +
+            '</td>' +
+            '</tr>';
 
-        return trHTML;
+        return h;
     };
 
     var webSocket = function(websocketUrl, prependTo, maxKillID) {
@@ -101,7 +116,7 @@ var generateKillList = function(url, loadWebsocket, page) {
     };
 
     var loadMoreOnScroll = function(url, page) {
-        var page = typeof page !== 'undefined' ? page : 1;
+        page = parseInt(page);
         var isPreviousPageLoaded = true;
 
         $(window).scroll(function() {
@@ -110,6 +125,7 @@ var generateKillList = function(url, loadWebsocket, page) {
                     isPreviousPageLoaded = false;
                     //@todo fix so that https://neweden.xyz/freighters/1/ works
                     var address = window.location.origin + url + (page + 1) + "/";
+                    console.log(address);
                     $.ajax({
                         type: "GET",
                         url: address,
@@ -124,10 +140,7 @@ var generateKillList = function(url, loadWebsocket, page) {
                             });
 
                             $("#killlist").append(trHTML);
-
-                            // Turn on tooltips, popovers etc.
                             turnOnFunctions();
-
                             page++;
                             isPreviousPageLoaded = true;
                         },
@@ -173,10 +186,8 @@ var generateKillList = function(url, loadWebsocket, page) {
             // Append the killlist element to the killlist table
             $("#killlist").append(trHTML);
 
-            // Turn on tooltips/popovers
             turnOnFunctions();
-
-            if(loadWebsocket == true) {
+            if (loadWebsocket == true) {
                 // Fire up the Websocket
                 webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
             }

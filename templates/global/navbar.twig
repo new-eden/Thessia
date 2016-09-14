@@ -1,63 +1,19 @@
-<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
-    <a class="navbar-brand" href="#">New Eden</a>
-    <ul class="nav navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item btn-group">
-            <a class="dropdown-toggle nav-link" type="button" id="killListDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Killlists</a>
-            <div class="dropdown-menu" aria-labelledby="killListDropDown">
-                <a class="dropdown-item" href="/latest/">Latest Kills</a>
-                <a class="dropdown-item" href="/bigkills/">Big Kills</a>
-                <a class="dropdown-item" href="/wspace/">W-Space</a>
-                <a class="dropdown-item" href="/highsec/">HighSec</a>
-                <a class="dropdown-item" href="/lowsec/">LowSec</a>
-                <a class="dropdown-item" href="/nullsec/">NullSec</a>
-                <a class="dropdown-item" href="/solo/">Solo Kills</a>
-                <a class="dropdown-item" href="/npc/">NPC Kills</a>
-                <a class="dropdown-item" href="/5b/">+5b</a>
-                <a class="dropdown-item" href="/10b/">+10b</a>
-                <a class="dropdown-item" href="/citadels/">Citadels</a>
-                <a class="dropdown-item" href="/t1/">T1</a>
-                <a class="dropdown-item" href="/t2/">T2</a>
-                <a class="dropdown-item" href="/t3/">T3</a>
-                <div class="dropdown-header">Hull Sizes</div>
-                <a class="dropdown-item" href="/frigates/">Frigates</a>
-                <a class="dropdown-item" href="/destroyers/">Destroyers</a>
-                <a class="dropdown-item" href="/cruisers/">Cruisers</a>
-                <a class="dropdown-item" href="/battlecruisers/">BattleCruisers</a>
-                <a class="dropdown-item" href="/battleships/">BattleShips</a>
-                <a class="dropdown-item" href="/capitals/">Capitals</a>
-                <a class="dropdown-item" href="/freighters/">Freighters</a>
-                <a class="dropdown-item" href="/supercarriers/">SuperCarriers</a>
-                <a class="dropdown-item" href="/titans/">Titans</a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Battles</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Wars</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Map</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Post</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Top List</a>
-        </li>
+<div id="main_menu">
+    <ul>
+        <div class="navigation-section">
+            <li><a class="link" href="/">Home</a></li>
+            <li><a class="link" href="#">Kills</a></li>
+            <li><a class="link" href="#">Battles</a></li>
+            <li><a class="link" href="#">Wars</a></li>
+            <li><a class="link" href="#">Map</a></li>
+            <li><a class="link" href="#">Post</a></li>
+            <li><a class="link" href="#">Top</a></li>
+        </div>
     </ul>
-    <ul class="nav navbar-nav pull-right">
-        <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Status</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-        </li>
-    </ul>
-</nav>
+    <div style="float: right">
+        <a class="link" href="#">Status</a>
+        <a class="link" href="#">Contact</a>
+        <a class="link" href="#">Login</a>
+        <a id="displayText" href="javascript:void(0)" onclick="toggle('toggleText')">Post Killmail</a>
+    </div>
+</div>

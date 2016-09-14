@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-var top10ListGenerator = function (url, type, outputTo) {
+var top10ListGenerator = function (url, type) {
     // Turn on CORS support for jQuery
     jQuery.support.cors = true;
 
     // Define the current origin url (eg: https://neweden.xyz)
     var currentOrigin = window.location.origin;
+    var loop = 1;
 
     // Get the data from the JSON API and output it as a killlist...
     $.ajax({
@@ -44,43 +45,88 @@ var top10ListGenerator = function (url, type, outputTo) {
         // Don't cache it - the backend does that for us
         cache: false,
         success: function (data) {
-            var trHTML =
-                '<table class="table">' +
-                '<thead class="thead-inverse">' +
-                '<tr><th>#</th><th>' + type + '</th><th>Kills</th></tr>' +
-                '</thead>' +
-                '<tbody>';
-
-            var number = 1;
+            var h = '<table class="kb-table awardbox">' +
+                '<tr>' +
+                '<td class="kb-table-header">'+type+'</td>' +
+                '</tr>' +
+                '<tr class="kb-table-row-even">' +
+                '<td>';
 
             // data-toggle='tooltip' data-html='true' data-placement='left' title='"+kill.killTime.toString()+"'
             // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
+            var totalKills = 0;
             $.each(data, function (i, kill) {
-                trHTML +=
-                    '<tr id="char'+number+'" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="left" data-html="true" data-content="' +
-                    '<div class=text-xs-center><img class=img-circle src=https://imageserver.eveonline.com/Character/'+kill.characterID+'_128.jpg/><div><br>' +
-                    'Name: ' + kill.characterName + '<br>' +
-                    'Corporation: ' + kill.corporationName + '<br>';
-                    if(kill.allianceID > 0) {
-                        trHTML += 'Alliance: ' + kill.allianceName + '<br>';
-                    }
-                    trHTML += 'Kills: ' + kill.kills + '<br>' +
-                    'Losses: ' + kill.losses + '<br>' +
-                    'Points: ' + kill.points + '<br>">' +
-                    '<th scope="row">'+number+'</th>' +
-                    '<td><a href="/character/'+kill.characterID+'/">'+ kill.characterName +'</a></td>' +
-                    '<td>'+ kill.count +'</td>' +
-                    '</tr>';
-
-                number++;
+                totalKills += kill.count;
             });
 
-            trHTML +=
-                '</tbody>' +
-                '</table>';
+            $.each(data, function (i, kill) {
+                percent = (100 - ((kill.count / totalKills) * 100));
+                if (loop == 1) {
+                    h += '<table class="kb-subtable awardbox-top">' +
+                        '<tr class="kb-table-row-odd">' +
+                        '<td><img class="rounded" data-trigger="tooltip" data-delay="0" data-position="e" data-content="' + kill.characterName + '" src="https://imageserver.eveonline.com/Character/' + kill.characterID + '_64.jpg" title="' + kill.characterName + '" alt="' + kill.characterName + '" height="64" width="64" /></td>' +
+                        '<td><img class="rounded" src="/img/awards/eagle.png" alt="award" height="64" width="64" /></td>' +
+                        '</tr>' +
+                        '</table>' +
+                        '<table class="kb-subtable awardbox-list">' +
+                        '<tr>' +
+                        '<td class="awardbox-num">1.</td>' +
+                        '<td colspan="2"><a class="kb-shipclass" href="/character/'+kill.characterID+'" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
+                        '<img class=rounded src=https://imageserver.eveonline.com/Character/' + kill.characterID + '_128.jpg/><br>' +
+                        'Name: ' + kill.characterName + '<br>' +
+                        'Corporation: ' + kill.corporationName + '<br>';
+                    if (kill.allianceID > 0) {
+                        h += 'Alliance: ' + kill.allianceName + '<br>';
+                    }
+                    h += 'Kills: ' + kill.kills + '<br>' +
+                        'Losses: ' + kill.losses + '<br>' +
+                        'Points: ' + kill.points + '<br>"' +
+                        '>' + kill.characterName + '</a></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td></td>' +
+                        '<td>' +
+                        '<div class="bar-background">' +
+                        '<div class="bar" style="width: 100%;">&nbsp;</div>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td class="awardbox-count">' + kill.count + '</td>' +
+                        '</tr>';
+                } else {
+                    totalKills = totalKills - kill.count;
+                    h += '<tr>' +
+                        '<td class="awardbox-num">2</td>' +
+                        '<td colspan="2"><a class="kb-shipclass" href="/character/'+kill.characterID+'" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
+                        '<img class=rounded src=https://imageserver.eveonline.com/Character/' + kill.characterID + '_128.jpg/><br>' +
+                        'Name: ' + kill.characterName + '<br>' +
+                        'Corporation: ' + kill.corporationName + '<br>';
+                    if (kill.allianceID > 0) {
+                        h += 'Alliance: ' + kill.allianceName + '<br>';
+                    }
+                    h += 'Kills: ' + kill.kills + '<br>' +
+                        'Losses: ' + kill.losses + '<br>' +
+                        'Points: ' + kill.points + '<br>"' +
+                        '>' + kill.characterName + '</a></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td></td>' +
+                        '<td><div class="bar-background"><div class="bar" style="width: ' + percent + '%;">&nbsp;</div></td>' +
+                        '<td class="awardbox-count">' + kill.count + '</td>' +
+                        '</tr>';
+                }
+                loop++;
+            });
+
+            h += '<tr>' +
+                '<td class="awardbox-comment" colspan="3">(Kills over last 7 days)</td>' +
+                '</tr>' +
+                '</table>' +
+                '</td>' +
+                '</tr>' +
+                '</table>'
 
             // Append the killlist element to the killlist table
-            $(outputTo).append(trHTML);
+            $("#topListCharacter").append(h);
 
             // Turn on tooltips, popovers etc.
             turnOnFunctions();
@@ -92,4 +138,4 @@ var top10ListGenerator = function (url, type, outputTo) {
 };
 
 //@todo fix so that it unloads data when it gets over 1k items
-top10ListGenerator("/api/stats/top10characters/", "Top 10 Characters", "#topCharacters");
+top10ListGenerator("/api/stats/top10characters/", "Top 10 Characters");

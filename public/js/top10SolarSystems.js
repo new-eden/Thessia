@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-var top10ListGenerator = function (url, type, outputTo) {
+var top10ListGenerator = function (url, type) {
     // Turn on CORS support for jQuery
     jQuery.support.cors = true;
 
     // Define the current origin url (eg: https://neweden.xyz)
     var currentOrigin = window.location.origin;
+    var loop = 1;
 
     // Get the data from the JSON API and output it as a killlist...
     $.ajax({
@@ -44,34 +45,63 @@ var top10ListGenerator = function (url, type, outputTo) {
         // Don't cache it - the backend does that for us
         cache: false,
         success: function (data) {
-            var trHTML =
-                '<table class="table table-striped">' +
-                '<thead class="thead-inverse">' +
-                '<tr><th>#</th><th>' + type + '</th><th>Kills</th></tr>' +
-                '</thead>' +
-                '<tbody>';
-
-            var number = 1;
+            var h = '<table class="kb-table awardbox">' +
+                '<tr>' +
+                '<td class="kb-table-header">' + type + '</td>' +
+                '</tr>' +
+                '<tr class="kb-table-row-even">';
 
             // data-toggle='tooltip' data-html='true' data-placement='left' title='"+kill.killTime.toString()+"'
             // Now for each element in the data we just got from the json api, we'll build up some html.. ugly.. ugly.. html
+            var totalKills = 0;
             $.each(data, function (i, kill) {
-                trHTML +=
-                    '<tr id="system'+number+'">' +
-                    '<th scope="row">'+number+'</th>' +
-                    '<td><a href="/solarSystem/'+kill.solarSystemID+'/">'+ kill.solarSystemName +'</a></td>' +
-                    '<td>'+ kill.count +'</td>' +
-                    '</tr>';
-
-                number++;
+                totalKills += kill.count;
             });
 
-            trHTML +=
-                '</tbody>' +
-                '</table>';
+            $.each(data, function (i, kill) {
+                percent = (100 - ((kill.count / totalKills) * 100));
+                if (loop == 1) {
+                    h += '<table class="kb-subtable awardbox-list">' +
+                        '<tr>' +
+                            '<td class="awardbox-num">1.</td>' +
+                            '<td colspan="2">' +
+                                '<a class="kb-shipclass" href="/system/'+kill.solarSystemID+'/">' + kill.solarSystemName + '</a>' +
+                            '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td></td>' +
+                            '<td>' +
+                                '<div class="bar-background">' +
+                                    '<div class="bar" style="width: 100%;">&nbsp;</div>' +
+                                '</div>' +
+                            '</td>' +
+                            '<td class="awardbox-count">' + kill.count + '</td>' +
+                        '</tr>';
+                } else {
+                    totalKills = totalKills - kill.count;
+                    h += '<tr>' +
+                        '<td class="awardbox-num">2</td>' +
+                        '<td colspan="2"><a class="kb-shipclass" href="/system/'+kill.solarSystemID+'/">' + kill.solarSystemName + '</a></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td></td>' +
+                        '<td><div class="bar-background"><div class="bar" style="width: ' + percent + '%;">&nbsp;</div></td>' +
+                        '<td class="awardbox-count">' + kill.count + '</td>' +
+                        '</tr>';
+                }
+                loop++;
+            });
+
+            h += '<tr>' +
+                '<td class="awardbox-comment" colspan="3">(Kills over last 7 days)</td>' +
+                '</tr>' +
+                '</table>' +
+                '</td>' +
+                '</tr>' +
+                '</table>'
 
             // Append the killlist element to the killlist table
-            $(outputTo).append(trHTML);
+            $("#topListSolarSystems").append(h);
 
             // Turn on tooltips, popovers etc.
             turnOnFunctions();
@@ -83,4 +113,4 @@ var top10ListGenerator = function (url, type, outputTo) {
 };
 
 //@todo fix so that it unloads data when it gets over 1k items
-top10ListGenerator("/api/stats/top10solarsystems/", "Top 10 Systems", "#topSolarSystems");
+top10ListGenerator("/api/stats/top10solarsystems/", "Top 10 Systems");

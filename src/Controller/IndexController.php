@@ -31,10 +31,21 @@ use Thessia\Model\EVE\Participants;
 
 class IndexController extends Controller
 {
-    public function index()
+    public function index($page = 1)
     {
-        //@todo add information from the login data, if the person is logged in that is..
-        return $this->render("pages/frontpage.twig", array());
+        //@todo add information from the login data, if the person is logged in tha is..
+        if($page == 1) {
+            $menu = array(
+                "Next Page" => $this->getFullHost() . "page/" . ($page + 1) . "/",
+            );
+        } else {
+            $menu = array(
+                "Previous Page" => $this->getFullHost() . "page/" . ($page - 1) . "/",
+                "Next Page" => $this->getFullHost() . "page/" . ($page + 1) . "/",
+            );
+        }
+
+        return $this->render("/pages/frontpage.twig", array("menu" => $menu));
     }
 
     private function getLoginData() {

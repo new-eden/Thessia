@@ -284,6 +284,14 @@ abstract class Controller
         return $this->app->getContainer()->get($name);
     }
 
+    protected function getFullPath() {
+        return $this->request->getUri()->getScheme() . "://" . $this->request->getUri()->getHost() . $this->request->getUri()->getPath();
+    }
+
+    protected function getFullHost() {
+        return $this->request->getUri()->getScheme() . "://" . $this->request->getUri()->getHost() . "/";
+    }
+
     /**
      * Redirect.
      *

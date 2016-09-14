@@ -1,59 +1,53 @@
 {% extends "base.twig" %}
-
+{% set pageTitle = "Frontpage" %}
 {% set title = "" %}
+{% set fullWidth = false %}
+
+{% block meta %}
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sco.js/1.1.0/css/scojs.min.css" integrity="sha256-X/S6bj3zqdJs4v8yl2OWoacgvpGRmjUJtjdreo3aEi8=" crossorigin="anonymous" />
+{% endblock %}
 
 {% block js %}
-    <script src="/js/topkills.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sco.js/1.1.0/js/sco.tooltip.js" integrity="sha256-D1cXcX/XEN8qmiAakjJ3d54Qq93MF4+WtdsTkSFZuLo=" crossorigin="anonymous"></script>
+    <script src="/js/killlist.js"></script>
     <script src="/js/top10Characters.js"></script>
     <script src="/js/top10Corporations.js"></script>
     <script src="/js/top10Alliances.js"></script>
     <script src="/js/top10SolarSystems.js"></script>
     <script src="/js/top10Regions.js"></script>
-    <script src="/js/killlist.js"></script>
+    <script src="/js/topKills.js"></script>
     <script>
+        var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        var splitsies = newURL.split("/");
+        var page = 1;
+        cnt = 0;
+        splitsies.forEach(function(part){
+            if(part == "page") {
+                page = splitsies[cnt + 1];
+            }
+            cnt++;
+        });
+
         // Generate the killlist
-        generateKillList("/api/killlist/latest/", true, 1);
+        generateKillList("/api/killlist/latest/", true, page);
     </script>
 {% endblock %}
 
-{% block css %}
+{% block rightContent %}
+    <div id="topKills"></div>
+    {% include "/global/killlisttable.twig" %}
 {% endblock %}
 
-{% block container %}
-    <div class="container">
-        <div class="row">
-            <!-- left column -->
-            <div class="col-xs-12 col-sm-8 col-md-10">
-                <!-- Most Valuable kills -->
-                <div id="mostValuableKills" class="hidden-md-down row flex-items-xs-center">
-                </div>
-
-                <!-- The Killlist -->
-                <div class="table-responsive">
-                    <table id="killlist" class="table table-striped table-hover table-sm">
-                        <thead class="thead-inverse">
-                        <tr>
-                            <th class='hidden-sm-down'>Time</th>
-                            <th class='hidden-md-down'>Ship</th>
-                            <th>Place</th>
-                            <th class='hidden-md-down'></th>
-                            <th>Victim</th>
-                            <th class='hidden-md-down'></th>
-                            <th>Final Blow</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <!-- right column -->
-            <div class="col-xs-6 col-md-2 hidden-md-down">
-                <!-- Top 10 lists -->
-                <div id="topCharacters"></div>
-                <div id="topCorporations"></div>
-                <div id="topAlliances"></div>
-                <div id="topSolarSystems"></div>
-                <div id="topRegions"></div>
-            </div>
-        </div>
-    </div>
+{% block leftContent %}
+    <!-- Generalise the menu, so i can pass an array of menu items to it -->
+    {% include "/global/navigationMenu.twig" %}
+    <div id="topListCharacter"></div><br/>
+    <div id="topListCorporation"></div><br/>
+    <div id="topListAlliance"></div><br/>
+    <div id="topListSolarSystems"></div><br/>
+    <div id="topListRegions"></div><br/>
 {% endblock %}
