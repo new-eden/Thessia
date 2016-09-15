@@ -29,4 +29,7 @@ $app->group("", function() use ($app) {
 
     // Kill page
     $app->get("/kill/{killID:[0-9]+}/", $controller("kill"));
+
+    // Information
+    $app->get("/information/", $controller("information"));
 });

@@ -648,7 +648,7 @@ class Participants extends Mongo
      * @return array|mixed
      */
     public function getAllKills($extraArguments = array(), $limit = 100, $cacheTime = 360, $order = "DESC", $offset = null, array $extraOptions = array()) {
-        $md5 = md5(serialize(implode("", $extraArguments) . $limit . $order . $offset));
+        $md5 = md5(serialize($extraArguments) . $limit . $order . $offset);
         if($this->cache->exists($md5))
             return $this->cache->get($md5);
 

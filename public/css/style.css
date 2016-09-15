@@ -30,6 +30,7 @@ html, body {
     font-weight: bold;
     color: #c1daec;
     background: url("/images/bg.jpg") no-repeat black top center;
+    background-attachment: fixed;
     text-shadow: 1px 1px 1px #0e0e0e;
 }
 
@@ -700,7 +701,6 @@ td.kb-table-imgcell > img {
 .kb-contract-target-header {
     background-image: url("./img/titlebg.png");
     background-repeat: repeat;
-
     margin-top: 10px;
     margin-bottom: 10px;
     color: #c1daec;

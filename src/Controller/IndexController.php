@@ -71,4 +71,8 @@ class IndexController extends Controller
 
         return $this->render("/pages/kill.twig", array("killID" => $killID, "menu" => $menu));
     }
+
+    public function information() {
+        return $this->render("/pages/information.twig", array());
+    }
 }
