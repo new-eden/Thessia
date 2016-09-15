@@ -649,7 +649,7 @@ var generateKillData = function(killID) {
                 '<td><a href="/type/' + attacker.weaponTypeID + '/">' + attacker.weaponTypeName + '</a></td>' +
             '</tr>' +
             '<tr class="' + classText + '">' +
-                '<td>Damage done: <span style="color: #841818;"><b>' + format(Math.round(attacker.damageDone)) + '</b></span> (<span style="color: #2c6524; ">' + parseFloat((attacker.damageDone / totalDamage) * 100).toFixed(2) + '%</span>)</td>' +
+                '<td>Damage done: <span style="color: #e42f2f;"><b>' + format(Math.round(attacker.damageDone)) + '</b></span> (<span style="color: #3d9e2f; ">' + parseFloat((attacker.damageDone / totalDamage) * 100).toFixed(2) + '%</span>)</td>' +
             '</tr>';
 
             return h;
