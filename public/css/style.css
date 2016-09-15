@@ -2247,7 +2247,7 @@ width:
 
 /* Not sure if they should stay rounded or not - but 100% circular it is for now.. */
 .rounded {
-    border-radius: 100%;
+    border-radius: 10%;
 }
 
 .dropdown {

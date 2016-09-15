@@ -99,7 +99,7 @@ var generateKillData = function(killID) {
                         '<td class="finalblow">' +
                             '<div class="menu-wrapper">' +
                                 '<a href="/ship/'+attacker.shipTypeID+'/">' +
-                                    '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Render/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
+                                    '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
                                 '</a>' +
                             '</div>' +
                         '</td>' +
@@ -125,7 +125,7 @@ var generateKillData = function(killID) {
                             '<td class="finalblow">' +
                                 '<div class="menu-wrapper">' +
                                     '<a href="/ship/'+attacker.shipTypeID+'/">' +
-                                        '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Render/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
+                                        '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
                                     '</a>' +
                                 '</div>' +
                             '</td>' +
@@ -179,7 +179,7 @@ var generateKillData = function(killID) {
                     '<col class="attribute-data"/>' +
                     '<tr class="kb-table-row-even" >' +
                         '<td class="logo" rowspan="3">' +
-                            '<img class="rounded" src="https://imageserver.eveonline.com/Render/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/>' +
+                            '<img class="rounded" src="https://imageserver.eveonline.com/Type/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/>' +
                         '</td>' +
                         '<td>Ship:</td>' +
                         '<td><a href="/ship/' + data.victim.shipTypeID + '/">' + data.victim.shipTypeName + '</a></td>' +
@@ -625,9 +625,9 @@ var generateKillData = function(killID) {
                 '<td rowspan="5" class="logo" width="64">' +
                     '<a href="/ship/'+attacker.shipTypeID+'/">';
                         if(attacker.finalBlow == true) {
-                            h += '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Render/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
+                            h += '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
                         } else {
-                            h += '<img class="rounded" src="https://imageserver.eveonline.com/Render/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
+                            h += '<img class="rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
                         }
             h +=    '</a>' +
                 '</td>' +

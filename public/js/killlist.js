@@ -39,7 +39,7 @@ var generateKillList = function(url, loadWebsocket, page) {
             h += '<tr class="kb-table-row-kill kb-table-row-even clickableRow" data-href="/kill/' + kill.killID + '/">';
         }
         h += '<td class="kb-table-imgcell">' +
-            '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Render/'+ kill.victim.shipTypeID +'_32.png" style="width: 32px; height: 32px;"/>' +
+            '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/'+ kill.victim.shipTypeID +'_32.png" style="width: 32px; height: 32px;"/>' +
             '</td>' +
             '<td class="kl-shiptype-text">' +
             '<div class="no_stretch kl-shiptype-text">' +
