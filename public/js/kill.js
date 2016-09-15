@@ -414,7 +414,39 @@ var generateKillData = function(killID) {
 
         $("#fittingWheel").append(h);
     };
-    var itemDetail = function(data) {
+    var itemDetail = function (data) {
+        // {typeID, typeName, qty, value
+        var reduced = data.items.reduce(function (pv, cv) {
+            if (cv.qtyDropped > 0) {
+                if (pv[cv.typeName.trim() + "dropped"]) {
+                    pv[cv.typeName.trim() + "dropped"]["qtyDropped"] += cv.qtyDropped;
+                    pv[cv.typeName.trim() + "dropped"]["value"] += cv.value;
+                } else {
+                    pv[cv.typeName.trim() + "dropped"] = [];
+                    pv[cv.typeName.trim() + "dropped"]["flag"] = cv.flag;
+                    pv[cv.typeName.trim() + "dropped"]["typeID"] = cv.typeID;
+                    pv[cv.typeName.trim() + "dropped"]["typeName"] = cv.typeName.trim();
+                    pv[cv.typeName.trim() + "dropped"]["qtyDropped"] = cv.qtyDropped;
+                    pv[cv.typeName.trim() + "dropped"]["qtyDestroyed"] = 0;
+                    pv[cv.typeName.trim() + "dropped"]["value"] = cv.value;
+                }
+            } else if (cv.qtyDestroyed > 0) {
+                if (pv[cv.typeName.trim() + "destroyed"]) {
+                    pv[cv.typeName.trim() + "destroyed"]["qtyDestroyed"] += cv.qtyDestroyed;
+                    pv[cv.typeName.trim() + "destroyed"]["value"] += cv.value;
+                } else {
+                    pv[cv.typeName.trim() + "destroyed"] = [];
+                    pv[cv.typeName.trim() + "destroyed"]["flag"] = cv.flag;
+                    pv[cv.typeName.trim() + "destroyed"]["typeID"] = cv.typeID;
+                    pv[cv.typeName.trim() + "destroyed"]["typeName"] = cv.typeName.trim();
+                    pv[cv.typeName.trim() + "destroyed"]["qtyDropped"] = 0;
+                    pv[cv.typeName.trim() + "destroyed"]["qtyDestroyed"] = cv.qtyDestroyed;
+                    pv[cv.typeName.trim() + "destroyed"]["value"] = cv.value;
+                }
+            }
+            return pv;
+        }, {});
+
         var slotPopulated = function (flags, item) {
             if (inArray(flags, item.flag)) {
                 return true;
@@ -472,7 +504,8 @@ var generateKillData = function(killID) {
                         }
                     }
 
-                    data.items.forEach(function (item) {
+                    for(var key in reduced) {
+                        var item = reduced[key];
                         if (inArray(flags, item.flag)) {
                             if (item.qtyDropped > 0) {
                                 h +=
@@ -496,7 +529,7 @@ var generateKillData = function(killID) {
                                 lossValue += item.value;
                             }
                         }
-                    });
+                    }
                 }
                 h +=
                 '<tr class="kb-table-row-even summary itemloss">' +
@@ -573,7 +606,7 @@ var generateKillData = function(killID) {
                     var name = invCorporations[key]["key"];
 
                     h += '<div>' +
-                        '('+ amount +') '+ name +
+                        '&nbsp;('+ amount +') '+ name +
                         '</div>';
 
                 }
