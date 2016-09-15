@@ -36,14 +36,14 @@ class KillList extends Participants {
     }
 
     public function getLatest($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
         return $this->getAllKills(array(), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getBigKills($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -57,7 +57,7 @@ class KillList extends Participants {
     }
 
     public function getWSpace($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -71,7 +71,7 @@ class KillList extends Participants {
     }
 
     public function getHighSec($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -85,7 +85,7 @@ class KillList extends Participants {
     }
 
     public function getLowSec($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -99,7 +99,7 @@ class KillList extends Participants {
     }
 
     public function getNullSec($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "solarSystems");
@@ -113,7 +113,7 @@ class KillList extends Participants {
     }
 
     public function getSolo($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
@@ -121,7 +121,7 @@ class KillList extends Participants {
     }
 
     public function getNPC($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
@@ -129,7 +129,7 @@ class KillList extends Participants {
     }
 
     public function get5b($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
@@ -137,7 +137,7 @@ class KillList extends Participants {
     }
 
     public function get10b($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
@@ -145,7 +145,7 @@ class KillList extends Participants {
     }
 
     public function getCitadels($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -159,7 +159,7 @@ class KillList extends Participants {
     }
 
     public function getT1($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -173,7 +173,7 @@ class KillList extends Participants {
     }
 
     public function getT2($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -187,7 +187,7 @@ class KillList extends Participants {
     }
 
     public function getT3($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -201,7 +201,7 @@ class KillList extends Participants {
     }
 
     public function getFrigates($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -215,7 +215,7 @@ class KillList extends Participants {
     }
 
     public function getDestroyers($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -229,7 +229,7 @@ class KillList extends Participants {
     }
 
     public function getCruisers($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -243,7 +243,7 @@ class KillList extends Participants {
     }
 
     public function getBattleCruisers($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -257,7 +257,7 @@ class KillList extends Participants {
     }
 
     public function getBattleShips($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -271,7 +271,7 @@ class KillList extends Participants {
     }
 
     public function getCapitals($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -285,7 +285,7 @@ class KillList extends Participants {
     }
 
     public function getFreighters($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -299,7 +299,7 @@ class KillList extends Participants {
     }
 
     public function getSuperCarriers($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");
@@ -313,7 +313,7 @@ class KillList extends Participants {
     }
 
     public function getTitans($page = 1) {
-        $limit = 50;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $typeIDs = $this->mongodb->selectCollection("ccp", "typeIDs");

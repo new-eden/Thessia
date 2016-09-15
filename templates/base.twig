@@ -8,7 +8,7 @@
     {% block meta %}{% endblock %}
 
     <!-- Page Title -->
-    <title>New Eden{% if title %} | {{ title }}{% endif %}</title>
+    <title>{% if title %}{{ title }}{% else %}Home{% endif %} | New Eden</title>
 
     <!-- Site Font-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />

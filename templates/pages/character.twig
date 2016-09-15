@@ -1,8 +1,8 @@
 {% extends "base.twig" %}
-{% set pageTitle = "Frontpage" %}
-{% set title = "" %}
+{% set pageTitle = "Character " ~ characterID %}
+{% set title = "Character" %}
 {% set fullWidth = false %}
-{% set showDate = true %}
+{% set showDate = false %}
 
 {% block meta %}
 {% endblock %}
@@ -14,13 +14,9 @@
 {% block js %}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sco.js/1.1.0/js/sco.tooltip.js" integrity="sha256-D1cXcX/XEN8qmiAakjJ3d54Qq93MF4+WtdsTkSFZuLo=" crossorigin="anonymous"></script>
-    <script src="/js/killlist.js"></script>
-    <script src="/js/top10Characters.js"></script>
-    <script src="/js/top10Corporations.js"></script>
-    <script src="/js/top10Alliances.js"></script>
-    <script src="/js/top10SolarSystems.js"></script>
-    <script src="/js/top10Regions.js"></script>
-    <script src="/js/topKills.js"></script>
+    <script type="text/javascript" src="/js/killlist.js"></script>
+    <script type="text/javascript" src="/js/topList.js"></script>
+    <script type="text/javascript" src="/js/characterInfoTop.js"></script>
     <script>
         var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var splitsies = newURL.split("/");
@@ -34,21 +30,27 @@
         });
 
         // Generate the killlist
-        generateKillList("/api/killlist/latest/", true, page, true);
+        generateKillList("/api/kills/character/{{ characterID }}/", false, page, false);
+        generateTopList("/api/character/top/corporations/{{ characterID }}/", "topListCorporation", "corporation", "Top 10 Corporations");
+        generateTopList("/api/character/top/alliances/{{ characterID }}/", "topListAlliance", "alliance", "Top 10 Alliances");
+        generateTopList("/api/character/top/ships/{{ characterID }}/", "topListShips", "ship", "Top 10 Ships");
+        generateTopList("/api/character/top/systems/{{ characterID }}/", "topListSolarSystems", "system", "Top 10 Systems");
+        generateTopList("/api/character/top/regions/{{ characterID }}/", "topListRegions", "region", "Top 10 Regions");
+        characterInfoTop("/api/character/information/{{ characterID }}/");
     </script>
 {% endblock %}
 
 {% block rightContent %}
-    <div id="topKills"></div>
+    <div id="info"></div>
+    <div class="kb-date-header">Kills</div>
     {% include "/global/killlisttable.twig" %}
 {% endblock %}
 
 {% block leftContent %}
-    <!-- Generalise the menu, so i can pass an array of menu items to it -->
     {% include "/global/navigationMenu.twig" %}
-    <div id="topListCharacter"></div><br/>
     <div id="topListCorporation"></div><br/>
     <div id="topListAlliance"></div><br/>
+    <div id="topListShips"></div><br/>
     <div id="topListSolarSystems"></div><br/>
     <div id="topListRegions"></div><br/>
 {% endblock %}

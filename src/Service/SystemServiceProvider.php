@@ -211,7 +211,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("apiKeyCheck", ApiKeyCheck::class);
         $container->share("apiKeys", ApiKeys::class);
         $container->share("search", Search::class)->withArgument("mongo");
-        $container->share("top", Top::class)->withArgument("mongo");
+        $container->share("top", Top::class)->withArgument("mongo")->withArgument("cache");
         $container->share("killlist", KillList::class)->withArgument("config")->withArgument("mongo")->withArgument("cache");
 
         // Add CCP XML Interface Shim thing

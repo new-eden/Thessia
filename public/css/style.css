@@ -57,6 +57,40 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
     align: center;
 }
 
+#searchBox {
+    width: 100%;
+    color: white;
+    letter-spacing: 1px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #000;
+    line-height: 13px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.0);
+    border: none;
+    height: 13px;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: dimgrey;
+    font-size: 12px;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: dimgrey;
+    font-size: 12px;
+    opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: dimgrey;
+    font-size: 12px;
+    opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: dimgrey;
+    font-size: 12px;
+}
+
 #search-box {
     float: right;
     width: 330px;
@@ -451,6 +485,7 @@ textarea.killmail {
     font-size: 10.5px;
     color: #c1daec;
     padding: 0px;
+    width: 100%;
 }
 
 .kb-table {
@@ -679,7 +714,7 @@ td.kb-table-imgcell > img {
 }
 
 .kl-kill, .kl-loss, .kl-kill-null, .kl-loss-null {
-    text-align: center;
+    text-align: left;
 }
 
 .kl-kill-null, .kl-loss-null {

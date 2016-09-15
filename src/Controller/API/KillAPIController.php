@@ -32,9 +32,11 @@ use Thessia\Middleware\Controller;
 class KillAPIController extends Controller
 {
     private $killmails;
+    private $cache;
     public function __construct(App $app)
     {
         parent::__construct($app);
+        $this->cache = $this->container->get("cache");
         $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
     }
 
@@ -47,18 +49,32 @@ class KillAPIController extends Controller
     }
 
     public function getKillByID(int $killID) {
+        $md5 = md5($killID);
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
         $data = $this->killmails->findOne(array("killID" => $killID), array("projection" => array("_id" => 0)));
         $data["killTime"] = date(DateTime::ISO8601, $data["killTime"]->__toString() / 1000);
+        $this->cache->set($md5, $data, 3600);
         return $this->json($data);
     }
 
     public function getKillByHash(string $crestHash) {
+        $md5 = md5($crestHash);
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
         $data = $this->killmails->findOne(array("crestHash" => $crestHash), array("projection" => array("_id" => 0)));
         $data["killTime"] = date(DateTime::ISO8601, $data["killTime"]->__toString() / 1000);
+        $this->cache->set($md5, $data, 3600);
         return $this->json($data);
     }
 
     public function getKillsByDate($timeStamp) {
+        $md5 = md5($timeStamp);
+        if($this->cache->exists($md5))
+            return $this->json($this->cache->get($md5));
+
         $startDate = $this->makeTimeFromDateTime(date("Y-m-d", strtotime($timeStamp)));
         $endDate = $this->makeTimeFromDateTime(date("Y-m-d", strtotime($timeStamp) + 86400));
 
@@ -74,6 +90,7 @@ class KillAPIController extends Controller
         foreach($data as $km)
             $formatData[$km["killID"]] = $km["crestHash"];
 
+        $this->cache->set($md5, $data, 3600);
         return $this->json($formatData);
     }
 }

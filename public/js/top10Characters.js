@@ -71,7 +71,7 @@ var top10ListGenerator = function (url, type) {
                         '<table class="kb-subtable awardbox-list">' +
                         '<tr>' +
                         '<td class="awardbox-num">1.</td>' +
-                        '<td colspan="2"><a class="kb-shipclass" href="/character/'+kill.characterID+'" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
+                        '<td colspan="2"><a class="kb-shipclass" href="/character/'+kill.characterID+'/" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
                         '<img class=\'rounded\' src=https://imageserver.eveonline.com/Character/' + kill.characterID + '_128.jpg/><br>' +
                         'Name: ' + kill.characterName + '<br>' +
                         'Corporation: ' + kill.corporationName + '<br>';
@@ -96,7 +96,7 @@ var top10ListGenerator = function (url, type) {
                     totalKills = totalKills - kill.count;
                     h += '<tr>' +
                         '<td class="awardbox-num">'+loop+'</td>' +
-                        '<td colspan="2"><a class="kb-shipclass" href="/character/'+kill.characterID+'" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
+                        '<td colspan="2"><a class="kb-shipclass" href="/character/'+kill.characterID+'/" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
                         '<img class=\'rounded\' src=https://imageserver.eveonline.com/Character/' + kill.characterID + '_128.jpg/><br>' +
                         'Name: ' + kill.characterName + '<br>' +
                         'Corporation: ' + kill.corporationName + '<br>';

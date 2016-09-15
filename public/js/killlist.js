@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-var generateKillList = function(url, loadWebsocket, page) {
+var generateKillList = function(url, loadWebsocket, page, autoloadScroll) {
     var maxKillID = 0;
     var highestKillID = function(newID) {
         maxKillID = Math.max(maxKillID, newID);
@@ -98,7 +98,7 @@ var generateKillList = function(url, loadWebsocket, page) {
             '<img src="/img/involved10_10.png" alt="I:"/> ' + attackerCount +
             '</div>' +
             '<div class="kl-date">' +
-            '<a href="/related/"><b>'+killTime+'</b></a>' +
+            '<a href="/related/"><b>'+kill.killTime_str+'</b></a>' +
             '</div>' +
             '</td>' +
             '</tr>';
@@ -129,7 +129,6 @@ var generateKillList = function(url, loadWebsocket, page) {
                     isPreviousPageLoaded = false;
                     //@todo fix so that https://neweden.xyz/freighters/1/ works
                     var address = window.location.origin + url + (page + 1) + "/";
-                    console.log(address);
                     $.ajax({
                         type: "GET",
                         url: address,
@@ -198,8 +197,10 @@ var generateKillList = function(url, loadWebsocket, page) {
                 webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
             }
 
-            // Turn on loading more on scroll
-            loadMoreOnScroll(url, page);
+            if(autoloadScroll == true) {
+                // Turn on loading more on scroll
+                loadMoreOnScroll(url, page);
+            }
         }
     });
 };

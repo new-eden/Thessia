@@ -73,42 +73,48 @@ class KillsAPIController extends Controller
         $count = 0;
         $tempArray = array();
         $returnArray = array();
-        foreach($arguments as $param) {
-            if(empty($param))
-                continue;
 
-            if($count % 2 == false)
-                $tempArray[$param] = $arguments[$count + 1];
+        if(count($arguments) >= 2) {
+            foreach ($arguments as $param) {
+                if (empty($param)) {
+                    continue;
+                }
 
-            $count++;
-        }
+                if ($count % 2 == false) {
+                    $tempArray[$param] = $arguments[$count + 1];
+                }
 
-        foreach($tempArray as $key => $value) {
-            foreach($validArguments as $arg => $type) {
-                if ($key == $arg) {
-                    switch ($type) {
-                        case "int":
-                            $returnArray[$key] = (int)$value;
-                            break;
+                $count++;
+            }
 
-                        case "string":
-                            $returnArray[$key] = (string)$value;
-                            break;
+            foreach ($tempArray as $key => $value) {
+                foreach ($validArguments as $arg => $type) {
+                    if ($key == $arg) {
+                        switch ($type) {
+                            case "int":
+                                $returnArray[$key] = (int)$value;
+                                break;
 
-                        case "float":
-                            $returnArray[$key] = (float)$value;
-                            break;
+                            case "string":
+                                $returnArray[$key] = (string)$value;
+                                break;
 
-                        case "bool":
-                            $returnArray[$key] = (bool)$value;
-                            break;
-                        case "datetime":
-                            if (is_numeric($value))
-                                $returnArray[$key] = (int)$value * 1000;
-                            else
-                                $returnArray[$key] = (int)strtotime($value * 1000);
+                            case "float":
+                                $returnArray[$key] = (float)$value;
+                                break;
 
-                            break;
+                            case "bool":
+                                $returnArray[$key] = (bool)$value;
+                                break;
+                            case "datetime":
+                                if (is_numeric($value)) {
+                                    $returnArray[$key] = (int)$value * 1000;
+                                } else {
+                                    $returnArray[$key] = (int)strtotime($value * 1000);
+                                }
+
+                                break;
+                        }
                     }
                 }
             }

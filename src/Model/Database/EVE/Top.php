@@ -28,6 +28,7 @@ namespace Thessia\Model\Database\EVE;
 
 
 use MongoDB\Client;
+use Thessia\Lib\Cache;
 
 class Top {
     /**
@@ -50,14 +51,16 @@ class Top {
      * @var \MongoDB\Collection
      */
     private $killmails;
+    private $cache;
 
     /**
      * Top constructor.
      * @param Client $mongo
+     * @param Cache $cache
      */
-    public function __construct(Client $mongo) {
+    public function __construct(Client $mongo, Cache $cache) {
         $this->mongo = $mongo;
-
+        $this->cache = $cache;
         $this->alliances = $this->mongo->selectCollection("thessia", "alliances");
         $this->corporations = $this->mongo->selectCollection("thessia", "corporations");
         $this->characters = $this->mongo->selectCollection("thessia", "characters");
@@ -67,88 +70,131 @@ class Top {
         $this->regions = $this->mongo->selectCollection("ccp", "regions");
     }
 
-    public function topCharacters(string $victimType, int $typeID, int $limit = 10) {
+    public function topCharacters(string $attackerType, int $typeID, int $limit = 10) {
+        $md5 = md5("topCharacters" . $attackerType . $typeID . $limit);
+        if($this->cache->exists($md5))
+            return $this->cache->get($md5);
+
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.{$victimType}" => $typeID, "victim.characterID" => array("\$ne" => 0))),
-            array('$group' => array("_id" => '$victim.characterID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "characterID" => '$_id')),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.characterID" => array('$ne' => 0))),
+            array('$unwind' => '$attackers'),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$group' => array("_id" => '$attackers.characterID', "count" => array('$sum' => 1))),
+            array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ))->toArray();
 
         foreach($data as $key => $character)
-            $data[$key]["characterName"] = $this->characters->findOne(array("characterID" => $character["characterID"]))["characterName"];
+            $data[$key]["name"] = $this->characters->findOne(array("characterID" => $character["id"]))["characterName"];
 
+
+        $this->cache->set($md5, $data, 3600);
         return $data;
     }
 
-    public function topCorporations(string $victimType, int $typeID, int $limit = 10) {
+    public function topCorporations(string $attackerType, int $typeID, int $limit = 10) {
+        $md5 = md5("topCorporations" . $attackerType . $typeID . $limit);
+        if($this->cache->exists($md5))
+            return $this->cache->get($md5);
+
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.{$victimType}" => $typeID, "victim.corporationID" => array("\$ne" => 0))),
-            array('$group' => array("_id" => '$victim.corporationID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "corporationID" => '$_id')),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.corporationID" => array('$ne' => 0))),
+            array('$unwind' => '$attackers'),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$group' => array("_id" => '$attackers.corporationID', "count" => array('$sum' => 1))),
+            array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ))->toArray();
         foreach($data as $key => $corporation)
-            $data[$key]["corporationName"] = $this->corporations->findOne(array("corporationID" => $corporation["corporationID"]))["corporationName"];
+            $data[$key]["name"] = $this->corporations->findOne(array("corporationID" => $corporation["id"]))["corporationName"];
 
+        $this->cache->set($md5, $data, 3600);
         return $data;
     }
 
-    public function topAlliances(string $victimType, int $typeID, int $limit = 10) {
+    public function topAlliances(string $attackerType, int $typeID, int $limit = 10) {
+        $md5 = md5("topAlliances" . $attackerType . $typeID . $limit);
+        if($this->cache->exists($md5))
+            return $this->cache->get($md5);
+
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.{$victimType}" => $typeID, "victim.allianceID" => array("\$ne" => 0))),
-            array('$group' => array("_id" => '$victim.allianceID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "allianceID" => '$_id')),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.allianceID" => array('$ne' => 0))),
+            array('$unwind' => '$attackers'),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$group' => array("_id" => '$attackers.allianceID', "count" => array('$sum' => 1))),
+            array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ))->toArray();
         foreach($data as $key => $alliance)
-            $data[$key]["allianceName"] = $this->alliances->findOne(array("allianceID" => $alliance["allianceID"]))["allianceName"];
+            $data[$key]["name"] = $this->alliances->findOne(array("allianceID" => $alliance["id"]))["allianceName"];
 
+        $this->cache->set($md5, $data, 3600);
         return $data;
     }
 
-    public function topShips(string $victimType, int $typeID, int $limit = 10) {
+    public function topShips(string $attackerType, int $typeID, int $limit = 10) {
+        $md5 = md5("topShips" . $attackerType . $typeID . $limit);
+        if($this->cache->exists($md5))
+            return $this->cache->get($md5);
+
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.{$victimType}" => $typeID)),
-            array('$group' => array("_id" => '$victim.shipTypeID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "shipTypeID" => '$_id')),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$unwind' => '$attackers'),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$group' => array("_id" => '$attackers.shipTypeID', "count" => array('$sum' => 1))),
+            array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ))->toArray();
         foreach($data as $key => $shipType)
-            $data[$key]["shipTypeName"] = $this->shipTypes->findOne(array("typeID" => $shipType["shipTypeID"]))["name"]["en"];
+            $data[$key]["name"] = trim($this->shipTypes->findOne(array("typeID" => $shipType["id"]))["name"]["en"]);
 
+        $this->cache->set($md5, $data, 3600);
         return $data;
     }
 
-    public function topSystems(string $victimType, int $typeID, int $limit = 10) {
+    public function topSystems(string $attackerType, int $typeID, int $limit = 10) {
+        $md5 = md5("topSystems" . $attackerType . $typeID . $limit);
+        if($this->cache->exists($md5))
+            return $this->cache->get($md5);
+
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.{$victimType}" => $typeID)),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$unwind' => '$attackers'),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$solarSystemID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "solarSystemID" => '$_id')),
+            array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ))->toArray();
         foreach($data as $key => $solarSystem)
-            $data[$key]["solarSystemName"] = $this->solarSystems->findOne(array("solarSystemID" => $solarSystem["solarSystemID"]))["solarSystemName"];
+            $data[$key]["name"] = trim($this->solarSystems->findOne(array("solarSystemID" => $solarSystem["id"]))["solarSystemName"]);
 
+        $this->cache->set($md5, $data, 3600);
         return $data;
     }
 
-    public function topRegions(string $victimType, int $typeID, int $limit = 10) {
+    public function topRegions(string $attackerType, int $typeID, int $limit = 10) {
+        $md5 = md5("topRegions" . $attackerType . $typeID . $limit);
+        if ($this->cache->exists($md5))
+            return $this->cache->get($md5);
+
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("victim.{$victimType}" => $typeID)),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$unwind' => '$attackers'),
+            array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$regionID', "count" => array('$sum' => 1))),
-            array('$project' => array("_id" => 0, "count" => '$count', "regionID" => '$_id')),
+            array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ))->toArray();
         foreach($data as $key => $region)
-            $data[$key]["regionName"] = $this->regions->findOne(array("regionID" => $region["regionID"]))["regionName"];
+            $data[$key]["name"] = trim($this->regions->findOne(array("regionID" => $region["id"]))["regionName"]);
 
+        $this->cache->set($md5, $data, 3600);
         return $data;
     }
 }

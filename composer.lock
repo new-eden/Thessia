@@ -2288,20 +2288,21 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.1.4",
+            "version": "3.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8ea494c34f0f772c3954b5fbe00bffc5a435e563"
+                "reference": "5586b74d07a04ae87c23175a085b413911e86a7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8ea494c34f0f772c3954b5fbe00bffc5a435e563",
-                "reference": "8ea494c34f0f772c3954b5fbe00bffc5a435e563",
+                "url": "https://api.github.com/repos/symfony/console/zipball/5586b74d07a04ae87c23175a085b413911e86a7e",
+                "reference": "5586b74d07a04ae87c23175a085b413911e86a7e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
+                "symfony/debug": "~2.8|~3.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "require-dev": {
@@ -2344,7 +2345,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-08-19 06:48:39"
+            "time": "2016-09-14 20:33:02"
         },
         {
             "name": "symfony/debug",
@@ -2469,12 +2470,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "d7b31206638f0d9492679e5a525e4f2abf7a990b"
+                "reference": "8818fa9f67955aba87cf82b0e3c9e5411813cd3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/d7b31206638f0d9492679e5a525e4f2abf7a990b",
-                "reference": "d7b31206638f0d9492679e5a525e4f2abf7a990b",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/8818fa9f67955aba87cf82b0e3c9e5411813cd3f",
+                "reference": "8818fa9f67955aba87cf82b0e3c9e5411813cd3f",
                 "shasum": ""
             },
             "require": {
@@ -2514,7 +2515,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-06 11:07:23"
+            "time": "2016-09-14 20:47:40"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2769,12 +2770,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "70ce4725022ff1f3df8ddeaeb44dbb8ef612a8ec"
+                "reference": "3f5a4a45d51d4853dcd5d20a404a66066260c123"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/70ce4725022ff1f3df8ddeaeb44dbb8ef612a8ec",
-                "reference": "70ce4725022ff1f3df8ddeaeb44dbb8ef612a8ec",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/3f5a4a45d51d4853dcd5d20a404a66066260c123",
+                "reference": "3f5a4a45d51d4853dcd5d20a404a66066260c123",
                 "shasum": ""
             },
             "require": {
@@ -2842,7 +2843,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "https://symfony.com",
-            "time": "2016-09-06 11:02:40"
+            "time": "2016-09-14 20:33:02"
         },
         {
             "name": "symfony/var-dumper",
