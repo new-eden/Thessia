@@ -29,11 +29,15 @@ var generateKillList = function(url, loadWebsocket, page) {
         return maxKillID;
     };
 
-    var generateKillList = function(kill) {
+    var generateKillList = function(kill, killCount) {
         var h = "";
 
         // Ship type portion
-        h += '<tr class="kb-table-row-kill" onclick="window.location.href=\'/kill/' + kill.killID + '/\';">';
+        if(isOdd(killCount)) {
+            h += '<tr class="kb-table-row-kill kb-table-row-odd" onclick="window.location.href=\'/kill/' + kill.killID + '/\';">';
+        } else {
+            h += '<tr class="kb-table-row-kill kb-table-row-even" onclick="window.location.href=\'/kill/' + kill.killID + '/\';">';
+        }
         h += '<td class="kb-table-imgcell">' +
             '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Render/'+ kill.victim.shipTypeID +'_32.png" style="width: 32px; height: 32px;"/>' +
             '</td>' +
@@ -135,8 +139,10 @@ var generateKillList = function(url, loadWebsocket, page) {
                         cache: false,
                         success: function(data) {
                             var trHTML = "";
+                            var killCount = 0;
                             $.each(data, function(i, kill) {
-                                trHTML += generateKillList(kill);
+                                trHTML += generateKillList(kill, killCount);
+                                killCount++;
                             });
 
                             $("#killlist").append(trHTML);

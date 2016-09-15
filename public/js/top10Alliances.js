@@ -72,7 +72,7 @@ var top10ListGenerator = function (url, type) {
                         '<tr>' +
                         '<td class="awardbox-num">1.</td>' +
                         '<td colspan="2"><a class="kb-shipclass" href="/alliance/'+kill.allianceID+'/" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
-                        '<img src=https://imageserver.eveonline.com/Alliance/' + kill.allianceID + '_128.png/><br>' +
+                        '<img class=\'rounded\' src=https://imageserver.eveonline.com/Alliance/' + kill.allianceID + '_128.png/><br>' +
                         'Alliance: ' + kill.allianceName + '<br>' +
                         'Kills: ' + kill.kills + '<br>' +
                         'Losses: ' + kill.losses + '<br>' +
@@ -92,7 +92,7 @@ var top10ListGenerator = function (url, type) {
                     h += '<tr>' +
                         '<td class="awardbox-num">'+loop+'</td>' +
                         '<td colspan="2"><a class="kb-shipclass" href="/alliance/'+kill.allianceID+'/" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
-                        '<img src=https://imageserver.eveonline.com/Alliance/' + kill.allianceID + '_128.png/><br>' +
+                        '<img class=\'rounded\' src=https://imageserver.eveonline.com/Alliance/' + kill.allianceID + '_128.png/><br>' +
                         'Alliance: ' + kill.allianceName + '<br>' +
                         'Kills: ' + kill.kills + '<br>' +
                         'Losses: ' + kill.losses + '<br>' +

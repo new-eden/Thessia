@@ -495,12 +495,11 @@ textarea.killmail {
 }
 
 .kb-table-row-odd {
-    background: #:
+    background: rgba(0, 0, 0, 0.3);
     color: #c1daec;
 }
 
 .kb-table-row-even {
-    background: #;
     color: #c1daec;
 }
 
@@ -886,7 +885,7 @@ a:hover {
 }
 
 .kb-table-rows > tbody > tr.kb-table-row-kill:nth-child(odd) {
-    background-color: #;
+    background-color: rgba(0, 0, 0, 0.3);;
     color: #c1daec;
 }
 
@@ -2241,11 +2240,14 @@ width:
 }
 
 .tooltip.infotip {
-    width: 128px;
+    width: 200px;
+    font-size: 10.5px;
+    text-align: center;
 }
 
+/* Not sure if they should stay rounded or not - but 100% circular it is for now.. */
 .rounded {
-    border-radius: 50%;
+    border-radius: 100%;
 }
 
 .dropdown {

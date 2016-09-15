@@ -28,10 +28,10 @@ var generateTopKillsHeader = function (kill) {
     h += '<th data-trigger="tooltip" data-delay="0" data-position="s" data-cssclass="infotip" data-content="';
 
     if (kill.victim.characterID > 0) {
-        h += '<img class=img-circle src=https://imageserver.eveonline.com/Character/' + kill.victim.characterID + '_128.jpg/>';
+        h += '<img class=\'rounded\' src=https://imageserver.eveonline.com/Character/' + kill.victim.characterID + '_128.jpg/><br>';
         h += 'Character: ' + kill.victim.characterName + '<br>';
     } else {
-        h += '<img class=img-circle src=https://imageserver.eveonline.com/Corporation/' + kill.victim.corporationID + '_128.png/>';
+        h += '<img class=\'rounded\' src=https://imageserver.eveonline.com/Corporation/' + kill.victim.corporationID + '_128.png/><br>';
     }
 
     h += 'Corporation: ' + kill.victim.corporationName + '<br>';
