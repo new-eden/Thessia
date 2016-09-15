@@ -156,3 +156,7 @@ var inArray = function(haystack, needle) {
 
     return (haystack.indexOf(needle) > -1);
 };
+
+function format(x) {
+    return isNaN(x)?"":x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

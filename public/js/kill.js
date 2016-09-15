@@ -198,7 +198,7 @@ var generateKillData = function(killID) {
                     '</tr>' +
                     '<tr class="kb-table-row-even">' +
                         '<td colspan="2">Total Damage Taken:</td>' +
-                        '<td>' + Math.round(data.victim.damageTaken) + '</td>' +
+                        '<td>' + format(Math.round(data.victim.damageTaken)) + '</td>' +
                     '</tr>' +
                     '<tr class="kb-table-row-odd">' +
                         '<td colspan="2">Near:</td>' +
@@ -499,7 +499,7 @@ var generateKillData = function(killID) {
                     });
                 }
                 h +=
-                '<tr class="kb-table-row-evenslotbg summary itemloss">' +
+                '<tr class="kb-table-row-even summary itemloss">' +
                     '<td colspan="3"><div>Total Module Loss:</div></td>' +
                     '<td>' + millionBillion(lossValue) + '</td>' +
                 '</tr>' +
@@ -507,7 +507,7 @@ var generateKillData = function(killID) {
                     '<td colspan="3"><div>Total Module Drop:</div></td>' +
                     '<td>' + millionBillion(dropValue) + '</td>' +
                 '</tr>' +
-                '<tr class="kb-table-row-evenslotbg summary itemdrop">' +
+                '<tr class="kb-table-row-even summary itemdrop">' +
                     '<td colspan="3"><div>Total Fit Value:</div></td>' +
                     '<td>' + millionBillion(data.fittingValue) + '</td>' +
                 '</tr>' +
@@ -515,7 +515,7 @@ var generateKillData = function(killID) {
                     '<td colspan="3"><div>Ship Loss:</div></td>' +
                     '<td>' + millionBillion(data.shipValue) + '</td>' +
                 '</tr>' +
-                '<tr class="kb-table-row-evenslotbg summary totalloss">' +
+                '<tr class="kb-table-row-even summary totalloss">' +
                     '<td colspan="3">Total Loss at current prices:</td>' +
                     '<td>' + millionBillion(data.totalValue) + '</td>' +
                 '</tr>' +
@@ -649,7 +649,7 @@ var generateKillData = function(killID) {
                 '<td><a href="/type/' + attacker.weaponTypeID + '/">' + attacker.weaponTypeName + '</a></td>' +
             '</tr>' +
             '<tr class="' + classText + '">' +
-                '<td>Damage done: <span style="color: #841818;"><b>' + attacker.damageDone + '</b></span> (<span style="color: #2c6524; ">' + parseFloat((attacker.damageDone / totalDamage) * 100).toFixed(2) + '%</span>)</td>' +
+                '<td>Damage done: <span style="color: #841818;"><b>' + format(Math.round(attacker.damageDone)) + '</b></span> (<span style="color: #2c6524; ">' + parseFloat((attacker.damageDone / totalDamage) * 100).toFixed(2) + '%</span>)</td>' +
             '</tr>';
 
             return h;
