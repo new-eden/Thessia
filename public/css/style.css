@@ -436,7 +436,7 @@ div.bar-red {
 }
 
 .f_killmail {
-    font-size: 9.5px;
+    font-size: 10.5px;
 }
 
 textarea.killmail {
@@ -448,7 +448,7 @@ textarea.killmail {
 }
 
 .kb-table, .kb-subtable {
-    font-size: 9.5px;
+    font-size: 10.5px;
     color: #c1daec;
     padding: 0px;
 }
@@ -468,7 +468,7 @@ textarea.killmail {
 .kb-table-header {
     height: 15px;
     background: #313131;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     padding: 4px;
     background: rgba(44, 44, 44, 0.42) 0 0 repeat-x;
@@ -476,7 +476,7 @@ textarea.killmail {
 }
 .kb-inv-parties {
     background: #313131;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     padding: 4px;
     background: rgba(44, 44, 44, 0.42) 0 0 repeat-x;
@@ -575,7 +575,7 @@ img.icon-hover {
 }
 
 td.avatar-name {
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     color: #cccccc;
 }
@@ -731,17 +731,17 @@ td.weeknav {
 }
 
 select.kb-select {
-    font-size: 9.5px;
+    font-size: 10.5px;
     width: 210px;
 }
 
 input.kb-input {
-    font-size: 9.5px;
+    font-size: 10.5px;
 }
 
 a:link {
     color: #c1daec;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -752,21 +752,21 @@ a.kb-table-row-hover:link {
 
 a:visited {
     color: #c1daec;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     text-decoration: none;
 }
 
 a:active {
     color: #c1daec;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     text-decoration: none;
 }
 
 a:hover {
     color: #E7F5FF;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -1005,7 +1005,7 @@ a.kb-contract:visited {
     clear: both;
     color: #444;
     float: left;
-    font-size: 9.5px;
+    font-size: 10.5px;
     margin: 10px 0 0 0;
     padding: 0 0 0 10px;
 }
@@ -2112,7 +2112,7 @@ select {
     padding: 10px 12px 8px 12px;
     color: white;
     letter-spacing: 1px;
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
     text-shadow: 1px 1px 1px #000;
     background: rgba(0, 0, 0, 0.0);
@@ -2253,7 +2253,7 @@ width:
     padding: 0px 12px 8px 12px;
     color: white;
     letter-spacing: 1px;
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
     text-shadow: 1px 1px 1px #000;
     background: rgba(0, 0, 0, 0.0);

@@ -36,12 +36,16 @@ class IndexController extends Controller
         //@todo add information from the login data, if the person is logged in tha is..
         if($page == 1) {
             $menu = array(
-                "Next Page" => $this->getFullHost() . "page/" . ($page + 1) . "/",
+                "Navigation" => array(
+                    "Next Page" => $this->getFullHost() . "page/" . ($page + 1) . "/",
+                )
             );
         } else {
             $menu = array(
-                "Previous Page" => $this->getFullHost() . "page/" . ($page - 1) . "/",
-                "Next Page" => $this->getFullHost() . "page/" . ($page + 1) . "/",
+                "Navigation" => array(
+                    "Previous Page" => $this->getFullHost() . "page/" . ($page - 1) . "/",
+                    "Next Page" => $this->getFullHost() . "page/" . ($page + 1) . "/",
+                )
             );
         }
 
@@ -54,7 +58,15 @@ class IndexController extends Controller
 
     public function kill($killID) {
         $menu = array(
-            "Stuff" => "",
+            "Killmail" => "#",
+            "EFT" => "#",
+            "DNA" => "#",
+            "Related Kills" => "#",
+            "Osmium" => array(),
+            "EVEGate" => array(),
+            "EVEWho" => array(),
+            "Dotlan" => array(),
+            "Social" => array(),
         );
 
         return $this->render("/pages/kill.twig", array("killID" => $killID, "menu" => $menu));
