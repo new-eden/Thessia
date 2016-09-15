@@ -144,19 +144,19 @@ var generateKillData = function(killID) {
                     '<col class="attribute-data"/>' +
                     '<tr class="kb-table-row-even" >' +
                         '<td class="logo" rowspan="3">' +
-                        '<img class="rounded" src="https://imageserver.eveonline.com/Character/' + data.victim.characterID + '_64.jpg" alt="' + data.victim.characterName + '"/>' +
+                            '<a href="/character/'+data.victim.characterID+'/"><img class="rounded" src="https://imageserver.eveonline.com/Character/' + data.victim.characterID + '_64.jpg" alt="' + data.victim.characterName + '"/></a>' +
                         '</td>';
                         if(data.victim.characterID > 0) {
                             h +=
                                 '<td>Victim:</td>' +
-                                '<td><a href="/ship/' + data.victim.characterID + '/">' + data.victim.characterName + '</a></td>';
+                                '<td><a href="/character/' + data.victim.characterID + '/">' + data.victim.characterName + '</a></td>';
                         } else {
                             h += '<td>&nbsp;</td><td>&nbsp;</td>';
                         }
                     h += '</tr>' +
                     '<tr class="kb-table-row-odd">' +
                         '<td>Corporation:</td>' +
-                        '<td><a href="/system/' + data.victim.corporationID + '/">' + data.victim.corporationName + '</a>';
+                        '<td><a href="/corporation/' + data.victim.corporationID + '/">' + data.victim.corporationName + '</a>';
                         if(data.victim.factionID > 0) {
                             h += '(<a href="/faction/' + data.victim.factionID + '/">' + data.victim.factionName + '</a>)</td>';
                         }
@@ -176,7 +176,7 @@ var generateKillData = function(killID) {
                     '<col class="attribute-data"/>' +
                     '<tr class="kb-table-row-even" >' +
                         '<td class="logo" rowspan="3">' +
-                            '<img class="rounded" src="https://imageserver.eveonline.com/Type/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/>' +
+                            '<a href="/ship/'+data.victim.shipTypeID+'/"><img class="rounded" src="https://imageserver.eveonline.com/Type/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/></a>' +
                         '</td>' +
                         '<td>Ship:</td>' +
                         '<td><a href="/ship/' + data.victim.shipTypeID + '/">' + data.victim.shipTypeName + '</a></td>' +
@@ -417,7 +417,7 @@ var generateKillData = function(killID) {
             if (cv.qtyDropped > 0) {
                 if (pv[cv.typeName.trim() + "dropped"]) {
                     pv[cv.typeName.trim() + "dropped"]["qtyDropped"] += cv.qtyDropped;
-                    pv[cv.typeName.trim() + "dropped"]["value"] += cv.value;
+                    pv[cv.typeName.trim() + "dropped"]["value"] += (cv.value * cv.qtyDropped);
                 } else {
                     pv[cv.typeName.trim() + "dropped"] = [];
                     pv[cv.typeName.trim() + "dropped"]["flag"] = cv.flag;
@@ -425,12 +425,12 @@ var generateKillData = function(killID) {
                     pv[cv.typeName.trim() + "dropped"]["typeName"] = cv.typeName.trim();
                     pv[cv.typeName.trim() + "dropped"]["qtyDropped"] = cv.qtyDropped;
                     pv[cv.typeName.trim() + "dropped"]["qtyDestroyed"] = 0;
-                    pv[cv.typeName.trim() + "dropped"]["value"] = cv.value;
+                    pv[cv.typeName.trim() + "dropped"]["value"] = (cv.value * cv.qtyDropped);
                 }
             } else if (cv.qtyDestroyed > 0) {
                 if (pv[cv.typeName.trim() + "destroyed"]) {
                     pv[cv.typeName.trim() + "destroyed"]["qtyDestroyed"] += cv.qtyDestroyed;
-                    pv[cv.typeName.trim() + "destroyed"]["value"] += cv.value;
+                    pv[cv.typeName.trim() + "destroyed"]["value"] += (cv.value * cv.qtyDestroyed);
                 } else {
                     pv[cv.typeName.trim() + "destroyed"] = [];
                     pv[cv.typeName.trim() + "destroyed"]["flag"] = cv.flag;
@@ -438,12 +438,12 @@ var generateKillData = function(killID) {
                     pv[cv.typeName.trim() + "destroyed"]["typeName"] = cv.typeName.trim();
                     pv[cv.typeName.trim() + "destroyed"]["qtyDropped"] = 0;
                     pv[cv.typeName.trim() + "destroyed"]["qtyDestroyed"] = cv.qtyDestroyed;
-                    pv[cv.typeName.trim() + "destroyed"]["value"] = cv.value;
+                    pv[cv.typeName.trim() + "destroyed"]["value"] = (cv.value * cv.qtyDestroyed);
                 }
             }
             return pv;
         }, {});
-
+        
         var slotPopulated = function (flags, item) {
             if (inArray(flags, item.flag)) {
                 return true;
