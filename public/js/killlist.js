@@ -34,9 +34,9 @@ var generateKillList = function(url, loadWebsocket, page) {
 
         // Ship type portion
         if(isOdd(killCount)) {
-            h += '<tr class="kb-table-row-kill kb-table-row-odd" onclick="window.location.href=\'/kill/' + kill.killID + '/\';">';
+            h += '<tr class="kb-table-row-kill kb-table-row-odd clickableRow" data-href="/kill/' + kill.killID + '/">';
         } else {
-            h += '<tr class="kb-table-row-kill kb-table-row-even" onclick="window.location.href=\'/kill/' + kill.killID + '/\';">';
+            h += '<tr class="kb-table-row-kill kb-table-row-even clickableRow" data-href="/kill/' + kill.killID + '/">';
         }
         h += '<td class="kb-table-imgcell">' +
             '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Render/'+ kill.victim.shipTypeID +'_32.png" style="width: 32px; height: 32px;"/>' +

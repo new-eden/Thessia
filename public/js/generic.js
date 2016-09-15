@@ -140,6 +140,28 @@ var truncate = function (string, length) {
 
 var turnOnFunctions = function () {
     $(".tooltips").scojs_tooltip();
+
+    // Clickable Row
+    var ctrlTriggered = false;
+    $("body").keydown(function(e) {
+        if(e.which == 17) {
+            ctrlTriggered = true;
+        }
+    });
+    $("body").keyup(function(e) {
+        if(e.which == 17) {
+            ctrlTriggered = false;
+        }
+    });
+    $(".clickableRow").click(function(e) {
+        e.preventDefault();
+        var buttonClicked = e.which;
+        if(buttonClicked == 1 && ctrlTriggered == false) {
+            window.location = $(this).data("href");
+        } else if(buttonClicked == 1 && ctrlTriggered == true) {
+            window.open($(this).data("href"), "_blank");
+        }
+    });
 };
 
 var largestID = function (oldID, newID) {
