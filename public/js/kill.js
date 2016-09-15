@@ -229,7 +229,7 @@ var generateKillData = function(killID) {
         var classText = "";
         var itemCategory = 7;
         var ammoCategory = 8;
-        var highSlotFlags = [27, 28, 29, 30, 31, 32, 33, 34];
+        var highSlotFlags = [27, 28, 29, 30, 31, 32, 33, 34]; // Implant is 89
         var medSlotFlags = [19, 20, 21, 22, 23, 24, 25, 26];
         var lowSlotFlags = [11, 12, 13, 14, 15, 16, 17, 18];
         var rigSlotFlags = [92, 93, 94, 95, 96, 97, 98, 99];
@@ -447,7 +447,8 @@ var generateKillData = function(killID) {
             "Ammo Hold": [143],
             "Quafe Bay": [154],
             "Structure Services": [164, 165, 166, 167, 168, 169, 170, 171],
-            "Structure Fuel": [172]
+            "Structure Fuel": [172],
+            "Implants": [89]
         };
         var lossValue = 0;
         var dropValue = 0;
