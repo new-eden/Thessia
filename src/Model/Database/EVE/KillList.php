@@ -133,7 +133,7 @@ class KillList extends Participants {
         $offset = $limit * ($page - 1);
 
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
-        return $this->getAllKills(array("totalValue" => array("\$gte" => "5000000000")), $limit, 30, "DESC", $offset, $extras);
+        return $this->getAllKills(array("totalValue" => array("\$gte" => 5000000000)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function get10b($page = 1) {
@@ -141,7 +141,7 @@ class KillList extends Participants {
         $offset = $limit * ($page - 1);
 
         $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
-        return $this->getAllKills(array("totalValue" => array("\$gte" => "10000000000")), $limit, 30, "DESC", $offset, $extras);
+        return $this->getAllKills(array("totalValue" => array("\$gte" => 10000000000)), $limit, 30, "DESC", $offset, $extras);
     }
 
     public function getCitadels($page = 1) {
