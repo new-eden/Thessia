@@ -126,9 +126,6 @@ var top10ListGenerator = function (url, type) {
 
             // Turn on tooltips, popovers etc.
             turnOnFunctions();
-        },
-        error: function (msg) {
-            alert(msg.responseText);
         }
     });
 };

@@ -53,9 +53,6 @@ var generateKillData = function(killID) {
             itemDetail(data);
             involvedPartiesInfo(data);
             involvedPartiesList(data);
-        },
-        error: function (msg) {
-            alert(msg.responseText);
         }
     });
 

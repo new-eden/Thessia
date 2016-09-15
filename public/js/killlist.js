@@ -200,9 +200,6 @@ var generateKillList = function(url, loadWebsocket, page) {
 
             // Turn on loading more on scroll
             loadMoreOnScroll(url, page);
-        },
-        error: function (msg) {
-            alert(msg.responseText);
         }
     });
 };

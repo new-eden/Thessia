@@ -110,8 +110,5 @@ $.ajax({
 
         // Turn on tooltips, popovers etc.
         turnOnFunctions();
-    },
-    error: function (msg) {
-        alert(msg.responseText);
     }
 });
