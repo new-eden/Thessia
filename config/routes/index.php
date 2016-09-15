@@ -26,4 +26,7 @@
 $app->group("", function() use ($app) {
     $controller = new \Thessia\Controller\IndexController($app);
     $app->get("/[page/{page:[0-9]+}/]", $controller("index"));
+
+    // Kill page
+    $app->get("/kill/{killID:[0-9]+}/", $controller("kill"));
 });

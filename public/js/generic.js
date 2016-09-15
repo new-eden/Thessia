@@ -147,5 +147,12 @@ var largestID = function (oldID, newID) {
 };
 
 var isOdd = function(number) {
-    return num % 2;
+    return number % 2;
 }
+
+var inArray = function(haystack, needle) {
+    if(typeof haystack == "string")
+        haystack = [haystack];
+
+    return (haystack.indexOf(needle) > -1);
+};

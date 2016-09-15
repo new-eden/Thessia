@@ -80,7 +80,7 @@ var top10ListGenerator = function (url, type) {
                 } else {
                     totalKills = totalKills - kill.count;
                     h += '<tr>' +
-                        '<td class="awardbox-num">2</td>' +
+                        '<td class="awardbox-num">'+loop+'</td>' +
                         '<td colspan="2"><a class="kb-shipclass" href="/system/'+kill.solarSystemID+'/">' + kill.solarSystemName + '</a></td>' +
                         '</tr>' +
                         '<tr>' +

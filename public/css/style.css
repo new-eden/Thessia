@@ -474,7 +474,14 @@ textarea.killmail {
     background: rgba(44, 44, 44, 0.42) 0 0 repeat-x;
     color: #c1daec;
 }
-
+.kb-inv-parties {
+    background: #313131;
+    font-size: 9.5px;
+    font-weight: bold;
+    padding: 4px;
+    background: rgba(44, 44, 44, 0.42) 0 0 repeat-x;
+    color: #c1daec;
+}
 .kb-kl-table-summary {
     text-align: center;
     font-size: 10px;
@@ -1027,15 +1034,15 @@ a.kb-contract:visited {
 #kl-detail-left {
     display: inline-block;
     margin: 0 0px 10px 0;
-    width: 410px;
-    float: right;
+    width: 46%;
+    float: left;
 }
 
 #kl-detail-right {
     display: inline-block;
     margin: 0 0 10px 0;
-    width: 480px;
-    float: left;
+    width: 53%;
+    float: right;
 }
 
 #popup {
@@ -2144,7 +2151,7 @@ select {
 }
 
 .kl-detail-fitting {
-    padding-left: 40px;
+    padding-left: 0px;
 }
 
 #invsumcollapse {
@@ -2239,4 +2246,30 @@ width:
 
 .rounded {
     border-radius: 50%;
+}
+
+.dropdown {
+    float: left;
+    padding: 0px 12px 8px 12px;
+    color: white;
+    letter-spacing: 1px;
+    font-size: 9px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #000;
+    background: rgba(0, 0, 0, 0.0);
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #111;
+    min-width: 150px;
+    padding: 3px 5px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }

@@ -72,7 +72,7 @@ var top10ListGenerator = function (url, type) {
                         '<tr>' +
                         '<td class="awardbox-num">1.</td>' +
                         '<td colspan="2"><a class="kb-shipclass" href="/corporation/'+kill.corporationID+'/" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
-                        '<img class=rounded src=https://imageserver.eveonline.com/Corporation/' + kill.corporationID + '_128.png/><br>' +
+                        '<img src=https://imageserver.eveonline.com/Corporation/' + kill.corporationID + '_128.png/><br>' +
                         'Corporation: ' + kill.corporationName + '<br>';
                     if (kill.allianceID > 0) {
                         h += 'Alliance: ' + kill.allianceName + '<br>';
@@ -93,9 +93,9 @@ var top10ListGenerator = function (url, type) {
                 } else {
                     totalKills = totalKills - kill.count;
                     h += '<tr>' +
-                        '<td class="awardbox-num">2</td>' +
+                        '<td class="awardbox-num">'+loop+'</td>' +
                         '<td colspan="2"><a class="kb-shipclass" href="/corporation/'+kill.corporationID+'/" data-trigger="tooltip" data-cssclass="infotip" data-delay="0" data-position="e" data-content="' +
-                        '<img class=rounded src=https://imageserver.eveonline.com/Corporation/' + kill.corporationID + '_128.png/><br>' +
+                        '<img src=https://imageserver.eveonline.com/Corporation/' + kill.corporationID + '_128.png/><br>' +
                         'Corporation: ' + kill.corporationName + '<br>';
                     if (kill.allianceID > 0) {
                         h += 'Alliance: ' + kill.allianceName + '<br>';

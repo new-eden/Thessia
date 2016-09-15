@@ -51,4 +51,12 @@ class IndexController extends Controller
     private function getLoginData() {
 
     }
+
+    public function kill($killID) {
+        $menu = array(
+            "Stuff" => "",
+        );
+
+        return $this->render("/pages/kill.twig", array("killID" => $killID, "menu" => $menu));
+    }
 }

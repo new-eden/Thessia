@@ -33,7 +33,7 @@ var generateKillList = function(url, loadWebsocket, page) {
         var h = "";
 
         // Ship type portion
-        h += '<tr class="kb-table-row-kill" onclick="window.location.href=\'/kill/' + kill.killID + '\';">';
+        h += '<tr class="kb-table-row-kill" onclick="window.location.href=\'/kill/' + kill.killID + '/\';">';
         h += '<td class="kb-table-imgcell">' +
             '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+kill.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Render/'+ kill.victim.shipTypeID +'_32.png" style="width: 32px; height: 32px;"/>' +
             '</td>' +
@@ -164,7 +164,7 @@ var generateKillList = function(url, loadWebsocket, page) {
         // Define the type of call this is
         type: "GET",
         // Define the url we're getting data from
-        url: currentOrigin + url,
+        url: currentOrigin + url + page + "/",
         // Predefine the data field.. it's just an empty array
         data: "{}",
         // Define the content type we're getting

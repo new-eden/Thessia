@@ -1,5 +1,8 @@
 <div class="kltable">
-    <div class="kb-date-header">{{ "now"|date("l, F jS") }}</div><br />
+    {% if showDate %}
+        <div class="kb-date-header">{{ "now"|date("l, F jS") }}</div><br />
+    {% endif %}
+
     <table id="killlist" class="kb-table kb-kl-table kb-table-rows">
         <thead>
         <tr class="kb-table-header">
