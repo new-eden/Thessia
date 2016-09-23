@@ -40,6 +40,9 @@
 
 ## Plugin-specific files:
 
+# VisualStudio Code
+.vscode/
+
 # IntelliJ
 /out/
 
