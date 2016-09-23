@@ -89,14 +89,14 @@ var generateKillData = function(killID) {
                         '<td class="finalblow">' +
                             '<div class="menu-wrapper">' +
                                 '<a href="/character/'+attacker.characterID+'/">' +
-                                    '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Character/'+attacker.characterID+'_64.jpg" alt="'+attacker.characterName+'" title="'+attacker.characterName+'" />' +
+                                    '<img class="finalblow rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.characterName+'" data-position="s" src="https://imageserver.eveonline.com/Character/'+attacker.characterID+'_64.jpg" alt="'+attacker.characterName+'" title="'+attacker.characterName+'" />' +
                                 '</a>' +
                             '</div>' +
                         '</td>' +
                         '<td class="finalblow">' +
                             '<div class="menu-wrapper">' +
                                 '<a href="/ship/'+attacker.shipTypeID+'/">' +
-                                    '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
+                                    '<img class="finalblow rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
                                 '</a>' +
                             '</div>' +
                         '</td>' +
@@ -115,14 +115,14 @@ var generateKillData = function(killID) {
                             '<td class="finalblow">' +
                                 '<div class="menu-wrapper">' +
                                     '<a href="/character/'+attacker.characterID+'/">' +
-                                        '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Character/'+attacker.characterID+'_64.jpg" alt="'+attacker.characterName+'" title="'+attacker.characterName+'" />' +
+                                        '<img class="finalblow rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.characterName+'" data-position="s" src="https://imageserver.eveonline.com/Character/'+attacker.characterID+'_64.jpg" alt="'+attacker.characterName+'" title="'+attacker.characterName+'" />' +
                                     '</a>' +
                                 '</div>' +
                             '</td>' +
                             '<td class="finalblow">' +
                                 '<div class="menu-wrapper">' +
                                     '<a href="/ship/'+attacker.shipTypeID+'/">' +
-                                        '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
+                                        '<img class="finalblow rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />' +
                                     '</a>' +
                                 '</div>' +
                             '</td>' +
@@ -144,7 +144,7 @@ var generateKillData = function(killID) {
                     '<col class="attribute-data"/>' +
                     '<tr class="kb-table-row-even" >' +
                         '<td class="logo" rowspan="3">' +
-                            '<a href="/character/'+data.victim.characterID+'/"><img class="rounded" src="https://imageserver.eveonline.com/Character/' + data.victim.characterID + '_64.jpg" alt="' + data.victim.characterName + '"/></a>' +
+                            '<a href="/character/'+data.victim.characterID+'/"><img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+data.victim.characterName+'" data-position="s" src="https://imageserver.eveonline.com/Character/' + data.victim.characterID + '_64.jpg" alt="' + data.victim.characterName + '"/></a>' +
                         '</td>';
                         if(data.victim.characterID > 0) {
                             h +=
@@ -160,12 +160,16 @@ var generateKillData = function(killID) {
                         if(data.victim.factionID > 0) {
                             h += '(<a href="/faction/' + data.victim.factionID + '/">' + data.victim.factionName + '</a>)</td>';
                         }
-                    h += '</tr>' +
-                    '<tr class="kb-table-row-even">' +
-                        '<td>Alliance:</td>' +
-                        '<td><a href="/alliance/' + data.victim.allianceID + '/">' + data.victim.allianceName + '</a></td>' +
-                    '</tr>' +
-                '</table>' +
+                        if(data.victim.allianceID > 0) {
+                            h += '</tr>' +
+                                '<tr class="kb-table-row-even">' +
+                                '<td>Alliance:</td>' +
+                                '<td><a href="/alliance/' + data.victim.allianceID + '/">' + data.victim.allianceName + '</a></td>' +
+                                '</tr>';
+                        } else {
+                            h += '<td>&nbsp;</td><td>&nbsp;</td>';
+                        }
+                h += '</table>' +
             '</div>';
 
         h +=
@@ -176,7 +180,7 @@ var generateKillData = function(killID) {
                     '<col class="attribute-data"/>' +
                     '<tr class="kb-table-row-even" >' +
                         '<td class="logo" rowspan="3">' +
-                            '<a href="/ship/'+data.victim.shipTypeID+'/"><img class="rounded" src="https://imageserver.eveonline.com/Type/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/></a>' +
+                            '<a href="/ship/'+data.victim.shipTypeID+'/"><img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+data.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/></a>' +
                         '</td>' +
                         '<td>Ship:</td>' +
                         '<td><a href="/ship/' + data.victim.shipTypeID + '/">' + data.victim.shipTypeName + '</a></td>' +
@@ -211,197 +215,137 @@ var generateKillData = function(killID) {
 
         h += '' +
         '<div class="kl-detail-fitting">' +
-            '<div class="fitting-panel" style="position:relative; height:398px; width:398px;" title="fitting">' +
+            '<div class="fitting-panel" style="position:relative; height:398px; width:398px;">' +
             '<div id="mask" class="fit-slot-bg">' +
             '<img style="height:398px; width:398px;" src="/panel/tyrannis.png" alt="" /></div>';
 
-        var highCnt = 1;
-        var medCnt = 1;
-        var lowCnt = 1;
-        var rigCnt = 1;
-        var subCnt = 1;
-        var highAmmoCnt = 1;
-        var medAmmoCnt = 1;
-        var id = "";
-        var classText = "";
-        var itemCategory = 7;
-        var ammoCategory = 8;
-        var highSlotFlags = [27, 28, 29, 30, 31, 32, 33, 34]; // Implant is 89
-        var medSlotFlags = [19, 20, 21, 22, 23, 24, 25, 26];
-        var lowSlotFlags = [11, 12, 13, 14, 15, 16, 17, 18];
-        var rigSlotFlags = [92, 93, 94, 95, 96, 97, 98, 99];
-        var subSystemFlags = [125, 126, 127, 128, 129, 130, 131, 132];
-        var highSlotStyle = {
-            high1: 'left:73px; top:60px;',
-            high2: 'left:102px; top:42px;',
-            high3: 'left:134px; top:27px;',
-            high4: 'left:169px; top:21px;',
-            high5: 'left:203px; top:22px;',
-            high6: 'left:238px; top:30px;',
-            high7: 'left:270px; top:45px;',
-            high8: 'left:295px; top:64px;'
-        };
-        var medSlotStyle = {
-            med1: 'left:26px; top:140px;',
-            med2: 'left:24px; top:176px;',
-            med3: 'left:23px; top:212px;',
-            med4: 'left:30px; top:245px;',
-            med5: 'left:46px; top:278px;',
-            med6: 'left:69px; top:304px;',
-            med7: 'left:100px; top:328px;',
-            med8: 'left:133px; top:342px;'
-        };
-        var lowSlotStyle = {
-            low1: 'left:344px; top:143px;',
-            low2: 'left:350px; top:178px;',
-            low3: 'left:349px; top:213px;',
-            low4: 'left:340px; top:246px;',
-            low5: 'left:323px; top:277px;',
-            low6: 'left:300px; top:304px;',
-            low7: 'left:268px; top:324px;',
-            low8: 'left:234px; top:338px;'
-        };
-        var rigSlotStyle = {
-            rig1: 'left:148px; top:259px;',
-            rig2: 'left:185px; top:267px;',
-            rig3: 'left:221px; top:259px;'
-        };
-        var subSlotStyle = {
-            sub1: 'left:117px; top:131px;',
-            sub2: 'left:147px; top:108px;',
-            sub3: 'left:184px; top:98px;',
-            sub4: 'left:221px; top:107px;',
-            sub5: 'left:250px; top:131px;'
-        };
-        var highAmmoSlotStyle = {
-            high1l: 'left:94px; top:88px;',
-            high2l: 'left:119px; top:70px;',
-            high3l: 'left:146px; top:58px;',
-            high4l: 'left:175px; top:52px;',
-            high5l: 'left:204px; top:52px;',
-            high6l: 'left:232px; top:60px;',
-            high7l: 'left:258px; top:72px;',
-            high8l: 'left:280px; top:91px;'
-        };
-        var medAmmoSlotStyle = {
-            med1l: 'left:59px; top:154px;',
-            med2l: 'left:54px; top:182px;',
-            med3l: 'left:56px; top:210px;',
-            med4l: 'left:62px; top:238px;',
-            med5l: 'left:76px; top:265px;',
-            med6l: 'left:94px; top:288px;',
-            med7l: 'left:118px; top:305px;',
-            med8l: 'left:146px; top:318px;'
+        var slotTypes = {
+            "highx": {"flags": [27, 28, 29, 30, 31, 32, 33, 34], "styles": {
+                27: 'left:73px; top:60px;',
+                28: 'left:102px; top:42px;',
+                29: 'left:134px; top:27px;',
+                30: 'left:169px; top:21px;',
+                31: 'left:203px; top:22px;',
+                32: 'left:238px; top:30px;',
+                33: 'left:270px; top:45px;',
+                34: 'left:295px; top:64px;'
+            }, "ammo": {
+                27: 'left:94px; top:88px;',
+                28: 'left:119px; top:70px;',
+                29: 'left:146px; top:58px;',
+                30: 'left:175px; top:52px;',
+                31: 'left:204px; top:52px;',
+                32: 'left:232px; top:60px;',
+                33: 'left:258px; top:72px;',
+                34: 'left:280px; top:91px;'
+            }},
+            "midx": {"flags": [19, 20, 21, 22, 23, 24, 25, 26], "styles": {
+                19: 'left:26px; top:140px;',
+                20: 'left:24px; top:176px;',
+                21: 'left:23px; top:212px;',
+                22: 'left:30px; top:245px;',
+                23: 'left:46px; top:278px;',
+                24: 'left:69px; top:304px;',
+                25: 'left:100px; top:328px;',
+                26: 'left:133px; top:342px;'
+            }, "ammo": {
+                19: 'left:59px; top:154px;',
+                20: 'left:54px; top:182px;',
+                21: 'left:56px; top:210px;',
+                22: 'left:62px; top:238px;',
+                23: 'left:76px; top:265px;',
+                24: 'left:94px; top:288px;',
+                25: 'left:118px; top:305px;',
+                26: 'left:146px; top:318px;'
+            }},
+            "lowx": {"flags": [11, 12, 13, 14, 15, 16, 17, 18], "styles": {
+                11: 'left:344px; top:143px;',
+                12: 'left:350px; top:178px;',
+                13: 'left:349px; top:213px;',
+                14: 'left:340px; top:246px;',
+                15: 'left:323px; top:277px;',
+                16: 'left:300px; top:304px;',
+                17: 'left:268px; top:324px;',
+                18: 'left:234px; top:338px;'
+            }},
+            "rigxx": {"flags": [92, 93, 94, 95, 96, 97, 98, 99], "styles": {
+                92: 'left:148px; top:259px;',
+                93: 'left:185px; top:267px;',
+                94: 'left:221px; top:259px;'
+            }},
+            "subx": {"flags": [125, 126, 127, 128, 129, 130, 131, 132], "styles": {
+                125: 'left:117px; top:131px;',
+                126: 'left:147px; top:108px;',
+                127: 'left:184px; top:98px;',
+                128: 'left:221px; top:107px;',
+                129: 'left:250px; top:131px;'
+            }}
         };
 
-        // High slots
-        h += '<div id="highx" class="fit-slot-bg">' +
-            '<img src="/panel/8h.png" alt="" />' +
-            '</div>';
+        for(var key in slotTypes) {
+            var highCount = 0;
+            var medCount = 0;
+            var lowCount = 0;
+            var rigCount = 0;
+            var subCount = 0;
+            var slotName = key;
+            var d = slotTypes[key];
+            var flags = d["flags"];
+            var style = d["styles"];
+            var ammo = {};
+            if(d["ammo"] != null)
+                ammo = d["ammo"];
 
-        data.items.forEach(function(item) {
-            if (inArray(highSlotFlags, item.flag) && item.categoryID == itemCategory) {
-                id = "high" + highCnt;
-                classText = "fit-module";
-                if (item.qtyDestroyed > 0) {
-                    classText += " fit-destroyed";
+            for(var slotKey in data.items) {
+                var item = data.items[slotKey];
+                var ammoCategory = 8;
+                var itemCategory = 7;
+
+                if (inArray(flags, item.flag) && item.categoryID == itemCategory) {
+                    if (slotName == "highx") {
+                        highCount++;
+                    } else if (slotName == "midx") {
+                        medCount++;
+                    } else if (slotName == "lowx") {
+                        lowCount++;
+                    } else if (slotName == "rigxx") {
+                        rigCount++;
+                    } else if (slotName == "subx") {
+                        subCount++;
+                    }
                 }
-                h += '<div id="' + id + '" class="' + classText + '" style="' + highSlotStyle[id] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
-                highCnt++;
             }
-        });
 
-        // Med slots
-        h += '<div id="midx" class="fit-slot-bg">' +
-            '<img src="/panel/8m.png" alt="" />' +
-            '</div>';
+            h += '<div id="'+slotName+'" class="fit-slot-bg">';
+            if(slotName == "highx") {
+                h += '<img src="/panel/'+highCount+'h.png" alt="" />';
+            } else if(slotName == "midx") {
+                h += '<img src="/panel/'+medCount+'m.png" alt="" />';
+            } else if(slotName == "lowx") {
+                h += '<img src="/panel/'+lowCount+'l.png" alt="" />';
+            } else if(slotName == "rigxx") {
+                h += '<img src="/panel/'+rigCount+'r.png" alt="" />';
+            } else if(slotName == "subx") {
+                h += '<img src="/panel/'+subCount+'s.png" alt="" />';
+            }
+            h += '</div>';
 
-        data.items.forEach(function(item) {
-            if(inArray(medSlotFlags, item.flag) && item.categoryID == itemCategory) {
-                id = "med" + medCnt;
-                classText = "fit-module";
-                if(item.qtyDestroyed > 0) {
-                    classText += " fit-destroyed";
+            for(var slotKey in data.items) {
+                var item = data.items[slotKey];
+                var ammoCategory = 8;
+                var itemCategory = 7;
+
+                if(inArray(flags, item.flag) && item.categoryID == itemCategory) {
+                    if(item.qtyDestroyed > 0) {
+                        h += '<div data-trigger="tooltip" data-delay="0" data-content="'+item.typeName+'" data-position="s" id="' + slotName + '" class="fit-module fit-destroyed" style="' + style[item.flag] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
+                    } else {
+                        h += '<div data-trigger="tooltip" data-delay="0" data-content="'+item.typeName+'" data-position="s" id="' + slotName + '" class="fit-module" style="' + style[item.flag] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
+                    }
+                } else if (inArray(flags, item.flag) && item.categoryID == ammoCategory) {
+                    h += '<div data-trigger="tooltip" data-delay="0" data-content="'+item.typeName+'" data-position="s" id="' + slotName + '" class="fit-module" style="' + ammo[item.flag] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
                 }
-                h += '<div id="'+id+'" class="'+classText+'" style="'+medSlotStyle[id]+'"><img src="https://imageserver.eveonline.com/Type/'+item.typeID+'_32.png"></div>';
-                medCnt++;
             }
-        });
-
-        // Low slots
-        h += '<div id="lowx" class="fit-slot-bg">' +
-            '<img src="/panel/8l.png" alt="" />' +
-            '</div>';
-
-        data.items.forEach(function(item) {
-            if (inArray(lowSlotFlags, item.flag) && item.categoryID == itemCategory) {
-                id = "low" + lowCnt;
-                classText = "fit-module";
-                if (item.qtyDestroyed > 0) {
-                    classText += " fit-destroyed";
-                }
-                h += '<div id="' + id + '" class="' + classText + '" style="' + lowSlotStyle[id] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
-                lowCnt++;
-            }
-        });
-
-        // Rig slots
-        h += '<div id="rigxx" class="fit-slot-bg">' +
-            '<img src="/panel/3r.png" alt="" />' +
-            '</div>';
-        data.items.forEach(function(item) {
-            if (inArray(rigSlotFlags, item.flag)) {
-                id = "rig" + rigCnt;
-                classText = "fit-module";
-                if (item.qtyDestroyed > 0) {
-                    classText += " fit-destroyed";
-                }
-                h += '<div id="' + id + '" class="' + classText + '" style="' + rigSlotStyle[id] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
-                rigCnt++;
-            }
-        });
-
-        // Sub slots
-        h += '<div id="subx" class="fit-slot-bg">' +
-            '<img src="/panel/5s.png" alt="" />' +
-            '</div>';
-        data.items.forEach(function(item) {
-            if (inArray(subSystemFlags, item.flag)) {
-                id = "sub" + subCnt;
-                classText = "fit-module";
-                if (item.qtyDestroyed > 0) {
-                    classText += " fit-destroyed";
-                }
-                h += '<div id="' + id + '" class="' + classText + '" style="' + subSlotStyle[id] + '"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
-                subCnt++;
-            }
-        });
-
-        // High Slot Ammo
-        data.items.forEach(function(item) {
-            if(inArray(highSlotFlags, item.flag) && item.categoryID == ammoCategory) {
-                id = "high" + highAmmoCnt + "l";
-                classText = "fit-ammo";
-                if(item.qtyDestryoed > 0) {
-                    classText += " fit.destroyed";
-                }
-                h += '<div id="'+id+'" class="'+classText+'" style="'+ highAmmoSlotStyle[id]+'"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
-                highAmmoCnt++;
-            }
-        });
-
-        // Med Slot Ammo
-        data.items.forEach(function(item) {
-            if(inArray(medSlotFlags, item.flag) && item.categoryID == ammoCategory) {
-                id = "med" + medAmmoCnt + "l";
-                classText = "fit-ammo";
-                if(item.qtyDestryoed > 0) {
-                    classText += " fit.destroyed";
-                }
-                h += '<div id="'+id+'" class="'+classText+'" style="'+ medAmmoSlotStyle[id]+'"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"></div>';
-                medAmmoCnt++;
-            }
-        });
+        }
 
         h +=
             '<div class="bigship"><img src="https://imageserver.eveonline.com/Render/'+data.victim.shipTypeID+'_256.png" alt="" /></div>';
@@ -415,30 +359,30 @@ var generateKillData = function(killID) {
         // {typeID, typeName, qty, value
         var reduced = data.items.reduce(function (pv, cv) {
             if (cv.qtyDropped > 0) {
-                if (pv[cv.typeName.trim() + "dropped"]) {
-                    pv[cv.typeName.trim() + "dropped"]["qtyDropped"] += cv.qtyDropped;
-                    pv[cv.typeName.trim() + "dropped"]["value"] += (cv.value * cv.qtyDropped);
+                if (pv[cv.typeName + "dropped"]) {
+                    pv[cv.typeName + "dropped"]["qtyDropped"] += cv.qtyDropped;
+                    pv[cv.typeName + "dropped"]["value"] += (cv.value * cv.qtyDropped);
                 } else {
-                    pv[cv.typeName.trim() + "dropped"] = [];
-                    pv[cv.typeName.trim() + "dropped"]["flag"] = cv.flag;
-                    pv[cv.typeName.trim() + "dropped"]["typeID"] = cv.typeID;
-                    pv[cv.typeName.trim() + "dropped"]["typeName"] = cv.typeName.trim();
-                    pv[cv.typeName.trim() + "dropped"]["qtyDropped"] = cv.qtyDropped;
-                    pv[cv.typeName.trim() + "dropped"]["qtyDestroyed"] = 0;
-                    pv[cv.typeName.trim() + "dropped"]["value"] = (cv.value * cv.qtyDropped);
+                    pv[cv.typeName + "dropped"] = [];
+                    pv[cv.typeName + "dropped"]["flag"] = cv.flag;
+                    pv[cv.typeName + "dropped"]["typeID"] = cv.typeID;
+                    pv[cv.typeName + "dropped"]["typeName"] = cv.typeName;
+                    pv[cv.typeName + "dropped"]["qtyDropped"] = cv.qtyDropped;
+                    pv[cv.typeName + "dropped"]["qtyDestroyed"] = 0;
+                    pv[cv.typeName + "dropped"]["value"] = (cv.value * cv.qtyDropped);
                 }
             } else if (cv.qtyDestroyed > 0) {
-                if (pv[cv.typeName.trim() + "destroyed"]) {
-                    pv[cv.typeName.trim() + "destroyed"]["qtyDestroyed"] += cv.qtyDestroyed;
-                    pv[cv.typeName.trim() + "destroyed"]["value"] += (cv.value * cv.qtyDestroyed);
+                if (pv[cv.typeName + "destroyed"]) {
+                    pv[cv.typeName + "destroyed"]["qtyDestroyed"] += cv.qtyDestroyed;
+                    pv[cv.typeName + "destroyed"]["value"] += (cv.value * cv.qtyDestroyed);
                 } else {
-                    pv[cv.typeName.trim() + "destroyed"] = [];
-                    pv[cv.typeName.trim() + "destroyed"]["flag"] = cv.flag;
-                    pv[cv.typeName.trim() + "destroyed"]["typeID"] = cv.typeID;
-                    pv[cv.typeName.trim() + "destroyed"]["typeName"] = cv.typeName.trim();
-                    pv[cv.typeName.trim() + "destroyed"]["qtyDropped"] = 0;
-                    pv[cv.typeName.trim() + "destroyed"]["qtyDestroyed"] = cv.qtyDestroyed;
-                    pv[cv.typeName.trim() + "destroyed"]["value"] = (cv.value * cv.qtyDestroyed);
+                    pv[cv.typeName + "destroyed"] = [];
+                    pv[cv.typeName + "destroyed"]["flag"] = cv.flag;
+                    pv[cv.typeName + "destroyed"]["typeID"] = cv.typeID;
+                    pv[cv.typeName + "destroyed"]["typeName"] = cv.typeName;
+                    pv[cv.typeName + "destroyed"]["qtyDropped"] = 0;
+                    pv[cv.typeName + "destroyed"]["qtyDestroyed"] = cv.qtyDestroyed;
+                    pv[cv.typeName + "destroyed"]["value"] = (cv.value * cv.qtyDestroyed);
                 }
             }
             return pv;
@@ -507,7 +451,7 @@ var generateKillData = function(killID) {
                             if (item.qtyDropped > 0) {
                                 h +=
                                     '<tr class="kb-table-row-odd dropped">' +
-                                    '<td class="item-icon"><a href="/type/' + item.typeID + '/"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"</a></td>' +
+                                    '<td class="item-icon"><a href="/type/' + item.typeID + '/"><img data-trigger="tooltip" data-delay="0" data-content="'+item.typeName+'" data-position="e" src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"</a></td>' +
                                     '<td>' + item.typeName + '</td>' +
                                     '<td>' + item.qtyDropped + '</td>' +
                                     '<td>' + millionBillion(item.value) + '</td>' +
@@ -517,7 +461,7 @@ var generateKillData = function(killID) {
                             } else if (item.qtyDestroyed > 0) {
                                 h +=
                                     '<tr class="kb-table-row-odd">' +
-                                    '<td class="item-icon"><a href="/type/' + item.typeID + '/"><img src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"</a></td>' +
+                                    '<td class="item-icon"><a href="/type/' + item.typeID + '/"><img data-trigger="tooltip" data-delay="0" data-content="'+item.typeName+'" data-position="e" src="https://imageserver.eveonline.com/Type/' + item.typeID + '_32.png"</a></td>' +
                                     '<td>' + item.typeName + '</td>' +
                                     '<td>' + item.qtyDestroyed + '</td>' +
                                     '<td>' + millionBillion(item.value) + '</td>' +
@@ -645,9 +589,9 @@ var generateKillData = function(killID) {
                 '<td rowspan="5" class="logo" width="64">' +
                     '<a href="/character/' + attacker.characterID + '/">';
                         if(attacker.finalBlow == true) {
-                            h += '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Character/'+ attacker.characterID+'_64.jpg" title="' + attacker.characterName + '" alt="' + attacker.characterName + '" />';
+                            h += '<img class="finalblow rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.characterName+'" data-position="s" src="https://imageserver.eveonline.com/Character/'+ attacker.characterID+'_64.jpg" title="' + attacker.characterName + '" alt="' + attacker.characterName + '" />';
                         } else {
-                            h += '<img class="rounded" src="https://imageserver.eveonline.com/Character/'+ attacker.characterID+'_64.jpg" title="' + attacker.characterName + '"  alt="' + attacker.characterName + '" />';
+                            h += '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.characterName+'" data-position="s" src="https://imageserver.eveonline.com/Character/'+ attacker.characterID+'_64.jpg" title="' + attacker.characterName + '"  alt="' + attacker.characterName + '" />';
                         }
             h +=
                     '</a>' +
@@ -655,9 +599,9 @@ var generateKillData = function(killID) {
                 '<td rowspan="5" class="logo" width="64">' +
                     '<a href="/ship/'+attacker.shipTypeID+'/">';
                         if(attacker.finalBlow == true) {
-                            h += '<img class="finalblow rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
+                            h += '<img class="finalblow rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
                         } else {
-                            h += '<img class="rounded" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
+                            h += '<img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+attacker.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/'+attacker.shipTypeID+'_64.png" alt="'+attacker.shipTypeName+'" title="'+attacker.shipTypeName+'" />';
                         }
             h +=    '</a>' +
                 '</td>' +

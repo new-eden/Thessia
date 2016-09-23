@@ -4,6 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="description" content="New Eden, a simple killboard"/>
     <meta name="keywords" content="EVE-Online, EVE, Multiplayer, Killboard, New Eden, killmail"/>
+    <meta name="google-site-verification" content="Yg96h99ajlHpEyV-XeuB-L1SdZXcosz_WIfkilNYRMQ" />
     <!-- Page Meta Tags -->
     {% block meta %}{% endblock %}
 
@@ -12,6 +13,8 @@
 
     <!-- Site Font-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Unica+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <!-- Site CSS -->
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
@@ -72,10 +75,15 @@
         <div align="center" id="popup" style="display: none; position: absolute; top: 217px; width: 99%; z-index: 3; padding: 5px;">
     </div>
 
+    <!-- Header Text/Image-->
+    <div style="text-align: center;">
+        <a href="/" style="font-family: 'Unica One', cursive; font-size: 90px;">New Eden</a>
+    </div>
+
     <!-- Content? -->
     <div id="repository">
         <br>
-        <div id="contentkb" style="margin-top: 50px;">
+        <div id="contentkb">
             <section>
                 <!-- Main navbar -->
                 {% include "global/navbar.twig" %}

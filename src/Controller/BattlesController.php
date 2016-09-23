@@ -26,29 +26,31 @@
 namespace Thessia\Controller;
 
 use Thessia\Middleware\Controller;
+use Thessia\Model\CCP\typeIDs;
+use Thessia\Model\EVE\Participants;
 
-class CharacterController extends Controller {
-    public function index($characterID = 0) {
-        $collection = $this->mongo->selectCollection("thessia", "characters");
-        $name = $collection->findOne(array("characterID" => (int) $characterID))["characterName"];
-        $menu = array(
-            "EVE-Board" => "#",
-            "EVE-Search" => "#",
-            "EVE-Gate" => "#",
-            "EVEWho" => "#",
-            "EVE-Hunt" => "#",
-            "Navigation" => array(
-                "Previous Page" => "#",
-                "Next Page" => "#",
-                "Kills" => "#",
-                "Losses" => "#",
-                "Solo" => "#",
-                "Trophies" => "#",
-                "Top" => "#",
-                "Ranks" => "#",
-                "Stats" => "#",
-            ),
-        );
-        return $this->render("pages/character.twig", array("characterID" => $characterID, "menu" => $menu, "name" => $name));
+class BattlesController extends Controller
+{
+    public function showBattles($page = 1) {
+        if($page == 1) {
+            $menu = array(
+                "Navigation" => array(
+                    "Next Page" => $this->getFullHost() . "battles/page/" . ($page + 1) . "/",
+                )
+            );
+        } else {
+            $menu = array(
+                "Navigation" => array(
+                    "Previous Page" => $this->getFullHost() . "battles/page/" . ($page - 1) . "/",
+                    "Next Page" => $this->getFullHost() . "battles/page/" . ($page + 1) . "/",
+                )
+            );
+        }
+
+        return $this->render("/pages/battles.twig", array("menu" => $menu));
+    }
+
+    public function showBattle($battleID) {
+
     }
 }

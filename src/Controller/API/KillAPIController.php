@@ -75,17 +75,15 @@ class KillAPIController extends Controller
         if($this->cache->exists($md5))
             return $this->json($this->cache->get($md5));
 
-        $startDate = $this->makeTimeFromDateTime(date("Y-m-d", strtotime($timeStamp)));
-        $endDate = $this->makeTimeFromDateTime(date("Y-m-d", strtotime($timeStamp) + 86400));
+        $startDate = $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime($timeStamp)));
+        $endDate = $this->makeTimeFromDateTime(date("Y-m-d H:i:s", strtotime($timeStamp) + 86400));
 
         $formatData = array();
-        $data = $this->killmails->find(
-            array("killTime" => array("\$gte" => $startDate, "\$lte" => $endDate)),
-            array(
-                "projection" => array("_id" => 0, "killID" => 1, "crestHash" => 1),
-                "sort" => array("killID" => -1)
-            )
-        )->toArray();
+        $data = $this->killmails->aggregate(array(
+            array('$match' => array("killTime" => array("\$gte" => $startDate, "\$lt" => $endDate))),
+            array('$project' => array("_id" => 0, "killID" => 1, "crestHash" => 1)),
+            array('$sort' => array("killID" => -1))
+        ))->toArray();
 
         foreach($data as $km)
             $formatData[$km["killID"]] = $km["crestHash"];

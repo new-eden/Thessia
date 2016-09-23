@@ -16,7 +16,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sco.js/1.1.0/js/sco.tooltip.js" integrity="sha256-D1cXcX/XEN8qmiAakjJ3d54Qq93MF4+WtdsTkSFZuLo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/js/killlist.js"></script>
     <script type="text/javascript" src="/js/topList.js"></script>
-    <script type="text/javascript" src="/js/characterInfoTop.js"></script>
+    <script type="text/javascript" src="/js/allianceInfoTop.js"></script>
     <script>
         var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var splitsies = newURL.split("/");
@@ -30,13 +30,13 @@
         });
 
         // Generate the killlist
-        generateKillList("/api/kills/character/{{ characterID }}/", false, page, false);
-        generateTopList("/api/character/top/corporations/{{ characterID }}/", "topListCorporation", "corporation", "Top 10 Corporations");
-        generateTopList("/api/character/top/alliances/{{ characterID }}/", "topListAlliance", "alliance", "Top 10 Alliances");
-        generateTopList("/api/character/top/ships/{{ characterID }}/", "topListShips", "ship", "Top 10 Ships");
-        generateTopList("/api/character/top/systems/{{ characterID }}/", "topListSolarSystems", "system", "Top 10 Systems");
-        generateTopList("/api/character/top/regions/{{ characterID }}/", "topListRegions", "region", "Top 10 Regions");
-        characterInfoTop("/api/character/information/{{ characterID }}/");
+        generateKillList("/api/kills/alliance/{{ allianceID }}/", false, page, false);
+        generateTopList("/api/alliance/top/characters/{{ allianceID }}/", "topListCharacter", "character", "Top 10 Characters");
+        generateTopList("/api/alliance/top/corporations/{{ allianceID }}/", "topListCorporation", "corporation", "Top 10 Corporations");
+        generateTopList("/api/alliance/top/ships/{{ allianceID }}/", "topListShips", "ship", "Top 10 Ships");
+        generateTopList("/api/alliance/top/systems/{{ allianceID }}/", "topListSolarSystems", "system", "Top 10 Systems");
+        generateTopList("/api/alliance/top/regions/{{ allianceID }}/", "topListRegions", "region", "Top 10 Regions");
+        allianceInfoTop("/api/alliance/information/{{ allianceID }}/");
     </script>
 {% endblock %}
 
@@ -48,8 +48,8 @@
 
 {% block leftContent %}
     {% include "/global/navigationMenu.twig" %}
+    <div id="topListCharacter"></div><br/>
     <div id="topListCorporation"></div><br/>
-    <div id="topListAlliance"></div><br/>
     <div id="topListShips"></div><br/>
     <div id="topListSolarSystems"></div><br/>
     <div id="topListRegions"></div><br/>

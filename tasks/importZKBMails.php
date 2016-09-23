@@ -58,7 +58,7 @@ class importZKBMails extends Command
         // Initial offset
         $increment = 86405; // Increment by a full day and 5 seconds to get to the next day...
         // Get the latest offset from the DB
-        $date = (int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "zkbDateOffSet"), 0);
+        $date = 0; //(int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "zkbDateOffSet"), 0);
         if($date == 0)
             $date = "1196889200"; // Earliest KillID is on 20071205 which is 1196809200 in unixTime
 

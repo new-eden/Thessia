@@ -27,6 +27,7 @@
 namespace Thessia\Model\Database\EVE;
 
 
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Client;
 use Thessia\Lib\Cache;
 
@@ -76,14 +77,14 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.characterID" => array('$ne' => 0))),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.characterID" => array('$ne' => 0), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000)))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$attackers.characterID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ))->toArray();
+        ), array("allowDiskUse" => true))->toArray();
 
         foreach($data as $key => $character)
             $data[$key]["name"] = $this->characters->findOne(array("characterID" => $character["id"]))["characterName"];
@@ -99,14 +100,14 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.corporationID" => array('$ne' => 0))),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.corporationID" => array('$ne' => 0), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000)))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$attackers.corporationID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ))->toArray();
+        ), array("allowDiskUse" => true))->toArray();
         foreach($data as $key => $corporation)
             $data[$key]["name"] = $this->corporations->findOne(array("corporationID" => $corporation["id"]))["corporationName"];
 
@@ -120,14 +121,14 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.allianceID" => array('$ne' => 0))),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "attackers.allianceID" => array('$ne' => 0), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000)))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$attackers.allianceID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ))->toArray();
+        ), array("allowDiskUse" => true))->toArray();
         foreach($data as $key => $alliance)
             $data[$key]["name"] = $this->alliances->findOne(array("allianceID" => $alliance["id"]))["allianceName"];
 
@@ -141,14 +142,14 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000)))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$attackers.shipTypeID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ))->toArray();
+        ), array("allowDiskUse" => true))->toArray();
         foreach($data as $key => $shipType)
             $data[$key]["name"] = trim($this->shipTypes->findOne(array("typeID" => $shipType["id"]))["name"]["en"]);
 
@@ -162,14 +163,14 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$match' => array("attackers.{$attackerType}" => $typeID), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$solarSystemID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ))->toArray();
+        ), array("allowDiskUse" => true))->toArray();
         foreach($data as $key => $solarSystem)
             $data[$key]["name"] = trim($this->solarSystems->findOne(array("solarSystemID" => $solarSystem["id"]))["solarSystemName"]);
 
@@ -183,14 +184,14 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID)),
+            array('$match' => array("attackers.{$attackerType}" => $typeID), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$regionID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ))->toArray();
+        ), array("allowDiskUse" => true))->toArray();
         foreach($data as $key => $region)
             $data[$key]["name"] = trim($this->regions->findOne(array("regionID" => $region["id"]))["regionName"]);
 

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-var characterInfoTop = function(url) {
+var allianceInfoTop = function(url) {
     var generateHTML = function(data) {
         var h = "";
 
@@ -36,25 +36,8 @@ var characterInfoTop = function(url) {
             '<tbody>' +
             '<tr class="kb-table-row-even">' +
             '<td rowspan="7">' +
-            '<a href="/character/' + data.characterID + '/"><img class="rounded" src="https://imageserver.eveonline.com/Character/' + data.characterID + '_128.jpg" alt="portrait"></a>' +
-            '<a href="/corporation/' + data.corporationID + '/"><img class="rounded" src="https://imageserver.eveonline.com/Corporation/' + data.corporationID + '_128.png" alt="portrait"></a>' +
             '<a href="/alliance/' + data.allianceID + '/"><img class="rounded" src="https://imageserver.eveonline.com/Alliance/' + data.allianceID + '_128.png" alt="portrait"></a>' +
-            '</td>' +
-            '<td>Corporation:</td>' +
-            '<td>' +
-            '<a href="/corporation/' + data.corporationID + '/">' + data.corporationName + '</a>' +
-            '</td>' +
-            '</tr>';
-
-        if (data.allianceID > 0) {
-            h +=
-                '<tr class="kb-table-row-even">' +
-                '<td>Alliance:</td>' +
-                '<td>' +
-                '<a href="/alliance/' + data.allianceID + '/">' + data.allianceName + '</a>' +
-                '</td>' +
-                '</tr>';
-        }
+            '</td>';
 
          h+=
             '<tr class="kb-table-row-even">' +
@@ -62,17 +45,6 @@ var characterInfoTop = function(url) {
             '<td class="kl-kill">';
             if(data.kills > 0) {
                 h += Math.round(data.kills);
-            } else {
-                h += 0;
-            }
-        h +=
-            '</td>' +
-            '</tr>' +
-            '<tr class="kb-table-row-even">' +
-            '<td>Points:</td>' +
-            '<td class="kl-kill">';
-            if(data.points > 0) {
-                h += format(parseFloat(data.points).toFixed(2));
             } else {
                 h += 0;
             }

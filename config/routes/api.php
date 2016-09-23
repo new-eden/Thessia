@@ -211,4 +211,10 @@ $app->group("/api", function() use ($app) {
         $app->get("/inventory/{inventoryID:[0-9]+}_{imageSize:[0-9]+}.jpg", $controller("getInventoryImage"));
         $app->get("/ship/{shipID:[0-9]+}_{imageSize:[0-9]+}.jpg", $controller("getShipImage"));
     });
+
+    $app->group("/battlereport", function() use ($app) {
+        $controller = new \Thessia\Controller\API\BattleReportAPIController($app);
+        $app->get("/battles/[{page:[0-9]+}/]", $controller("getBattles"));
+        $app->get("/battle/{battleID:[a-zA-Z0-9]+}/", $controller("getBattle"));
+    });
 });

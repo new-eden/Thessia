@@ -23,32 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Controller;
-
-use Thessia\Middleware\Controller;
-
-class CharacterController extends Controller {
-    public function index($characterID = 0) {
-        $collection = $this->mongo->selectCollection("thessia", "characters");
-        $name = $collection->findOne(array("characterID" => (int) $characterID))["characterName"];
-        $menu = array(
-            "EVE-Board" => "#",
-            "EVE-Search" => "#",
-            "EVE-Gate" => "#",
-            "EVEWho" => "#",
-            "EVE-Hunt" => "#",
-            "Navigation" => array(
-                "Previous Page" => "#",
-                "Next Page" => "#",
-                "Kills" => "#",
-                "Losses" => "#",
-                "Solo" => "#",
-                "Trophies" => "#",
-                "Top" => "#",
-                "Ranks" => "#",
-                "Stats" => "#",
-            ),
-        );
-        return $this->render("pages/character.twig", array("characterID" => $characterID, "menu" => $menu, "name" => $name));
-    }
-}
+$app->group("/corporation", function() use ($app) {
+    $controller = new \Thessia\Controller\CorporationController($app);
+    $app->get("/[{corporationID:[0-9]+}/]", $controller("index"));
+});

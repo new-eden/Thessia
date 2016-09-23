@@ -27,10 +27,10 @@ namespace Thessia\Controller;
 
 use Thessia\Middleware\Controller;
 
-class CharacterController extends Controller {
-    public function index($characterID = 0) {
-        $collection = $this->mongo->selectCollection("thessia", "characters");
-        $name = $collection->findOne(array("characterID" => (int) $characterID))["characterName"];
+class AllianceController extends Controller {
+    public function index($allianceID = 0) {
+        $collection = $this->mongo->selectCollection("thessia", "alliances");
+        $name = $collection->findOne(array("allianceID" => (int) $allianceID))["allianceName"];
         $menu = array(
             "EVE-Board" => "#",
             "EVE-Search" => "#",
@@ -49,6 +49,8 @@ class CharacterController extends Controller {
                 "Stats" => "#",
             ),
         );
-        return $this->render("pages/character.twig", array("characterID" => $characterID, "menu" => $menu, "name" => $name));
+
+
+        return $this->render("pages/alliance.twig", array("allianceID" => $allianceID, "menu" => $menu, "name" => $name));
     }
 }

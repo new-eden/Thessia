@@ -59,7 +59,8 @@ generateTopList = function(url, topListAppend, type, headerText) {
             loop++;
         });
 
-        h += '<tr>' +
+        h += '<tr></tr><tr>' +
+            '<td class="awardbox-comment" colspan="3">(Over last 30 days)</td>' +
             '</tr>' +
             '</table>' +
             '</td>' +
