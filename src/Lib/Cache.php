@@ -51,12 +51,6 @@ class Cache
     function __construct(Config $config)
     {
         $this->redis = new Client();
-        //$this->redis = new \Redis();
-        //if ($this->persistence == false) {
-        //    $this->redis->connect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        //} else {
-        //    $this->redis->pconnect($config->get("host", "redis", "127.0.0.1"), $config->get("port", "redis", 6379));
-        //}
     }
 
     /**
@@ -92,9 +86,8 @@ class Cache
     public function set(string $key, $value, int $timeout = 0)
     {
         $result = $this->redis->set($key, json_encode($value));
-        if ($timeout > 0) {
+        if ($timeout > 0)
             return $result ? $this->expire($key, $timeout) : $result;
-        }
         return $result;
     }
 
@@ -157,14 +150,14 @@ class Cache
      * @param string $key Key of numeric Cache item to increment
      * @param int $timeout
      *
-     * @return callable Function returning item's new value on successful increment, else `false`
+     * @return int|false Function returning item's new value on successful increment, else `false`
      */
-    public function increment(string $key, int $timeout = 0)
+    public function increment(string $key, int $timeout = 0): int
     {
         $data = $this->redis->incr($key);
-        if ($timeout) {
+        if ($timeout)
             $this->expire($key, $timeout);
-        }
+
         return $data;
     }
 
@@ -178,9 +171,9 @@ class Cache
      * @param string $key Key of numeric Cache item to decrement
      * @param int $timeout A strtotime() compatible Cache time.
      *
-     * @return Closure Function returning item's new value on successful decrement, else `false`
+     * @return int|false Function returning item's new value on successful decrement, else `false`
      */
-    public function decrement(string $key, int $timeout = 0)
+    public function decrement(string $key, int $timeout = 0): int
     {
         $data = $this->redis->decr($key);
         if ($timeout) {

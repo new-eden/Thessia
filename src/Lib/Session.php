@@ -38,7 +38,7 @@ class SessionHandler implements SessionHandlerInterface
     protected $ttl = 7200; // 2hrs of cache time
     private $cache;
 
-    function __construct(Cache $cache)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -49,10 +49,9 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @link http://php.net/manual/en/sessionhandlerinterface.close.php
      *
-     * @return bool <p>
+     * @return bool
      *              The return value (usually TRUE on success, FALSE on failure).
      *              Note this value is returned internally to PHP for processing.
-     *              </p>
      */
     public function close()
     {
@@ -65,16 +64,15 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @link http://php.net/manual/en/sessionhandlerinterface.destroy.php
      *
-     * @param int $session_id The session ID being destroyed.
+     * @param int $sessionID The session ID being destroyed.
      *
-     * @return boolean|null <p>
+     * @return boolean|null
      *              The return value (usually TRUE on success, FALSE on failure).
      *              Note this value is returned internally to PHP for processing.
-     *              </p>
      */
-    public function destroy($session_id)
+    public function destroy($sessionID)
     {
-        $this->cache->delete($session_id);
+        $this->cache->delete($sessionID);
     }
 
     /**
@@ -83,17 +81,14 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @link http://php.net/manual/en/sessionhandlerinterface.gc.php
      *
-     * @param int $maxlifetime <p>
+     * @param int $maxLifeTime
      *                         Sessions that have not updated for
-     *                         the last maxlifetime seconds will be removed.
-     *                         </p>
-     *
-     * @return bool <p>
+     *                         the last maxLifeTime seconds will be removed.
+     * @return bool
      *              The return value (usually TRUE on success, FALSE on failure).
      *              Note this value is returned internally to PHP for processing.
-     *              </p>
      */
-    public function gc($maxlifetime)
+    public function gc($maxLifeTime)
     {
         return true;
     }
@@ -104,15 +99,14 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @link http://php.net/manual/en/sessionhandlerinterface.open.php
      *
-     * @param string $save_path The path where to store/retrieve the session.
-     * @param string $session_id The session id.
+     * @param string $savePath The path where to store/retrieve the session.
+     * @param string $sessionID The session id.
      *
-     * @return bool <p>
+     * @return bool
      *              The return value (usually TRUE on success, FALSE on failure).
      *              Note this value is returned internally to PHP for processing.
-     *              </p>
      */
-    public function open($save_path, $session_id)
+    public function open($savePath, $sessionID)
     {
         return true;
     }
@@ -123,17 +117,16 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @link http://php.net/manual/en/sessionhandlerinterface.read.php
      *
-     * @param string $session_id The session id to read data for.
+     * @param string $sessionID The session id to read data for.
      *
-     * @return string <p>
+     * @return string
      *                Returns an encoded string of the read data.
      *                If nothing was read, it must return an empty string.
      *                Note this value is returned internally to PHP for processing.
-     *                </p>
      */
-    public function read($session_id)
+    public function read($sessionID)
     {
-        $data = $this->cache->get($session_id);
+        $data = $this->cache->get($sessionID);
         if (!is_array($data)) {
             return (string)$data;
         }
@@ -146,27 +139,21 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @link http://php.net/manual/en/sessionhandlerinterface.write.php
      *
-     * @param string $session_id The session id.
-     * @param string $session_data <p>
+     * @param string $sessionID The session id.
+     * @param string $sessionData
      *                             The encoded session data. This data is the
      *                             result of the PHP internally encoding
      *                             the $_SESSION superglobal to a serialized
      *                             string and passing it as this parameter.
      *                             Please note sessions use an alternative serialization method.
-     *                             </p>
      *
-     * @return bool <p>
+     * @return bool
      *              The return value (usually TRUE on success, FALSE on failure).
      *              Note this value is returned internally to PHP for processing.
-     *              </p>
      */
-    public function write($session_id, $session_data)
+    public function write($sessionID, $sessionData)
     {
-        $this->cache->set($session_id, $session_data, $this->ttl);
+        $this->cache->set($sessionID, $sessionData, $this->ttl);
         return true;
-    }
-
-    public function RunAsNew()
-    {
     }
 }
