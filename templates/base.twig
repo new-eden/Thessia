@@ -61,10 +61,12 @@
     <script>
         $(function() {
             $("#searchBox").typeahead({
+                hint: true,
                 highlight: true,
                 }, {
                 name: "search",
                 display: "value",
+                valueKey: "selected",
                 limit: 50,
                 source: function(query, syncResults, asyncResults) {
                     $.get("https://neweden.xyz/api/search/all/" + query + "/", function(data) {
@@ -140,6 +142,13 @@
 
 <!-- Start of the body -->
 <body style="height: 100%">
+    <!-- Back To Top -->
+    <div class="backtotop" style="position: fixed; margin-bottom: 25px; margin-right: 50px; bottom: 0; right: 0" alt="Back to Top">
+        <a style="position: relative; bottom: 0; right: 0;" href="#top">
+            <img src="/img/arrow-up.png" title="Back to Top">
+        </a>
+    </div>
+
     <!-- Popup -->
     <div id="popup"></div>
         <div align="center" id="popup" style="display: none; position: absolute; top: 217px; width: 99%; z-index: 3; padding: 5px;">
@@ -184,7 +193,6 @@
                     <div id="footerarea">
                         <br>
                         <div class="counter"></div>
-                        <div class="footerbacktotop" style="float: right" alt="Back to Top"><a href="#top"><img src="/img/arrow-up.png" title="Back to Top"></a></div>
                         <br>
                         <div class="footerbacktotop2" style="float: left">
                             <a href="http://evekb.org/forum/viewtopic.php?f=1033&t=18159">EVE+</a> theme by <a href="http://gate.eveonline.com/profile/vecati">Vecati</a>

@@ -2302,7 +2302,6 @@ width:
     display: none;
     position: absolute;
     background-color: #111;
-    min-width: 150px;
     padding: 3px 5px;
     z-index: 1;
 }
