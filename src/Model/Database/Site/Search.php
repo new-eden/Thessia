@@ -35,8 +35,8 @@ class Search {
         $this->mongodb = $client;
     }
 
-    public function search(string $searchTerm, array $searchIn = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial", "constellation"), int $limit = 5): array {
-        $valid = array("faction", "alliance", "corporation", "character", "item", "system", "region", "celestial", "constellation");
+    public function search(string $searchTerm, array $searchIn = array("faction", "alliance", "corporation", "character", "system", "region", "item", "celestial", "constellation"), int $limit = 5): array {
+        $valid = array("faction", "alliance", "corporation", "character", "system", "region", "item", "celestial", "constellation");
         $searchArray = array();
 
         if (!is_array($searchIn))

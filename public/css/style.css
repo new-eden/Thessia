@@ -2314,3 +2314,10 @@ width:
 .top {
 
 }
+
+.hidden { display: none; }
+
+#searchDropDown .empty-message {
+    padding: 5px 10px;
+    text-align: center;
+}

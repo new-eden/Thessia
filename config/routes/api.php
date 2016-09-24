@@ -186,6 +186,7 @@ $app->group("/api", function() use ($app) {
 
     $app->group("/search", function() use ($app) {
         $controller = new \Thessia\Controller\API\SearchAPIController($app);
+        $app->get("/all/{searchTerm:[A-Za-z0-9%-_]+}/", $controller("findAny"));
         $app->get("/faction/{searchTerm:[A-Za-z0-9]+}/", $controller("findFaction"));
         $app->get("/alliance/{searchTerm:[A-Za-z0-9]+}/", $controller("findAlliance"));
         $app->get("/corporation/{searchTerm:[A-Za-z0-9]+}/", $controller("findCorporation"));

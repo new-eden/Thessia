@@ -26,8 +26,20 @@
 namespace Thessia\Lib;
 
 
+/**
+ * Class RedisTools
+ * @package Thessia\Lib
+ */
 class RedisTools {
+    /**
+     * @var \Redis
+     */
     private $redis;
+
+    /**
+     * RedisTools constructor.
+     * @param Cache $cache
+     */
     public function __construct(Cache $cache) {
         $this->redis = $cache->returnRedis();
     }

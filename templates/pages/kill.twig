@@ -17,6 +17,18 @@
     <script type="text/javascript" src="/js/kill.js"></script>
     <script>
         generateKillData({{ killID }});
+        var showingComments = false;
+        showComments = function() {
+            var element = document.getElementsByName("comments");
+
+            if(showingComments == false) {
+                $("#comments").removeClass("hidden");
+                showingComments = true;
+            } else {
+                $("#comments").addClass("hidden");
+                showingComments = false
+            }
+        }
     </script>
 {% endblock %}
 
@@ -28,6 +40,13 @@
         <div id="lossValueDetail"></div>
     </div>
     <div id="kl-detail-right">
+        <div class="involvedparties"><a href="#isso-thread" style="color: #7F7F7F; font-size: 12px; font-weight: bold;">:</a>
+            <a href="javascript:showComments();" style="float: right; margin-right: 10px;">Show/Hide</a>
+        </div>
+        <div id="comments" class="hidden">
+            <section id="isso-thread"></section>
+            <br/>
+        </div>
         <div id="involvedPartiesInfo"></div>
         <div id="InvolvedPartiesList"></div>
     </div>

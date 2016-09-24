@@ -267,6 +267,15 @@ var generateKillData = function(killID) {
                 16: 'left:300px; top:304px;',
                 17: 'left:268px; top:324px;',
                 18: 'left:234px; top:338px;'
+            }, "ammo": {
+                11: 'left:314px; top:138px;',
+                12: 'left:320px; top:173px;',
+                13: 'left:319px; top:205px;',
+                14: 'left:310px; top:241px;',
+                15: 'left:293px; top:272px;',
+                16: 'left:270px; top:299px;',
+                17: 'left:238px; top:319px;',
+                18: 'left:204px; top:333px;'
             }},
             "rigxx": {"flags": [92, 93, 94, 95, 96, 97, 98, 99], "styles": {
                 92: 'left:148px; top:259px;',
@@ -521,7 +530,7 @@ var generateKillData = function(killID) {
         if(attackerCount > 4) {
             h +=
                 '<div class="kl-detail-invsum">' +
-                '<div class="involvedparties">Involved parties: ' + attackerCount +
+                '<div class="involvedparties">' + attackerCount + ' Involved parties' +
                 '<div id="invsumcollapse" style="float: right">' +
                 '<a href="javascript:Toggle();">Show/Hide</a>' +
                 '</div>' +

@@ -127,7 +127,6 @@ var generateKillList = function(url, loadWebsocket, page, autoloadScroll) {
             if($(document).height() - 500 <= $(window).scrollTop() + $(window).height()) {
                 if(isPreviousPageLoaded) {
                     isPreviousPageLoaded = false;
-                    //@todo fix so that https://neweden.xyz/freighters/1/ works
                     var address = window.location.origin + url + (page + 1) + "/";
                     $.ajax({
                         type: "GET",

@@ -51,6 +51,10 @@ class SearchAPIController extends Controller {
         $this->search = $this->container->get("search");
     }
 
+    public function findAny(string $searchTerm) {
+        return $this->json($this->search->search($searchTerm, array("alliance", "corporation", "character", "region", "system", "item")));
+    }
+
     /**
      * @param string $searchTerm
      * @return \Psr\Http\Message\ResponseInterface

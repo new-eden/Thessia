@@ -18,6 +18,7 @@
 
     <!-- Site CSS -->
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/isso.css"/>
     <style type="text/css">
         #ToggleTarget {
             display: none;
@@ -30,6 +31,9 @@
     <!-- Site JS -->
     <script type="text/javascript" src="/js/generic.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script data-isso="//comments.neweden.xyz/" data-isso-css="false" src="//comments.neweden.xyz/js/embed.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" integrity="sha256-RWiU4omUU7tQ2M3wmRQNW9UL50MB4CucbRPCbsQv+X0=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js" integrity="sha256-rMOSOM5HDzVEMoVZTv2189+RKSTSgY5ZKfTfap7q2zE=" crossorigin="anonymous"></script>
     <script>
         function toggle(ids) {
             var ele = document.getElementById(ids);
@@ -38,6 +42,7 @@
                 //text.innerHTML = "show";
             } else {
                 ele.style.display = "block";
+                ele.style.display = "none";
                 //text.innerHTML = "hide";
             }
         }
@@ -52,6 +57,71 @@
                 el.style.display = "block";
             }
         }
+    </script>
+    <script>
+        $(function() {
+            $("#searchBox").typeahead({
+                highlight: true,
+                }, {
+                name: "search",
+                display: "value",
+                limit: 50,
+                source: function(query, syncResults, asyncResults) {
+                    $.get("https://neweden.xyz/api/search/all/" + query + "/", function(data) {
+                        var imageServer = "https://imageserver.eveonline.com/";
+                        var results = [];
+                        for(var key in data) {
+                            var resultData = data[key];
+                            if(resultData.length >= 1) {
+                                resultData.forEach(function(res) {
+                                    switch(key) {
+                                        case "alliance":
+                                            var d = {"type": key, "name": res["allianceName"], "id": res["allianceID"], "img": imageServer + "/Alliance/" + res["allianceID"] + "_32.png"};
+                                            results.push(d);
+                                            break;
+                                        case "corporation":
+                                            var d = {"type": key, "name": res["corporationName"], "id": res["corporationID"], "img": imageServer + "/Corporation/" + res["corporationID"] + "_32.png"};
+                                            results.push(d);
+                                            break;
+                                        case "character":
+                                            var d = {"type": key, "name": res["characterName"], "id": res["characterID"], "img": imageServer + "/Character/" + res["characterID"] + "_32.jpg"};
+                                            results.push(d);
+                                            break;
+                                        case "region":
+                                            var d = {"type": key, "name": res["regionName"], "id": res["regionID"], "img": ""};
+                                            results.push(d);
+                                            break;
+                                        case "system":
+                                            var d = {"type": key, "name": res["solarSystemName"], "id": res["solarSystemID"], "img": ""};
+                                            results.push(d);
+                                            break;
+                                        case "item":
+                                            var d = {"type": key, "name": res["name"]["en"], "id": res["typeID"], "img": imageServer + "/Type/" + res["typeID"] + "_32.png"};
+                                            results.push(d);
+                                            break;
+                                    }
+                                });
+                            }
+                        }
+                        asyncResults(results);
+                    });
+                },
+                templates: {
+                    suggestion: function(data) {
+                        return '<div class="searchResults" style="width: 338px; background: black;">' +
+                               '<table>' +
+                               '<tbody>' +
+                               '<tr>' +
+                               '<td><img src="'+ data.img+'"></td>' +
+                               '<td><a href="/'+data.type+'/'+data.id+'/">'+data.name+' ('+ truncate(data.type, 7, true) +')</a></td>' +
+                               '</tr>' +
+                               '</tbody>' +
+                               '</table>' +
+                               '</div>';
+                    }
+                }
+            });
+        });
     </script>
 
     <!-- Google Analytics -->

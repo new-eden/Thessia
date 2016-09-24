@@ -134,8 +134,12 @@ var millionBillion = function (isk) {
     return (isk / 1000000).toFixed(2) + "m ISK";
 };
 
-var truncate = function (string, length) {
-    return string.length > length ? string.substring(0, length - 3) + "..." : string;
+var truncate = function (string, length, nodot) {
+    if(nodot == false) {
+        return string.length > length ? string.substring(0, length - 3) + "..." : string;
+    } else {
+        return string.length > length ? string.substring(0, length - 3) : string;
+    }
 };
 
 var turnOnFunctions = function () {

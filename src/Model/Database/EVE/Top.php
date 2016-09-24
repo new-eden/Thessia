@@ -171,6 +171,7 @@ class Top {
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         ), array("allowDiskUse" => true))->toArray();
+
         foreach($data as $key => $solarSystem)
             $data[$key]["name"] = trim($this->solarSystems->findOne(array("solarSystemID" => $solarSystem["id"]))["solarSystemName"]);
 

@@ -31,6 +31,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Thessia\Tasks\WebSockets\CommentsWebSocket;
 use Thessia\Tasks\WebSockets\EchoWebSocket;
 use Thessia\Tasks\WebSockets\KillsWebSocket;
 
@@ -66,10 +67,12 @@ class RunWebSocketServer extends Command
         // Startup the endpoints.
         $echoWebSocket = new EchoWebSocket($container, $loop);
         $killsWebSocket = new KillsWebSocket($container, $loop);
+        $commentsWebSocket = new CommentsWebSocket($container, $loop);
 
         // Add routes
         $ratchet->route("/echo", $echoWebSocket, array("*"));
         $ratchet->route("/kills", $killsWebSocket, array("*"));
+        $ratchet->route("/comments", $commentsWebSocket, array("*"));
 
         // Start the loop
         $loop->run();
