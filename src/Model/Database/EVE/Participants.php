@@ -654,10 +654,40 @@ class Participants extends Mongo
 
         $array = $this->generateQueryArray($extraArguments, $limit, $order, $offset);
         $options = array_merge($array["options"], $extraOptions);
-        $killData = $this->collection->find($array["filter"], $options)->toArray();
+        
+        // @todo rewrite the rest of Participants to use Aggregate - for some reason mongodb is a billion times faster
+        // with aggregate (match + sort) than with find+sort.. don't ask me why.......
 
-        foreach($killData as $key => $value)
-            $killData[$key]["killTime"] = date(DateTime::ISO8601, $value["killTime"]->__toString() / 1000);
+        // @todo make this isset add subtract bullshit into something nicer, maybe just if(isset(blabla)) $aggregateArray['$crap'] = $options["blabla"]; and then move on?!
+        if(isset($options["skip"])) {
+            $aggregateArray = array(
+                array('$match' => $array["filter"]),
+                array('$sort' => $options["sort"]),
+                array('$skip' => $options["skip"]),
+                array('$limit' => $options["limit"])
+            );
+        } else {
+            $aggregateArray = array(
+                array('$match' => $array["filter"]),
+                array('$sort' => $options["sort"]),
+                array('$limit' => $options["limit"])
+            );
+        }
+
+        $killData = $this->collection->aggregate($aggregateArray)->toArray();
+
+        // Remove things we have in our projection
+        if(isset($options["projection"])) {
+            foreach($killData as $key => $value) {
+                foreach($options["projection"] as $name => $proj) {
+                    unset($killData[$key][$name]);
+                }
+
+                // Fix the timestamp
+                $killData[$key]["killTime"] = date(DateTime::ISO8601, $value["killTime"]->__toString() / 1000);
+            }
+        }
+
         $this->cache->set($md5, $killData, $cacheTime);
         $this->cache->set(md5(serialize($extraArguments) . $limit . $order . $offset), $killData, $cacheTime);
         return $killData;

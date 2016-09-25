@@ -62,6 +62,10 @@ abstract class Controller
     protected $mongo;
 
     /**
+     * @var \Thessia\Lib\Cache
+     */
+    protected $cache;
+    /**
      * @var Render
      */
     private $render;
@@ -75,6 +79,7 @@ abstract class Controller
         $this->container = $app->getContainer();
         $this->mongo = $this->container->get("mongo");
         $this->render = $this->container->get("render");
+        $this->cache = $this->container->get("cache");
     }
 
     /**

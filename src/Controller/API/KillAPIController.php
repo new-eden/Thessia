@@ -32,11 +32,9 @@ use Thessia\Middleware\Controller;
 class KillAPIController extends Controller
 {
     private $killmails;
-    private $cache;
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->cache = $this->container->get("cache");
         $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
     }
 

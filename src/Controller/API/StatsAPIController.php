@@ -43,11 +43,9 @@ class StatsAPIController extends Controller {
     private $alliances;
     private $solarSystems;
     private $regions;
-    private $cache;
 
     public function __construct(App $app) {
         parent::__construct($app);
-        $this->cache = $this->container->get("cache");
         $this->collection = $this->mongo->selectCollection("thessia", "killmails");
         $this->characters = $this->mongo->selectCollection("thessia", "characters");
         $this->corporations = $this->mongo->selectCollection("thessia", "corporations");

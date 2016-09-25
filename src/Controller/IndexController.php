@@ -26,8 +26,6 @@
 namespace Thessia\Controller;
 
 use Thessia\Middleware\Controller;
-use Thessia\Model\CCP\typeIDs;
-use Thessia\Model\EVE\Participants;
 
 class IndexController extends Controller
 {
@@ -57,19 +55,72 @@ class IndexController extends Controller
     }
 
     public function kill($killID) {
+        // Figure out if there is anything related in this system
+        $collection = $this->mongo->selectCollection("thessia", "killmails");
+        $data = $collection->findOne(array("killID" => (int)$killID));
+        $victimID = $data["victim"]["characterID"];
+        $victimName = $data["victim"]["characterName"];
+        $fbID = 0;
+        $fbName = "";
+        $victimShipName = $data["victim"]["shipTypeName"];
+        $victimShipID = $data["victim"]["shipTypeID"];
+        $tdID = 0;
+        $solarSystemName = $data["solarSystemName"];
+        $solarSystemID = $data["solarSystemID"];
+        $regionID = $data["regionID"];
+        $regionName = $data["regionName"];
+        $tdName = "";
+        $dna = $data["dna"];
+
+        foreach($data["attackers"] as $key => $attacker) {
+            if($key == 0) {
+                $tdID = $attacker["characterID"];
+                $tdName = $attacker["characterName"];
+            }
+            if($attacker["finalBlow"] == 1) {
+                $fbID = $attacker["characterID"];
+                $fbName = $attacker["characterName"];
+            }
+        }
+
+        $md5 = md5("relatedCheck{$killID}");
+        if($this->cache->exists($md5) == false) {
+            $killTime = $data["killTime"]->__toString() / 1000;
+            $systemID = $data["solarSystemID"];
+            $date1 = $killTime - 600;
+            $date2 = $killTime + 600;
+            $related = $collection->find(array("solarSystemID" => $systemID, "killTime" => array('$gte' => $this->makeTimeFromUnixTime($date1), '$lte' => $this->makeTimeFromUnixTime($date2))));
+            $this->cache->set($md5, $related);
+        } else {
+            $related = $this->cache->get($md5);
+        }
+
+        // Create Menu
         $menu = array(
-            "Killmail" => "#",
-            "EFT" => "#",
-            "DNA" => "#",
-            "Related Kills" => "#",
-            "Osmium" => array(),
-            "EVEGate" => array(),
-            "EVEWho" => array(),
-            "Dotlan" => array(),
-            "Social" => array(),
+            "Killmail" => "https://crest.eveonline.com/killmails/{$data["killID"]}/{$data["crestHash"]}/",
+        );
+        if(count($related) > 1)
+            $menu["Related Kills"] = "/related/{$killID}/";
+
+        $menu["Osmium"] = array(
+            $victimShipName . "fit" => "https://o.smium.org/loadout/dna/{$dna}"
+        );
+        $menu["EVEGate"] = array(
+            $victimName => "https://gate.eveonline.com/Profile/{$victimName}",
+            $fbName => "https://gate.eveonline.com/Profile/{$fbName}",
+            $tdName => "https://gate.eveonline.com/Profile/{$tdName}",
+        );
+        $menu["EVEWho"] = array(
+            $victimName => "http://evewho.com/pilot/{$victimName}",
+            $fbName => "http://evewho.com/pilot/{$fbName}",
+            $tdName => "http://evewho.com/pilot/{$tdName}",
+        );
+        $menu["Dotlan"] = array(
+            $solarSystemName => "http://evemaps.dotlan.net/system/{$solarSystemName}",
+            $regionName => "http://evemaps.dotlan.net/region/{$regionName}",
         );
 
-        return $this->render("/pages/kill.twig", array("killID" => $killID, "menu" => $menu));
+        return $this->render("/pages/kill.twig", array("killID" => $killID, "menu" => $menu, "related" => count($related) > 0 ? true : false));
     }
 
     public function about() {

@@ -39,11 +39,9 @@ use Thessia\Middleware\Controller;
 class WarsAPIController extends Controller {
     private $collection;
     private $killmails;
-    private $cache;
 
     public function __construct(App $app) {
         parent::__construct($app);
-        $this->cache = $this->container->get("cache");
         $this->collection = $this->mongo->selectCollection("thessia", "wars");
         $this->killmails = $this->mongo->selectCollection("thessia", "killmails");
     }

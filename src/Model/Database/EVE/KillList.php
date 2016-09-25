@@ -25,6 +25,7 @@
 
 namespace Thessia\Model\Database\EVE;
 
+use DateTime;
 use MongoDB\Client;
 use Thessia\Lib\Cache;
 use Thessia\Lib\Config;
@@ -38,8 +39,11 @@ class KillList extends Participants {
     public function getLatest($page = 1) {
         $limit = 100;
         $offset = $limit * ($page - 1);
-        $extras = array("projection" => array("_id" => 0, "items" => 0, "osmium" => 0));
-        return $this->getAllKills(array(), $limit, 30, "DESC", $offset, $extras);
+        $killData = $this->collection->find(array(), array("sort" => array("killTime" => -1), "projection" => array("_id" => 0, "items" => 0, "osmium" => 0), "skip" => $offset, "limit" => $limit))->toArray();
+        foreach($killData as $key => $value)
+            $killData[$key]["killTime"] = date(DateTime::ISO8601, $value["killTime"]->__toString() / 1000);
+
+        return $killData;
     }
 
     public function getBigKills($page = 1) {
