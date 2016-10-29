@@ -1,3 +1,6 @@
+# Warning
+This is still early beta stuff, so beware!
+
 # Thessia
 
 _[Embrace Eternity...] (https://www.youtube.com/watch?v=vMEWIl_WwVA)_
