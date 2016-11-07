@@ -149,7 +149,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("settings", $settings);
 
         // Add the logger
-        $streamHandler = new StreamHandler(realpath(__DIR__ . "/../../logs/thessia.log"), Logger::INFO, true, 777, false);
+	$logFilePath = __DIR__ . "/../../logs/thessia.log";
+        $streamHandler = new StreamHandler($logFilePath, Logger::INFO, true, 777, false);
         $log = new Logger("Thessia");
         $log->pushHandler($streamHandler);
         $container->share("log", $log);
