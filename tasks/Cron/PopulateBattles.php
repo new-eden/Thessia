@@ -66,7 +66,7 @@ class PopulateBattles {
         // Do the query
         $result = $killmails->aggregate($aggregation)->toArray();
 
-        var_dump($result);
+        //var_dump($result);
 
         exit;
     }

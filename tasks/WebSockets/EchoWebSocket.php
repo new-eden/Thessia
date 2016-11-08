@@ -43,6 +43,7 @@ class EchoWebSocket implements MessageComponentInterface
      */
     public function __construct(Container $container, LoopInterface $loop)
     {
+        echo "Starting the echo websocket\n";
         $this->clients = new \SplObjectStorage();
     }
 

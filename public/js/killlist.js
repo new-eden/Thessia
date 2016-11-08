@@ -193,7 +193,7 @@ var generateKillList = function(url, loadWebsocket, page, autoloadScroll) {
             turnOnFunctions();
             if (loadWebsocket == true) {
                 // Fire up the Websocket
-                webSocket("wss://ws.eve-kill.net/kills", "#killlist", maxKillID);
+                webSocket("wss://ws.neweden.xyz/kills", "#killlist", maxKillID);
             }
 
             if(autoloadScroll == true) {

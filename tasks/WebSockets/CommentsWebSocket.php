@@ -46,6 +46,7 @@ class CommentsWebSocket implements WampServerInterface
      */
     public function __construct(Container $container, LoopInterface $loop)
     {
+        echo "Starting the comments websocket\n";
         $this->clients = new \SplObjectStorage();
     }
 

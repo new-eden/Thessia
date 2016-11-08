@@ -46,6 +46,7 @@ class KillsWebSocket implements WampServerInterface
      */
     public function __construct(Container $container, LoopInterface $loop)
     {
+        echo "Starting the kill websocket\n";
         $this->clients = new \SplObjectStorage();
         $config = $container->get("config");
 

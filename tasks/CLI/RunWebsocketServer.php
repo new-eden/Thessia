@@ -43,7 +43,7 @@ class RunWebSocketServer extends Command
             ->setName("run:wsserver")
             ->setDescription("Run the websocket server")
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "WebSocket host. Default is 0.0.0.0", "0.0.0.0")
-            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "WebSocket port. Default is 474", 8800)
+            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "WebSocket port. Default is 8800", 8800)
             ->addOption("httpHost", null, InputOption::VALUE_OPTIONAL, "WebSocket httpHost. Default is localhost", "localhost");
     }
 

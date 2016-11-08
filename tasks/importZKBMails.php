@@ -47,18 +47,16 @@ class importZKBMails extends Command
     {
         // Get the container
         $container = getContainer();
-
-        /** @var Db $db */
-        $db = $container->get("db");
         /** @var cURL $curl */
         $curl = $container->get("curl");
         /** @var Killmails $kms */
         $kms = $container->get("killmails");
+        $cache = $container->get("cache");
 
         // Initial offset
         $increment = 86405; // Increment by a full day and 5 seconds to get to the next day...
         // Get the latest offset from the DB
-        $date = 0; //(int)$db->queryField("SELECT value FROM storage WHERE `key` = :offset", "value", array(":offset" => "zkbDateOffSet"), 0);
+        $date = (int) 1477962355; //$cache->get("zkbDateOffset");
         if($date == 0)
             $date = "1196889200"; // Earliest KillID is on 20071205 which is 1196809200 in unixTime
 
@@ -68,7 +66,7 @@ class importZKBMails extends Command
             // Once the date gets to the current date, and if it goes above it - just exit..
             if($convertedDate > date("Ymd")) {
                 // Reset the date to zero, so we can start all over again
-                $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "zkbDateOffSet", ":value" => 0));
+                $cache->set("zkbDateOffset", 0);
                 $date = 1196889200;
                 continue;
                 //exit;
@@ -93,7 +91,7 @@ class importZKBMails extends Command
             }
 
             // New offset
-            $db->execute("REPLACE INTO storage (`key`, value) VALUES (:key, :value)", array(":key" => "zkbDateOffSet", ":value" => $date));
+            $cache->set("zkbDateOffset", $date);
 
             // Increment the date
             $date = $date + $increment;

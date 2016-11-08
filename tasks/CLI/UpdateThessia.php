@@ -47,7 +47,7 @@ class UpdateThessia extends Command
         $this->generateApiDoc();
 
         // Generate the .phpstorm.meta.php file
-        $this->phpStormMeta();
+        //$this->phpStormMeta();
 
         // Update composer
         $this->updateComposer();
