@@ -23,24 +23,29 @@
  * SOFTWARE.
  */
 
-namespace Thessia\Tasks\Cron;
+namespace Thessia\Tasks;
 
-use League\Container\Container;
 use MongoDB\Collection;
-use Monolog\Logger;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Thessia\Helper\CrestHelper;
+use Thessia\Lib\Db;
 
-class UpdatePrices
+class updatePrices extends Command
 {
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
+    protected function configure()
     {
+        $this
+            ->setName("updatePrices")
+            ->setDescription("Manually updates the pricing table.");
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $container = getContainer();
         /** @var \MongoClient $mongo */
         $mongo = $container->get("mongo");
-        /** @var Logger $log */
-        $log = $container->get("log");
         /** @var CrestHelper $crestHelper */
         $crestHelper = $container->get("crestHelper");
         /** @var Collection $collection */
@@ -48,12 +53,11 @@ class UpdatePrices
         /** @var Collection $priceCollection */
         $priceCollection = $mongo->selectCollection("thessia", "marketPrices");
 
-        $log->addInfo("CRON: Updating item values from CREST");
+        $output->writeln("Updating item values from CREST");
 
         // Get the Market Prices from CREST
         $marketData = $crestHelper->getMarketPrices();
-        $marketData = self::addExtraPrices($marketData);
-
+        $marketData = $this->addExtraPrices($marketData);
         if(isset($marketData["items"])) {
             foreach ($marketData["items"] as $data) {
                 $typeID = $data["type"]["id"];
@@ -75,7 +79,7 @@ class UpdatePrices
                     "averagePrice" => (int)isset($data["averagePrice"]) ? $data["averagePrice"] : 0,
                     "lastUpdated" => date("Y-m-d H:i:s")
                 );
-                $log->addInfo("CRON UpdatePrices: Updating {$typeData["name"]["en"]}");
+                $output->writeln("CRON UpdatePrices: Updating {$typeData["name"]["en"]}");
                 $priceCollection->replaceOne(array("typeID" => $typeID), $priceArray, array("upsert" => true));
             }
         }
@@ -83,7 +87,7 @@ class UpdatePrices
         exit;
     }
 
-    private static function addExtraPrices(array $marketData): array {
+    private function addExtraPrices(array $marketData): array {
         $container = getContainer();
         $mongo = $container->get("mongo");
         $typeIDs = $mongo->selectCollection("ccp", "typeIDs");
@@ -146,13 +150,5 @@ class UpdatePrices
         }
 
         return $marketData;
-    }
-
-    /**
-     * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
-     */
-    public static function getRunTimes()
-    {
-        return 86400;
     }
 }
