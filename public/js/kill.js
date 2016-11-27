@@ -46,6 +46,9 @@ var generateKillData = function(killID) {
         // Don't cache it - the backend does that for us
         cache: false,
         success: function (data) {
+            if(data.victim.shipGroupName == undefined)
+                data.victim.shipGroupName = "";
+
             pointHTML(data);
             topDamageDealerAndFinalBlow(data);
             topVictimInformationBox(data);
@@ -183,7 +186,7 @@ var generateKillData = function(killID) {
                             '<a href="/ship/'+data.victim.shipTypeID+'/"><img class="rounded" data-trigger="tooltip" data-delay="0" data-content="'+data.victim.shipTypeName+'" data-position="s" src="https://imageserver.eveonline.com/Type/' + data.victim.shipTypeID + '_64.png" alt="' + data.victim.shipTypeName + '"/></a>' +
                         '</td>' +
                         '<td>Ship:</td>' +
-                        '<td><a href="/ship/' + data.victim.shipTypeID + '/">' + data.victim.shipTypeName + '</a></td>' +
+                        '<td><a href="/ship/' + data.victim.shipTypeID + '/">' + data.victim.shipTypeName + '</a> (<a href="/group/'+data.victim.shipGroupID+'/">' + data.victim.shipGroupName.trim() + '</a>)</td>' +
                     '</tr>' +
                     '<tr class="kb-table-row-odd">' +
                         '<td>Location:</td>' +
@@ -588,6 +591,9 @@ var generateKillData = function(killID) {
         var attackerCnt = 0;
         var totalDamage = data.victim.damageTaken;
         var html = function(attacker, odd) {
+            if(attacker.shipGroupName == undefined)
+                attacker.shipGroupName = "";
+
             var h = "";
             var classText = "kb-table-row-even";
             if(odd == true) {
@@ -625,7 +631,7 @@ var generateKillData = function(killID) {
             '</tr>' +
             '<tr class="' + classText + '">' +
                 '<td>' +
-                    '<a href="/ship/' + attacker.shipTypeID + '"><b>' + attacker.shipTypeName + '</b></a>' +
+                    '<a href="/ship/' + attacker.shipTypeID + '"><b>' + attacker.shipTypeName + '</b></a> (<a href="/group/'+attacker.shipGroupID+'/">' + attacker.shipGroupName.trim() + '</a>)' +
                 '</td>' +
             '</tr>' +
             '<tr class="' + classText + '">' +

@@ -219,6 +219,7 @@ class Parser
 
         $solarData = $solarData[0];
         $top["solarSystemName"] = $solarData["solarSystemName"];
+        $top["solarSystemSecurity"] = $solarData["security"];
         $top["regionID"] = (int)$solarData["regionID"];
         $top["regionName"] = $solarData["regionName"];
         $top["near"] = $this->getNear($data["victim"]["x"], $data["victim"]["y"], $data["victim"]["z"],
@@ -541,6 +542,10 @@ class Parser
         $shipData = $this->typeIDs->getAllByTypeID($data["shipTypeID"])->toArray()[0];
         $victim["shipTypeName"] = $shipData["name"]["en"];
         $victim["shipImageURL"] = $this->imageServer . "Type/" . $data["shipTypeID"] . "_32.png";
+        $groupID = $shipData["groupID"];
+        $groupData = $this->groupIDs->getAllByGroupID($groupID)->toArray()[0];
+        $victim["shipGroupID"] = $groupID;
+        $victim["shipGroupName"] = $groupData["name"]["en"];
         $victim["damageTaken"] = (int)$data["damageTaken"];
         $victim["characterID"] = (int)$data["characterID"];
         $victim["characterName"] = $data["characterName"];
@@ -615,6 +620,11 @@ class Parser
             $shipData = $this->typeIDs->getAllByTypeID($attacker["shipTypeID"])->toArray()[0];
             $inner["shipTypeName"] = $shipData["name"]["en"];
             $inner["shipImageURL"] = $this->imageServer . "Type/" . $attacker["shipTypeID"] . "_32.png";
+            $groupID = $shipData["groupID"];
+            $groupData = $this->groupIDs->getAllByGroupID($groupID)->toArray()[0];
+            $inner["shipGroupID"] = $groupID;
+            $inner["shipGroupName"] = $groupData["name"]["en"];
+
 
             // Calculate the amount of points this pilot gets for this kill out of the total..
             if($attacker["damageDone"] == 0 || $totalDamage == 0) {

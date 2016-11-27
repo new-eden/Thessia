@@ -92,7 +92,7 @@ var generateKillList = function(url, loadWebsocket, page, autoloadScroll) {
         var killTime = ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
         
         h += '<td class="kb-table-cell kl-location">' +
-            '<div class="kl-location">'+kill.regionName+', '+kill.solarSystemName+'<br/>' +
+            '<div class="kl-location">'+kill.regionName+', '+kill.solarSystemName+' (' + parseFloat(kill.solarSystemSecurity).toFixed(2) + ')<br/>' +
             '</div>' +
             '<div class="kl-inv-comm">' +
             '<img src="/img/involved10_10.png" alt="I:"/> ' + attackerCount +
