@@ -1,4 +1,7 @@
 <?php
+// Declare ticks..
+declare(ticks = 1);
+
 /**
  * The MIT License (MIT)
  *
@@ -43,6 +46,10 @@ class RunCron extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Time limits..
+        set_time_limit(0);
+        ini_set("max_execution_time", 0);
+
         // Enable garbage collection
         gc_enable();
 
@@ -72,6 +79,10 @@ class RunCron extends Command
         $cronjobCount = count($this->cronjobs);
         $output->writeln("Loaded {$cronjobCount} cronjobs...");
 
+        // How many Cronjobs are already running?
+        if(count($this->runningJobs) > 0)
+            $output->writeln("There are already " . count($this->runningJobs) . " jobs running..");
+
         // Startup the main loop
         $run = true;
         $loopCount = 0;
@@ -84,30 +95,32 @@ class RunCron extends Command
 
             // Increment the loopCount
             $loopCount++;
+            if($loopCount % 100 == 0)
+                $output->writeln("There are currently " . count($this->runningJobs) . " jobs running..");
 
-            foreach ($this->cronjobs as $class => $time) {
+            foreach ($this->cronjobs as $className => $time) {
                 // Check and make sure it's not in the runningJobs array
-                if (isset($this->runningJobs[$class])) {
-                    $pid = $this->runningJobs[$class]["pid"];
-                    $lastRan = $this->runningJobs[$class]["lastRan"];
+                if (isset($this->runningJobs[$className])) {
+                    $pid = $this->runningJobs[$className]["pid"];
+                    $lastRan = $this->runningJobs[$className]["lastRan"];
                     $timeSinceItRanLast = time() - $lastRan;
                     $pidStatus = pcntl_waitpid($pid, $pidStatus, WNOHANG);
                     if ($timeSinceItRanLast >= $time && $pidStatus == -1) {
-                        unset($this->runningJobs[$class]);
+                        unset($this->runningJobs[$className]);
                     }
                 } else {
                     $date = date("Y-m-d H:i:s");
-                    $log->addInfo("Running cronjob: {$class} (Interval: {$time})");
-                    $output->writeln("{$date}: Running cronjob: {$class} (Interval: {$time})");
+                    $log->addInfo("Running cronjob: {$className} (Interval: {$time})");
+                    $output->writeln("{$date}: Running cronjob: {$className} (Interval: {$time})");
 
                     try {
                         // Forking into the child and executing cronjob
                         if (($pid = pcntl_fork()) == 0) {
                             $container = getContainer();
-                            $class = new $class();
+                            $class = new $className();
                             $class->execute($container);
                         }
-                        $this->runningJobs[$class] = array("pid" => $pid, "lastRan" => time());
+                        $this->runningJobs[$className] = array("pid" => $pid, "lastRan" => time());
                     } catch (\Exception $e) {
                         $log->addError("Cronjob error: {$e->getMessage()}...");
                         $output->writeln("Error: {$e->getMessage()}...");
@@ -117,11 +130,8 @@ class RunCron extends Command
 
                     // Insert the runningCronJobs array into Redis, in case we die..
                     $serialized = serialize($this->runningJobs);
-                    $cache->set("runningCronJobs", $serialized, 3600);
+                    $cache->set("runningCronJobs", $serialized);
                 }
-
-                // Sleep for half a second...
-                usleep(500000);
             }
 
             // Sleep for a second between runs, so we don't go and eat 99.99% cpu

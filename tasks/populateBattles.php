@@ -31,7 +31,6 @@ use MongoDB\Collection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Thessia\Lib\Db;
 
 class populateBattles extends Command
 {
@@ -46,8 +45,6 @@ class populateBattles extends Command
     {
         // Get the container
         $container = getContainer();
-        /** @var Db $db */
-        $db = $container->get("db");
         /** @var \MongoClient $mongo */
         $mongo = $container->get("mongo");
         $killmails = $mongo->selectCollection("thessia", "killmails");
