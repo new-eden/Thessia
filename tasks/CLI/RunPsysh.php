@@ -48,7 +48,7 @@ class RunPsysh extends Command
         $shell->setScopeVariables(array(
             "container" => $container,
             "mongo" => $container->get("mongo"),
-            "db" => $container->get("db"),
+            //"db" => $container->get("db"),
             "cache" => $container->get("cache"),
             "config" => $container->get("config"),
             "log" => $container->get("log"),

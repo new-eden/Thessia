@@ -91,7 +91,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         "log",
         "timer",
         "cache",
-        "db",
+        //"db",
         "session",
         "mongo",
         "killmails",
@@ -149,7 +149,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("settings", $settings);
 
         // Add the logger
-	$logFilePath = __DIR__ . "/../../logs/thessia.log";
+        $logFilePath = __DIR__ . "/../../logs/thessia.log";
         $streamHandler = new StreamHandler($logFilePath, Logger::INFO, true, 777, false);
         $log = new Logger("Thessia");
         $log->pushHandler($streamHandler);
@@ -165,7 +165,7 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("cache", Cache::class)->withArgument("config");
 
         // Add the CCP
-        $container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config");
+        //$container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config");
 
         // Add MongoDB
         $mongo = new Client("mongodb://localhost:27017", array(),
