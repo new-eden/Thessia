@@ -1317,12 +1317,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-pm/php-pm.git",
-                "reference": "a10eb5faca71a6a4a8078e5c3d5adb18ab9363c4"
+                "reference": "cb020feadbd92e2323e9aa5770b1d263b4728c7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-pm/php-pm/zipball/a10eb5faca71a6a4a8078e5c3d5adb18ab9363c4",
-                "reference": "a10eb5faca71a6a4a8078e5c3d5adb18ab9363c4",
+                "url": "https://api.github.com/repos/php-pm/php-pm/zipball/cb020feadbd92e2323e9aa5770b1d263b4728c7b",
+                "reference": "cb020feadbd92e2323e9aa5770b1d263b4728c7b",
                 "shasum": ""
             },
             "require": {
@@ -1359,7 +1359,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2016-11-10 13:55:58"
+            "time": "2016-11-27 17:21:49"
         },
         {
             "name": "pimple/pimple",
@@ -2530,12 +2530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "9ca9adc01576ae911259cf786808500357f93b9a"
+                "reference": "33fc1f26c15ee23be2af9407795ce7affa37671a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9ca9adc01576ae911259cf786808500357f93b9a",
-                "reference": "9ca9adc01576ae911259cf786808500357f93b9a",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/33fc1f26c15ee23be2af9407795ce7affa37671a",
+                "reference": "33fc1f26c15ee23be2af9407795ce7affa37671a",
                 "shasum": ""
             },
             "require": {
@@ -2575,7 +2575,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-25 12:33:00"
+            "time": "2016-11-27 04:22:04"
         },
         {
             "name": "symfony/polyfill-mbstring",

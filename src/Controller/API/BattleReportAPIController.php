@@ -47,7 +47,7 @@ class BattleReportAPIController extends Controller
         $data = $this->collection->findOne(array("battleID" => $battleID), array("projection" => array("_id" => 0)));
 
         if(!empty($data)) {
-            $data["killCount"] = count($data["killData"]);
+            $data["killCount"] = count($data["teamRed"]["kills"]) + count($data["teamBlue"]["kills"]);
             $data["startTime"] = date(DateTime::ISO8601, $data["startTime"]->__toString() / 1000);
             $data["endTime"] = date(DateTime::ISO8601, $data["endTime"]->__toString() / 1000);
         }
