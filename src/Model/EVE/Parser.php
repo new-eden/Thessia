@@ -144,7 +144,7 @@ class Parser
      * @param int|null $warID
      * @return array
      */
-    public function parseCrestKillmail(int $killID, string $killHash, int $warID = 0)
+    public function parseCrestKillmail(int $killID, string $killHash, int $warID = 0): array
     {
         // Get the killmail from CREST
         $data = $this->crestHelper->getKillmail($killID, $killHash);

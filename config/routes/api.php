@@ -218,4 +218,9 @@ $app->group("/api", function() use ($app) {
         $app->get("/battles/[{page:[0-9]+}/]", $controller("getBattles"));
         $app->get("/battle/{battleID:[a-zA-Z0-9]+}/", $controller("getBattle"));
     });
+
+    $app->group("/auth", function() use ($app) {
+        $controller = new \Thessia\Controller\API\AuthenticationAPIController($app);
+        $app->get("/eve/", $controller("eveAuth"));
+    });
 });
