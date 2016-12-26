@@ -95,6 +95,9 @@ var generateKillList = function(url, loadWebsocket, page, autoloadScroll) {
             '<div class="kl-location">'+kill.regionName+', '+kill.solarSystemName+' (' + parseFloat(kill.solarSystemSecurity).toFixed(2) + ')<br/>' +
             '</div>' +
             '<div class="kl-inv-comm">' +
+            '<img src="/img/comment_white.gif" alt="C:"/><span class="disqus-comment-count" data-disqus-identifier="'+kill.killID+'">0&nbsp;</span>' +
+            '</div>' +
+            '<div class="kl-inv-comm">' +
             '<img src="/img/involved10_10.png" alt="I:"/> ' + attackerCount +
             '</div>' +
             '<div class="kl-date">' +
