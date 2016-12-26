@@ -91,7 +91,6 @@ class SystemServiceProvider extends AbstractServiceProvider
         "log",
         "timer",
         "cache",
-        //"db",
         "session",
         "mongo",
         "killmails",
@@ -164,11 +163,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         // Add the Cache
         $container->share("cache", Cache::class)->withArgument("config");
 
-        // Add the CCP
-        //$container->share("db", Db::class)->withArgument("cache")->withArgument("log")->withArgument("timer")->withArgument("config");
-
         // Add MongoDB
-        $mongo = new Client("mongodb://localhost:27017", array(),
+        $mongo = new Client("mongodb://127.0.0.1:27017", array(),
             array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $container->share("mongo", $mongo);
 

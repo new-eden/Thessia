@@ -74,7 +74,7 @@ class CrestHelper {
      */
     private function getData(String $path, int $cacheTTL = 3600): array {
         $url = "https://crest.eveonline.com{$path}";
-        $md5 = md5($url);
+        $md5 = md5($url . $path);
 
         // If it exists in the cache, we'll just get it from there for now
         if($this->cache->exists($md5)) {

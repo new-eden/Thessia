@@ -25,9 +25,7 @@
 
 namespace Thessia\Lib;
 
-use Closure;
-use Predis\Client;
-use Redis;
+//use Predis\Client;
 
 /**
  * Class Cache
@@ -40,9 +38,9 @@ class Cache
      */
     public $persistence = true;
     /**
-     * @var Redis
+     * @var \Memcached
      */
-    private $redis;
+    private $cache;
 
     /**
      * Cache constructor.
@@ -50,17 +48,8 @@ class Cache
      */
     function __construct(Config $config)
     {
-        $this->redis = new Client();
-    }
-
-    /**
-     * Returns the redis handle for usage in places where the Cache functions aren't enough
-     *
-     * @return Redis
-     */
-    public function returnRedis(): Redis
-    {
-        return $this->redis;
+        $this->cache = new \Memcached("thessia");
+        $this->cache->addServer("127.0.0.1", 11211, 1);
     }
 
     /**
@@ -72,7 +61,7 @@ class Cache
      */
     public function get(string $key)
     {
-        return json_decode($this->redis->get($key), true);
+        return json_decode($this->cache->get($key), true);
     }
 
     /**
@@ -85,9 +74,7 @@ class Cache
      */
     public function set(string $key, $value, int $timeout = 0)
     {
-        $result = $this->redis->set($key, json_encode($value));
-        if ($timeout > 0)
-            return $result ? $this->expire($key, $timeout) : $result;
+        $result = $this->cache->set($key, json_encode($value), $timeout);
         return $result;
     }
 
@@ -98,20 +85,10 @@ class Cache
      * @return bool
      */
     public function exists(string $key): bool {
-        return $this->redis->exists($key);
-    }
-
-    /**
-     * Sets expiration time for Cache key.
-     *
-     * @param string $key The key to uniquely identify the cached item
-     * @param integer $timeout
-     *
-     * @return bool
-     */
-    protected function expire(string $key, int $timeout)
-    {
-        return $this->redis->expire($key, $timeout);
+        $data = $this->cache->get($key);
+        if(!empty($data))
+            return true;
+        return false;
     }
 
     /**
@@ -125,7 +102,7 @@ class Cache
      */
     public function replace(string $key, string $value, int $timeout): bool
     {
-        return $this->redis->set($key, json_encode($value), $timeout);
+        return $this->cache->set($key, json_encode($value), $timeout);
     }
 
     /**
@@ -137,7 +114,7 @@ class Cache
      */
     public function delete(string $key): bool
     {
-        return (boolean)$this->redis->del($key);
+        return (boolean)$this->cache->delete($key);
     }
 
     /**
@@ -154,10 +131,7 @@ class Cache
      */
     public function increment(string $key, int $timeout = 0): int
     {
-        $data = $this->redis->incr($key);
-        if ($timeout)
-            $this->expire($key, $timeout);
-
+        $data = $this->cache->increment($key, 1, 0, $timeout);
         return $data;
     }
 
@@ -175,10 +149,7 @@ class Cache
      */
     public function decrement(string $key, int $timeout = 0): int
     {
-        $data = $this->redis->decr($key);
-        if ($timeout) {
-            $this->expire($key, $timeout);
-        }
+        $data = $this->cache->decrement($key, 1, 0, $timeout);
         return $data;
     }
 
@@ -189,6 +160,6 @@ class Cache
      */
     public function flush(): bool
     {
-        return $this->redis->flushDB();
+        return $this->cache->flush();
     }
 }

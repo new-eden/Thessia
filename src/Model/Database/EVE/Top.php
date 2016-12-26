@@ -162,15 +162,16 @@ class Top {
         if($this->cache->exists($md5))
             return $this->cache->get($md5);
 
-        $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000))),
+        $aggregate = array(
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000)))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$solarSystemID', "count" => array('$sum' => 1))),
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ), array("allowDiskUse" => true))->toArray();
+        );
+        $data = $this->killmails->aggregate($aggregate, array("allowDiskUse" => true))->toArray();
 
         foreach($data as $key => $solarSystem)
             $data[$key]["name"] = trim($this->solarSystems->findOne(array("solarSystemID" => $solarSystem["id"]))["solarSystemName"]);
@@ -185,7 +186,7 @@ class Top {
             return $this->cache->get($md5);
 
         $data = $this->killmails->aggregate(array(
-            array('$match' => array("attackers.{$attackerType}" => $typeID), "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000))),
+            array('$match' => array("attackers.{$attackerType}" => $typeID, "killTime" => array('$gte' => new UTCDateTime((time() - 2592000) * 1000)))),
             array('$unwind' => '$attackers'),
             array('$match' => array("attackers.{$attackerType}" => $typeID)),
             array('$group' => array("_id" => '$regionID', "count" => array('$sum' => 1))),
