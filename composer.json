@@ -31,6 +31,7 @@
     "jtrumbull/xml-parser": "1.0.*",
     "zendframework/zend-diactoros": "1.3.*",
     "php-pm/php-pm": "dev-master",
+    "react/http": "dev-master#cd15204bd15d106d7832c680e4fb0ca0ce2f5e30",
     "chrisboulton/php-resque": "1.*",
     "react/zmq": "0.3.*",
     "react/stomp": "0.2.*",
