@@ -12,13 +12,13 @@
                         {% for key,val in val %}
                             <div class="menu-item">
                                 <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
-                                <a href="{{ val }}" target="_blank">{{ key }}</a><br />
+                                <a href="{{ val }}">{{ key }}</a><br />
                             </div>
                         {% endfor %}
                     {% else %}
                         <div class="menu-item">
                             <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
-                            <a href="{{ val }}" target="_blank">{{ key }}</a><br />
+                            <a href="{{ val }}">{{ key }}</a><br />
                         </div>
                     {% endif %}
                 {%  endfor %}

@@ -46,7 +46,8 @@ class PopulateWars {
     public static function execute(Container $container)
     {
         /** @var \MongoClient $mongo */
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         /** @var Logger $log */
         $log = $container->get("log");
         /** @var CrestHelper $crestHelper */

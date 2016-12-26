@@ -39,7 +39,8 @@ class ApiKeyChecker {
     public static function execute(Container $container)
     {
         /** @var \MongoClient $mongo */
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         /** @var Logger $log */
         $log = $container->get("log");
         /** @var Pheal $pheal */
@@ -56,7 +57,10 @@ class ApiKeyChecker {
 
         $log->addInfo("CRON: Updating API keys");
         $date = strtotime(date("Y-m-d H:i:s", strtotime("-6 hour"))) * 1000;
-        $apiKeys = $collection->find(array("lastValidation" => array("\$lt" => new UTCDatetime($date))), array("limit" => 100))->toArray();
+        $apiKeys = $collection->aggregate(array(
+            array('$match' => array("lastValidation" => array("\$lt" => new UTCDatetime($date)))),
+            array('$limit' => 100)
+        ))->toArray();
 
         foreach ($apiKeys as $api) {
             $keyID = $api["keyID"];

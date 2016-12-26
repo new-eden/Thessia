@@ -36,7 +36,8 @@ class PopulateBattles {
     public static function execute(Container $container)
     {
         $log = $container->get("log");
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $killmails = $mongo->selectCollection("thessia", "killmails");
         $storage = $mongo->selectCollection("thessia", "storage");
         $battleCollection = $mongo->selectCollection("thessia", "battles");
@@ -53,9 +54,8 @@ class PopulateBattles {
          * It can go beyond 00:30 if it keeps getting hits of 3 kills or more.
          */
         //$startTime = strtotime(date("2007-12-05 20:00:00"));
-        //$endTime = time();
-        //$mongoTime = (int) $storage->findOne(array("key" => "battleImporterStartTime"))["value"];
-        //$searchTime = $mongoTime > 0 ? $mongoTime : $startTime;
+        $endTime = time();
+        $searchTime = time() - 7200;
 
         do {
             // Look for stuff from two hours ago, till now..

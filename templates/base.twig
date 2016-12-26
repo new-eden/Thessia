@@ -37,7 +37,6 @@
 
     <!-- Site CSS -->
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/isso.css"/>
     <style type="text/css">
         #ToggleTarget {
             display: none;
@@ -49,20 +48,19 @@
 
     <!-- Site JS -->
     <script type="text/javascript" src="/js/generic.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script data-isso="//comments.neweden.xyz/" data-isso-css="false" src="//comments.neweden.xyz/js/embed.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" integrity="sha256-RWiU4omUU7tQ2M3wmRQNW9UL50MB4CucbRPCbsQv+X0=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js" integrity="sha256-rMOSOM5HDzVEMoVZTv2189+RKSTSgY5ZKfTfap7q2zE=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" integrity="sha256-RWiU4omUU7tQ2M3wmRQNW9UL50MB4CucbRPCbsQv+X0=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js" integrity="sha256-rMOSOM5HDzVEMoVZTv2189+RKSTSgY5ZKfTfap7q2zE=" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//neweden-xyz.disqus.com/count.js" async></script>
     <script>
-        function toggle(ids) {
-            var ele = document.getElementById(ids);
-            if (ele.style.display == "block") {
-                ele.style.display = "none";
-                //text.innerHTML = "show";
+        var postShown = false;
+        showPost = function() {
+            if(postShown == false) {
+                $("#togglePost").removeClass("hidden");
+                postShown = true;
             } else {
-                ele.style.display = "block";
-                ele.style.display = "none";
-                //text.innerHTML = "hide";
+                $("#togglePost").addClass("hidden");
+                postShown = false
             }
         }
     </script>

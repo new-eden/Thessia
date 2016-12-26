@@ -25,7 +25,9 @@
 
 namespace Thessia\Tasks;
 
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Collection;
+use MongoDB\Driver\Cursor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,130 +54,191 @@ class fixStats extends Command
 
         // Get all characterIDs
         $characters = $mongo->selectCollection("thessia", "characters");
-        $chars = $characters->find();
+        $charCount = $characters->count();
+        $count = 0;
+        while($count <= $charCount)
+        {
+            $chars = $characters->find(array(
+                '$or' => array(
+                    array("statsCalculated" => array('$exists' => false)),
+                    array("statsCalculated" => array('$lt' => new UTCDateTime((time() - 2592000) * 1000)))
+                )
+            ), array("limit" => 1000));
 
-        $fixd = 0;
-        foreach($chars as $char) {
-            $k = $killmails->aggregate(array(
-                array('$match' => array("attackers.characterID" => $char["characterID"])),
-                array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
-                array('$project' => array("_id" => 0, "kills" => '$kills'))
-            ))->toArray();
-            $l = $killmails->aggregate(array(
-                array('$match' => array("victim.characterID" => $char["characterID"])),
-                array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
-                array('$project' => array("_id" => 0, "losses" => '$losses'))
-            ))->toArray();
-            $p = $killmails->aggregate(array(
-                array('$match' => array("attackers.characterID" => $char["characterID"])),
-                array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
-                array('$project' => array("_id" => 0, "points" => '$totalPoints'))
-            ))->toArray();
+            if(empty($chars))
+                $charCount = 0;
 
-            $kills = 0;
-            $losses = 0;
-            $points = 0;
-            if(!empty($k))
-                $kills = $k[0]["kills"];
-            if(!empty($l))
-                $losses = $l[0]["losses"];
-            if(!empty($p))
-                $points = $p[0]["points"];
+            $fixd = 0;
+            foreach($chars as $char)
+            {
+                $output->writeln("Working on kill stats for charID: " . $char["characterID"]);
+                $k = $killmails->aggregate(array(
+                    array('$match' => array("attackers.characterID" => $char["characterID"])),
+                    array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
+                    array('$project' => array("_id" => 0, "kills" => '$kills'))
+                ))->toArray();
+                $output->writeln("Working on loss stats for charID: " . $char["characterID"]);
+                $l = $killmails->aggregate(array(
+                    array('$match' => array("victim.characterID" => $char["characterID"])),
+                    array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
+                    array('$project' => array("_id" => 0, "losses" => '$losses'))
+                ))->toArray();
+                $output->writeln("Working on points for charID: " . $char["characterID"]);
+                $p = $killmails->aggregate(array(
+                    array('$match' => array("attackers.characterID" => $char["characterID"])),
+                    array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
+                    array('$project' => array("_id" => 0, "points" => '$totalPoints'))
+                ))->toArray();
 
-            $char["kills"] = $kills;
-            $char["losses"] = $losses;
-            $char["points"] = $points;
+                $kills = 0;
+                $losses = 0;
+                $points = 0;
+                if(!empty($k)) $kills = $k[0]["kills"];
+                if(!empty($l)) $losses = $l[0]["losses"];
+                if(!empty($p)) $points = $p[0]["points"];
 
-            $characters->replaceOne(array("characterID" => $char["characterID"]), $char);
-            if($fixd % 500 == 0)
-                $output->writeln("Fixed {$fixd} characters..");
-            $fixd++;
+                $char["kills"] = $kills;
+                $char["losses"] = $losses;
+                $char["points"] = $points;
+                $char["statsCalculated"] = time() * 1000;
+
+                $characters->replaceOne(array("characterID" => $char["characterID"]), $char);
+                if($fixd % 500 == 0) $output->writeln("Fixed {$fixd} characters..");
+                $fixd++;
+                $count++;
+            }
         }
         $output->writeln("Fixed {$fixd} characters..");
 
         // Get all corporationIDs
+        /** @var Collection $corporations */
         $corporations = $mongo->selectCollection("thessia", "corporations");
-        $corps = $corporations->find();
+        $corpCount = $corporations->count();
+        $count = 0;
+        while($count <= $corpCount)
+        {
+            /** @var Cursor $corps */
+            $corps = $corporations->find(array(
+                '$or' => array(
+                    array("statsCalculated" => array('$exists' => false)),
+                    array("statsCalculated" => array('$lt' => new UTCDateTime((time() - 2592000) * 1000)))
+                )
+            ), array("limit" => 1000));
 
-        $fixd = 0;
-        foreach($corps as $corp) {
-            $k = $killmails->aggregate(array(
-                array('$match' => array("attackers.corporationID" => $corp["corporationID"])),
-                array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
-                array('$project' => array("_id" => 0, "kills" => '$kills'))
-            ))->toArray();
-            $l = $killmails->aggregate(array(
-                array('$match' => array("victim.corporationID" => $corp["corporationID"])),
-                array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
-                array('$project' => array("_id" => 0, "losses" => '$losses'))
-            ))->toArray();
-            $p = $killmails->aggregate(array(
-                array('$match' => array("attackers.corporationID" => $corp["corporationID"])),
-                array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
-                array('$project' => array("_id" => 0, "points" => '$totalPoints'))
-            ))->toArray();
+            if(empty($corps))
+                $corpCount = 0;
 
-            $kills = 0;
-            $losses = 0;
-            $points = 0;
-            if(!empty($k))
-                $kills = $k[0]["kills"];
-            if(!empty($l))
-                $losses = $l[0]["losses"];
-            if(!empty($p))
-                $points = $p[0]["points"];
+            $fixd = 0;
+            foreach($corps as $corp)
+            {
+                try
+                {
+                    $output->writeln("Working on kill stats for corpID: " . $corp["corporationID"]);
+                    $k = $killmails->aggregate(array(
+                        array('$match' => array("attackers.corporationID" => $corp["corporationID"])),
+                        array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
+                        array('$project' => array("_id" => 0, "kills" => '$kills'))
+                    ))->toArray();
+                    $output->writeln("Working on loss stats for corpID: " . $corp["corporationID"]);
+                    $l = $killmails->aggregate(array(
+                        array('$match' => array("victim.corporationID" => $corp["corporationID"])),
+                        array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
+                        array('$project' => array("_id" => 0, "losses" => '$losses'))
+                    ))->toArray();
+                    $output->writeln("Working on points for corpID: " . $corp["corporationID"]);
+                    $p = $killmails->aggregate(array(
+                        array('$match' => array("attackers.corporationID" => $corp["corporationID"])),
+                        array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
+                        array('$project' => array("_id" => 0, "points" => '$totalPoints'))
+                    ))->toArray();
 
-            $corp["kills"] = $kills;
-            $corp["losses"] = $losses;
-            $corp["points"] = $points;
+                    $kills = 0;
+                    $losses = 0;
+                    $points = 0;
+                    if(!empty($k)) $kills = $k[0]["kills"];
+                    if(!empty($l)) $losses = $l[0]["losses"];
+                    if(!empty($p)) $points = $p[0]["points"];
 
-            $corporations->replaceOne(array("corporationID" => $corp["corporationID"]), $corp);
-            if($fixd % 500 == 0)
-                $output->writeln("Fixed {$fixd} corporations..");
-            $fixd++;
+                    $corp["kills"] = $kills;
+                    $corp["losses"] = $losses;
+                    $corp["points"] = $points;
+                    $corp["statsCalculated"] = time() * 1000;
+
+                    $output->writeln("Inserting stats for: " . $corp["corporationID"]);
+                    $corporations->replaceOne(array("corporationID" => $corp["corporationID"]), $corp);
+                    if($fixd % 500 == 0) $output->writeln("Fixed {$fixd} corporations..");
+                    $fixd++;
+                    $count++;
+                } catch(\Exception $e)
+                {
+                    $output->writeln("An error occurred: {$e->getMessage()}");
+                }
+            }
         }
         $output->writeln("Fixed {$fixd} corporations..");
 
         // Get all allianceIDs
         $alliances = $mongo->selectCollection("thessia", "alliances");
-        $allis = $alliances->find();
+        $alliCount = $alliances->count();
+        $count = 0;
+        while($count <= $alliCount)
+        {
+            $allis = $alliances->find(array(
+                '$or' => array(
+                    array("statsCalculated" => array('$exists' => false)),
+                    array("statsCalculated" => array('$lt' => new UTCDateTime((time() - 2592000) * 1000)))
+                )
+            ), array("limit" => 1000));
 
-        $fixd = 0;
-        foreach($allis as $alli) {
-            $k = $killmails->aggregate(array(
-                array('$match' => array("attackers.allianceID" => $alli["allianceID"])),
-                array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
-                array('$project' => array("_id" => 0, "kills" => '$kills'))
-            ))->toArray();
-            $l = $killmails->aggregate(array(
-                array('$match' => array("victim.allianceID" => $alli["allianceID"])),
-                array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
-                array('$project' => array("_id" => 0, "losses" => '$losses'))
-            ))->toArray();
-            $p = $killmails->aggregate(array(
-                array('$match' => array("attackers.allianceID" => $alli["allianceID"])),
-                array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
-                array('$project' => array("_id" => 0, "points" => '$totalPoints'))
-            ))->toArray();
+            if(empty($allis))
+                $alliCount = 0;
 
-            $kills = 0;
-            $losses = 0;
-            $points = 0;
-            if(!empty($k))
-                $kills = $k[0]["kills"];
-            if(!empty($l))
-                $losses = $l[0]["losses"];
-            if(!empty($p))
-                $points = $p[0]["points"];
+            $fixd = 0;
+            foreach($allis as $alli)
+            {
+                try
+                {
+                    $output->writeln("Working on kill stats for alliID: " . $alli["allianceID"]);
+                    $k = $killmails->aggregate(array(
+                        array('$match' => array("attackers.allianceID" => $alli["allianceID"])),
+                        array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
+                        array('$project' => array("_id" => 0, "kills" => '$kills'))
+                    ))->toArray();
+                    $output->writeln("Working on loss stats for alliID: " . $alli["allianceID"]);
+                    $l = $killmails->aggregate(array(
+                        array('$match' => array("victim.allianceID" => $alli["allianceID"])),
+                        array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
+                        array('$project' => array("_id" => 0, "losses" => '$losses'))
+                    ))->toArray();
+                    $output->writeln("Working on points for alliID: " . $alli["allianceID"]);
+                    $p = $killmails->aggregate(array(
+                        array('$match' => array("attackers.allianceID" => $alli["allianceID"])),
+                        array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
+                        array('$project' => array("_id" => 0, "points" => '$totalPoints'))
+                    ))->toArray();
 
-            $alli["kills"] = $kills;
-            $alli["losses"] = $losses;
-            $alli["points"] = $points;
+                    $kills = 0;
+                    $losses = 0;
+                    $points = 0;
+                    if(!empty($k)) $kills = $k[0]["kills"];
+                    if(!empty($l)) $losses = $l[0]["losses"];
+                    if(!empty($p)) $points = $p[0]["points"];
 
-            $alliances->replaceOne(array("allianceID" => $alli["allianceID"]), $alli);
-            if($fixd % 500 == 0)
-                $output->writeln("Fixed {$fixd} alliances..");
-            $fixd++;
+                    $alli["kills"] = $kills;
+                    $alli["losses"] = $losses;
+                    $alli["points"] = $points;
+                    $alli["statsCalculated"] = time() * 1000;
+
+                    $output->writeln("Inserting stats for: " . $alli["allianceID"]);
+                    $alliances->replaceOne(array("allianceID" => $alli["allianceID"]), $alli);
+                    if($fixd % 500 == 0) $output->writeln("Fixed {$fixd} alliances..");
+                    $fixd++;
+                    $count++;
+                } catch(\Exception $e)
+                {
+                    $output->writeln("An error occurred: {$e->getMessage()}");
+                }
+            }
         }
         $output->writeln("Fixed {$fixd} alliances..");
     }

@@ -64,7 +64,8 @@ class UpdateCacheables
     }
 
     private static function updateTop10Characters(bool $allTime = false, Container $container) {
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $collection = $mongo->selectCollection("thessia", "killmails");
         $characters = $mongo->selectCollection("thessia", "characters");
         $cache = $container->get("cache");
@@ -97,7 +98,8 @@ class UpdateCacheables
     }
 
     private static function updateTop10Corporation(bool $allTime = false, Container $container) {
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $collection = $mongo->selectCollection("thessia", "killmails");
         $corporations = $mongo->selectCollection("thessia", "corporations");
         $cache = $container->get("cache");
@@ -130,7 +132,8 @@ class UpdateCacheables
     }
 
     private static function updateTop10Alliances(bool $allTime = false, Container $container) {
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $collection = $mongo->selectCollection("thessia", "killmails");
         $alliances = $mongo->selectCollection("thessia", "alliances");
         $cache = $container->get("cache");
@@ -163,7 +166,8 @@ class UpdateCacheables
     }
 
     private static function updateTop10SolarSystems(bool $allTime = false, Container $container) {
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $collection = $mongo->selectCollection("thessia", "killmails");
         $solarSystems = $mongo->selectCollection("ccp", "solarSystems");
         $cache = $container->get("cache");
@@ -193,7 +197,8 @@ class UpdateCacheables
     }
 
     private static function updateTop10Regions(bool $allTime = false, Container $container) {
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         $collection = $mongo->selectCollection("thessia", "killmails");
         $regions = $mongo->selectCollection("ccp", "regions");
         $cache = $container->get("cache");

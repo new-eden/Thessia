@@ -38,7 +38,8 @@ class UpdateCorporations
     public static function execute(Container $container)
     {
         /** @var \MongoClient $mongo */
-        $mongo = $container->get("mongo");
+        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
         /** @var Logger $log */
         $log = $container->get("log");
         /** @var Collection $collection */
@@ -49,6 +50,9 @@ class UpdateCorporations
         $corporationsToUpdate = $collection->find(array("lastUpdated" => array("\$lt" => new UTCDatetime($date))), array("limit" => 1000))->toArray();
 
         foreach($corporationsToUpdate as $corp) {
+            if(!isset($corp["corporationID"]))
+                continue;
+
             if($corp["corporationID"] > 0)
                 \Resque::enqueue("low", '\Thessia\Tasks\Resque\UpdateCorporation', array("corporationID" => $corp["corporationID"]));
         }

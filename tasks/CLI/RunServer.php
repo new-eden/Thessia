@@ -55,6 +55,7 @@ class RunServer extends StartCommand
     protected function configurePPMOptions(Command $command)
     {
         $command
+            ->addOption("config", null, InputOption::VALUE_OPTIONAL, "Config file location (Not needed)", null)
             ->addOption("bridge", null, InputOption::VALUE_OPTIONAL, "The bridge we use to convert a ReactPHP-Request to your target framework.", "Thessia\\Middleware\\Bridge")
             ->addOption("bootstrap", null, InputOption::VALUE_OPTIONAL, "The class that will be used to bootstrap your application", "Thessia\\Middleware\\Bootstrap")
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "Load-Balancer host. Default is 127.0.0.1", "127.0.0.1")
@@ -78,7 +79,7 @@ class RunServer extends StartCommand
 
         $config = $this->loadConfig($input, $output);
 
-        if ($path = $this->getConfigPath()) {
+        if ($path = $config["config"]) {
             $modified = "";
             $fileConfig = json_decode(file_get_contents($path), true);
             if (json_encode($fileConfig) !== json_encode($config)) {

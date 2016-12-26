@@ -35,7 +35,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RunCron extends Command
 {
     private $cronjobs = array();
-    private $runningJobs;
+    private $runningJobs = array();
+    private $endedJobs = array();
 
     protected function configure()
     {
@@ -79,10 +80,6 @@ class RunCron extends Command
         $cronjobCount = count($this->cronjobs);
         $output->writeln("Loaded {$cronjobCount} cronjobs...");
 
-        // How many Cronjobs are already running?
-        if(count($this->runningJobs) > 0)
-            $output->writeln("There are already " . count($this->runningJobs) . " jobs running..");
-
         // Startup the main loop
         $run = true;
         $loopCount = 0;
@@ -95,14 +92,13 @@ class RunCron extends Command
 
             // Increment the loopCount
             $loopCount++;
-            if($loopCount % 100 == 0)
-                $output->writeln("There are currently " . count($this->runningJobs) . " jobs running..");
 
             foreach ($this->cronjobs as $className => $time) {
                 // Check and make sure it's not in the runningJobs array
                 if (isset($this->runningJobs[$className])) {
                     $pid = $this->runningJobs[$className]["pid"];
                     $lastRan = $this->runningJobs[$className]["lastRan"];
+
                     $timeSinceItRanLast = time() - $lastRan;
                     $pidStatus = pcntl_waitpid($pid, $pidStatus, WNOHANG);
                     if ($timeSinceItRanLast >= $time && $pidStatus == -1) {
@@ -122,8 +118,8 @@ class RunCron extends Command
                         }
                         $this->runningJobs[$className] = array("pid" => $pid, "lastRan" => time());
                     } catch (\Exception $e) {
-                        $log->addError("Cronjob error: {$e->getMessage()}...");
-                        $output->writeln("Error: {$e->getMessage()}...");
+                        $log->addError("Cronjob error ({$className}): {$e->getMessage()}...");
+                        $output->writeln("Error ({$className}): {$e->getMessage()}...");
                         $output->writeln("Exiting...");
                         die();
                     }
@@ -132,6 +128,7 @@ class RunCron extends Command
                     $serialized = serialize($this->runningJobs);
                     $cache->set("runningCronJobs", $serialized);
                 }
+                usleep(500000);
             }
 
             // Sleep for a second between runs, so we don't go and eat 99.99% cpu
