@@ -136,7 +136,7 @@ class StatsAPIController extends Controller {
             array("\$group" => array("_id" => "\$attackers.characterID")),
             array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
         ),
-            array("allowDiskUse" => true)
+            array("allowDiskUse" => true, "maxTimeMS" => 30000)
         )->toArray();
 
         $returnData["activeCharacters"] = count($data);
@@ -160,7 +160,7 @@ class StatsAPIController extends Controller {
             array("\$group" => array("_id" => "\$attackers.corporationID")),
             array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
         ),
-            array("allowDiskUse" => true)
+            array("allowDiskUse" => true, "maxTimeMS" => 30000)
         )->toArray();
 
         $returnData["activeCorporations"] = count($data);
@@ -183,7 +183,7 @@ class StatsAPIController extends Controller {
             array("\$group" => array("_id" => "\$attackers.allianceID")),
             array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
         ),
-            array("allowDiskUse" => true)
+            array("allowDiskUse" => true, "maxTimeMS" => 30000)
         )->toArray();
 
         $returnData["activeAlliances"] = count($data);
@@ -206,7 +206,7 @@ class StatsAPIController extends Controller {
             array("\$group" => array("_id" => "\$attackers.shipTypeID")),
             array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
         ),
-            array("allowDiskUse" => true)
+            array("allowDiskUse" => true, "maxTimeMS" => 30000)
         )->toArray();
 
         $returnData["activeShipTypes"] = count($data);
@@ -229,7 +229,7 @@ class StatsAPIController extends Controller {
             array("\$group" => array("_id" => "\$solarSystemID")),
             array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
         ),
-            array("allowDiskUse" => true)
+            array("allowDiskUse" => true, "maxTimeMS" => 30000)
         )->toArray();
 
         $returnData["activeSolarSystems"] = count($data);
@@ -252,7 +252,7 @@ class StatsAPIController extends Controller {
             array("\$group" => array("_id" => "\$regionID")),
             array("\$group" => array("_id" => 1, "count" => array("\$sum" => 1)))
         ),
-            array("allowDiskUse" => true)
+            array("allowDiskUse" => true, "maxTimeMS" => 30000)
         )->toArray();
 
         $returnData["activeRegions"] = count($data);
