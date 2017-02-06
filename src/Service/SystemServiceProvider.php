@@ -27,6 +27,7 @@ namespace Thessia\Service;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use MongoDB\Client;
+use MongoDB\Driver\Manager;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Thessia\Helper\CrestHelper;
@@ -164,8 +165,8 @@ class SystemServiceProvider extends AbstractServiceProvider
         $container->share("cache", Cache::class)->withArgument("config");
 
         // Add MongoDB
-        $mongo = new Client("mongodb://127.0.0.1:27017", array(),
-            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+        $mongo = new Client("mongodb://127.0.0.1:27017/?connectTimeoutMS=300000&socketTimeoutMS=300000", array(),
+            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array"), "connectTimeoutMS" => 300000, "socketTimeoutMS" => 300000));
         $container->share("mongo", $mongo);
 
         // Add cURL

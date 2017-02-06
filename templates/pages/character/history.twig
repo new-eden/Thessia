@@ -16,7 +16,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sco.js/1.1.0/js/sco.tooltip.js" integrity="sha256-D1cXcX/XEN8qmiAakjJ3d54Qq93MF4+WtdsTkSFZuLo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/js/killlist.js"></script>
     <script type="text/javascript" src="/js/topList.js"></script>
-    <script type="text/javascript" src="/js/corporationInfoTop.js"></script>
+    <script type="text/javascript" src="/js/characterInfoTop.js"></script>
+    <script type="text/javascript" src="/js/characterPage.js"></script>
     <script>
         var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var splitsies = newURL.split("/");
@@ -29,28 +30,18 @@
             cnt++;
         });
 
-        // Generate the killlist
-        corporationInfoTop("/api/corporation/information/{{ corporationID }}/");
-        generateKillList("/api/kills/corporation/{{ corporationID }}/", false, page, false);
-        generateTopList("/api/corporation/top/characters/{{ corporationID }}/", "topListCharacter", "character", "Top 10 Characters");
-        generateTopList("/api/corporation/top/alliances/{{ corporationID }}/", "topListAlliance", "alliance", "Top 10 Alliances");
-        generateTopList("/api/corporation/top/ships/{{ corporationID }}/", "topListShips", "ship", "Top 10 Ships");
-        generateTopList("/api/corporation/top/systems/{{ corporationID }}/", "topListSolarSystems", "system", "Top 10 Systems");
-        generateTopList("/api/corporation/top/regions/{{ corporationID }}/", "topListRegions", "region", "Top 10 Regions");
+        characterInfoTop("/api/character/information/{{ characterID }}/");
+        characterHistory("/api/character/information/{{ characterID }}/", "#history")
     </script>
 {% endblock %}
 
 {% block rightContent %}
     <div id="info"></div>
-    <div class="kb-date-header">Kills</div>
-    {% include "/global/killlisttable.twig" %}
+    <div class="kb-date-header">Corporation History</div>
+    <div id="history"></div>
+
 {% endblock %}
 
 {% block leftContent %}
     {% include "/global/navigationMenu.twig" %}
-    <div id="topListCharacter"></div><br/>
-    <div id="topListAlliance"></div><br/>
-    <div id="topListShips"></div><br/>
-    <div id="topListSolarSystems"></div><br/>
-    <div id="topListRegions"></div><br/>
 {% endblock %}

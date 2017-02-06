@@ -28,7 +28,7 @@ $app->group("/api", function() use ($app) {
         $controller = new \Thessia\Controller\API\CharacterAPIController($app);
         $app->get("/count/", $controller("characterCount"));
         $app->get("/information/{characterID:[0-9]+}/", $controller("characterInformation"));
-        $app->get("/find/{searchTerm:[A-Za-z0-9]+}/", $controller("findCharacter"));
+        $app->get("/find/{searchTerm:[^\\/]+}/", $controller("findCharacter"));
 
         $app->group("/top", function() use ($app, $controller) {
             $app->get("/corporations/{characterID:[0-9]+}/[{limit:[0-9]+}/]", $controller("topCorporations"));
@@ -184,17 +184,18 @@ $app->group("/api", function() use ($app) {
         $app->get("/activeregions/[{allTime:[0-1]}/]", $controller("activeRegions"));
     });
 
+    // Old: {searchTerm:[A-Za-z0-9%-_]+}
     $app->group("/search", function() use ($app) {
         $controller = new \Thessia\Controller\API\SearchAPIController($app);
-        $app->get("/all/{searchTerm:[A-Za-z0-9%-_]+}/", $controller("findAny"));
-        $app->get("/faction/{searchTerm:[A-Za-z0-9]+}/", $controller("findFaction"));
-        $app->get("/alliance/{searchTerm:[A-Za-z0-9]+}/", $controller("findAlliance"));
-        $app->get("/corporation/{searchTerm:[A-Za-z0-9]+}/", $controller("findCorporation"));
-        $app->get("/character/{searchTerm:[A-Za-z0-9]+}/", $controller("findCharacter"));
-        $app->get("/item/{searchTerm:[A-Za-z0-9]+}/", $controller("findItem"));
-        $app->get("/system/{searchTerm:[A-Za-z0-9]+}/", $controller("findSolarSystem"));
-        $app->get("/region/{searchTerm:[A-Za-z0-9]+}/", $controller("findRegion"));
-        $app->get("/celestial/{searchTerm:[A-Za-z0-9]+}/", $controller("findCelestial"));
+        $app->get("/all/{searchTerm:[^\\/]+}/", $controller("findAny"));
+        $app->get("/faction/{searchTerm:[^\\/]+}/", $controller("findFaction"));
+        $app->get("/alliance/{searchTerm:[^\\/]+}/", $controller("findAlliance"));
+        $app->get("/corporation/{searchTerm:[^\\/]+}/", $controller("findCorporation"));
+        $app->get("/character/{searchTerm:[^\\/]+}/", $controller("findCharacter"));
+        $app->get("/item/{searchTerm:[^\\/]+}/", $controller("findItem"));
+        $app->get("/system/{searchTerm:[^\\/]+}/", $controller("findSolarSystem"));
+        $app->get("/region/{searchTerm:[^\\/]+}/", $controller("findRegion"));
+        $app->get("/celestial/{searchTerm:[^\\/]+}/", $controller("findCelestial"));
     });
 
     $app->group("/wars", function() use ($app) {

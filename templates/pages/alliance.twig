@@ -30,13 +30,13 @@
         });
 
         // Generate the killlist
+        allianceInfoTop("/api/alliance/information/{{ allianceID }}/");
         generateKillList("/api/kills/alliance/{{ allianceID }}/", false, page, false);
         generateTopList("/api/alliance/top/characters/{{ allianceID }}/", "topListCharacter", "character", "Top 10 Characters");
         generateTopList("/api/alliance/top/corporations/{{ allianceID }}/", "topListCorporation", "corporation", "Top 10 Corporations");
         generateTopList("/api/alliance/top/ships/{{ allianceID }}/", "topListShips", "ship", "Top 10 Ships");
         generateTopList("/api/alliance/top/systems/{{ allianceID }}/", "topListSolarSystems", "system", "Top 10 Systems");
         generateTopList("/api/alliance/top/regions/{{ allianceID }}/", "topListRegions", "region", "Top 10 Regions");
-        allianceInfoTop("/api/alliance/information/{{ allianceID }}/");
     </script>
 {% endblock %}
 

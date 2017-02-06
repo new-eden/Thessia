@@ -1324,12 +1324,12 @@
  */
 
 /**
- * @api {get} /search/:searchTerm/ Do a multi-search, looking into every category
- * @apiName findAny
+ * @api {get} /search/all/:searchTerm/ Do a multi-search, looking into every category
+ * @apiName findAll
  * @apiGroup search
  * @apiPermission public
  * @apiParam {String} searchTerm A String to try and match to..
- * @apiSampleRequest /api/search/any/:searchTerm/
+ * @apiSampleRequest /api/search/all/:searchTerm/
  */
 
 /**
@@ -1438,3 +1438,4 @@
  * @apiParam {Integer} pageID The ID of the page to view (Max 100 kills pr. page)
  * @apiSampleRequest /api/wars/kills/:warID/:pageID/
  */
+

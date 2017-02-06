@@ -84,7 +84,7 @@ class Top {
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ), array("allowDiskUse" => true))->toArray();
+        ), array("allowDiskUse" => true, "maxTimeMS" => 30000))->toArray();
 
         foreach($data as $key => $character)
             $data[$key]["name"] = $this->characters->findOne(array("characterID" => $character["id"]))["characterName"];
@@ -107,7 +107,7 @@ class Top {
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ), array("allowDiskUse" => true))->toArray();
+        ), array("allowDiskUse" => true, "maxTimeMS" => 30000))->toArray();
         foreach($data as $key => $corporation)
             $data[$key]["name"] = $this->corporations->findOne(array("corporationID" => $corporation["id"]))["corporationName"];
 
@@ -128,7 +128,7 @@ class Top {
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ), array("allowDiskUse" => true))->toArray();
+        ), array("allowDiskUse" => true, "maxTimeMS" => 30000))->toArray();
         foreach($data as $key => $alliance)
             $data[$key]["name"] = $this->alliances->findOne(array("allianceID" => $alliance["id"]))["allianceName"];
 
@@ -149,7 +149,7 @@ class Top {
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ), array("allowDiskUse" => true))->toArray();
+        ), array("allowDiskUse" => true, "maxTimeMS" => 30000))->toArray();
         foreach($data as $key => $shipType)
             $data[$key]["name"] = trim($this->shipTypes->findOne(array("typeID" => $shipType["id"]))["name"]["en"]);
 
@@ -171,7 +171,7 @@ class Top {
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
         );
-        $data = $this->killmails->aggregate($aggregate, array("allowDiskUse" => true))->toArray();
+        $data = $this->killmails->aggregate($aggregate, array("allowDiskUse" => true, "maxTimeMS" => 30000))->toArray();
 
         foreach($data as $key => $solarSystem)
             $data[$key]["name"] = trim($this->solarSystems->findOne(array("solarSystemID" => $solarSystem["id"]))["solarSystemName"]);
@@ -193,7 +193,7 @@ class Top {
             array('$project' => array("_id" => 0, "count" => '$count', "id" => '$_id')),
             array('$sort' => array("count" => -1)),
             array('$limit' => $limit)
-        ), array("allowDiskUse" => true))->toArray();
+        ), array("allowDiskUse" => true, "maxTimeMS" => 30000))->toArray();
         foreach($data as $key => $region)
             $data[$key]["name"] = trim($this->regions->findOne(array("regionID" => $region["id"]))["regionName"]);
 

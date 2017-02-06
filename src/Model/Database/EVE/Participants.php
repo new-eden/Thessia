@@ -658,7 +658,6 @@ class Participants extends Mongo
         
         // @todo rewrite the rest of Participants to use Aggregate - for some reason mongodb is a billion times faster
         // with aggregate (match + sort) than with find+sort.. don't ask me why.......
-
         // @todo make this isset add subtract bullshit into something nicer, maybe just if(isset(blabla)) $aggregateArray['$crap'] = $options["blabla"]; and then move on?!
         if(isset($options["skip"])) {
             $aggregateArray = array(

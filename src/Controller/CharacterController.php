@@ -28,10 +28,20 @@ namespace Thessia\Controller;
 use Thessia\Middleware\Controller;
 
 class CharacterController extends Controller {
-    public function index($characterID = 0) {
+    public function index(int $characterID = 0) {
         $collection = $this->mongo->selectCollection("thessia", "characters");
         $name = $collection->findOne(array("characterID" => (int) $characterID))["characterName"];
-        $menu = array(
+        return $this->render("pages/character.twig", array("characterID" => $characterID, "menu" => $this->generateMenu($characterID), "name" => $name));
+    }
+
+    public function history(int $characterID = 0) {
+        $collection = $this->mongo->selectCollection("thessia", "characters");
+        $name = $collection->findOne(array("characterID" => (int) $characterID))["characterName"];
+        return $this->render("pages/character/history.twig", array("characterID" => $characterID, "menu" => $this->generateMenu($characterID), "name" => $name));
+    }
+
+    private function generateMenu(int $characterID = 0) {
+        return array(
             "EVE-Board" => "#",
             "EVE-Search" => "#",
             "EVE-Gate" => "#",
@@ -39,7 +49,9 @@ class CharacterController extends Controller {
             "EVE-Hunt" => "#",
             "Navigation" => array(
                 "Previous Page" => "#",
-                "Next Page" => "#",
+                "Next Page" => "#"
+            ),
+            "Information" => array(
                 "Kills" => "#",
                 "Losses" => "#",
                 "Solo" => "#",
@@ -47,8 +59,8 @@ class CharacterController extends Controller {
                 "Top" => "#",
                 "Ranks" => "#",
                 "Stats" => "#",
+                "History" => "/character/{$characterID}/history/",
             ),
         );
-        return $this->render("pages/character.twig", array("characterID" => $characterID, "menu" => $menu, "name" => $name));
     }
 }

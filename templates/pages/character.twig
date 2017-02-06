@@ -30,13 +30,13 @@
         });
 
         // Generate the killlist
+        characterInfoTop("/api/character/information/{{ characterID }}/");
         generateKillList("/api/kills/character/{{ characterID }}/", false, page, false);
         generateTopList("/api/character/top/corporations/{{ characterID }}/", "topListCorporation", "corporation", "Top 10 Corporations");
         generateTopList("/api/character/top/alliances/{{ characterID }}/", "topListAlliance", "alliance", "Top 10 Alliances");
         generateTopList("/api/character/top/ships/{{ characterID }}/", "topListShips", "ship", "Top 10 Ships");
         generateTopList("/api/character/top/systems/{{ characterID }}/", "topListSolarSystems", "system", "Top 10 Systems");
         generateTopList("/api/character/top/regions/{{ characterID }}/", "topListRegions", "region", "Top 10 Regions");
-        characterInfoTop("/api/character/information/{{ characterID }}/");
     </script>
 {% endblock %}
 
