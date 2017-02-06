@@ -30,14 +30,10 @@ use MongoDB\BSON\UTCDatetime;
 use MongoDB\Collection;
 
 class PopulateBattles {
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
-    {
-        $log = $container->get("log");
-        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
-            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+    private $container;
+    public function perform() {
+        $log = $this->container->get("log");
+        $mongo = $this->container->get("mongo");
         $killmails = $mongo->selectCollection("thessia", "killmails");
         $storage = $mongo->selectCollection("thessia", "storage");
         $battleCollection = $mongo->selectCollection("thessia", "battles");
@@ -118,7 +114,7 @@ class PopulateBattles {
                             $log->addInfo("A battle happened in {$solarSystemID}, and started at " . date("Y-m-d H:i:s", $battleStartTime) . " and ended at " . date("Y-m-d H:i:s", $minTime - 12000));
 
                             // Process the battle report
-                            self::processBattleReport($container, $battleStartTime, $minTime - 12000, $solarSystemID);
+                            $this->processBattleReport($battleStartTime, $minTime - 12000, $solarSystemID);
 
                             // This one is done, lets call it quits and find more!
                             $run = false;
@@ -146,8 +142,8 @@ class PopulateBattles {
         } while($searchTime < $endTime);
     }
 
-    private static function processBattleReport(Container $container, $startTime, $endTime, $solarSystemID) {
-        $mongo = $container->get("mongo");
+    private function processBattleReport($startTime, $endTime, $solarSystemID) {
+        $mongo = $this->container->get("mongo");
         $collection = $mongo->selectCollection("thessia", "battles");
         $killmails = $mongo->selectCollection("thessia", "killmails");
         $solarSystemCollection = $mongo->selectCollection("ccp", "solarSystems");
@@ -173,7 +169,7 @@ class PopulateBattles {
         $blueTeamShips = array();
         $blueTeamCorporations = array();
         $blueTeamKills = array();
-        $success = self::findTeams($redTeam, $blueTeam, $killData);
+        $success = $this->findTeams($redTeam, $blueTeam, $killData);
         if($success == false)
             return;
 
@@ -277,14 +273,14 @@ class PopulateBattles {
     /*
      *
      */
-    private static function findTeams(&$redTeam, &$blueTeam, $killData) {
+    private function findTeams(&$redTeam, &$blueTeam, $killData) {
         $allianceTempArray = array();
         $corporationTempArray = array();
 
         // Should i map on alliances?
-        self::allianceSides($allianceTempArray, $blueTeam, $redTeam, $killData);
+        $this->allianceSides($allianceTempArray, $blueTeam, $redTeam, $killData);
         if(empty($blueTeam) || empty($redTeam))
-            self::corporationSides($corporationTempArray, $blueTeam, $redTeam, $killData);
+            $this->corporationSides($corporationTempArray, $blueTeam, $redTeam, $killData);
         if(empty($blueTeam) || empty($redTeam)) {
             return false;
         }
@@ -315,7 +311,7 @@ class PopulateBattles {
         return true;
     }
 
-    private static function allianceSides(&$allianceTempArray, &$blueTeam, &$redTeam, $killData) {
+    private function allianceSides(&$allianceTempArray, &$blueTeam, &$redTeam, $killData) {
         foreach($killData as $data) {
             $attacker = $data["attackers"];
             $victim = $data["victim"];
@@ -360,7 +356,7 @@ class PopulateBattles {
         }
     }
 
-    private static function corporationSides(&$corporationTempArray, &$blueTeam, &$redTeam, $killData) {
+    private function corporationSides(&$corporationTempArray, &$blueTeam, &$redTeam, $killData) {
         foreach($killData as $data) {
             $attacker = $data["attackers"];
             $victim = $data["victim"];
@@ -408,8 +404,18 @@ class PopulateBattles {
     /**
      * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
      */
-    public static function getRunTimes()
+    public function getRunTimes()
     {
         return 1800;
+    }
+
+    public function setUp()
+    {
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
 }

@@ -52,38 +52,40 @@ class fixStats extends Command
         /** @var Collection $collection */
         $killmails = $mongo->selectCollection("thessia", "killmails");
 
-        // Get all characterIDs
+        // Character Collection
         $characters = $mongo->selectCollection("thessia", "characters");
-        $charCount = $characters->count();
-        $count = 0;
-        while($count <= $charCount)
-        {
+        $fixd = 0;
+        do {
             $chars = $characters->find(array(
                 '$or' => array(
                     array("statsCalculated" => array('$exists' => false)),
-                    array("statsCalculated" => array('$lt' => new UTCDateTime((time() - 2592000) * 1000)))
+                    array("statsCalculated" => array('$gt' => new UTCDateTime((time() - 2592000) * 1000)))
+                ), '$and' => array(
+                    array("characterID" => array('$gt' => 0))
                 )
-            ), array("limit" => 1000));
+            ), array("limit" => 1000))->toArray();
 
-            if(empty($chars))
-                $charCount = 0;
+            // Count how many Chars we have..
+            $charCount = count($chars);
 
-            $fixd = 0;
+            // Decide if we continue running..
+            $run = $charCount > 0 ? true : false;
+
             foreach($chars as $char)
             {
-                $output->writeln("Working on kill stats for charID: " . $char["characterID"]);
+                $output->writeln("Working on kill stats         for charID: " . $char["characterID"]);
                 $k = $killmails->aggregate(array(
                     array('$match' => array("attackers.characterID" => $char["characterID"])),
                     array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
                     array('$project' => array("_id" => 0, "kills" => '$kills'))
                 ))->toArray();
-                $output->writeln("Working on loss stats for charID: " . $char["characterID"]);
+                $output->writeln("Working on loss stats         for charID: " . $char["characterID"]);
                 $l = $killmails->aggregate(array(
                     array('$match' => array("victim.characterID" => $char["characterID"])),
                     array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
                     array('$project' => array("_id" => 0, "losses" => '$losses'))
                 ))->toArray();
-                $output->writeln("Working on points for charID: " . $char["characterID"]);
+                $output->writeln("Working on points             for charID: " . $char["characterID"]);
                 $p = $killmails->aggregate(array(
                     array('$match' => array("attackers.characterID" => $char["characterID"])),
                     array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
@@ -105,47 +107,49 @@ class fixStats extends Command
                 $characters->replaceOne(array("characterID" => $char["characterID"]), $char);
                 if($fixd % 500 == 0) $output->writeln("Fixed {$fixd} characters..");
                 $fixd++;
-                $count++;
             }
-        }
+        } while($run == true);
+
         $output->writeln("Fixed {$fixd} characters..");
 
         // Get all corporationIDs
         /** @var Collection $corporations */
         $corporations = $mongo->selectCollection("thessia", "corporations");
-        $corpCount = $corporations->count();
-        $count = 0;
-        while($count <= $corpCount)
-        {
+        $fixd = 0;
+        do {
             /** @var Cursor $corps */
             $corps = $corporations->find(array(
                 '$or' => array(
                     array("statsCalculated" => array('$exists' => false)),
-                    array("statsCalculated" => array('$lt' => new UTCDateTime((time() - 2592000) * 1000)))
+                    array("statsCalculated" => array('$gt' => new UTCDateTime((time() - 2592000) * 1000)))
+                ), '$and' => array(
+                    array("corporationID" => array('$gt' => 0))
                 )
-            ), array("limit" => 1000));
+            ), array("limit" => 1000))->toArray();
 
-            if(empty($corps))
-                $corpCount = 0;
+            // Count how many Chars we have..
+            $corpCount = count($corps);
 
-            $fixd = 0;
+            // Decide if we continue running..
+            $run = $corpCount > 0 ? true : false;
+
             foreach($corps as $corp)
             {
                 try
                 {
-                    $output->writeln("Working on kill stats for corpID: " . $corp["corporationID"]);
+                    $output->writeln("Working on kill stats         for corpID: " . $corp["corporationID"]);
                     $k = $killmails->aggregate(array(
                         array('$match' => array("attackers.corporationID" => $corp["corporationID"])),
                         array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
                         array('$project' => array("_id" => 0, "kills" => '$kills'))
                     ))->toArray();
-                    $output->writeln("Working on loss stats for corpID: " . $corp["corporationID"]);
+                    $output->writeln("Working on loss stats         for corpID: " . $corp["corporationID"]);
                     $l = $killmails->aggregate(array(
                         array('$match' => array("victim.corporationID" => $corp["corporationID"])),
                         array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
                         array('$project' => array("_id" => 0, "losses" => '$losses'))
                     ))->toArray();
-                    $output->writeln("Working on points for corpID: " . $corp["corporationID"]);
+                    $output->writeln("Working on points             for corpID: " . $corp["corporationID"]);
                     $p = $killmails->aggregate(array(
                         array('$match' => array("attackers.corporationID" => $corp["corporationID"])),
                         array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
@@ -164,53 +168,53 @@ class fixStats extends Command
                     $corp["points"] = $points;
                     $corp["statsCalculated"] = time() * 1000;
 
-                    $output->writeln("Inserting stats for: " . $corp["corporationID"]);
                     $corporations->replaceOne(array("corporationID" => $corp["corporationID"]), $corp);
                     if($fixd % 500 == 0) $output->writeln("Fixed {$fixd} corporations..");
                     $fixd++;
-                    $count++;
                 } catch(\Exception $e)
                 {
                     $output->writeln("An error occurred: {$e->getMessage()}");
                 }
             }
-        }
+        } while($run == true);
         $output->writeln("Fixed {$fixd} corporations..");
 
         // Get all allianceIDs
         $alliances = $mongo->selectCollection("thessia", "alliances");
-        $alliCount = $alliances->count();
-        $count = 0;
-        while($count <= $alliCount)
-        {
+        $fixd = 0;
+        do {
             $allis = $alliances->find(array(
                 '$or' => array(
                     array("statsCalculated" => array('$exists' => false)),
-                    array("statsCalculated" => array('$lt' => new UTCDateTime((time() - 2592000) * 1000)))
+                    array("statsCalculated" => array('$gt' => new UTCDateTime((time() - 2592000) * 1000)))
+                ), '$and' => array(
+                    array("allianceID" => array('$gt' => 0))
                 )
-            ), array("limit" => 1000));
+            ), array("limit" => 1000))->toArray();
 
-            if(empty($allis))
-                $alliCount = 0;
+            // Count how many Chars we have..
+            $alliCount = count($chars);
 
-            $fixd = 0;
+            // Decide if we continue running..
+            $run = $alliCount > 0 ? true : false;
+
             foreach($allis as $alli)
             {
                 try
                 {
-                    $output->writeln("Working on kill stats for alliID: " . $alli["allianceID"]);
+                    $output->writeln("Working on kill stats         for alliID: " . $alli["allianceID"]);
                     $k = $killmails->aggregate(array(
                         array('$match' => array("attackers.allianceID" => $alli["allianceID"])),
                         array('$group' => array("_id" => null, "kills" => array('$sum' => 1))),
                         array('$project' => array("_id" => 0, "kills" => '$kills'))
                     ))->toArray();
-                    $output->writeln("Working on loss stats for alliID: " . $alli["allianceID"]);
+                    $output->writeln("Working on loss stats         for alliID: " . $alli["allianceID"]);
                     $l = $killmails->aggregate(array(
                         array('$match' => array("victim.allianceID" => $alli["allianceID"])),
                         array('$group' => array("_id" => null, "losses" => array('$sum' => 1))),
                         array('$project' => array("_id" => 0, "losses" => '$losses'))
                     ))->toArray();
-                    $output->writeln("Working on points for alliID: " . $alli["allianceID"]);
+                    $output->writeln("Working on points             for alliID: " . $alli["allianceID"]);
                     $p = $killmails->aggregate(array(
                         array('$match' => array("attackers.allianceID" => $alli["allianceID"])),
                         array('$group' => array("_id" => null, "totalPoints" => array('$sum' => '$pointValue'))),
@@ -229,17 +233,15 @@ class fixStats extends Command
                     $alli["points"] = $points;
                     $alli["statsCalculated"] = time() * 1000;
 
-                    $output->writeln("Inserting stats for: " . $alli["allianceID"]);
                     $alliances->replaceOne(array("allianceID" => $alli["allianceID"]), $alli);
                     if($fixd % 500 == 0) $output->writeln("Fixed {$fixd} alliances..");
                     $fixd++;
-                    $count++;
                 } catch(\Exception $e)
                 {
                     $output->writeln("An error occurred: {$e->getMessage()}");
                 }
             }
-        }
+        } while($run == true);
         $output->writeln("Fixed {$fixd} alliances..");
     }
 }

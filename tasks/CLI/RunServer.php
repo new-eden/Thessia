@@ -79,9 +79,9 @@ class RunServer extends StartCommand
 
         $config = $this->loadConfig($input, $output);
 
-        if ($path = $config["config"]) {
+        if (isset($config["config"])) {
             $modified = "";
-            $fileConfig = json_decode(file_get_contents($path), true);
+            $fileConfig = json_decode(file_get_contents($config["config"]), true);
             if (json_encode($fileConfig) !== json_encode($config)) {
                 $modified = ", modified by command arguments";
             }

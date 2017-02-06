@@ -41,18 +41,15 @@ use Thessia\Model\Database\EVE\Killmails;
  * @package Thessia\Tasks\Cron
  */
 class ApiKeyDataFetcher {
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
+    private $container;
+    public function perform()
     {
         /** @var \MongoClient $mongo */
-        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
-            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+        $mongo = $this->container->get("mongo");
         /** @var Logger $log */
-        $log = $container->get("log");
+        $log = $this->container->get("log");
         /** @var Pheal $pheal */
-        $pheal = $container->get("pheal");
+        $pheal = $this->container->get("pheal");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("thessia", "apiKeys");
 
@@ -79,7 +76,7 @@ class ApiKeyDataFetcher {
 
             // Killmails
             if(($accessMask & 256) > 0)
-                $cachedUntil = self::killmails($container, $apiKey, $vCode, $characterID, $accountType);
+                $cachedUntil = $this->killmails($apiKey, $vCode, $characterID, $accountType);
 
             // Update the cached until to last for an hour from now
             $collection->updateOne(array("keyID" => $apiKey, "characters.characterID" => $characterID), array("\$set" => array("characters.\$.cachedUntil" => new UTCDatetime($cachedUntil))));
@@ -89,24 +86,23 @@ class ApiKeyDataFetcher {
     }
 
     /**
-     * @param Container $container
      * @param int $apiKey
      * @param string $vCode
      * @param int|null $characterID
      * @param string $accountType
      * @return int
      */
-    private static function killmails(Container $container, int $apiKey, string $vCode, int $characterID = null, string $accountType): int {
+    private function killmails(int $apiKey, string $vCode, int $characterID = null, string $accountType): int {
         /** @var Logger $log */
-        $log = $container->get("log");
+        $log = $this->container->get("log");
         /** @var Corporation $corporation */
-        $corporation = $container->get("ccpCorporation");
+        $corporation = $this->container->get("ccpCorporation");
         /** @var Character $character */
-        $character = $container->get("ccpCharacter");
+        $character = $this->container->get("ccpCharacter");
         /** @var CrestHelper $crestHelper */
-        $crestHelper = $container->get("crestHelper");
+        $crestHelper = $this->container->get("crestHelper");
         /** @var Killmails $kms */
-        $kms = $container->get("killmails");
+        $kms = $this->container->get("killmails");
 
         // Default cache time
         $cachedUntil = date("Y-m-d H:i:s", strtotime("+1 hour")) * 1000;
@@ -149,8 +145,18 @@ class ApiKeyDataFetcher {
     /**
      * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
      */
-    public static function getRunTimes()
+    public function getRunTimes()
     {
         return 60;
+    }
+
+    public function setUp()
+    {
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
 }

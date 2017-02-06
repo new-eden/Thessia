@@ -31,22 +31,17 @@ use Monolog\Logger;
 use Thessia\Helper\CrestHelper;
 use Thessia\Helper\EVEApi\EVE;
 
-class UpdateAllianceList
-{
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
-    {
+class UpdateAllianceList {
+    private $container;
+    public function perform() {
         /** @var \Mongo $mongo */
-        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
-            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+        $$mongo = $this->container->get("mongo");
         /** @var Logger $log */
-        $log = $container->get("log");
+        $log = $this->container->get("log");
         /** @var EVE $eve */
-        $eve = $container->get("ccpEVE");
+        $eve = $this->container->get("ccpEVE");
         /** @var CrestHelper $crestHelper */
-        $crestHelper = $container->get("crestHelper");
+        $crestHelper = $this->container->get("crestHelper");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("thessia", "alliances");
         /** @var Collection $corporationCollection */
@@ -102,8 +97,18 @@ class UpdateAllianceList
     /**
      * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
      */
-    public static function getRunTimes()
+    public function getRunTimes()
     {
         return 86400;
+    }
+
+    public function setUp()
+    {
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
 }

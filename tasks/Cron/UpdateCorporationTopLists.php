@@ -32,12 +32,10 @@ use Monolog\Logger;
 
 class UpdateCorporationTopLists
 {
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
+    private $container;
+    public function perform()
     {
-        $log = $container->get("log");
+        $log = $this->container->get("log");
         $startTime = time();
 
         //$log->addInfo("Updating Top10 Characters");
@@ -53,16 +51,26 @@ class UpdateCorporationTopLists
     /**
      * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
      */
-    public static function getRunTimes()
+    public function getRunTimes()
     {
         return 3600;
+    }
+
+    public function setUp()
+    {
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
     
     /**
      * @param $dateTime
      * @return UTCDatetime
      */
-    private static function makeTimeFromDateTime($dateTime): UTCDatetime {
+    private function makeTimeFromDateTime($dateTime): UTCDatetime {
         $unixTime = strtotime($dateTime);
         $milliseconds = $unixTime * 1000;
 
@@ -73,7 +81,7 @@ class UpdateCorporationTopLists
      * @param $unixTime
      * @return UTCDatetime
      */
-    private static function makeTimeFromUnixTime($unixTime): UTCDatetime {
+    private function makeTimeFromUnixTime($unixTime): UTCDatetime {
         $milliseconds = $unixTime * 1000;
         return new UTCDatetime($milliseconds);
     }

@@ -50,7 +50,8 @@ class RunResque extends Command
         require_once(__DIR__ . "/../../vendor/chrisboulton/php-resque/lib/Resque/Worker.php");
 
         // Load all the resque files
-        foreach (glob(__DIR__ . "/../Resque/*.php") as $file) {
+        $files = array_merge(glob(__DIR__ . "/../Cron/*.php"), glob(__DIR__ . "/../Resque/*.php"));
+        foreach ($files as $file) {
             require_once($file);
         }
 

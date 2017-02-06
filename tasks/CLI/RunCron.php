@@ -36,7 +36,6 @@ class RunCron extends Command
 {
     private $cronjobs = array();
     private $runningJobs = array();
-    private $endedJobs = array();
 
     protected function configure()
     {
@@ -61,6 +60,8 @@ class RunCron extends Command
 
         // Populate runningJobs from Redis
         $this->runningJobs = unserialize($cache->get("runningCronJobs"));
+
+        //var_dump($this->runningJobs); die();
 
         // Load all the cronjobs and populate the cronjobs array
         $files = glob(__DIR__ . "/../Cron/*.php");
@@ -96,38 +97,26 @@ class RunCron extends Command
             foreach ($this->cronjobs as $className => $time) {
                 // Check and make sure it's not in the runningJobs array
                 if (isset($this->runningJobs[$className])) {
-                    $pid = $this->runningJobs[$className]["pid"];
+                    $token = $this->runningJobs[$className]["token"];
                     $lastRan = $this->runningJobs[$className]["lastRan"];
 
                     $timeSinceItRanLast = time() - $lastRan;
-                    $pidStatus = pcntl_waitpid($pid, $pidStatus, WNOHANG);
-                    if ($timeSinceItRanLast >= $time && $pidStatus == -1) {
+                    $status = new \Resque_Job_Status($token);
+                    if ($timeSinceItRanLast >= $time && ($status->get() != \Resque_Job_Status::STATUS_WAITING || $status->get() != \Resque_Job_Status::STATUS_RUNNING)) {
                         unset($this->runningJobs[$className]);
                     }
                 } else {
                     $date = date("Y-m-d H:i:s");
-                    $log->addInfo("Running cronjob: {$className} (Interval: {$time})");
-                    $output->writeln("{$date}: Running cronjob: {$className} (Interval: {$time})");
-
-                    try {
-                        // Forking into the child and executing cronjob
-                        if (($pid = pcntl_fork()) == 0) {
-                            $container = getContainer();
-                            $class = new $className();
-                            $class->execute($container);
-                        }
-                        $this->runningJobs[$className] = array("pid" => $pid, "lastRan" => time());
-                    } catch (\Exception $e) {
-                        $log->addError("Cronjob error ({$className}): {$e->getMessage()}...");
-                        $output->writeln("Error ({$className}): {$e->getMessage()}...");
-                        $output->writeln("Exiting...");
-                        die();
-                    }
+                    $log->addInfo("Scheduling cronjob: {$className} (Interval: {$time})");
+                    $output->writeln("{$date}: Scheduling cronjob: {$className} (Interval: {$time})");
+                    $token = \Resque::enqueue("cron", $className, null, true);
+                    $this->runningJobs[$className] = array("token" => $token, "lastRan" => time());
 
                     // Insert the runningCronJobs array into Redis, in case we die..
                     $serialized = serialize($this->runningJobs);
                     $cache->set("runningCronJobs", $serialized);
                 }
+
                 usleep(500000);
             }
 

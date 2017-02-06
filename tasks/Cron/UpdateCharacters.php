@@ -32,16 +32,13 @@ use Monolog\Logger;
 
 class UpdateCharacters
 {
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
+    private $container;
+    public function perform()
     {
         /** @var \MongoClient $mongo */
-        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
-            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+        $mongo = $this->container->get("mongo");
         /** @var Logger $log */
-        $log = $container->get("log");
+        $log = $this->container->get("log");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("thessia", "characters");
 
@@ -60,8 +57,18 @@ class UpdateCharacters
     /**
      * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
      */
-    public static function getRunTimes()
+    public function getRunTimes()
     {
         return 60;
+    }
+
+    public function setUp()
+    {
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
 }

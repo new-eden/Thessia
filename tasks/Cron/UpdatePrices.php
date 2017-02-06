@@ -32,18 +32,15 @@ use Thessia\Helper\CrestHelper;
 
 class UpdatePrices
 {
-    /**
-     * @param Container $container
-     */
-    public static function execute(Container $container)
+    private $container;
+    public function perform()
     {
         /** @var \MongoClient $mongo */
-        $mongo = new \MongoDB\Client("mongodb://127.0.0.1:27017", array(),
-            array("typeMap" => array("root" => "array", "document" => "array", "array" => "array")));
+        $mongo = $this->container->get("mongo");
         /** @var Logger $log */
-        $log = $container->get("log");
+        $log = $this->container->get("log");
         /** @var CrestHelper $crestHelper */
-        $crestHelper = $container->get("crestHelper");
+        $crestHelper = $this->container->get("crestHelper");
         /** @var Collection $collection */
         $collection = $mongo->selectCollection("ccp", "typeIDs");
         /** @var Collection $priceCollection */
@@ -53,7 +50,7 @@ class UpdatePrices
 
         // Get the Market Prices from CREST
         $marketData = $crestHelper->getMarketPrices();
-        $marketData = self::addExtraPrices($marketData);
+        $marketData = $this->addExtraPrices($marketData);
 
         if(isset($marketData["items"])) {
             foreach ($marketData["items"] as $data) {
@@ -84,9 +81,8 @@ class UpdatePrices
         exit;
     }
 
-    private static function addExtraPrices(array $marketData): array {
-        $container = getContainer();
-        $mongo = $container->get("mongo");
+    private function addExtraPrices(array $marketData): array {
+        $mongo = $this->container->get("mongo");
         $typeIDs = $mongo->selectCollection("ccp", "typeIDs");
         $types = array(
             35834 => 300000000000, // Keepstar
@@ -152,8 +148,18 @@ class UpdatePrices
     /**
      * Defines how often the cronjob runs, every 1 second, every 60 seconds, every 86400 seconds, etc.
      */
-    public static function getRunTimes()
+    public function getRunTimes()
     {
         return 86400;
+    }
+
+    public function setUp()
+    {
+        $this->container = getContainer();
+    }
+
+    public function tearDown()
+    {
+
     }
 }
